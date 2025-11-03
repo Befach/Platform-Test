@@ -236,12 +236,12 @@
         .header {
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             color: var(--text-inverse);
-            padding: 12px 20px;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            flex-wrap: nowrap;
+            gap: 24px;
+            flex-wrap: wrap;
         }
 
         .header h1 {
@@ -252,21 +252,6 @@
             flex-shrink: 0;
         }
 
-        .header-main-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: nowrap;
-            align-items: center;
-            flex-shrink: 0;
-        }
 
         /* Sync Status Indicator */
         .sync-status {
@@ -3095,8 +3080,9 @@
                 font-size: 22px;
             }
 
-            .header-actions {
+            .quick-actions {
                 width: 100%;
+                justify-content: center;
             }
 
             .header-search {
@@ -4455,17 +4441,6 @@
 
         /* ========== HEADER LAYOUT STYLES ========== */
 
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 24px;
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
         .header-left {
             display: flex;
             align-items: center;
@@ -4548,43 +4523,49 @@
             flex-shrink: 0;
         }
 
-        /* Tools Dropdown */
-        .tools-dropdown {
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .quick-actions .btn-secondary {
+            padding: 6px 8px;
+            min-width: 32px;
+            justify-content: center;
+        }
+
+        .action-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--info);
+            color: var(--text-inverse);
+            border-radius: 8px;
+            padding: 1px 4px;
+            font-size: 10px;
+            font-weight: 500;
+            min-width: 14px;
+            text-align: center;
+        }
+
+        /* More Dropdown */
+        .more-dropdown {
             position: relative;
         }
 
-        .tools-btn {
-            display: flex !important;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 12px !important;
-            background: var(--bg-secondary) !important;
-            border: 1px solid var(--border-color) !important;
-            color: var(--text-primary) !important;
-            font-size: 14px !important;
-            font-weight: 500 !important;
+        .more-btn {
+            padding: 6px 8px !important;
+            min-width: 32px;
+            justify-content: center;
         }
 
-        .tools-btn:hover {
-            background: var(--bg-elevated) !important;
-        }
-
-        .dropdown-arrow {
-            font-size: 12px;
-            transition: transform 0.2s ease;
-        }
-
-        .tools-dropdown.active .dropdown-arrow {
-            transform: rotate(180deg);
-        }
-
-        .tools-dropdown-menu {
+        .more-dropdown-menu {
             position: absolute;
             top: calc(100% + 4px);
             right: 0;
-            min-width: 280px;
-            max-height: 400px;
-            overflow-y: auto;
+            min-width: 200px;
             background: var(--bg-elevated);
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -4714,7 +4695,7 @@
                 flex: 1;
             }
 
-            .tools-btn .btn-text {
+            .more-btn .btn-text {
                 display: none;
             }
 
@@ -4737,11 +4718,11 @@
                 justify-content: center;
             }
 
-            .tools-dropdown {
+            .more-dropdown {
                 position: static;
             }
 
-            .tools-dropdown-menu {
+            .more-dropdown-menu {
                 position: fixed;
                 top: auto;
                 bottom: 20px;
@@ -4771,60 +4752,49 @@
                 <div class="primary-actions">
                     <button class="btn-primary" onclick="app.showAddModal()" title="Add Feature (N)">
                         <span class="btn-icon">➕</span>
-                        <span class="btn-text">Add Feature</span>
+                        <span class="btn-text">Add</span>
                     </button>
                     <button class="btn-ai-create" onclick="app.showAIAssistedFeatureCreation()" title="Create with AI Assistant">
                         <span class="btn-icon">✨</span>
-                        <span class="btn-text">AI Create</span>
+                        <span class="btn-text">AI</span>
                     </button>
                 </div>
 
-                <!-- Tools Dropdown -->
-                <div class="tools-dropdown">
-                    <button class="btn-secondary btn-compact tools-btn" onclick="app.toggleToolsDropdown()" title="Tools & Actions">
-                        <span class="btn-icon">🛠️</span>
-                        <span class="btn-text">Tools</span>
-                        <span class="dropdown-arrow">▼</span>
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="btn-secondary btn-compact" onclick="app.exportAllData()" title="Export Data">
+                        <span class="btn-icon">💾</span>
                     </button>
-                    <div class="tools-dropdown-menu hidden" id="toolsDropdownMenu">
+                    <button class="btn-secondary btn-compact" onclick="app.importAllData()" title="Import Data">
+                        <span class="btn-icon">📂</span>
+                    </button>
+                    <button class="btn-secondary btn-compact" onclick="app.analyzeBatchLinks(event)" title="AI Link Detection">
+                        <span class="btn-icon">🔗</span>
+                    </button>
+                    <button class="btn-secondary btn-compact" onclick="app.toggleAIActionPanel()" title="AI Actions Log">
+                        <span class="btn-icon">📝</span>
+                        <span id="aiActionCount" class="action-badge">0</span>
+                    </button>
+                    <button class="btn-secondary btn-compact" onclick="app.toggleTheme()" title="Toggle Theme">
+                        <span class="btn-icon">🌓</span>
+                    </button>
+                </div>
+
+                <!-- More Actions Dropdown -->
+                <div class="more-dropdown">
+                    <button class="btn-secondary btn-compact more-btn" onclick="app.toggleMoreDropdown()" title="More Actions">
+                        <span class="btn-icon">⋯</span>
+                    </button>
+                    <div class="more-dropdown-menu hidden" id="moreDropdownMenu">
                         <div class="dropdown-section">
-                            <div class="dropdown-section-title">📊 Data Management</div>
-                            <button class="dropdown-item" onclick="app.exportAllData()">
-                                <span class="item-icon">💾</span>
-                                <span class="item-text">Export Backup</span>
-                            </button>
-                            <button class="dropdown-item" onclick="app.importAllData()">
-                                <span class="item-icon">📂</span>
-                                <span class="item-text">Import Backup</span>
-                            </button>
+                            <div class="dropdown-section-title">📊 Export Options</div>
                             <button class="dropdown-item" onclick="app.exportToCSV()">
                                 <span class="item-icon">📥</span>
                                 <span class="item-text">Export CSV</span>
                             </button>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-section">
-                            <div class="dropdown-section-title">🔗 Link Analysis</div>
-                            <button class="dropdown-item" onclick="app.analyzeBatchLinks(event)">
-                                <span class="item-icon">🔗</span>
-                                <span class="item-text">AI Link Detection</span>
-                            </button>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-section">
-                            <div class="dropdown-section-title">📝 Activity</div>
-                            <button class="dropdown-item" onclick="app.toggleAIActionPanel()">
-                                <span class="item-icon">📝</span>
-                                <span class="item-text">AI Actions Log</span>
-                                <span id="aiActionCount" class="item-badge">0</span>
-                            </button>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-section">
-                            <div class="dropdown-section-title">⚙️ Settings</div>
-                            <button class="dropdown-item" onclick="app.toggleTheme()">
-                                <span class="item-icon">🌓</span>
-                                <span class="item-text">Toggle Theme</span>
+                            <button class="dropdown-item" onclick="app.exportSelectedToCSV()">
+                                <span class="item-icon">📤</span>
+                                <span class="item-text">Export Selected</span>
                             </button>
                         </div>
                     </div>
@@ -7301,23 +7271,21 @@
                 }
             },
 
-            // Toggle tools dropdown
-            toggleToolsDropdown() {
-                const menu = document.getElementById('toolsDropdownMenu');
-                const dropdown = document.querySelector('.tools-dropdown');
+            // Toggle more dropdown
+            toggleMoreDropdown() {
+                const menu = document.getElementById('moreDropdownMenu');
+                const dropdown = document.querySelector('.more-dropdown');
                 if (!menu || !dropdown) return;
 
                 const isHidden = menu.classList.contains('hidden');
                 menu.classList.toggle('hidden');
-                dropdown.classList.toggle('active', !isHidden);
 
                 // Close dropdown when clicking outside
                 if (!menu.classList.contains('hidden')) {
                     setTimeout(() => {
                         const closeDropdown = (e) => {
-                            if (!e.target.closest('.tools-dropdown')) {
+                            if (!e.target.closest('.more-dropdown')) {
                                 menu.classList.add('hidden');
-                                dropdown.classList.remove('active');
                                 document.removeEventListener('click', closeDropdown);
                             }
                         };
