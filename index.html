@@ -4643,6 +4643,53 @@
             justify-content: center;
         }
 
+        /* Header Divider */
+        .header-divider {
+            width: 1px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 4px;
+        }
+
+        [data-theme="dark"] .header-divider {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Data Actions */
+        .data-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .data-actions .btn-secondary {
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Responsive Text Labels */
+        .btn-text-desktop {
+            display: inline;
+        }
+
+        @media (max-width: 1024px) {
+            .btn-text-desktop {
+                display: none;
+            }
+
+            .header-divider {
+                display: none;
+            }
+
+            .data-actions .btn-secondary {
+                padding: 6px 8px;
+                min-width: 32px;
+                justify-content: center;
+            }
+        }
+
         .action-badge {
             position: absolute;
             top: -4px;
@@ -4683,6 +4730,12 @@
 
         .dropdown-section {
             padding: 8px 0;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
         }
 
         .dropdown-section-title {
@@ -4867,29 +4920,30 @@
                     </button>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <button class="btn-secondary btn-compact" onclick="app.showWorkspaceModal()" title="Create New Workspace">
-                        <span class="btn-icon">🏗️</span>
-                    </button>
-                    <button class="btn-secondary btn-compact" onclick="app.exportAllData()" title="Export Data">
+                <div class="header-divider"></div>
+
+                <!-- Data Management -->
+                <div class="data-actions">
+                    <button class="btn-secondary" onclick="app.exportAllData()" title="Export all data as JSON backup">
                         <span class="btn-icon">💾</span>
+                        <span class="btn-text-desktop">Export</span>
                     </button>
-                    <button class="btn-secondary btn-compact" onclick="app.importAllData()" title="Import Data">
+                    <button class="btn-secondary" onclick="app.importAllData()" title="Import data from backup file">
                         <span class="btn-icon">📂</span>
+                        <span class="btn-text-desktop">Import</span>
                     </button>
-                    <button class="btn-secondary btn-compact" onclick="app.analyzeBatchLinks(event)" title="AI Link Detection">
-                        <span class="btn-icon">🔗</span>
-                    </button>
+                </div>
+
+                <div class="header-divider"></div>
+
+                <!-- Quick Tools -->
+                <div class="quick-actions">
                     <button class="btn-secondary btn-compact" onclick="app.toggleAIActionPanel()" title="AI Actions Log">
                         <span class="btn-icon">📝</span>
                         <span id="aiActionCount" class="action-badge">0</span>
                     </button>
-                    <button class="btn-secondary btn-compact" onclick="app.showApiSettings()" title="API Settings">
-                        <span class="btn-icon">🔑</span>
-                    </button>
-                    <button class="btn-secondary btn-compact" onclick="app.toggleTheme()" title="Toggle Theme">
-                        <span class="btn-icon">🌓</span>
+                    <button class="btn-secondary btn-compact" onclick="app.analyzeBatchLinks(event)" title="AI Link Detection">
+                        <span class="btn-icon">🔗</span>
                     </button>
                 </div>
 
@@ -4900,14 +4954,38 @@
                     </button>
                     <div class="more-dropdown-menu hidden" id="moreDropdownMenu">
                         <div class="dropdown-section">
-                            <div class="dropdown-section-title">📊 Export Options</div>
-                            <button class="dropdown-item" onclick="app.exportToCSV()">
-                                <span class="item-icon">📥</span>
-                                <span class="item-text">Export CSV</span>
+                            <div class="dropdown-section-title">🏗️ Workspace</div>
+                            <button class="dropdown-item" onclick="app.showWorkspaceModal(); app.toggleMoreDropdown();">
+                                <span class="item-icon">➕</span>
+                                <span class="item-text">New Workspace</span>
                             </button>
-                            <button class="dropdown-item" onclick="app.exportSelectedToCSV()">
+                            <button class="dropdown-item" onclick="document.querySelector('.workspace-selector-container button')?.click(); app.toggleMoreDropdown();">
+                                <span class="item-icon">⚙️</span>
+                                <span class="item-text">Manage Workspaces</span>
+                            </button>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-section">
+                            <div class="dropdown-section-title">📊 Export Options</div>
+                            <button class="dropdown-item" onclick="app.exportToCSV(); app.toggleMoreDropdown();">
+                                <span class="item-icon">📥</span>
+                                <span class="item-text">Export to CSV</span>
+                            </button>
+                            <button class="dropdown-item" onclick="app.exportSelectedToCSV(); app.toggleMoreDropdown();">
                                 <span class="item-icon">📤</span>
-                                <span class="item-text">Export Selected</span>
+                                <span class="item-text">Export Selected CSV</span>
+                            </button>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-section">
+                            <div class="dropdown-section-title">⚙️ Settings</div>
+                            <button class="dropdown-item" onclick="app.showApiSettings(); app.toggleMoreDropdown();">
+                                <span class="item-icon">🔑</span>
+                                <span class="item-text">API Settings</span>
+                            </button>
+                            <button class="dropdown-item" onclick="app.toggleTheme(); app.toggleMoreDropdown();">
+                                <span class="item-icon">🌓</span>
+                                <span class="item-text">Toggle Theme</span>
                             </button>
                         </div>
                     </div>
