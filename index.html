@@ -6517,7 +6517,7 @@
                         model: localStorage.getItem('selectedModel'),
                         tavilyApiKey: localStorage.getItem('tavilyApiKey'),
                         exportDate: new Date().toISOString(),
-                        version: '1.0'
+                        version: '2.0'
                     };
 
                     const dataStr = JSON.stringify(data, null, 2);
@@ -6541,13 +6541,51 @@
             importData(file) {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
-                    reader.onload = (e) => {
+                    reader.onload = async (e) => {
                         try {
                             const data = JSON.parse(e.target.result);
 
-                            // Validate data structure
-                            if (!data.version || !data.workspaces || !data.features) {
-                                throw new Error('Invalid backup file format');
+                            // Validate minimum required structure
+                            if (!data.version || !data.features) {
+                                throw new Error('Invalid backup file format: missing version or features');
+                            }
+
+                            // Handle v1.0 backups (pre-workspace) - migrate to workspace format
+                            if (data.version === "1.0" && !data.workspaces) {
+                                console.log('📦 Detected v1.0 backup - migrating to workspace format...');
+
+                                // Create default workspace from old data
+                                const defaultWorkspace = {
+                                    id: Date.now().toString(),
+                                    name: 'Import Platform',
+                                    description: 'Imported from backup file',
+                                    color: '#3b82f6',
+                                    icon: '📊',
+                                    customInstructions: data.customInstructions || '',
+                                    aiMemory: data.memory || [],
+                                    createdAt: new Date().toISOString(),
+                                    updatedAt: new Date().toISOString()
+                                };
+
+                                // Add workspace to data
+                                data.workspaces = [defaultWorkspace];
+
+                                // Assign all features to this workspace
+                                data.features.forEach(feature => {
+                                    if (!feature.workspaceId) {
+                                        feature.workspaceId = defaultWorkspace.id;
+                                    }
+                                });
+
+                                // Set as current workspace
+                                data.currentWorkspaceId = defaultWorkspace.id;
+
+                                console.log(`✅ Migration complete - created workspace "${defaultWorkspace.name}" with ${data.features.length} features`);
+                            }
+
+                            // Validate workspace structure is now present
+                            if (!data.workspaces || !Array.isArray(data.workspaces)) {
+                                throw new Error('Invalid backup file format: missing workspaces after migration');
                             }
 
                             // Confirm import
@@ -6556,7 +6594,7 @@
                                 return;
                             }
 
-                            // Import data
+                            // Import data to localStorage
                             if (data.workspaces && Array.isArray(data.workspaces)) {
                                 localStorage.setItem('roadmapWorkspaces', JSON.stringify(data.workspaces));
                             }
@@ -6576,7 +6614,24 @@
                                 localStorage.setItem('tavilyApiKey', data.tavilyApiKey);
                             }
 
-                            this.showAlert({ title: 'Import Complete', message: 'Your data has been imported successfully! Please refresh the page.', variant: 'success' });
+                            // Push to Supabase if connected
+                            if (supabaseService.isConnected) {
+                                console.log('🔄 Pushing imported data to Supabase...');
+
+                                // Push workspaces
+                                for (const workspace of data.workspaces) {
+                                    await supabaseService.createWorkspace(workspace);
+                                }
+
+                                // Push features
+                                await supabaseService.syncFeatures(data.features);
+
+                                console.log('✅ Data pushed to Supabase successfully');
+                                this.showAlert({ title: 'Import Complete', message: 'Your data has been imported and synced to cloud! Please refresh the page.', variant: 'success' });
+                            } else {
+                                this.showAlert({ title: 'Import Complete', message: 'Your data has been imported successfully! Please refresh the page.', variant: 'success' });
+                            }
+
                             resolve(true);
                         } catch (error) {
                             console.error('Import failed:', error);
