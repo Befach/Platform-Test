@@ -4085,6 +4085,72 @@
             gap: 6px;
         }
 
+        /* Workspace Banner */
+        .workspace-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: var(--primary-contrast);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            display: none; /* Hidden by default, shown when no workspaces */
+        }
+
+        .workspace-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .workspace-banner-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .workspace-banner-text {
+            flex: 1;
+        }
+
+        .workspace-banner-text h3 {
+            margin: 0 0 4px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .workspace-banner-text p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .workspace-banner .btn-primary {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .workspace-banner .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .workspace-banner-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .workspace-banner-text h3 {
+                font-size: 16px;
+            }
+
+            .workspace-banner-text p {
+                font-size: 13px;
+            }
+        }
+
         .workspace-item .workspace-edit {
             opacity: 0.6;
             font-size: 12px;
@@ -4803,6 +4869,9 @@
 
                 <!-- Quick Actions -->
                 <div class="quick-actions">
+                    <button class="btn-secondary btn-compact" onclick="app.showWorkspaceModal()" title="Create New Workspace">
+                        <span class="btn-icon">🏗️</span>
+                    </button>
                     <button class="btn-secondary btn-compact" onclick="app.exportAllData()" title="Export Data">
                         <span class="btn-icon">💾</span>
                     </button>
@@ -4868,6 +4937,20 @@
         <div class="content">
             <!-- Table View -->
             <div id="tableView" class="table-container">
+                <!-- Workspace Creation Banner -->
+                <div class="workspace-banner" id="workspaceBanner">
+                    <div class="workspace-banner-content">
+                        <div class="workspace-banner-icon">🏗️</div>
+                        <div class="workspace-banner-text">
+                            <h3>Create a Workspace</h3>
+                            <p>Organize your features into workspaces for better project management</p>
+                        </div>
+                        <button class="btn-primary" onclick="app.showWorkspaceModal()">
+                            <span class="btn-icon">➕</span>
+                            Create Workspace
+                        </button>
+                    </div>
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -6000,6 +6083,7 @@
                 await this.loadWorkspaces();
 
                 // Check if we have workspaces
+                console.log('🔍 Workspace check:', { count: this.workspaces.length, workspaces: this.workspaces });
                 if (this.workspaces.length === 0) {
                     // Check if there are features that need a workspace
                     const stored = localStorage.getItem('roadmapFeatures');
@@ -6122,6 +6206,9 @@
                 this.loadMemorySuggestions();
                 this.loadLinkSuggestions();
                 this.loadRejectedLinks();
+
+                // Update workspace banner visibility
+                this.updateWorkspaceBanner();
                 this.loadAIActionLog();
                 this.renderWorkspaceSelector();
                 this.renderTable();
@@ -7294,9 +7381,9 @@
                                 </div>
                             `).join('')}
                             <div class="workspace-divider"></div>
-                            <button class="workspace-item workspace-item-primary" onclick="app.showWorkspaceModal()">
-                                <span class="workspace-icon">➕</span>
-                                <span class="workspace-name">Create New Workspace</span>
+                            <button class="workspace-item workspace-item-primary" onclick="app.showWorkspaceModal(); app.updateWorkspaceBanner();">
+                                <span class="workspace-icon">🏗️</span>
+                                <span class="workspace-name">🏗️ Create New Workspace</span>
                             </button>
                             <button class="workspace-item" onclick="app.showWorkspaceManageModal()">
                                 <span class="workspace-icon">⚙️</span>
@@ -7395,8 +7482,22 @@
                 this.showWorkspaceModal(workspaceId);
             },
 
+            // Control workspace banner visibility
+            updateWorkspaceBanner() {
+                const banner = document.getElementById('workspaceBanner');
+                if (banner) {
+                    // Show banner if no workspaces exist or if user wants to see it
+                    const shouldShow = this.workspaces.length === 0;
+                    banner.style.display = shouldShow ? 'block' : 'none';
+                }
+            },
+
             // Show workspace welcome screen (no workspaces exist)
             showWorkspaceWelcome() {
+                // Hide workspace banner since we're showing the full welcome screen
+                const banner = document.getElementById('workspaceBanner');
+                if (banner) banner.style.display = 'none';
+
                 const container = document.getElementById('tableContainer');
                 if (!container) return;
 
