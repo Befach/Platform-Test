@@ -4008,6 +4008,56 @@
             font-weight: 600;
         }
 
+        .btn-create-workspace {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: var(--primary-contrast);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-create-workspace:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-create-workspace .workspace-icon {
+            font-size: 18px;
+        }
+
+        .btn-create-workspace .workspace-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .btn-create-workspace .workspace-arrow {
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-create-workspace:hover .workspace-arrow {
+            transform: translateX(2px);
+        }
+
+        .workspace-item-primary {
+            background: var(--primary) !important;
+            color: var(--primary-contrast) !important;
+            font-weight: 500;
+        }
+
+        .workspace-item-primary:hover {
+            background: var(--primary-hover) !important;
+        }
+
         .workspace-item .workspace-edit {
             opacity: 0.6;
             font-size: 12px;
@@ -4402,6 +4452,306 @@
         }
 
         /* ========== END WORKSPACE STYLES ========== */
+
+        /* ========== HEADER LAYOUT STYLES ========== */
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .header-center {
+            flex: 1;
+            max-width: 400px;
+            min-width: 200px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .header-search {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .header-search:focus {
+            outline: none;
+            border-color: var(--interactive);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        .primary-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-primary, .btn-ai-create {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--primary-contrast);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-ai-create {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-ai-create:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #6a4190 100%);
+        }
+
+        .btn-icon {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .btn-text {
+            flex-shrink: 0;
+        }
+
+        /* Tools Dropdown */
+        .tools-dropdown {
+            position: relative;
+        }
+
+        .tools-btn {
+            display: flex !important;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px !important;
+            background: var(--bg-secondary) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-primary) !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+        }
+
+        .tools-btn:hover {
+            background: var(--bg-elevated) !important;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .tools-dropdown.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .tools-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 4px);
+            right: 0;
+            min-width: 280px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            padding: 8px 0;
+        }
+
+        .dropdown-section {
+            padding: 8px 0;
+        }
+
+        .dropdown-section-title {
+            padding: 4px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        .item-icon {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .item-text {
+            flex: 1;
+        }
+
+        .item-badge {
+            background: var(--info);
+            color: var(--text-inverse);
+            border-radius: 10px;
+            padding: 0 6px;
+            font-size: 11px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 4px 0;
+        }
+
+        /* Status & Bulk Actions */
+        .sync-status {
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: opacity 0.2s ease;
+        }
+
+        .sync-status-offline {
+            opacity: 0.6;
+        }
+
+        .sync-status-syncing {
+            opacity: 1;
+            animation: pulse 1s infinite;
+        }
+
+        .sync-status-synced {
+            opacity: 0.8;
+        }
+
+        .sync-status-error {
+            opacity: 1;
+            color: var(--danger);
+        }
+
+        .bulk-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 8px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .bulk-actions.hidden {
+            display: none;
+        }
+
+        .bulk-count {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Responsive Header */
+        @media (max-width: 1024px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .header-center {
+                order: -1;
+                max-width: none;
+            }
+
+            .primary-actions {
+                flex: 1;
+            }
+
+            .tools-btn .btn-text {
+                display: none;
+            }
+
+            .btn-primary .btn-text,
+            .btn-ai-create .btn-text {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-left {
+                justify-content: center;
+            }
+
+            .header-left h1 {
+                font-size: 20px;
+            }
+
+            .primary-actions {
+                justify-content: center;
+            }
+
+            .tools-dropdown {
+                position: static;
+            }
+
+            .tools-dropdown-menu {
+                position: fixed;
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                max-height: 300px;
+            }
+        }
+
+        /* ========== END HEADER LAYOUT STYLES ========== */
     </style>
 </head>
 <body>
@@ -4411,23 +4761,81 @@
                 <h1>🚀 Platform Roadmap</h1>
                 <div id="workspaceSelector" class="workspace-selector-container"></div>
             </div>
-            <div class="header-main-actions">
-                <input type="text" id="searchInput" class="header-search focus-ring" placeholder="🔍 Search..." oninput="app.debouncedApplyFilters()" title="Ctrl/Cmd+K">
-                <button class="btn-primary btn-compact" onclick="app.showAddModal()" title="Add Feature (N)">+ Add</button>
-                <button class="btn-ai-create btn-compact" onclick="app.showAIAssistedFeatureCreation()" title="Create with AI Assistant">✨ AI Create</button>
+
+            <div class="header-center">
+                <input type="text" id="searchInput" class="header-search focus-ring" placeholder="🔍 Search features..." oninput="app.debouncedApplyFilters()" title="Ctrl/Cmd+K">
             </div>
-            <div class="header-actions">
-                <button class="btn-secondary btn-compact" onclick="app.exportAllData()" title="Export complete backup">💾</button>
-                <button class="btn-secondary btn-compact" onclick="app.importAllData()" title="Import from backup">📂</button>
-                <button class="btn-secondary btn-compact" onclick="app.analyzeBatchLinks(event)" title="AI-powered link detection">🔗</button>
-                <button class="btn-secondary btn-compact" onclick="app.exportToCSV()" title="Export CSV">📥</button>
-                <button class="btn-secondary btn-compact" onclick="app.toggleAIActionPanel()" title="AI Actions Log">📝 <span id="aiActionCount" style="background:var(--info); color:var(--text-inverse); border-radius:10px; padding:0 6px; font-size:11px; margin-left:4px;">0</span></button>
-                <button class="btn-secondary btn-compact" onclick="app.toggleTheme()" title="Toggle dark mode">🌓</button>
-                <div id="syncStatus" class="sync-status sync-status-offline" title="Sync status">📦 Offline</div>
-                <div id="bulkActions" class="bulk-actions" role="region" aria-label="Bulk actions">
-                    <span id="bulkCount" style="font-size:12px;">0</span>
-                    <button class="btn-danger btn-compact" onclick="app.bulkDeleteSelected()" style="font-size:11px;">Delete</button>
-                    <button class="btn-primary btn-compact" onclick="app.exportSelectedToCSV()" style="font-size:11px;">Export</button>
+
+            <div class="header-right">
+                <!-- Primary Actions -->
+                <div class="primary-actions">
+                    <button class="btn-primary" onclick="app.showAddModal()" title="Add Feature (N)">
+                        <span class="btn-icon">➕</span>
+                        <span class="btn-text">Add Feature</span>
+                    </button>
+                    <button class="btn-ai-create" onclick="app.showAIAssistedFeatureCreation()" title="Create with AI Assistant">
+                        <span class="btn-icon">✨</span>
+                        <span class="btn-text">AI Create</span>
+                    </button>
+                </div>
+
+                <!-- Tools Dropdown -->
+                <div class="tools-dropdown">
+                    <button class="btn-secondary btn-compact tools-btn" onclick="app.toggleToolsDropdown()" title="Tools & Actions">
+                        <span class="btn-icon">🛠️</span>
+                        <span class="btn-text">Tools</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="tools-dropdown-menu hidden" id="toolsDropdownMenu">
+                        <div class="dropdown-section">
+                            <div class="dropdown-section-title">📊 Data Management</div>
+                            <button class="dropdown-item" onclick="app.exportAllData()">
+                                <span class="item-icon">💾</span>
+                                <span class="item-text">Export Backup</span>
+                            </button>
+                            <button class="dropdown-item" onclick="app.importAllData()">
+                                <span class="item-icon">📂</span>
+                                <span class="item-text">Import Backup</span>
+                            </button>
+                            <button class="dropdown-item" onclick="app.exportToCSV()">
+                                <span class="item-icon">📥</span>
+                                <span class="item-text">Export CSV</span>
+                            </button>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-section">
+                            <div class="dropdown-section-title">🔗 Link Analysis</div>
+                            <button class="dropdown-item" onclick="app.analyzeBatchLinks(event)">
+                                <span class="item-icon">🔗</span>
+                                <span class="item-text">AI Link Detection</span>
+                            </button>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-section">
+                            <div class="dropdown-section-title">📝 Activity</div>
+                            <button class="dropdown-item" onclick="app.toggleAIActionPanel()">
+                                <span class="item-icon">📝</span>
+                                <span class="item-text">AI Actions Log</span>
+                                <span id="aiActionCount" class="item-badge">0</span>
+                            </button>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-section">
+                            <div class="dropdown-section-title">⚙️ Settings</div>
+                            <button class="dropdown-item" onclick="app.toggleTheme()">
+                                <span class="item-icon">🌓</span>
+                                <span class="item-text">Toggle Theme</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status & Bulk Actions -->
+                <div id="syncStatus" class="sync-status sync-status-offline" title="Sync status">📦</div>
+                <div id="bulkActions" class="bulk-actions hidden" role="region" aria-label="Bulk actions">
+                    <span id="bulkCount" class="bulk-count">0</span>
+                    <button class="btn-danger btn-compact" onclick="app.bulkDeleteSelected()" title="Delete selected">🗑️</button>
+                    <button class="btn-primary btn-compact" onclick="app.exportSelectedToCSV()" title="Export selected">📤</button>
                 </div>
             </div>
         </div>
@@ -6830,7 +7238,13 @@
 
                 const currentWorkspace = this.getCurrentWorkspace();
                 if (!currentWorkspace) {
-                    container.innerHTML = '<button class="btn-workspace" onclick="app.showWorkspaceModal()">+ Create Workspace</button>';
+                    container.innerHTML = `
+                        <button class="btn-create-workspace" onclick="app.showWorkspaceModal()">
+                            <span class="workspace-icon">🏗️</span>
+                            <span class="workspace-text">Create Your First Workspace</span>
+                            <span class="workspace-arrow">→</span>
+                        </button>
+                    `;
                     return;
                 }
 
@@ -6853,9 +7267,9 @@
                                 </div>
                             `).join('')}
                             <div class="workspace-divider"></div>
-                            <button class="workspace-item" onclick="app.showWorkspaceModal()">
+                            <button class="workspace-item workspace-item-primary" onclick="app.showWorkspaceModal()">
                                 <span class="workspace-icon">➕</span>
-                                <span class="workspace-name">New Workspace</span>
+                                <span class="workspace-name">Create New Workspace</span>
                             </button>
                             <button class="workspace-item" onclick="app.showWorkspaceManageModal()">
                                 <span class="workspace-icon">⚙️</span>
@@ -6879,6 +7293,31 @@
                         const closeDropdown = (e) => {
                             if (!e.target.closest('.workspace-dropdown')) {
                                 menu.classList.add('hidden');
+                                document.removeEventListener('click', closeDropdown);
+                            }
+                        };
+                        document.addEventListener('click', closeDropdown);
+                    }, 0);
+                }
+            },
+
+            // Toggle tools dropdown
+            toggleToolsDropdown() {
+                const menu = document.getElementById('toolsDropdownMenu');
+                const dropdown = document.querySelector('.tools-dropdown');
+                if (!menu || !dropdown) return;
+
+                const isHidden = menu.classList.contains('hidden');
+                menu.classList.toggle('hidden');
+                dropdown.classList.toggle('active', !isHidden);
+
+                // Close dropdown when clicking outside
+                if (!menu.classList.contains('hidden')) {
+                    setTimeout(() => {
+                        const closeDropdown = (e) => {
+                            if (!e.target.closest('.tools-dropdown')) {
+                                menu.classList.add('hidden');
+                                dropdown.classList.remove('active');
                                 document.removeEventListener('click', closeDropdown);
                             }
                         };
