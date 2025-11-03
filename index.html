@@ -6917,6 +6917,13 @@
                 localStorage.setItem('customInstructions', instructions);
             },
 
+            escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            },
+
             loadMemory() {
                 try {
                     const stored = localStorage.getItem('aiMemory');
@@ -12472,6 +12479,13 @@ Generate 3-4 milestones, 3-5 risks, and 2-4 prerequisites.`;
                                     title:'Import complete',
                                     message:`Restored ${this.workspaces.length} workspace(s), ${this.features.length} features, ${this.memory.length} memory items.`,
                                     variant:'success'
+                                });
+                            }).catch((error) => {
+                                console.error('❌ Import error during processing:', error);
+                                this.showAlert({
+                                    title: 'Import failed during processing',
+                                    message: `An unexpected error occurred while importing: ${error.message}<br><br>Please try again or check the browser console for details.`,
+                                    variant: 'danger'
                                 });
                             });
 
