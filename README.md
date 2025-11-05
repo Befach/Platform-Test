@@ -35,6 +35,144 @@ Simply double-click `index.html` or open it in your web browser.
 2. Paste your OpenRouter API key in the input field
 3. Start chatting with the AI assistant!
 
+## 🔌 MCP Servers Setup (Optional)
+
+This project uses **Model Context Protocol (MCP)** servers to enhance AI capabilities. The following servers are configured:
+
+### 🌐 Autonomous Frontend Browser Tools (Installed)
+**Purpose:** Gives AI real-time context about your running application - console logs, network requests, DOM state, and screenshots.
+
+**What it does:**
+- Inspect live application state
+- Monitor console logs and errors
+- Track network requests (perfect for debugging Supabase API calls)
+- Take screenshots for visual debugging
+- AI can see what developers see in DevTools
+
+**Chrome Extension Setup Required:**
+
+1. **Install the npm package:**
+   ```bash
+   npm install -g @winds-ai/autonomous-frontend-browser-tools
+   ```
+
+2. **Download Chrome Extension:**
+   - Visit: [Autonomous Browser Tools on npm](https://www.npmjs.com/package/@winds-ai/autonomous-frontend-browser-tools)
+   - Download the extension files
+   - Or clone from GitHub: `git clone https://github.com/winds-ai/autonomous-frontend-browser-tools`
+
+3. **Install Extension in Chrome:**
+   - Open Chrome and navigate to `chrome://extensions/`
+   - Enable **Developer mode** (toggle in top-right)
+   - Click **"Load unpacked"**
+   - Select the `chrome-extension/` folder from the package
+   - Extension should appear with the Autonomous Browser Tools icon
+
+4. **Usage:**
+   - Open your app in Chrome (`index.html`)
+   - Open DevTools (F12)
+   - The extension will automatically connect to the MCP server
+   - Now AI can inspect your running application!
+
+**Perfect for:**
+- Debugging Supabase sync issues
+- Analyzing network performance
+- Troubleshooting JavaScript errors
+- Visual inspection of UI changes
+
+---
+
+### 🎨 MCP-UI Server (Installed ✅)
+**Purpose:** Generate reusable HTML/CSS components from natural language descriptions.
+
+**What it does:**
+- Framework-agnostic raw HTML/CSS generation
+- Pre-built component templates (modals, cards, buttons, forms, tables)
+- Vanilla JavaScript compatible (no React/Vue required)
+- Copy-paste ready components with inline CSS
+
+**Installation Complete!**
+
+The MCP-UI server is already configured and running. You can now generate components by asking:
+
+**Example prompts:**
+```
+"Generate a modal with title 'Settings' and a form inside"
+"Create a card component for displaying features"
+"Generate a primary button with text 'Save Changes'"
+"Create a form with name, email, and password fields"
+"Generate a table showing my roadmap features"
+```
+
+**Available Component Types:**
+- **Modals** - Dialog boxes with customizable content
+- **Cards** - Content cards with titles, descriptions, and optional images
+- **Buttons** - Styled buttons (primary, secondary, success, danger variants)
+- **Forms** - Multi-field forms with validation
+- **Tables** - Data tables with headers and sortable columns
+- **Custom HTML** - General-purpose HTML/CSS generation
+
+**Test Page:**
+Open [mcp-ui-test.html](mcp-ui-test.html) to see component examples and test the server.
+
+**How to Use:**
+1. Ask the AI to generate a component (e.g., "Create a modal for user login")
+2. The MCP-UI server generates the HTML/CSS
+3. Copy the code into your project
+4. Customize as needed
+
+---
+
+### ✨ 21st.dev Magic MCP (Installed ✅)
+**Purpose:** AI-powered UI component generation (like v0.dev in your IDE).
+
+**What it does:**
+- Natural language to component generation
+- Modern UI scaffolding with React, Vue, Svelte, and more
+- Access to large pre-built component library
+- SVGL integration for brand assets
+- Professional design patterns and layouts
+
+**Installation Complete!**
+
+The Magic MCP server is now configured and running. You can generate advanced UI components by asking:
+
+**Example prompts:**
+```
+"Create a modern dashboard layout with sidebar"
+"Generate a pricing card component with three tiers"
+"Build a contact form with validation"
+"Create an animated hero section"
+"Generate a responsive navigation bar"
+```
+
+**Features:**
+- **Component Library** - Access to thousands of pre-built components
+- **Modern Frameworks** - React, Vue, Svelte, Solid, and more
+- **Responsive Design** - Mobile-first, adaptive layouts
+- **Brand Assets** - SVGL icons and logos
+- **Best Practices** - Industry-standard patterns and accessibility
+
+**Note:** While primarily designed for React/modern frameworks, you can adapt generated components to vanilla HTML/CSS or use them as inspiration for your project.
+
+---
+
+### Other Configured MCP Servers
+
+This project also has the following MCP servers configured:
+
+- **🗄️ Supabase MCP** - Database operations and project management
+- **🚀 Vercel MCP** - Deployment and environment management
+- **🎭 Playwright MCP** - Browser automation and testing (Microsoft Official)
+- **🎪 Puppeteer MCP** - Alternative browser automation
+
+**Total MCP Servers:** 7 configured and connected ✅
+
+To see all configured MCP servers:
+```bash
+claude mcp list
+```
+
 ## 📖 How to Use
 
 ### Adding Features
