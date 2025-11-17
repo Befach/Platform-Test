@@ -1,7 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Settings } from 'lucide-react';
+import { WorkspaceGeneralSettings } from '@/components/workspaces/settings/workspace-general-settings';
 
 interface SettingsViewProps {
   workspace: any;
@@ -25,26 +24,7 @@ export function SettingsView({
       </div>
 
       {/* Settings Content */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Settings className="h-5 w-5" />
-            Workspace Settings
-          </CardTitle>
-          <CardDescription>
-            Configure workspace preferences
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="text-center py-12">
-          <div className="text-6xl mb-4">⚙️</div>
-          <h3 className="text-lg font-semibold mb-2">
-            Settings view in development
-          </h3>
-          <p className="text-muted-foreground">
-            Workspace configuration options will be available soon
-          </p>
-        </CardContent>
-      </Card>
+      <WorkspaceGeneralSettings workspace={workspace} />
     </div>
   );
 }
