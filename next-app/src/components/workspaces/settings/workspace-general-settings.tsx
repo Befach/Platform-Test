@@ -7,13 +7,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
   Card,
   CardContent,
   CardDescription,
@@ -22,16 +15,6 @@ import {
 } from '@/components/ui/card'
 import { useRouter } from 'next/navigation'
 import { Loader2, Trash2, Sidebar, Check } from 'lucide-react'
-
-const PHASES = [
-  { value: 'research', label: 'Research', description: 'Discovery and validation' },
-  { value: 'planning', label: 'Planning', description: 'Detailed planning' },
-  { value: 'review', label: 'Review', description: 'Stakeholder review' },
-  { value: 'execution', label: 'Execution', description: 'Building features' },
-  { value: 'testing', label: 'Testing', description: 'Quality assurance' },
-  { value: 'metrics', label: 'Metrics', description: 'Success measurement' },
-  { value: 'complete', label: 'Complete', description: 'Project complete' },
-]
 
 interface WorkspaceGeneralSettingsProps {
   workspace: {
@@ -49,7 +32,6 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState(workspace.name)
   const [description, setDescription] = useState(workspace.description || '')
-  const [phase, setPhase] = useState(workspace.phase)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [saved, setSaved] = useState(false)
   const [sidebarBehavior, setSidebarBehavior] = useState<SidebarBehavior>('expanded')
@@ -77,7 +59,6 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
         .update({
           name,
           description: description || null,
-          phase,
         })
         .eq('id', workspace.id)
 
@@ -141,7 +122,7 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
         <CardHeader>
           <CardTitle>General Information</CardTitle>
           <CardDescription>
-            Update your workspace name, description, and current phase
+            Update your workspace name and description
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -168,30 +149,6 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
                 disabled={loading}
                 placeholder="Describe the purpose and goals of this workspace..."
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phase">Current Phase</Label>
-              <Select value={phase} onValueChange={setPhase} disabled={loading}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a phase" />
-                </SelectTrigger>
-                <SelectContent>
-                  {PHASES.map((p) => (
-                    <SelectItem key={p.value} value={p.value}>
-                      <div className="flex flex-col">
-                        <span className="font-medium">{p.label}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {p.description}
-                        </span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                Track your workspace through the product development lifecycle
-              </p>
             </div>
 
             <div className="flex items-center gap-2 pt-4">
