@@ -5,11 +5,13 @@ import { WorkspaceGeneralSettings } from '@/components/workspaces/settings/works
 interface SettingsViewProps {
   workspace: any;
   team: any;
+  currentUserId: string;
 }
 
 export function SettingsView({
   workspace,
   team,
+  currentUserId,
 }: SettingsViewProps) {
   return (
     <div className="space-y-6">
@@ -24,7 +26,7 @@ export function SettingsView({
       </div>
 
       {/* Settings Content */}
-      <WorkspaceGeneralSettings workspace={workspace} />
+      <WorkspaceGeneralSettings workspace={workspace} currentUserId={currentUserId} />
     </div>
   );
 }

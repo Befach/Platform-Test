@@ -108,6 +108,32 @@ export default function AcceptInvitePage() {
 
       if (memberError) throw memberError
 
+      // Create phase assignments if provided
+      if (invitationData.phase_assignments && Array.isArray(invitationData.phase_assignments)) {
+        const phaseAssignments = invitationData.phase_assignments.map((assignment: any) => ({
+          id: `assignment_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+          team_id: invitationData.team_id,
+          workspace_id: assignment.workspace_id,
+          user_id: user.id,
+          phase: assignment.phase,
+          can_edit: assignment.can_edit ?? true,
+          assigned_by: invitationData.invited_by,
+          assigned_at: new Date().toISOString(),
+          notes: `Auto-assigned via invitation on ${new Date().toLocaleDateString()}`,
+        }))
+
+        if (phaseAssignments.length > 0) {
+          const { error: assignmentError } = await supabase
+            .from('user_phase_assignments')
+            .insert(phaseAssignments)
+
+          if (assignmentError) {
+            console.error('Error creating phase assignments:', assignmentError)
+            // Don't throw - invitation is still accepted, just log the error
+          }
+        }
+      }
+
       // Mark invitation as accepted
       const { error: updateError } = await supabase
         .from('invitations')

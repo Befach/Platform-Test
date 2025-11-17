@@ -6,6 +6,7 @@ import { TimelineView } from './timeline-view';
 import { MindMapView } from './mind-map-view';
 import { DependenciesView } from './dependencies-view';
 import { SettingsView } from './settings-view';
+import { TeamAnalyticsView } from './team-analytics-view';
 
 interface WorkspaceContentProps {
   view: string;
@@ -98,6 +99,14 @@ export function WorkspaceContent({
           <SettingsView
             workspace={workspace}
             team={team}
+            currentUserId={currentUserId}
+          />
+        );
+
+      case 'team-analytics':
+        return (
+          <TeamAnalyticsView
+            workspace={workspace}
           />
         );
 

@@ -378,6 +378,60 @@ Before implementing:
 
 ---
 
+## 📁 DOCUMENTATION ORGANIZATION
+
+**CRITICAL**: All documentation MUST be organized into the proper structure. NEVER create scattered files in root or random directories.
+
+### File Structure
+
+```
+docs/
+├── implementation/         # Week-by-week progress
+│   ├── week-X-Y.md        # Add all week-related work HERE
+│   └── postponed-features.md
+├── reference/              # Technical references
+│   ├── API_REFERENCE.md   # Consolidate all API docs HERE
+│   ├── ARCHITECTURE.md    # System design
+│   ├── SECURITY.md        # Security implementation
+│   └── CODE_PATTERNS.md   # Code examples
+├── planning/               # Project management
+│   ├── PROGRESS.md        # Weekly progress tracking
+│   └── NEXT_STEPS.md      # Immediate priorities
+└── processes/              # How-to guides
+```
+
+### Rules
+
+✅ **DO**:
+- Add implementations to `docs/implementation/week-X-Y.md` immediately
+- Consolidate API docs into `docs/reference/API_REFERENCE.md`
+- Update week files with full details (what, why, files, dependencies, impact)
+- Delete scattered files after consolidating
+
+❌ **DON'T**:
+- Create summary/implementation/quick-reference files in root
+- Create duplicate documentation in multiple locations
+- Skip updating week files "because it's documented elsewhere"
+- Leave scattered files after completing work
+
+### When You Create Documentation
+
+**Immediately after ANY significant change:**
+1. Update appropriate `docs/implementation/week-X-Y.md` with full entry
+2. If API changes → Update `docs/reference/API_REFERENCE.md`
+3. If security changes → Update `docs/reference/SECURITY.md`
+4. Delete any temporary/scattered files created during development
+5. Update `docs/planning/PROGRESS.md` percentages
+
+**Example**: After implementing team management:
+- ✅ Add full entry to `week-5-review-system.md`
+- ✅ Update API_REFERENCE.md with new routes
+- ✅ Delete TEAM_MANAGEMENT_UI_IMPLEMENTATION.md (consolidate into week-5)
+- ✅ Delete TEAM_API_*.md files (consolidate into API_REFERENCE.md)
+- ❌ Don't leave 10+ scattered .md files in root
+
+---
+
 ## 📝 DOCUMENTATION MAINTENANCE WORKFLOW
 
 ### When to Update Documentation

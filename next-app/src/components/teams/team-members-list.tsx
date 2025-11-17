@@ -22,7 +22,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { useRouter } from 'next/navigation'
-import { Crown, Shield, User, Trash2 } from 'lucide-react'
+import { Crown, Shield, User, Trash2, Settings } from 'lucide-react'
+import { ComprehensiveMemberEditor } from '@/components/team/comprehensive-member-editor'
 
 interface TeamMember {
   id: string
@@ -42,6 +43,8 @@ interface TeamMembersListProps {
   currentUserId: string
   currentUserRole: string
   teamId: string
+  workspaceId?: string
+  workspaceName?: string
 }
 
 export function TeamMembersList({
@@ -49,8 +52,11 @@ export function TeamMembersList({
   currentUserId,
   currentUserRole,
   teamId,
+  workspaceId,
+  workspaceName,
 }: TeamMembersListProps) {
   const [removingMemberId, setRemovingMemberId] = useState<string | null>(null)
+  const [editingMember, setEditingMember] = useState<TeamMember | null>(null)
   const [loading, setLoading] = useState(false)
 
   const router = useRouter()
@@ -193,6 +199,19 @@ export function TeamMembersList({
                   </Badge>
                 )}
 
+                {/* Edit Permissions button (only show if workspace context is available) */}
+                {isAdmin && workspaceId && workspaceName && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditingMember(member)}
+                    disabled={loading}
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    Edit Permissions
+                  </Button>
+                )}
+
                 {canRemove && (
                   <Button
                     variant="ghost"
@@ -233,6 +252,24 @@ export function TeamMembersList({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Comprehensive Member Editor */}
+      {editingMember && workspaceId && workspaceName && (
+        <ComprehensiveMemberEditor
+          member={{
+            id: editingMember.id,
+            user_id: editingMember.user_id,
+            team_id: teamId,
+            role: editingMember.role as 'owner' | 'admin' | 'member',
+            users: editingMember.users
+          }}
+          workspaceId={workspaceId}
+          workspaceName={workspaceName}
+          currentUserRole={currentUserRole as 'owner' | 'admin' | 'member'}
+          open={!!editingMember}
+          onOpenChange={(open) => !open && setEditingMember(null)}
+        />
+      )}
     </>
   )
 }

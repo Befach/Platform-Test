@@ -192,3 +192,18 @@ export function calculatePhaseDistribution(workItems: Array<{
     ])
   ) as Record<WorkspacePhase, { count: number; percentage: number }>;
 }
+
+/**
+ * Phase permission constants
+ *
+ * Default permission settings for team members.
+ * Owners and admins bypass these restrictions.
+ */
+export const PHASE_PERMISSIONS = {
+  /** All team members can view all phases */
+  DEFAULT_VIEW: true,
+  /** Edit access requires explicit phase assignment (or admin role) */
+  DEFAULT_EDIT: false,
+  /** Delete access same as edit */
+  DEFAULT_DELETE: false,
+} as const;

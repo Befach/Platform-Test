@@ -170,7 +170,7 @@ export default async function TeamSettingsPage({
           </CardContent>
         </Card>
 
-        {isAdmin && invitations && invitations.length > 0 && (
+        {isAdmin && invitations && Array.isArray(invitations) && invitations.length > 0 && (
           <Card>
             <CardHeader>
               <CardTitle>Pending Invitations</CardTitle>

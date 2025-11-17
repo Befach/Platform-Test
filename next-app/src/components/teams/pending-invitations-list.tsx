@@ -33,6 +33,9 @@ export function PendingInvitationsList({
   const router = useRouter()
   const supabase = createClient()
 
+  // Ensure invitations is always an array
+  const safeInvitations = Array.isArray(invitations) ? invitations : []
+
   const handleDelete = async () => {
     if (!deletingId) return
 
@@ -88,7 +91,7 @@ export function PendingInvitationsList({
   return (
     <>
       <div className="space-y-4">
-        {invitations.map((invitation) => (
+        {safeInvitations.map((invitation) => (
           <div
             key={invitation.id}
             className="flex items-center justify-between p-4 border rounded-lg"

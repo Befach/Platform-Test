@@ -14,7 +14,12 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useRouter } from 'next/navigation'
-import { Loader2, Trash2, Sidebar, Check } from 'lucide-react'
+import { Loader2, Trash2, Check, UserPlus, Users } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { InviteMemberDialog } from '@/components/team/invite-member-dialog'
+import { PhaseAssignmentMatrix } from '@/components/team/phase-assignment-matrix'
+import { TeamMembersList } from '@/components/teams/team-members-list'
+import Link from 'next/link'
 
 interface WorkspaceGeneralSettingsProps {
   workspace: {
@@ -24,11 +29,12 @@ interface WorkspaceGeneralSettingsProps {
     phase: string
     team_id: string
   }
+  currentUserId?: string
 }
 
 type SidebarBehavior = 'expanded' | 'collapsed' | 'hover'
 
-export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettingsProps) {
+export function WorkspaceGeneralSettings({ workspace, currentUserId }: WorkspaceGeneralSettingsProps) {
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState(workspace.name)
   const [description, setDescription] = useState(workspace.description || '')
@@ -36,6 +42,10 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
   const [saved, setSaved] = useState(false)
   const [sidebarBehavior, setSidebarBehavior] = useState<SidebarBehavior>('expanded')
   const [sidebarSaved, setSidebarSaved] = useState(false)
+  const [teamMembers, setTeamMembers] = useState<any[]>([])
+  const [loadingMembers, setLoadingMembers] = useState(true)
+  const [currentUserRole, setCurrentUserRole] = useState<'owner' | 'admin' | 'member'>('member')
+  const [phaseMatrixOpen, setPhaseMatrixOpen] = useState(false)
 
   const router = useRouter()
   const supabase = createClient()
@@ -47,6 +57,70 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
       setSidebarBehavior(savedBehavior)
     }
   }, [])
+
+  // Load team members
+  useEffect(() => {
+    const loadTeamMembers = async () => {
+      try {
+        // Try to join with public.users table (will work after setup)
+        const { data, error } = await supabase
+          .from('team_members')
+          .select('id, user_id, role, joined_at, users(email, name)')
+          .eq('team_id', workspace.team_id)
+          .order('joined_at', { ascending: true})
+
+        if (error) {
+          // If join fails (table doesn't exist), fall back to basic query
+          console.warn('Users table join failed, using fallback:', error)
+          const { data: basicData, error: basicError } = await supabase
+            .from('team_members')
+            .select('id, user_id, role, joined_at')
+            .eq('team_id', workspace.team_id)
+            .order('joined_at', { ascending: true})
+
+          if (basicError) throw basicError
+
+          // Show user_id as placeholder
+          const membersWithPlaceholder = (basicData || []).map(member => ({
+            ...member,
+            users: {
+              email: member.user_id,
+              name: null
+            }
+          }))
+
+          setTeamMembers(membersWithPlaceholder)
+
+          // Find current user's role
+          if (currentUserId) {
+            const currentMember = basicData?.find(m => m.user_id === currentUserId)
+            if (currentMember) {
+              setCurrentUserRole(currentMember.role)
+            }
+          }
+          setLoadingMembers(false)
+          return
+        }
+
+        // Success with users join
+        setTeamMembers(data || [])
+
+        // Find current user's role
+        if (currentUserId) {
+          const currentMember = data?.find(m => m.user_id === currentUserId)
+          if (currentMember) {
+            setCurrentUserRole(currentMember.role)
+          }
+        }
+      } catch (error) {
+        console.error('Error loading team members:', error)
+      } finally {
+        setLoadingMembers(false)
+      }
+    }
+
+    loadTeamMembers()
+  }, [workspace.team_id, currentUserId, supabase])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -114,6 +188,8 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
       setLoading(false)
     }
   }
+
+  const canManage = currentUserRole === 'owner' || currentUserRole === 'admin'
 
   return (
     <div className="space-y-6">
@@ -262,6 +338,77 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
         </CardContent>
       </Card>
 
+      {/* Team Members Card */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Team Members
+              </CardTitle>
+              <CardDescription>
+                Manage who has access to this workspace
+              </CardDescription>
+            </div>
+            {canManage && (
+              <Link href="/team/members">
+                <Button variant="outline" size="sm">
+                  View All
+                </Button>
+              </Link>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent>
+          {loadingMembers ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* Team Members List with Edit Permissions */}
+              <TeamMembersList
+                members={teamMembers.map(member => ({
+                  ...member,
+                  users: member.users || null
+                }))}
+                currentUserId={currentUserId || ''}
+                currentUserRole={currentUserRole}
+                teamId={workspace.team_id}
+                workspaceId={workspace.id}
+                workspaceName={workspace.name}
+              />
+
+              {/* Action Buttons */}
+              <div className="flex gap-2 pt-4">
+                {canManage && (
+                  <>
+                    <InviteMemberDialog
+                      teamId={workspace.team_id}
+                      preSelectedWorkspaceId={workspace.id}
+                      trigger={
+                        <Button variant="outline" className="flex-1">
+                          <UserPlus className="mr-2 h-4 w-4" />
+                          Invite Member
+                        </Button>
+                      }
+                    />
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => setPhaseMatrixOpen(true)}
+                    >
+                      Phase Access Matrix
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Danger Zone Card */}
       <Card className="border-red-200">
         <CardHeader>
@@ -337,6 +484,15 @@ export function WorkspaceGeneralSettings({ workspace }: WorkspaceGeneralSettings
           )}
         </CardContent>
       </Card>
+
+      {/* Phase Assignment Matrix Dialog */}
+      <PhaseAssignmentMatrix
+        workspaceId={workspace.id}
+        workspaceName={workspace.name}
+        teamId={workspace.team_id}
+        open={phaseMatrixOpen}
+        onOpenChange={setPhaseMatrixOpen}
+      />
     </div>
   )
 }

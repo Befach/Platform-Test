@@ -146,7 +146,7 @@ export function WorkspaceSidebar({
         },
         {
           id: 'features',
-          name: 'Features',
+          name: 'Work Board',
           view: 'features',
           icon: FileText,
           enabled: enabledModules.includes('features'),
@@ -172,6 +172,13 @@ export function WorkspaceSidebar({
       name: 'Collaboration',
       icon: Users,
       items: [
+        {
+          id: 'team-analytics',
+          name: 'Team Analytics',
+          view: 'team-analytics',
+          icon: Users,
+          enabled: true,
+        },
         {
           id: 'review',
           name: 'Review & Feedback',
