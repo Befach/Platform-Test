@@ -2,15 +2,14 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { WorkspaceSwitcher } from '@/components/workspaces/workspace-switcher';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import {
   BarChart3,
   Bot,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   FileText,
   GitBranch,
   Home,
@@ -24,7 +23,25 @@ import {
   Calendar,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuBadge,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 interface Workspace {
   id: string;
@@ -41,7 +58,6 @@ interface WorkspaceSidebarProps {
   teamPlan: 'free' | 'pro' | 'enterprise';
   enabledModules: string[];
   currentView?: string;
-  workspaces: Workspace[];
 }
 
 interface NavSection {
@@ -67,45 +83,13 @@ export function WorkspaceSidebar({
   teamPlan,
   enabledModules,
   currentView = 'dashboard',
-  workspaces,
 }: WorkspaceSidebarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [collapsed, setCollapsed] = useState(false);
+  const { state } = useSidebar();
   const [expandedSections, setExpandedSections] = useState<string[]>(['work-items']);
-  const [sidebarBehavior, setSidebarBehavior] = useState<'expanded' | 'collapsed' | 'hover'>('expanded');
-  const [isHovering, setIsHovering] = useState(false);
 
   const activeView = currentView || searchParams?.get('view') || 'dashboard';
-
-  // Load sidebar behavior and collapsed state from localStorage
-  useEffect(() => {
-    const behavior = localStorage.getItem('workspace-sidebar-behavior') as 'expanded' | 'collapsed' | 'hover';
-    const savedCollapsed = localStorage.getItem('workspace-sidebar-collapsed');
-
-    if (behavior) {
-      setSidebarBehavior(behavior);
-
-      // Set initial collapsed state based on behavior
-      if (behavior === 'collapsed' || behavior === 'hover') {
-        setCollapsed(true);
-      } else if (behavior === 'expanded') {
-        setCollapsed(false);
-      }
-    } else if (savedCollapsed) {
-      setCollapsed(JSON.parse(savedCollapsed));
-    }
-  }, []);
-
-  // Determine if sidebar should be expanded based on hover behavior
-  const shouldBeExpanded = sidebarBehavior === 'hover' ? isHovering : !collapsed;
-
-  // Save collapsed state to localStorage
-  const toggleCollapsed = () => {
-    const newState = !collapsed;
-    setCollapsed(newState);
-    localStorage.setItem('workspace-sidebar-collapsed', JSON.stringify(newState));
-  };
 
   // Toggle section expansion
   const toggleSection = (sectionId: string) => {
@@ -252,131 +236,142 @@ export function WorkspaceSidebar({
   const isActive = (view: string) => activeView === view;
 
   return (
-    <div
-      className={cn(
-        'flex h-full flex-col border-r bg-white transition-all duration-300',
-        shouldBeExpanded ? 'w-64' : 'w-16'
-      )}
-      onMouseEnter={() => sidebarBehavior === 'hover' && setIsHovering(true)}
-      onMouseLeave={() => sidebarBehavior === 'hover' && setIsHovering(false)}
-    >
-      {/* Header with Workspace Switcher */}
-      <div className="flex h-16 items-center gap-2 border-b px-4">
-        <div className="flex-1 min-w-0">
-          <WorkspaceSwitcher
-            currentWorkspaceId={workspaceId}
-            currentWorkspaceName={workspaceName}
-            teamPlan={teamPlan}
-            workspaces={workspaces}
-            collapsed={!shouldBeExpanded}
-          />
-        </div>
-      </div>
+    <Sidebar collapsible="icon">
+      <SidebarContent>
+        {navSections.map((section) => {
+          const isExpanded = expandedSections.includes(section.id);
+          const SectionIcon = section.icon;
 
-      {/* Navigation */}
-      <ScrollArea className="flex-1">
-        <nav className="space-y-1 p-2">
-          {navSections.map((section) => {
-            const isExpanded = expandedSections.includes(section.id);
-            const SectionIcon = section.icon;
-
+          // Overview section (no collapsible)
+          if (section.id === 'overview') {
             return (
-              <div key={section.id} className="space-y-1">
-                {/* Section Header */}
-                {shouldBeExpanded && section.id !== 'overview' && (
-                  <button
-                    onClick={() => toggleSection(section.id)}
-                    className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-slate-100"
-                  >
-                    <div className="flex items-center gap-2">
-                      <SectionIcon className="h-4 w-4" />
-                      <span>{section.name}</span>
-                    </div>
-                    <ChevronDown
-                      className={cn(
-                        'h-4 w-4 transition-transform',
-                        isExpanded && 'rotate-180'
-                      )}
-                    />
-                  </button>
-                )}
-
-                {/* Section Items */}
-                {(isExpanded || !shouldBeExpanded || section.id === 'overview') && (
-                  <div className={cn(shouldBeExpanded && section.id !== 'overview' && 'ml-2')}>
+              <SidebarGroup key={section.id}>
+                <SidebarGroupContent>
+                  <SidebarMenu>
                     {section.items.map((item) => {
                       const ItemIcon = item.icon;
                       const active = isActive(item.view);
                       const locked = item.requiresPro && teamPlan === 'free';
 
                       return (
-                        <button
-                          key={item.id}
-                          onClick={() => {
-                            if (item.enabled && !item.comingSoon && !locked) {
-                              navigateToView(item.view);
-                            }
-                          }}
-                          disabled={item.comingSoon || !item.enabled || locked}
-                          className={cn(
-                            'w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
-                            active && 'bg-blue-50 font-medium text-blue-600',
-                            !active && 'text-slate-700 hover:bg-slate-100',
-                            (item.comingSoon || !item.enabled || locked) &&
-                              'cursor-not-allowed opacity-50'
+                        <SidebarMenuItem key={item.id}>
+                          <SidebarMenuButton
+                            onClick={() => {
+                              if (item.enabled && !item.comingSoon && !locked) {
+                                navigateToView(item.view);
+                              }
+                            }}
+                            disabled={item.comingSoon || !item.enabled || locked}
+                            isActive={active}
+                            tooltip={item.name}
+                          >
+                            <ItemIcon className="h-4 w-4" />
+                            <span>{item.name}</span>
+                          </SidebarMenuButton>
+                          {(item.comingSoon || locked) && (
+                            <SidebarMenuBadge>
+                              {item.comingSoon && <span className="text-xs">Soon</span>}
+                              {locked && <Lock className="h-3 w-3" />}
+                            </SidebarMenuBadge>
                           )}
-                        >
-                          <ItemIcon className="h-4 w-4 shrink-0" />
-                          {shouldBeExpanded && (
-                            <>
-                              <span className="flex-1 truncate text-left">{item.name}</span>
-                              {item.comingSoon && (
-                                <Badge
-                                  variant="secondary"
-                                  className="shrink-0 text-xs bg-amber-100 text-amber-700"
-                                >
-                                  Soon
-                                </Badge>
-                              )}
-                              {locked && (
-                                <Lock className="h-3 w-3 shrink-0 text-muted-foreground" />
-                              )}
-                            </>
-                          )}
-                        </button>
+                        </SidebarMenuItem>
                       );
                     })}
-                  </div>
-                )}
-              </div>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
             );
-          })}
-        </nav>
-      </ScrollArea>
+          }
 
-      {/* Sidebar Toggle Footer */}
-      {sidebarBehavior !== 'hover' && (
-        <div className="border-t p-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleCollapsed}
-            className="w-full flex items-center justify-center gap-2 text-muted-foreground hover:text-slate-700"
-          >
-            {collapsed ? (
-              <>
-                <ChevronRight className="h-4 w-4" />
-                {shouldBeExpanded && <span className="text-xs">Expand</span>}
-              </>
-            ) : (
-              <>
-                <ChevronLeft className="h-4 w-4" />
-                {shouldBeExpanded && <span className="text-xs">Collapse</span>}
-              </>
-            )}
-          </Button>
-        </div>
-      )}
-    </div>
+          // Collapsible sections
+          return (
+            <Collapsible
+              key={section.id}
+              open={isExpanded}
+              onOpenChange={() => toggleSection(section.id)}
+              className="group/collapsible"
+            >
+              <SidebarGroup>
+                <SidebarGroupLabel asChild>
+                  <CollapsibleTrigger className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <SectionIcon className="h-4 w-4" />
+                      <span>{section.name}</span>
+                    </div>
+                    <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                  </CollapsibleTrigger>
+                </SidebarGroupLabel>
+                <CollapsibleContent>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {section.items.map((item) => {
+                        const ItemIcon = item.icon;
+                        const active = isActive(item.view);
+                        const locked = item.requiresPro && teamPlan === 'free';
+
+                        return (
+                          <SidebarMenuItem key={item.id}>
+                            <SidebarMenuButton
+                              onClick={() => {
+                                if (item.enabled && !item.comingSoon && !locked) {
+                                  navigateToView(item.view);
+                                }
+                              }}
+                              disabled={item.comingSoon || !item.enabled || locked}
+                              isActive={active}
+                              tooltip={item.name}
+                            >
+                              <ItemIcon className="h-4 w-4" />
+                              <span>{item.name}</span>
+                            </SidebarMenuButton>
+                            {(item.comingSoon || locked) && (
+                              <SidebarMenuBadge>
+                                {item.comingSoon && (
+                                  <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-700">
+                                    Soon
+                                  </Badge>
+                                )}
+                                {locked && <Lock className="h-3 w-3 text-muted-foreground" />}
+                              </SidebarMenuBadge>
+                            )}
+                          </SidebarMenuItem>
+                        );
+                      })}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </CollapsibleContent>
+              </SidebarGroup>
+            </Collapsible>
+          );
+        })}
+      </SidebarContent>
+
+      {/* Sidebar Settings Footer */}
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <Popover>
+              <PopoverTrigger asChild>
+                <SidebarMenuButton>
+                  <Settings className="h-4 w-4" />
+                  <span>Sidebar Settings</span>
+                </SidebarMenuButton>
+              </PopoverTrigger>
+              <PopoverContent side="top" align="start" className="w-56">
+                <div className="space-y-3">
+                  <h4 className="font-medium text-sm">Sidebar Display</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Current state: <span className="font-medium capitalize">{state}</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Use Ctrl+B (Windows) or Cmd+B (Mac) to toggle the sidebar.
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
   );
 }

@@ -1,8 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
-import { WorkspaceSidebar } from '@/components/workspaces/workspace-sidebar'
+import { cookies } from 'next/headers'
+import { AcmeSidebar } from '@/components/layout/acme-sidebar'
+import { AcmeTopBar } from '@/components/layout/acme-top-bar'
 import { WorkspaceContent } from './_components/workspace-content'
 import { calculatePhaseDistribution } from '@/lib/constants/workspace-phases'
+import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
 
 export default async function WorkspacePage({
   params,
@@ -58,6 +61,7 @@ export default async function WorkspacePage({
     { data: workItemTagRels },
     { data: tags },
     { count: teamSize },
+    { data: userProfile },
   ] = await Promise.all([
     // Team info
     supabase
@@ -69,7 +73,7 @@ export default async function WorkspacePage({
     // All workspaces for this team (for workspace switcher)
     supabase
       .from('workspaces')
-      .select('id, name, team_id, teams(subscription_plan)')
+      .select('id, name, team_id, teams!inner(subscription_plan)')
       .eq('team_id', workspace.team_id)
       .order('name'),
 
@@ -115,6 +119,13 @@ export default async function WorkspacePage({
       .from('team_members')
       .select('*', { count: 'exact', head: true })
       .eq('team_id', workspace.team_id),
+
+    // User profile
+    supabase
+      .from('users')
+      .select('*')
+      .eq('id', user.id)
+      .single(),
   ])
 
   // Calculate phase distribution and stats
@@ -137,33 +148,72 @@ export default async function WorkspacePage({
         : 0,
   }
 
+  // Prepare user data for sidebar
+  const currentUser = {
+    id: user.id,
+    email: user.email!,
+    name: userProfile?.name || null,
+    avatar_url: userProfile?.avatar_url || null,
+  }
+
+  // Get section name based on current view
+  const getSectionName = () => {
+    switch (view) {
+      case 'dashboard': return 'Dashboard'
+      case 'mind-map': return 'Mind Map'
+      case 'features': return 'Features'
+      case 'timeline': return 'Timeline'
+      case 'dependencies': return 'Dependencies'
+      case 'analytics': return 'Analytics'
+      case 'team': return 'Team'
+      default: return 'Dashboard'
+    }
+  }
+
+  // Get sidebar state from cookies for SSR persistence
+  const cookieStore = await cookies()
+  const defaultOpen = cookieStore.get('sidebar_state')?.value !== 'false'
+
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
-      {/* Sidebar */}
-      <WorkspaceSidebar
+    <SidebarProvider defaultOpen={defaultOpen}>
+      <AcmeSidebar
         workspaceId={workspace.id}
         workspaceName={workspace.name}
-        teamPlan={(team?.subscription_plan || 'free') as 'free' | 'pro' | 'enterprise'}
-        enabledModules={workspace.enabled_modules || []}
-        currentView={view}
         workspaces={workspaces || []}
+        userEmail={user.email!}
+        userName={userProfile?.full_name || undefined}
       />
 
-      {/* Main Content with View Router */}
-      <WorkspaceContent
-        view={view}
-        workspace={workspace}
-        team={team}
-        workItems={workItems || []}
-        timelineItems={timelineItems || []}
-        linkedItems={linkedItems || []}
-        mindMaps={mindMaps || []}
-        tags={tags || []}
-        teamSize={teamSize || 0}
-        phaseDistribution={phaseDistribution}
-        onboardingState={onboardingState}
-        currentUserId={user.id}
-      />
-    </div>
+      <SidebarInset>
+        {/* Acme-Style Top Bar with Sidebar Trigger */}
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+          <SidebarTrigger className="-ml-1" />
+          <div className="flex flex-1 items-center justify-between">
+            <h1 className="text-lg font-semibold">{getSectionName()}</h1>
+            <div className="flex items-center gap-2">
+              {/* User info or other header elements can go here */}
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content with View Router */}
+        <main className="flex-1 overflow-auto bg-slate-50">
+          <WorkspaceContent
+            view={view}
+            workspace={workspace}
+            team={team}
+            workItems={workItems || []}
+            timelineItems={timelineItems || []}
+            linkedItems={linkedItems || []}
+            mindMaps={mindMaps || []}
+            tags={tags || []}
+            teamSize={teamSize || 0}
+            phaseDistribution={phaseDistribution}
+            onboardingState={onboardingState}
+            currentUserId={user.id}
+          />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

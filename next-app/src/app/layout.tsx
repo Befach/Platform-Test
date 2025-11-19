@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -28,6 +29,11 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         <Providers>{children}</Providers>
+        <Script
+          src="https://cdn.jsdelivr.net/npm/@tweakcn/preview@latest/dist/preview.js"
+          strategy="afterInteractive"
+          data-project-id="preview"
+        />
       </body>
     </html>
   );
