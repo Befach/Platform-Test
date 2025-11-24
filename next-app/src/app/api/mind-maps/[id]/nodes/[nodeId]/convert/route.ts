@@ -8,6 +8,17 @@ export async function POST(
 ) {
   try {
     const { id: mindMapId, nodeId } = await params
+    const body = await request.json()
+    const { work_item_type = 'concept', timeline = 'MVP' } = body
+
+    // Validate work_item_type
+    if (!['concept', 'feature', 'bug', 'enhancement'].includes(work_item_type)) {
+      return NextResponse.json(
+        { error: 'work_item_type must be concept, feature, bug, or enhancement' },
+        { status: 400 }
+      )
+    }
+
     const supabase = await createClient()
 
     // Check authentication
@@ -52,20 +63,12 @@ export async function POST(
         team_id: teamId,
         workspace_id: workspaceId,
         name: node.title,
-        description: node.description || '',
-        purpose: `Converted from mind map node: ${node.title}`,
-        expected_outcome: '',
-        success_criteria: '',
-        is_hypothesis: false,
-        timeline: 'MVP', // Default to MVP, user can change later
-        status: 'brainstorming',
-        priority: 'medium',
-        tags: [node.node_type], // Add node type as tag
-        metadata: {
-          converted_from_mind_map: mindMapId,
-          converted_from_node: nodeId,
-          original_node_type: node.node_type,
-        },
+        type: work_item_type,
+        purpose: node.description || `Converted from mind map node: ${node.title}`,
+        owner: user.id,
+        is_epic: false,
+        parent_id: null,
+        tags: [node.node_type], // Add original node type as tag
       })
       .select()
       .single()
@@ -76,6 +79,31 @@ export async function POST(
         { error: 'Failed to create work item' },
         { status: 500 }
       )
+    }
+
+    // Optionally create timeline item if timeline is specified
+    if (timeline && ['MVP', 'SHORT', 'LONG'].includes(timeline)) {
+      const timelineItemId = Date.now().toString() + '1'
+      const { error: timelineError } = await supabase
+        .from('timeline_items')
+        .insert({
+          id: timelineItemId,
+          work_item_id: workItemId,
+          team_id: teamId,
+          workspace_id: workspaceId,
+          user_id: user.id,
+          timeline,
+          difficulty: 'medium',
+          status: 'not_started',
+          progress_percent: 0,
+          is_blocked: false,
+          blockers: [],
+        })
+
+      if (timelineError) {
+        console.error('Error creating timeline item:', timelineError)
+        // Continue anyway, work item is created
+      }
     }
 
     // Update node to mark it as converted

@@ -38,6 +38,7 @@ interface TimelineItem {
   timeline: 'MVP' | 'SHORT' | 'LONG'
   description: string | null
   difficulty: string
+  status: string | null
 }
 
 interface FeaturesViewWrapperProps {
@@ -151,6 +152,7 @@ export function FeaturesViewWrapper({
           workItems={filteredWorkItems}
           timelineItems={timelineItems}
           workspaceId={workspaceId}
+          workspacePhase={selectedPhase || 'research'}
           onDelete={setDeletingId}
           viewMode={viewMode}
           columnVisibility={columnVisibility}

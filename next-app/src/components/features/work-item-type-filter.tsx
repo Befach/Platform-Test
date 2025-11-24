@@ -35,8 +35,8 @@ export function WorkItemTypeFilter({
   showAllTypes,
   onToggleShowAll,
 }: WorkItemTypeFilterProps) {
-  const availableTypes = getPhaseItemTypes(phase, showAllTypes)
-  const helperText = getPhaseHelperText(phase, showAllTypes)
+  const availableTypes = getPhaseItemTypes(phase)
+  const helperText = getPhaseHelperText(phase)
 
   return (
     <div className="flex flex-col gap-2">

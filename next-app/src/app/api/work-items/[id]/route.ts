@@ -76,15 +76,6 @@ export async function PATCH(
     const { id } = await params
     const body = await req.json()
 
-    const {
-      title,
-      description,
-      status,
-      has_timeline_breakdown,
-      assigned_to,
-      is_mind_map_conversion,
-    } = body
-
     // 1. Fetch current work item
     const { data: currentItem, error: fetchError } = await supabase
       .from('work_items')
@@ -96,18 +87,10 @@ export async function PATCH(
       return NextResponse.json({ error: 'Work item not found' }, { status: 404 })
     }
 
-    // 2. Calculate current phase
-    const currentPhase = calculateWorkItemPhase(currentItem)
+    // 2. Calculate current phase (from explicit phase field)
+    const currentPhase = currentItem.phase
 
-    // 3. Calculate target phase after update
-    const targetPhase = calculateWorkItemPhase({
-      status: status ?? currentItem.status,
-      has_timeline_breakdown: has_timeline_breakdown ?? currentItem.has_timeline_breakdown,
-      assigned_to: assigned_to ?? currentItem.assigned_to,
-      is_mind_map_conversion: is_mind_map_conversion ?? currentItem.is_mind_map_conversion,
-    })
-
-    // 4. Validate permission for CURRENT phase (can edit existing item)
+    // 3. Validate permission for CURRENT phase (can edit existing item)
     await validatePhasePermission({
       workspaceId: currentItem.workspace_id,
       teamId: currentItem.team_id,
@@ -115,45 +98,43 @@ export async function PATCH(
       action: 'edit',
     })
 
-    // 5. If phase is changing, validate permission for TARGET phase too
-    if (currentPhase !== targetPhase) {
-      try {
-        await validatePhasePermission({
-          workspaceId: currentItem.workspace_id,
-          teamId: currentItem.team_id,
-          phase: targetPhase,
-          action: 'edit',
-        })
-      } catch (error) {
-        // Log phase escalation attempt
-        const user = await supabase.auth.getUser()
-        if (user.data.user) {
-          logPermissionDenial({
-            userId: user.data.user.id,
-            action: 'phase_change',
-            phase: targetPhase,
-            workspaceId: currentItem.workspace_id,
-            teamId: currentItem.team_id,
-            reason: `Attempted to move item from ${currentPhase} to ${targetPhase} without permission`,
-          })
-        }
-
-        throw error
-      }
+    // 4. Prepare update data (merge with current values)
+    const updateData: any = {
+      updated_at: new Date().toISOString(),
     }
 
-    // 6. Update work item
+    // Basic fields
+    if (body.name !== undefined) updateData.name = body.name
+    if (body.purpose !== undefined) updateData.purpose = body.purpose
+    if (body.type !== undefined) updateData.type = body.type
+
+    // Planning fields
+    if (body.target_release !== undefined) updateData.target_release = body.target_release
+    if (body.acceptance_criteria !== undefined) updateData.acceptance_criteria = body.acceptance_criteria
+    if (body.business_value !== undefined) updateData.business_value = body.business_value
+    if (body.customer_impact !== undefined) updateData.customer_impact = body.customer_impact
+    if (body.strategic_alignment !== undefined) updateData.strategic_alignment = body.strategic_alignment
+    if (body.estimated_hours !== undefined) updateData.estimated_hours = body.estimated_hours
+    if (body.priority !== undefined) updateData.priority = body.priority
+
+    // Execution fields
+    if (body.actual_start_date !== undefined) updateData.actual_start_date = body.actual_start_date
+    if (body.actual_end_date !== undefined) updateData.actual_end_date = body.actual_end_date
+    if (body.actual_hours !== undefined) updateData.actual_hours = body.actual_hours
+    if (body.progress_percent !== undefined) updateData.progress_percent = body.progress_percent
+
+    // Legacy fields (for backward compatibility)
+    if (body.title !== undefined) updateData.title = body.title
+    if (body.description !== undefined) updateData.description = body.description
+    if (body.status !== undefined) updateData.status = body.status
+    if (body.has_timeline_breakdown !== undefined) updateData.has_timeline_breakdown = body.has_timeline_breakdown
+    if (body.assigned_to !== undefined) updateData.assigned_to = body.assigned_to
+    if (body.is_mind_map_conversion !== undefined) updateData.is_mind_map_conversion = body.is_mind_map_conversion
+
+    // 5. Update work item
     const { data: updatedItem, error: updateError } = await supabase
       .from('work_items')
-      .update({
-        title: title ?? currentItem.title,
-        description: description ?? currentItem.description,
-        status: status ?? currentItem.status,
-        has_timeline_breakdown: has_timeline_breakdown ?? currentItem.has_timeline_breakdown,
-        assigned_to: assigned_to ?? currentItem.assigned_to,
-        is_mind_map_conversion: is_mind_map_conversion ?? currentItem.is_mind_map_conversion,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq('id', id)
       .select()
       .single()

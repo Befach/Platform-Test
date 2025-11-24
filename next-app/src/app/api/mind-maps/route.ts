@@ -49,7 +49,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json({ mindMaps })
+    return NextResponse.json(mindMaps)
   } catch (error: any) {
     console.error('Error in GET /api/mind-maps:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { workspace_id, name, description, template } = body
+    const { workspace_id, name, description, canvas_type = 'freeform', template } = body
 
     if (!workspace_id || !name) {
       return NextResponse.json(
@@ -102,6 +102,7 @@ export async function POST(request: Request) {
         user_id: user.id,
         name,
         description,
+        canvas_type,
         canvas_data: { zoom: 1, position: [0, 0] },
       })
       .select()
@@ -112,26 +113,32 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: mindMapError.message }, { status: 500 })
     }
 
-    // Create initial center node
-    const initialNodeId = Date.now().toString()
-    const { error: nodeError } = await supabase
-      .from('mind_map_nodes')
-      .insert({
-        id: initialNodeId,
-        mind_map_id: mindMapId,
-        team_id: workspace.team_id,
-        node_type: 'idea',
-        title: name,
-        description: description || undefined,
-        position: { x: 250, y: 250 },
-      })
+    // Create initial center node (only for freeform canvases)
+    if (canvas_type === 'freeform') {
+      const initialNodeId = Date.now().toString()
+      const { error: nodeError } = await supabase
+        .from('mind_map_nodes')
+        .insert({
+          id: initialNodeId,
+          mind_map_id: mindMapId,
+          team_id: workspace.team_id,
+          node_type: 'idea',
+          shape_type: 'semantic',
+          title: name,
+          description: description || undefined,
+          position: { x: 250, y: 250 },
+          width: 150,
+          height: 100,
+          data: {},
+        })
 
-    if (nodeError) {
-      console.error('Error creating initial node:', nodeError)
-      // Continue anyway, mind map is created
+      if (nodeError) {
+        console.error('Error creating initial node:', nodeError)
+        // Continue anyway, mind map is created
+      }
     }
 
-    return NextResponse.json({ mindMap })
+    return NextResponse.json(mindMap)
   } catch (error: any) {
     console.error('Error in POST /api/mind-maps:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })

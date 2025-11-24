@@ -17,8 +17,10 @@ import {
   Link2,
   ChevronRight,
   ChevronDown,
+  Pencil,
 } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { getItemLabel, getItemIcon } from '@/lib/constants/work-item-types'
 import { LinkManagementModal } from './link-management-modal'
 import { ViewMode } from './work-items-filter'
@@ -29,6 +31,8 @@ import {
   getDifficultyConfig,
   TIMELINE_PHASE_CONFIG,
 } from '@/lib/features/table-config'
+import { EditWorkItemDialog } from '@/components/work-items/edit-work-item-dialog'
+import { WorkspacePhase } from '@/lib/constants/workspace-phases'
 
 interface WorkItem {
   id: string
@@ -50,6 +54,7 @@ interface TimelineItem {
   timeline: 'MVP' | 'SHORT' | 'LONG'
   description: string | null
   difficulty: string
+  status: string | null
   integration_system?: string | null
   integration_complexity?: string | null
   implementation_approach?: string | null
@@ -61,6 +66,7 @@ interface FeaturesTableViewProps {
   workItems: WorkItem[]
   timelineItems: TimelineItem[]
   workspaceId: string
+  workspacePhase: WorkspacePhase
   onDelete: (id: string) => void
   viewMode: ViewMode
   columnVisibility: ColumnVisibility
@@ -70,11 +76,15 @@ export function FeaturesTableView({
   workItems,
   timelineItems,
   workspaceId,
+  workspacePhase,
   onDelete,
   viewMode,
   columnVisibility,
 }: FeaturesTableViewProps) {
+  const router = useRouter()
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [selectedWorkItem, setSelectedWorkItem] = useState<string | null>(null)
 
   const toggleRowExpansion = (workItemId: string) => {
     setExpandedRows((prev) => {
@@ -121,24 +131,60 @@ export function FeaturesTableView({
         {/* Timeline - Aggregated badges */}
         {columnVisibility.timeline && (
           <TableCell className="px-3 py-2">
-            <div className="flex flex-wrap gap-1">
-              {mvpTimeline && (
-                <Badge variant="outline" className={`${TIMELINE_PHASE_CONFIG.MVP.color} px-1.5 py-0.5 text-[10px] font-medium`}>
-                  {TIMELINE_PHASE_CONFIG.MVP.label} · {getDifficultyConfig(mvpTimeline.difficulty).label}
-                </Badge>
-              )}
-              {shortTimeline && (
-                <Badge variant="outline" className={`${TIMELINE_PHASE_CONFIG.SHORT.color} px-1.5 py-0.5 text-[10px] font-medium`}>
-                  {TIMELINE_PHASE_CONFIG.SHORT.label} · {getDifficultyConfig(shortTimeline.difficulty).label}
-                </Badge>
-              )}
-              {longTimeline && (
-                <Badge variant="outline" className={`${TIMELINE_PHASE_CONFIG.LONG.color} px-1.5 py-0.5 text-[10px] font-medium`}>
-                  {TIMELINE_PHASE_CONFIG.LONG.label} · {getDifficultyConfig(longTimeline.difficulty).label}
-                </Badge>
-              )}
-              {timelines.length === 0 && (
-                <span className="text-[11px] text-muted-foreground">No phases</span>
+            <div className="flex flex-col gap-1.5">
+              {/* Timeline phases and difficulty */}
+              <div className="flex flex-wrap gap-1">
+                {mvpTimeline && (
+                  <Badge variant="outline" className={`${TIMELINE_PHASE_CONFIG.MVP.color} px-1.5 py-0.5 text-[10px] font-medium`}>
+                    {TIMELINE_PHASE_CONFIG.MVP.label} · {getDifficultyConfig(mvpTimeline.difficulty).label}
+                  </Badge>
+                )}
+                {shortTimeline && (
+                  <Badge variant="outline" className={`${TIMELINE_PHASE_CONFIG.SHORT.color} px-1.5 py-0.5 text-[10px] font-medium`}>
+                    {TIMELINE_PHASE_CONFIG.SHORT.label} · {getDifficultyConfig(shortTimeline.difficulty).label}
+                  </Badge>
+                )}
+                {longTimeline && (
+                  <Badge variant="outline" className={`${TIMELINE_PHASE_CONFIG.LONG.color} px-1.5 py-0.5 text-[10px] font-medium`}>
+                    {TIMELINE_PHASE_CONFIG.LONG.label} · {getDifficultyConfig(longTimeline.difficulty).label}
+                  </Badge>
+                )}
+                {timelines.length === 0 && (
+                  <span className="text-[11px] text-muted-foreground">No phases</span>
+                )}
+              </div>
+
+              {/* Timeline status badges - compact format */}
+              {timelines.length > 0 && timelines.some(t => t.status) && (
+                <div className="flex flex-wrap gap-1">
+                  {mvpTimeline?.status && (
+                    <Badge
+                      variant="outline"
+                      className={`${getStatusConfig(mvpTimeline.status).badgeColor} px-1.5 py-0.5 text-[10px] font-medium`}
+                    >
+                      {React.createElement(getStatusConfig(mvpTimeline.status).icon, { className: 'h-2 w-2 mr-0.5 inline' })}
+                      MVP: {getStatusConfig(mvpTimeline.status).label}
+                    </Badge>
+                  )}
+                  {shortTimeline?.status && (
+                    <Badge
+                      variant="outline"
+                      className={`${getStatusConfig(shortTimeline.status).badgeColor} px-1.5 py-0.5 text-[10px] font-medium`}
+                    >
+                      {React.createElement(getStatusConfig(shortTimeline.status).icon, { className: 'h-2 w-2 mr-0.5 inline' })}
+                      Short: {getStatusConfig(shortTimeline.status).label}
+                    </Badge>
+                  )}
+                  {longTimeline?.status && (
+                    <Badge
+                      variant="outline"
+                      className={`${getStatusConfig(longTimeline.status).badgeColor} px-1.5 py-0.5 text-[10px] font-medium`}
+                    >
+                      {React.createElement(getStatusConfig(longTimeline.status).icon, { className: 'h-2 w-2 mr-0.5 inline' })}
+                      Long: {getStatusConfig(longTimeline.status).label}
+                    </Badge>
+                  )}
+                </div>
               )}
             </div>
           </TableCell>
@@ -253,6 +299,17 @@ export function FeaturesTableView({
                 <Eye className="h-3.5 w-3.5" />
               </Button>
             </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                setSelectedWorkItem(item.id)
+                setEditDialogOpen(true)
+              }}
+              className="h-7 w-7 hover:bg-muted"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+            </Button>
             <Button
               variant="ghost"
               size="icon"
@@ -422,6 +479,17 @@ export function FeaturesTableView({
               <Button
                 variant="ghost"
                 size="icon"
+                onClick={() => {
+                  setSelectedWorkItem(item.id)
+                  setEditDialogOpen(true)
+                }}
+                className="h-7 w-7 hover:bg-muted"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => onDelete(item.id)}
                 className="h-7 w-7 hover:bg-red-50 hover:text-red-600"
               >
@@ -570,6 +638,21 @@ export function FeaturesTableView({
           )}
         </TableBody>
       </Table>
+
+      {/* Edit Work Item Dialog */}
+      {selectedWorkItem && (
+        <EditWorkItemDialog
+          workItemId={selectedWorkItem}
+          workspaceId={workspaceId}
+          phase={workspacePhase}
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          onSuccess={() => {
+            // Refresh the data
+            router.refresh()
+          }}
+        />
+      )}
     </div>
   )
 }

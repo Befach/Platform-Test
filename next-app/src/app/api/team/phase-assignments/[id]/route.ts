@@ -68,11 +68,14 @@ export async function PATCH(
       )
     }
 
+    // Handle workspace as array (TypeScript quirk with Supabase relations)
+    const workspace = Array.isArray(assignment.workspace) ? assignment.workspace[0] : assignment.workspace
+
     // Check if requesting user is owner or admin
     const { data: requesterMembership, error: requesterError } = await supabase
       .from('team_members')
       .select('role')
-      .eq('team_id', assignment.workspace.team_id)
+      .eq('team_id', workspace.team_id)
       .eq('user_id', user.id)
       .single()
 
@@ -174,11 +177,14 @@ export async function DELETE(
       )
     }
 
+    // Handle workspace as array (TypeScript quirk with Supabase relations)
+    const workspace = Array.isArray(assignment.workspace) ? assignment.workspace[0] : assignment.workspace
+
     // Check if requesting user is owner or admin
     const { data: requesterMembership, error: requesterError } = await supabase
       .from('team_members')
       .select('role')
-      .eq('team_id', assignment.workspace.team_id)
+      .eq('team_id', workspace.team_id)
       .eq('user_id', user.id)
       .single()
 

@@ -60,6 +60,7 @@ import {
   RelationshipFilters,
   filterEdgesByRelationships,
 } from './relationship-toggle-panel'
+import { ViewModeSelector } from './view-mode-selector'
 import { Button } from '@/components/ui/button'
 
 type WorkItem = Tables<'work_items'>
@@ -69,6 +70,63 @@ type LinkedItem = {
   target_item_id: string
   link_type: string
   team_id: string
+}
+
+// ========== VIEW MODES ==========
+export type ViewMode = 'dependency' | 'blocking' | 'hierarchical' | 'architecture'
+
+export interface ViewModeConfig {
+  id: ViewMode
+  label: string
+  description: string
+  icon: string
+  algorithm: 'layered' | 'mrtree' | 'stress'
+  edgeFilter: string[] // Which link_types to show
+  direction?: 'DOWN' | 'UP' | 'RIGHT' | 'LEFT'
+  spacing?: {
+    nodeNodeBetweenLayers?: number
+    layerSpacing?: number
+  }
+}
+
+export const VIEW_MODE_CONFIGS: Record<ViewMode, ViewModeConfig> = {
+  dependency: {
+    id: 'dependency',
+    label: 'Dependency View',
+    description: 'Shows depends_on and blocks relationships',
+    icon: '🔗',
+    algorithm: 'layered',
+    edgeFilter: ['depends_on', 'blocks'],
+    direction: 'DOWN',
+  },
+  blocking: {
+    id: 'blocking',
+    label: 'Blocking View',
+    description: 'Highlights what blocks what (mrtree layout)',
+    icon: '🚫',
+    algorithm: 'mrtree',
+    edgeFilter: ['blocks', 'conflicts'],
+    direction: 'DOWN',
+  },
+  hierarchical: {
+    id: 'hierarchical',
+    label: 'Hierarchical View',
+    description: 'Parent-child relationships with strict layering',
+    icon: '📊',
+    algorithm: 'layered',
+    edgeFilter: ['parent_child', 'relates_to'],
+    direction: 'DOWN',
+    spacing: { layerSpacing: 100 },
+  },
+  architecture: {
+    id: 'architecture',
+    label: 'Architecture View',
+    description: 'System modules with stress algorithm',
+    icon: '🏗️',
+    algorithm: 'stress',
+    edgeFilter: ['integration', 'complements', 'enables'],
+    spacing: { nodeNodeBetweenLayers: 100 },
+  },
 }
 
 export interface UnifiedCanvasProps {
@@ -186,6 +244,10 @@ export function UnifiedCanvas({
   >('basic')
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null)
 
+  // View mode state
+  const [viewMode, setViewMode] = useState<ViewMode>('dependency')
+  const currentViewConfig = VIEW_MODE_CONFIGS[viewMode]
+
   // Relationship filtering
   const [relationshipFilters, setRelationshipFilters] = useState<RelationshipFilters>({
     dependencies: true,
@@ -199,6 +261,14 @@ export function UnifiedCanvas({
   const initialNodes = useMemo(() => workItemsToNodes(workItems), [workItems])
   const initialEdges = useMemo(() => linkedItemsToEdges(linkedItems), [linkedItems])
 
+  // Filter edges based on current view mode
+  const viewModeFilteredEdges = useMemo(() => {
+    return initialEdges.filter((edge) => {
+      const linkType = edge.data?.linkType as string
+      return currentViewConfig.edgeFilter.includes(linkType)
+    })
+  }, [initialEdges, currentViewConfig.edgeFilter])
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
@@ -208,11 +278,11 @@ export function UnifiedCanvas({
   // ELK.js layout - only compute for initial nodes, not manual changes
   const { nodes: layoutedNodes, edges: layoutedEdges, layoutTime, isLayouting } = useElkLayout(
     initialNodes, // Use initial nodes, not the mutable ones from useNodesState
-    initialEdges, // Use initial edges, not the mutable ones from useEdgesState
+    viewModeFilteredEdges, // Use view mode filtered edges
     {
-      direction: 'DOWN',
-      nodeSpacing: 80,
-      levelSpacing: 100,
+      direction: currentViewConfig.direction || 'DOWN',
+      nodeSpacing: currentViewConfig.spacing?.nodeNodeBetweenLayers || 80,
+      levelSpacing: currentViewConfig.spacing?.layerSpacing || 100,
       edgeSpacing: 50,
     },
     (time) => {
@@ -223,7 +293,12 @@ export function UnifiedCanvas({
     }
   )
 
-  // Apply auto-layout only once on initial load
+  // Re-layout when view mode changes
+  useEffect(() => {
+    setLayoutApplied(false)
+  }, [viewMode])
+
+  // Apply auto-layout only once on initial load or when view mode changes
   useEffect(() => {
     if (!isLayouting && !layoutApplied && layoutedNodes.length > 0) {
       setNodes(layoutedNodes)
@@ -332,7 +407,7 @@ export function UnifiedCanvas({
       // Temporarily disabled to avoid console errors during testing
       if (false && onWorkItemUpdate) {
         try {
-          await onWorkItemUpdate({
+          await onWorkItemUpdate?.({
             id: node.id,
             canvas_position: node.position as any,
           })
@@ -389,24 +464,32 @@ export function UnifiedCanvas({
 
         {/* Fullscreen Toggle Button */}
         <Panel position="top-left" className="!m-4">
-          <Button
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            variant="outline"
-            size="sm"
-            className="bg-white shadow-md hover:shadow-lg transition-shadow"
-          >
-            {isFullscreen ? (
-              <>
-                <Minimize2 className="w-4 h-4 mr-2" />
-                Exit Fullscreen
-              </>
-            ) : (
-              <>
-                <Maximize2 className="w-4 h-4 mr-2" />
-                Fullscreen
-              </>
-            )}
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              variant="outline"
+              size="sm"
+              className="bg-white shadow-md hover:shadow-lg transition-shadow"
+            >
+              {isFullscreen ? (
+                <>
+                  <Minimize2 className="w-4 h-4 mr-2" />
+                  Exit Fullscreen
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="w-4 h-4 mr-2" />
+                  Fullscreen
+                </>
+              )}
+            </Button>
+
+            {/* View Mode Selector */}
+            <ViewModeSelector
+              selectedMode={viewMode}
+              onModeChange={setViewMode}
+            />
+          </div>
         </Panel>
 
         {/* Relationship Toggle Panel */}

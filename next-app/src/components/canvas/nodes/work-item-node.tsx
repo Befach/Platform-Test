@@ -190,10 +190,11 @@ const priorityColors = {
   low: 'text-gray-600',
 }
 
-export const WorkItemNode = memo(({ data, selected }: NodeProps<WorkItemNodeData>) => {
-  const config = typeConfig[data.type as keyof typeof typeConfig] ?? typeConfig.task
+export const WorkItemNode = memo(({ data, selected }: NodeProps) => {
+  const nodeData = data as unknown as WorkItemNodeData
+  const config = typeConfig[nodeData.type as keyof typeof typeConfig] ?? typeConfig.task
   const Icon = config.icon
-  const StatusIcon = statusIcons[data.status as keyof typeof statusIcons]
+  const StatusIcon = statusIcons[nodeData.status as keyof typeof statusIcons]
 
   return (
     <div
@@ -203,7 +204,7 @@ export const WorkItemNode = memo(({ data, selected }: NodeProps<WorkItemNodeData
         selected
           ? 'border-blue-500 shadow-lg'
           : cn(config.borderColor, 'shadow-sm hover:shadow-md'),
-        data.isPlaceholder && 'opacity-60 border-dashed'
+        nodeData.isPlaceholder && 'opacity-60 border-dashed'
       )}
       style={{
         width: 280,
@@ -233,40 +234,40 @@ export const WorkItemNode = memo(({ data, selected }: NodeProps<WorkItemNodeData
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-[10px] font-medium text-gray-500 uppercase tracking-wide truncate">
-              {data.isNote ? data.noteType ?? 'Note' : data.type.replace('_', ' ')}
+              {nodeData.isNote ? nodeData.noteType ?? 'Note' : nodeData.type.replace('_', ' ')}
             </div>
           </div>
-          {data.priority && (
+          {nodeData.priority && (
             <div
               className={cn(
                 'text-[10px] font-semibold px-2 py-0.5 rounded-md',
                 config.accentColor,
-                priorityColors[data.priority as keyof typeof priorityColors]
+                priorityColors[nodeData.priority as keyof typeof priorityColors]
               )}
             >
-              {data.priority[0].toUpperCase()}
+              {nodeData.priority[0].toUpperCase()}
             </div>
           )}
         </div>
 
         {/* Title */}
         <div className="font-semibold text-sm text-gray-900 line-clamp-2 leading-snug">
-          {data.label}
+          {nodeData.label}
         </div>
 
         {/* Status Row */}
         <div className="mt-auto flex items-center justify-between">
-          {data.status && StatusIcon ? (
+          {nodeData.status && StatusIcon ? (
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <StatusIcon className="w-3.5 h-3.5" />
-              <span className="capitalize">{data.status.replace('_', ' ')}</span>
+              <span className="capitalize">{nodeData.status.replace('_', ' ')}</span>
             </div>
           ) : (
             <div />
           )}
 
           {/* Placeholder Badge */}
-          {data.isPlaceholder && (
+          {nodeData.isPlaceholder && (
             <div className="bg-gray-100 text-gray-600 text-[10px] font-medium px-2 py-0.5 rounded-md">
               Draft
             </div>

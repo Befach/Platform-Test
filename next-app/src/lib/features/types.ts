@@ -106,6 +106,12 @@ export interface TimelineItem {
   description: string | null
 
   /**
+   * Current status of this timeline item
+   * @example 'not_started', 'planning', 'in_progress', 'completed'
+   */
+  status?: string
+
+  /**
    * Estimated difficulty level
    * @see DIFFICULTY_CONFIG in table-config.ts
    */

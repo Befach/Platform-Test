@@ -21,7 +21,8 @@ import {
   Plus,
   Check,
   ChevronsUpDown,
-  Sparkles
+  Sparkles,
+  Network
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -87,7 +88,8 @@ export function AppSidebar({ workspaceId: defaultWorkspaceId, workspaceName: def
   const mainNavItems: NavItem[] = [
     { icon: LayoutDashboard, label: 'Dashboard', href: `/workspaces/${workspaceId}?view=dashboard` },
     { icon: Boxes, label: 'Canvas', href: `/workspaces/${workspaceId}?view=canvas` },
-    { icon: List, label: 'Features', href: `/workspaces/${workspaceId}?view=features` },
+    { icon: Network, label: 'Mind Maps', href: `/workspaces/${workspaceId}/mind-maps` },
+    { icon: List, label: 'Work Board', href: `/workspaces/${workspaceId}?view=features` },
     { icon: Calendar, label: 'Timeline', href: `/workspaces/${workspaceId}?view=timeline` },
     { icon: BarChart3, label: 'Analytics', href: `/workspaces/${workspaceId}?view=analytics` },
     { icon: Users, label: 'Project Team', href: `/workspaces/${workspaceId}?view=team-analytics` }

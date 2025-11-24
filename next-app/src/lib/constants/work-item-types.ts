@@ -1,369 +1,302 @@
 /**
- * Work Item Types and Phase-Aware Mappings
+ * Work Item Types - Consolidated 4-Type System
  *
- * This file defines the relationship between workspace phases and available item types.
- * It provides dynamic labels to support universal terminology instead of hardcoded "feature".
+ * Simplified from 13 types to 4 core types with phase-aware field visibility.
+ * Use tags for sub-categorization instead of proliferating types.
  */
 
-// All available work item types
+// 4 Core Work Item Types
 export const WORK_ITEM_TYPES = {
-  // Research Phase
-  IDEA: 'idea',
-  EXPLORATION: 'exploration',
-  USER_NEED: 'user_need',
-
-  // Planning Phase
-  CORE_FEATURE: 'core_feature',
+  CONCEPT: 'concept',
+  FEATURE: 'feature',
+  BUG: 'bug',
   ENHANCEMENT: 'enhancement',
-
-  // Review Phase
-  USER_REQUEST: 'user_request',
-
-  // Execution Phase
-  BUG_FIX: 'bug_fix',
-  TECHNICAL_DEBT: 'technical_debt',
-  INTEGRATION: 'integration',
-
-  // Testing Phase
-  PERFORMANCE_IMPROVEMENT: 'performance_improvement',
-  QUALITY_ENHANCEMENT: 'quality_enhancement',
-
-  // Metrics Phase
-  ANALYTICS_FEATURE: 'analytics_feature',
-  OPTIMIZATION: 'optimization',
 } as const
 
 export type WorkItemType = typeof WORK_ITEM_TYPES[keyof typeof WORK_ITEM_TYPES]
 
-// Workspace phases
-export type WorkspacePhase = 'research' | 'planning' | 'review' | 'execution' | 'testing' | 'metrics' | 'complete'
+// Workspace phases (5-phase system)
+export type WorkspacePhase = 'research' | 'planning' | 'execution' | 'review' | 'complete'
 
-// Phase-aware type mappings
-export const PHASE_ITEM_TYPES: Record<WorkspacePhase, WorkItemType[]> = {
-  research: [
-    WORK_ITEM_TYPES.IDEA,
-    WORK_ITEM_TYPES.EXPLORATION,
-    WORK_ITEM_TYPES.USER_NEED,
-  ],
-  planning: [
-    WORK_ITEM_TYPES.CORE_FEATURE,
-    WORK_ITEM_TYPES.ENHANCEMENT,
-  ],
-  review: [
-    WORK_ITEM_TYPES.CORE_FEATURE,
-    WORK_ITEM_TYPES.ENHANCEMENT,
-    WORK_ITEM_TYPES.USER_REQUEST,
-  ],
-  execution: [
-    WORK_ITEM_TYPES.CORE_FEATURE,
-    WORK_ITEM_TYPES.ENHANCEMENT,
-    WORK_ITEM_TYPES.BUG_FIX,
-    WORK_ITEM_TYPES.TECHNICAL_DEBT,
-    WORK_ITEM_TYPES.INTEGRATION,
-  ],
-  testing: [
-    WORK_ITEM_TYPES.BUG_FIX,
-    WORK_ITEM_TYPES.PERFORMANCE_IMPROVEMENT,
-    WORK_ITEM_TYPES.QUALITY_ENHANCEMENT,
-  ],
-  metrics: [
-    WORK_ITEM_TYPES.ANALYTICS_FEATURE,
-    WORK_ITEM_TYPES.OPTIMIZATION,
-  ],
-  complete: [], // All types available in complete phase (handled separately)
-}
-
-// Item type labels (singular and plural)
-export const ITEM_TYPE_LABELS: Record<WorkItemType, { singular: string; plural: string; icon: string; description: string }> = {
-  // Research Phase
-  idea: {
-    singular: 'Idea',
-    plural: 'Ideas',
+// Item type metadata
+export const ITEM_TYPE_METADATA: Record<WorkItemType, {
+  singular: string
+  plural: string
+  icon: string
+  description: string
+  color: string
+}> = {
+  concept: {
+    singular: 'Concept',
+    plural: 'Concepts',
     icon: '💡',
-    description: 'Raw concept or hypothesis to explore',
+    description: 'Unvalidated idea or hypothesis in research phase',
+    color: 'blue',
   },
-  exploration: {
-    singular: 'Exploration',
-    plural: 'Explorations',
-    icon: '🔍',
-    description: 'Experimental feature direction or investigation',
-  },
-  user_need: {
-    singular: 'User Need',
-    plural: 'User Needs',
-    icon: '👤',
-    description: 'Identified user problem or requirement',
-  },
-
-  // Planning Phase
-  core_feature: {
+  feature: {
     singular: 'Feature',
     plural: 'Features',
     icon: '⭐',
-    description: 'Primary product functionality',
+    description: 'New functionality to be built',
+    color: 'purple',
+  },
+  bug: {
+    singular: 'Bug',
+    plural: 'Bugs',
+    icon: '🐛',
+    description: 'Something broken that needs fixing',
+    color: 'red',
   },
   enhancement: {
     singular: 'Enhancement',
     plural: 'Enhancements',
     icon: '✨',
-    description: 'Improvement to existing capability',
-  },
-
-  // Review Phase
-  user_request: {
-    singular: 'User Request',
-    plural: 'User Requests',
-    icon: '📝',
-    description: 'Specific stakeholder ask or feedback',
-  },
-
-  // Execution Phase
-  bug_fix: {
-    singular: 'Bug Fix',
-    plural: 'Bug Fixes',
-    icon: '🐛',
-    description: 'Defect resolution or error correction',
-  },
-  technical_debt: {
-    singular: 'Technical Debt',
-    plural: 'Technical Debt Items',
-    icon: '🔧',
-    description: 'Code quality improvement or refactoring',
-  },
-  integration: {
-    singular: 'Integration',
-    plural: 'Integrations',
-    icon: '🔗',
-    description: 'Third-party service connection',
-  },
-
-  // Testing Phase
-  performance_improvement: {
-    singular: 'Performance Improvement',
-    plural: 'Performance Improvements',
-    icon: '⚡',
-    description: 'Speed or efficiency optimization',
-  },
-  quality_enhancement: {
-    singular: 'Quality Enhancement',
-    plural: 'Quality Enhancements',
-    icon: '✅',
-    description: 'UX polish or quality improvement',
-  },
-
-  // Metrics Phase
-  analytics_feature: {
-    singular: 'Analytics Feature',
-    plural: 'Analytics Features',
-    icon: '📊',
-    description: 'Tracking or measurement capability',
-  },
-  optimization: {
-    singular: 'Optimization',
-    plural: 'Optimizations',
-    icon: '📈',
-    description: 'Data-driven improvement',
+    description: 'Make existing functionality better',
+    color: 'green',
   },
 }
 
+// Timeline item statuses (8 states)
+export const TIMELINE_ITEM_STATUSES = {
+  NOT_STARTED: 'not_started',
+  PLANNING: 'planning',
+  IN_PROGRESS: 'in_progress',
+  BLOCKED: 'blocked',
+  REVIEW: 'review',
+  COMPLETED: 'completed',
+  ON_HOLD: 'on_hold',
+  CANCELLED: 'cancelled',
+} as const
+
+export type TimelineItemStatus = typeof TIMELINE_ITEM_STATUSES[keyof typeof TIMELINE_ITEM_STATUSES]
+
+// Status metadata
+export const STATUS_METADATA: Record<TimelineItemStatus, {
+  label: string
+  color: string
+  description: string
+}> = {
+  not_started: {
+    label: 'Not Started',
+    color: 'gray',
+    description: 'Work hasn\'t begun yet',
+  },
+  planning: {
+    label: 'Planning',
+    color: 'blue',
+    description: 'Defining requirements and approach',
+  },
+  in_progress: {
+    label: 'In Progress',
+    color: 'yellow',
+    description: 'Actively being worked on',
+  },
+  blocked: {
+    label: 'Blocked',
+    color: 'red',
+    description: 'Waiting on external dependency',
+  },
+  review: {
+    label: 'In Review',
+    color: 'purple',
+    description: 'Under review before completion',
+  },
+  completed: {
+    label: 'Completed',
+    color: 'green',
+    description: 'Work is done',
+  },
+  on_hold: {
+    label: 'On Hold',
+    color: 'orange',
+    description: 'Paused temporarily',
+  },
+  cancelled: {
+    label: 'Cancelled',
+    color: 'gray',
+    description: 'Work was stopped and won\'t continue',
+  },
+}
+
+// Feedback source types (3 types)
+export const FEEDBACK_SOURCES = {
+  INTERNAL: 'internal',
+  CUSTOMER: 'customer',
+  USER: 'user',
+} as const
+
+export type FeedbackSource = typeof FEEDBACK_SOURCES[keyof typeof FEEDBACK_SOURCES]
+
+// Feedback priorities (2 levels - forces clear decisions)
+export const FEEDBACK_PRIORITIES = {
+  HIGH: 'high',
+  LOW: 'low',
+} as const
+
+export type FeedbackPriority = typeof FEEDBACK_PRIORITIES[keyof typeof FEEDBACK_PRIORITIES]
+
+// Feedback statuses
+export const FEEDBACK_STATUSES = {
+  PENDING: 'pending',
+  REVIEWED: 'reviewed',
+  IMPLEMENTED: 'implemented',
+  DEFERRED: 'deferred',
+  REJECTED: 'rejected',
+} as const
+
+export type FeedbackStatus = typeof FEEDBACK_STATUSES[keyof typeof FEEDBACK_STATUSES]
+
 /**
  * Get the appropriate item types for a given workspace phase
- * @param phase - Current workspace phase
- * @param showAll - Override to show all types regardless of phase
- * @returns Array of available work item types
+ * All 4 types are available in all phases - phase affects field visibility, not types
  */
-export function getPhaseItemTypes(phase: WorkspacePhase, showAll = false): WorkItemType[] {
-  if (showAll || phase === 'complete') {
-    return Object.values(WORK_ITEM_TYPES)
-  }
-
-  return PHASE_ITEM_TYPES[phase] || []
+export function getPhaseItemTypes(phase: WorkspacePhase): WorkItemType[] {
+  return Object.values(WORK_ITEM_TYPES)
 }
 
 /**
  * Get dynamic label for an item type
- * @param type - Work item type
- * @param plural - Return plural form
- * @returns Localized label string
  */
 export function getItemLabel(type: WorkItemType | string, plural = false): string {
-  const typeInfo = ITEM_TYPE_LABELS[type as WorkItemType]
+  const typeInfo = ITEM_TYPE_METADATA[type as WorkItemType]
   if (!typeInfo) {
     return plural ? 'Work Items' : 'Work Item'
   }
-
   return plural ? typeInfo.plural : typeInfo.singular
 }
 
 /**
  * Get icon for an item type
- * @param type - Work item type
- * @returns Emoji icon
  */
 export function getItemIcon(type: WorkItemType | string): string {
-  return ITEM_TYPE_LABELS[type as WorkItemType]?.icon || '📋'
+  return ITEM_TYPE_METADATA[type as WorkItemType]?.icon || '📋'
 }
 
 /**
  * Get description for an item type
- * @param type - Work item type
- * @returns Description string
  */
 export function getItemDescription(type: WorkItemType | string): string {
-  return ITEM_TYPE_LABELS[type as WorkItemType]?.description || 'A work item in your product roadmap'
+  return ITEM_TYPE_METADATA[type as WorkItemType]?.description || 'A work item in your product roadmap'
 }
 
 /**
- * Check if a type is valid for a given phase
- * @param type - Work item type to check
- * @param phase - Current workspace phase
- * @returns True if type is valid for phase
+ * Get color for an item type
  */
-export function isTypeValidForPhase(type: WorkItemType, phase: WorkspacePhase): boolean {
-  if (phase === 'complete') {
-    return true // All types valid in complete phase
+export function getItemColor(type: WorkItemType | string): string {
+  return ITEM_TYPE_METADATA[type as WorkItemType]?.color || 'gray'
+}
+
+/**
+ * Get status label
+ */
+export function getStatusLabel(status: TimelineItemStatus | string): string {
+  return STATUS_METADATA[status as TimelineItemStatus]?.label || status
+}
+
+/**
+ * Get status color
+ */
+export function getStatusColor(status: TimelineItemStatus | string): string {
+  return STATUS_METADATA[status as TimelineItemStatus]?.color || 'gray'
+}
+
+/**
+ * Check if field should be visible/editable based on phase
+ * Research: Basic fields only (name, purpose, tags)
+ * Planning+: All fields (target_release, acceptance_criteria, etc.)
+ * Execution+: Planning fields locked, execution fields unlocked
+ */
+export function isFieldVisibleInPhase(field: string, phase: WorkspacePhase): boolean {
+  // Fields always visible in all phases
+  const basicFields = ['name', 'purpose', 'tags', 'type']
+  if (basicFields.includes(field)) return true
+
+  // Fields visible from Planning phase onwards
+  const planningFields = [
+    'target_release',
+    'acceptance_criteria',
+    'business_value',
+    'customer_impact',
+    'strategic_alignment',
+    'estimated_hours',
+    'priority',
+    'stakeholders',
+  ]
+  if (planningFields.includes(field)) {
+    return ['planning', 'execution', 'review', 'complete'].includes(phase)
   }
 
-  return PHASE_ITEM_TYPES[phase]?.includes(type) || false
+  // Fields visible from Execution phase onwards
+  const executionFields = [
+    'actual_start_date',
+    'actual_end_date',
+    'actual_hours',
+    'progress_percent',
+    'blockers',
+  ]
+  if (executionFields.includes(field)) {
+    return ['execution', 'review', 'complete'].includes(phase)
+  }
+
+  return false
+}
+
+/**
+ * Check if field should be locked (read-only) based on phase
+ * Example: Planning fields locked once in Execution phase
+ */
+export function isFieldLockedInPhase(field: string, phase: WorkspacePhase): boolean {
+  // Planning fields lock once in Execution
+  const planningFields = [
+    'target_release',
+    'acceptance_criteria',
+    'business_value',
+    'estimated_hours',
+  ]
+  if (planningFields.includes(field)) {
+    return ['execution', 'review', 'complete'].includes(phase)
+  }
+
+  return false
+}
+
+/**
+ * Get suggested priority for feedback based on source
+ */
+export function getSuggestedPriority(source: FeedbackSource): FeedbackPriority {
+  // Customers are paying users - default to high priority
+  if (source === FEEDBACK_SOURCES.CUSTOMER) {
+    return FEEDBACK_PRIORITIES.HIGH
+  }
+  // Internal and non-paying users - default to low
+  return FEEDBACK_PRIORITIES.LOW
 }
 
 /**
  * Get conversion-appropriate types (what an item can be converted to)
- * @param currentType - Current item type
- * @param phase - Current workspace phase
- * @returns Array of types this item can be converted to
+ * Simplified: concept → feature/bug, feature ↔ enhancement ↔ bug
  */
-export function getConversionTargets(currentType: WorkItemType, phase: WorkspacePhase): WorkItemType[] {
-  const phaseTypes = getPhaseItemTypes(phase, true)
-
-  // Common conversion patterns
-  const conversionMap: Partial<Record<WorkItemType, WorkItemType[]>> = {
-    idea: [WORK_ITEM_TYPES.USER_NEED, WORK_ITEM_TYPES.CORE_FEATURE, WORK_ITEM_TYPES.EXPLORATION],
-    exploration: [WORK_ITEM_TYPES.CORE_FEATURE, WORK_ITEM_TYPES.ENHANCEMENT],
-    user_need: [WORK_ITEM_TYPES.CORE_FEATURE, WORK_ITEM_TYPES.ENHANCEMENT, WORK_ITEM_TYPES.USER_REQUEST],
-    user_request: [WORK_ITEM_TYPES.CORE_FEATURE, WORK_ITEM_TYPES.ENHANCEMENT, WORK_ITEM_TYPES.BUG_FIX],
-    core_feature: [WORK_ITEM_TYPES.ENHANCEMENT, WORK_ITEM_TYPES.TECHNICAL_DEBT],
-    enhancement: [WORK_ITEM_TYPES.CORE_FEATURE, WORK_ITEM_TYPES.TECHNICAL_DEBT],
-    bug_fix: [WORK_ITEM_TYPES.ENHANCEMENT, WORK_ITEM_TYPES.TECHNICAL_DEBT],
+export function getConversionTargets(currentType: WorkItemType): WorkItemType[] {
+  const conversionMap: Record<WorkItemType, WorkItemType[]> = {
+    concept: [WORK_ITEM_TYPES.FEATURE, WORK_ITEM_TYPES.BUG, WORK_ITEM_TYPES.ENHANCEMENT],
+    feature: [WORK_ITEM_TYPES.ENHANCEMENT, WORK_ITEM_TYPES.BUG],
+    bug: [WORK_ITEM_TYPES.FEATURE, WORK_ITEM_TYPES.ENHANCEMENT],
+    enhancement: [WORK_ITEM_TYPES.FEATURE, WORK_ITEM_TYPES.BUG],
   }
 
-  const targets = conversionMap[currentType] || []
-
-  // Filter to only types available in current phase or all types if in complete phase
-  return targets.filter(target =>
-    phase === 'complete' || phaseTypes.includes(target)
-  )
+  return conversionMap[currentType] || []
 }
 
 /**
- * Get the primary phase for a given work item type
- * Returns the most appropriate phase where this type is primarily used
- * @param type - Work item type
- * @returns Primary phase for the type, or null if not found
+ * Get phase-appropriate helper text
  */
-export function getPrimaryPhaseForType(type: WorkItemType): WorkspacePhase | null {
-  // Map each type to its primary phase (first/most relevant phase)
-  const typeToPrimaryPhase: Partial<Record<WorkItemType, WorkspacePhase>> = {
-    // Research Phase
-    [WORK_ITEM_TYPES.IDEA]: 'research',
-    [WORK_ITEM_TYPES.EXPLORATION]: 'research',
-    [WORK_ITEM_TYPES.USER_NEED]: 'research',
-
-    // Planning Phase
-    [WORK_ITEM_TYPES.CORE_FEATURE]: 'planning',
-    [WORK_ITEM_TYPES.ENHANCEMENT]: 'planning',
-
-    // Review Phase
-    [WORK_ITEM_TYPES.USER_REQUEST]: 'review',
-
-    // Execution Phase
-    [WORK_ITEM_TYPES.BUG_FIX]: 'execution',
-    [WORK_ITEM_TYPES.TECHNICAL_DEBT]: 'execution',
-    [WORK_ITEM_TYPES.INTEGRATION]: 'execution',
-
-    // Testing Phase
-    [WORK_ITEM_TYPES.PERFORMANCE_IMPROVEMENT]: 'testing',
-    [WORK_ITEM_TYPES.QUALITY_ENHANCEMENT]: 'testing',
-
-    // Metrics Phase
-    [WORK_ITEM_TYPES.ANALYTICS_FEATURE]: 'metrics',
-    [WORK_ITEM_TYPES.OPTIMIZATION]: 'metrics',
+export function getPhaseHelperText(phase: WorkspacePhase): string {
+  const phaseHelpers: Record<WorkspacePhase, string> = {
+    research: 'Research phase - All types available, basic fields only',
+    planning: 'Planning phase - All fields unlocked for planning',
+    execution: 'Execution phase - Planning locked, execution tracking enabled',
+    review: 'Review phase - Gather feedback, track completion',
+    complete: 'Complete - All types and fields available',
   }
-
-  return typeToPrimaryPhase[type] || null
-}
-
-/**
- * Get all valid phases for a given work item type
- * @param type - Work item type
- * @returns Array of phases where this type is valid
- */
-export function getValidPhasesForType(type: WorkItemType): WorkspacePhase[] {
-  const validPhases: WorkspacePhase[] = []
-
-  // Check each phase to see if it includes this type
-  for (const [phase, types] of Object.entries(PHASE_ITEM_TYPES)) {
-    if (types.includes(type)) {
-      validPhases.push(phase as WorkspacePhase)
-    }
-  }
-
-  // Complete phase accepts all types
-  validPhases.push('complete')
-
-  return validPhases
-}
-
-/**
- * Get the best phase for a type given user's assigned phases
- * Prioritizes: 1) Primary phase if user has access, 2) First valid phase user has access to
- * @param type - Work item type
- * @param userAssignedPhases - Phases the user has edit access to
- * @returns Best phase for the type, or null if user has no valid phases
- */
-export function getBestPhaseForType(
-  type: WorkItemType,
-  userAssignedPhases: WorkspacePhase[]
-): WorkspacePhase | null {
-  // 1. Try primary phase first
-  const primaryPhase = getPrimaryPhaseForType(type)
-  if (primaryPhase && userAssignedPhases.includes(primaryPhase)) {
-    return primaryPhase
-  }
-
-  // 2. Get all valid phases for this type
-  const validPhases = getValidPhasesForType(type)
-
-  // 3. Return first valid phase that user has access to
-  for (const phase of validPhases) {
-    if (userAssignedPhases.includes(phase)) {
-      return phase
-    }
-  }
-
-  return null
-}
-
-/**
- * Get phase-appropriate helper text for the type selector
- * @param phase - Current workspace phase
- * @param showAll - Whether showing all types
- * @returns Helper text string
- */
-export function getPhaseHelperText(phase: WorkspacePhase, showAll: boolean): string {
-  if (showAll) {
-    return 'Showing all item types (override active)'
-  }
-
-  const phaseLabels: Record<WorkspacePhase, string> = {
-    research: 'Research phase - Focus on discovery and ideation',
-    planning: 'Planning phase - Define core features and enhancements',
-    review: 'Review phase - Gather and organize feedback',
-    execution: 'Execution phase - Build features and fix issues',
-    testing: 'Testing phase - Improve quality and performance',
-    metrics: 'Metrics phase - Track and optimize outcomes',
-    complete: 'Completed - All item types available',
-  }
-
-  return phaseLabels[phase] || ''
+  return phaseHelpers[phase] || ''
 }

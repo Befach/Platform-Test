@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { ArrowLeft, Plus } from 'lucide-react'
 import { CreateTimelineItemDialog } from '@/components/features/create-timeline-item-dialog'
 import { TimelineItemsList } from '@/components/features/timeline-items-list'
+import { FeatureEditButton } from '@/components/features/feature-edit-button'
 
 export default async function FeatureDetailPage({
   params,
@@ -31,7 +32,7 @@ export default async function FeatureDetailPage({
     redirect('/login')
   }
 
-  // Get work item details
+  // Get work item details with workspace phase
   const { data: feature, error: featureError } = await supabase
     .from('work_items')
     .select(`
@@ -40,6 +41,7 @@ export default async function FeatureDetailPage({
         id,
         name,
         icon,
+        phase,
         team_id,
         teams:team_id (
           id,
@@ -139,6 +141,11 @@ export default async function FeatureDetailPage({
                 </p>
               </div>
             </div>
+            <FeatureEditButton
+              featureId={featureId}
+              workspaceId={workspaceId}
+              phase={feature.workspace.phase}
+            />
           </div>
         </div>
       </header>

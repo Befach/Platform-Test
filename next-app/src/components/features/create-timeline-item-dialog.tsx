@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/select'
 import { useRouter } from 'next/navigation'
 import { Plus } from 'lucide-react'
+import { TIMELINE_ITEM_STATUSES, STATUS_METADATA, TimelineItemStatus } from '@/lib/constants/work-item-types'
 
 interface CreateTimelineItemDialogProps {
   featureId: string
@@ -42,6 +43,7 @@ export function CreateTimelineItemDialog({
   const [description, setDescription] = useState('')
   const [difficulty, setDifficulty] = useState<string>('MEDIUM')
   const [estimatedHours, setEstimatedHours] = useState('')
+  const [status, setStatus] = useState<TimelineItemStatus>(TIMELINE_ITEM_STATUSES.NOT_STARTED)
 
   const router = useRouter()
   const supabase = createClient()
@@ -67,6 +69,7 @@ export function CreateTimelineItemDialog({
         difficulty,
         order_index: orderIndex,
         estimated_hours: estimatedHours ? parseInt(estimatedHours) : null,
+        status,
       })
 
       if (error) throw error
@@ -76,6 +79,7 @@ export function CreateTimelineItemDialog({
       setDescription('')
       setDifficulty('MEDIUM')
       setEstimatedHours('')
+      setStatus(TIMELINE_ITEM_STATUSES.NOT_STARTED)
       setOpen(false)
 
       // Refresh the page
@@ -162,6 +166,25 @@ export function CreateTimelineItemDialog({
                   placeholder="e.g., 8"
                 />
               </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="status">Initial Status</Label>
+              <Select value={status} onValueChange={(value) => setStatus(value as TimelineItemStatus)}>
+                <SelectTrigger id="status">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(TIMELINE_ITEM_STATUSES).map((statusValue) => (
+                    <SelectItem key={statusValue} value={statusValue}>
+                      {STATUS_METADATA[statusValue].label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Default status for this timeline item
+              </p>
             </div>
           </div>
 

@@ -31,10 +31,9 @@ import {
   getItemIcon,
   getItemDescription,
   getPhaseHelperText,
-  getBestPhaseForType,
-  isTypeValidForPhase,
   type WorkspacePhase,
   type WorkItemType,
+  WORK_ITEM_TYPES,
 } from '@/lib/constants/work-item-types'
 import { TagSelector } from './tag-selector'
 import { PhaseSelect, type PhasePermission } from './phase-select'
@@ -49,6 +48,7 @@ import {
 } from '@/lib/utils/phase-context'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { cn } from '@/lib/utils'
+import { PhaseContextBadge } from '@/components/work-items/phase-context-badge'
 
 interface CreateFeatureDialogProps {
   workspaceId: string
@@ -104,12 +104,11 @@ export function CreateFeatureDialog({
     permissions,
     canEdit,
     isLoading: permissionsLoading,
-    isAdmin,
   } = usePhasePermissions({ workspaceId, teamId })
 
   // Get user's assigned phases (where they can edit)
   const userAssignedPhases = WORKSPACE_PHASES
-    .filter((p) => isAdmin || canEdit(p.id))
+    .filter((p) => canEdit(p.id))
     .map((p) => p.id)
 
   // Calculate smart default phase
@@ -126,9 +125,9 @@ export function CreateFeatureDialog({
     return getDefaultPhase(context) || undefined
   }
 
-  // Get initial types from workspace phase for initialization
-  const initialTypes = getPhaseItemTypes(workspacePhase, showAllTypes)
-  const initialItemType = defaultType && defaultType !== 'all' ? defaultType : initialTypes[0]
+  // Get all 4 work item types (all types available in all phases)
+  const allTypes = Object.values(WORK_ITEM_TYPES)
+  const initialItemType = defaultType && defaultType !== 'all' ? defaultType : allTypes[0]
 
   // Consolidated form state
   const [formData, setFormData] = useState<FormData>({
@@ -155,10 +154,8 @@ export function CreateFeatureDialog({
     }
   })
 
-  // Get available types based on SELECTED phase (not workspace phase) and showAllTypes toggle
-  const availableTypes = formData.phase
-    ? getPhaseItemTypes(formData.phase, showAllTypes)
-    : getPhaseItemTypes(workspacePhase, showAllTypes)
+  // All 4 types available in all phases (4-type system)
+  const availableTypes = allTypes
 
   const router = useRouter()
   const supabase = createClient()
@@ -195,38 +192,14 @@ export function CreateFeatureDialog({
     }
   }, [open, workspaceId])
 
-  // Bidirectional handlers for phase-type relationship
+  // Phase change handler (4-type system: all types available in all phases)
   const handlePhaseChange = (newPhase: WorkspacePhase) => {
-    // Update phase
-    setFormData((prev) => {
-      const updatedData = { ...prev, phase: newPhase }
-
-      // Check if current type is valid for new phase
-      if (!isTypeValidForPhase(prev.type as WorkItemType, newPhase) && !showAllTypes) {
-        // Get available types for new phase
-        const newAvailableTypes = getPhaseItemTypes(newPhase, false)
-        // Set to first available type for this phase
-        if (newAvailableTypes.length > 0) {
-          updatedData.type = newAvailableTypes[0]
-        }
-      }
-
-      return updatedData
-    })
+    setFormData((prev) => ({ ...prev, phase: newPhase }))
   }
 
+  // Type change handler (4-type system: all types available in all phases)
   const handleTypeChange = (newType: string) => {
-    setFormData((prev) => {
-      const updatedData = { ...prev, type: newType }
-
-      // Auto-update phase to best phase for this type (if user has access)
-      const bestPhase = getBestPhaseForType(newType as WorkItemType, userAssignedPhases)
-      if (bestPhase && bestPhase !== prev.phase) {
-        updatedData.phase = bestPhase
-      }
-
-      return updatedData
-    })
+    setFormData((prev) => ({ ...prev, type: newType }))
   }
 
   // Validation functions
@@ -237,7 +210,7 @@ export function CreateFeatureDialog({
     }
 
     // Validate phase selection
-    const phaseValidation = validatePhaseSelection(formData.phase, userAssignedPhases)
+    const phaseValidation = validatePhaseSelection(formData.phase ?? null, userAssignedPhases)
     if (!phaseValidation.valid) {
       alert(phaseValidation.error ||'Phase is required')
       return false
@@ -383,7 +356,7 @@ export function CreateFeatureDialog({
       const resetDefaultPhase = getSmartDefaultPhase()
       setFormData({
         name: '',
-        type: defaultItemType,
+        type: initialItemType,
         phase: resetDefaultPhase,
         priority: 'medium',
         purpose: '',
@@ -424,7 +397,7 @@ export function CreateFeatureDialog({
   // Prepare phase permissions for PhaseSelect component
   const phasePermissions: PhasePermission[] = WORKSPACE_PHASES.map((phase) => ({
     phase: phase.id,
-    canAssign: isAdmin || canEdit(phase.id),
+    canAssign: canEdit(phase.id),
     canView: permissions?.[phase.id]?.can_view || false,
     workloadCount: phaseWorkload[phase.id] || 0,
   }))
@@ -449,8 +422,11 @@ export function CreateFeatureDialog({
                 {step === 1 ? 'Step 1: Parent Details' : 'Step 2: Timeline Breakdown'}
               </span>
             </div>
-            <DialogDescription>
-              {getPhaseHelperText(workspacePhase, showAllTypes)}
+            <DialogDescription className="space-y-2">
+              <PhaseContextBadge phase={workspacePhase} />
+              <p className="text-sm text-muted-foreground">
+                {getPhaseHelperText(workspacePhase)}
+              </p>
             </DialogDescription>
           </DialogHeader>
 

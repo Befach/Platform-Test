@@ -132,10 +132,11 @@ export async function GET(request: NextRequest) {
 
       if (assignment.is_lead) {
         leadCounts[phase]++
+        const userData = Array.isArray(assignment.users) ? assignment.users[0] : assignment.users
         leadsByPhase[phase].push({
           user_id: assignment.user_id,
-          email: assignment.users?.email,
-          name: assignment.users?.name,
+          email: userData?.email,
+          name: userData?.name,
           assigned_at: assignment.assigned_at,
         })
       } else if (assignment.can_edit) {
