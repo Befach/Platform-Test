@@ -122,21 +122,17 @@ function resolveLink(sourceFile: string, link: string, projectRoot: string): str
 
 function fileExists(filePath: string): boolean {
   try {
-    // Check if path exists as file
-    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    // Remove trailing slash for directory checks
+    const cleanPath = filePath.replace(/\/$/, '');
+
+    // Check if path exists (file or directory)
+    if (fs.existsSync(cleanPath)) {
       return true;
     }
 
-    // Check if it's a directory with index.md
-    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-      const indexPath = path.join(filePath, 'index.md');
-      const readmePath = path.join(filePath, 'README.md');
-      return fs.existsSync(indexPath) || fs.existsSync(readmePath);
-    }
-
-    // Try adding .md extension
-    if (!filePath.endsWith('.md')) {
-      return fs.existsSync(filePath + '.md');
+    // Try adding .md extension for markdown links without extensions
+    if (!cleanPath.endsWith('.md') && !path.extname(cleanPath)) {
+      return fs.existsSync(cleanPath + '.md');
     }
 
     return false;
