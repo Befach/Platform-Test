@@ -35,6 +35,7 @@ export async function GET(request: Request) {
     const workspaceId = searchParams.get('workspace_id')
     const timeline = searchParams.get('timeline')
     const status = searchParams.get('status')
+    const phase = searchParams.get('phase')
     const assignedTo = searchParams.get('assigned_to')
     const isBlocked = searchParams.get('is_blocked')
 
@@ -61,6 +62,9 @@ export async function GET(request: Request) {
     }
     if (status) {
       query = query.eq('status', status)
+    }
+    if (phase) {
+      query = query.eq('phase', phase)
     }
     if (assignedTo) {
       query = query.eq('assigned_to', assignedTo)
@@ -127,6 +131,7 @@ export async function POST(request: Request) {
       planned_end_date,
       assigned_to,
       status,
+      phase,
     } = body
 
     // Validate required fields
@@ -149,6 +154,15 @@ export async function POST(request: Request) {
     if (!['easy', 'medium', 'hard'].includes(difficulty)) {
       return NextResponse.json(
         { error: 'difficulty must be easy, medium, or hard' },
+        { status: 400 }
+      )
+    }
+
+    // Validate phase if provided
+    const validPhases = ['research', 'planning', 'execution', 'review', 'complete']
+    if (phase && !validPhases.includes(phase)) {
+      return NextResponse.json(
+        { error: 'phase must be one of: research, planning, execution, review, complete' },
         { status: 400 }
       )
     }
@@ -186,6 +200,7 @@ export async function POST(request: Request) {
       planned_end_date: planned_end_date || null,
       assigned_to: assigned_to || null,
       status: status || 'not_started',
+      phase: phase || 'planning',
       progress_percent: 0,
       is_blocked: false,
       blockers: [],

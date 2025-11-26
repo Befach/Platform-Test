@@ -70,6 +70,77 @@ export const TIMELINE_ITEM_STATUSES = {
 
 export type TimelineItemStatus = typeof TIMELINE_ITEM_STATUSES[keyof typeof TIMELINE_ITEM_STATUSES]
 
+// Timeline item phases (lifecycle phases)
+export const TIMELINE_ITEM_PHASES = {
+  RESEARCH: 'research',
+  PLANNING: 'planning',
+  EXECUTION: 'execution',
+  REVIEW: 'review',
+  COMPLETE: 'complete',
+} as const
+
+export type TimelineItemPhase = typeof TIMELINE_ITEM_PHASES[keyof typeof TIMELINE_ITEM_PHASES]
+
+// Phase metadata for timeline items
+export const PHASE_METADATA: Record<TimelineItemPhase, {
+  label: string
+  color: string
+  bgColor: string
+  description: string
+}> = {
+  research: {
+    label: 'Research',
+    color: 'text-indigo-700',
+    bgColor: 'bg-indigo-100 border-indigo-300',
+    description: 'Investigating requirements and approach',
+  },
+  planning: {
+    label: 'Planning',
+    color: 'text-violet-700',
+    bgColor: 'bg-violet-100 border-violet-300',
+    description: 'Defining scope and timeline',
+  },
+  execution: {
+    label: 'Execution',
+    color: 'text-emerald-700',
+    bgColor: 'bg-emerald-100 border-emerald-300',
+    description: 'Active development',
+  },
+  review: {
+    label: 'Review',
+    color: 'text-amber-700',
+    bgColor: 'bg-amber-100 border-amber-300',
+    description: 'Testing and validation',
+  },
+  complete: {
+    label: 'Complete',
+    color: 'text-green-700',
+    bgColor: 'bg-green-100 border-green-300',
+    description: 'Finished',
+  },
+}
+
+/**
+ * Get phase label
+ */
+export function getPhaseLabel(phase: TimelineItemPhase | string): string {
+  return PHASE_METADATA[phase as TimelineItemPhase]?.label || phase
+}
+
+/**
+ * Get phase color class
+ */
+export function getPhaseColor(phase: TimelineItemPhase | string): string {
+  return PHASE_METADATA[phase as TimelineItemPhase]?.color || 'text-gray-700'
+}
+
+/**
+ * Get phase background color class
+ */
+export function getPhaseBgColor(phase: TimelineItemPhase | string): string {
+  return PHASE_METADATA[phase as TimelineItemPhase]?.bgColor || 'bg-gray-100 border-gray-300'
+}
+
 // Status metadata
 export const STATUS_METADATA: Record<TimelineItemStatus, {
   label: string

@@ -1,7 +1,7 @@
-# **WEEK 5: Team Management & External Review System**
+# **WEEK 5: Team Management & Work Items UI**
 
-**Last Updated:** 2025-01-17
-**Status:** 🚧 In Progress (60% Complete)
+**Last Updated:** 2025-11-26
+**Status:** ✅ Complete (100%)
 
 [← Previous: Week 4](week-4-dependencies.md) | [Back to Plan](README.md) | [Next: Week 6 →](week-6-timeline-execution.md)
 
@@ -9,10 +9,11 @@
 
 ## Goal
 
-**Primary**: Team management with phase-based access control
-**Secondary**: External review system (postponed to Week 7)
+**Primary**: Team management with phase-based access control ✅
+**Secondary**: Work items UI layer with phase-aware forms ✅
+**Tertiary**: External review system (postponed to Week 7)
 
-**Progress**: Week 5: 0% → 60%
+**Progress**: Week 5: 0% → 100%
 
 ---
 
@@ -227,6 +228,224 @@
 **Links**:
 - Security Guide: [../reference/SECURITY.md](../reference/SECURITY.md) (to be created)
 - Middleware: [../../next-app/src/lib/middleware/permission-middleware.ts](../../next-app/src/lib/middleware/permission-middleware.ts)
+
+---
+
+### 4. Work Items UI Implementation (2025-01-24)
+
+**What Changed**:
+- Implemented comprehensive UI layer for consolidated 4-type work items system
+- Created phase-aware forms with progressive disclosure
+- Built timeline status management with 8 status states
+- Added feedback integration workflows (triage + convert)
+
+**Why**:
+- Phase-aware forms provide better UX by showing only relevant fields
+- Timeline status tracking enables proper work item lifecycle management
+- Feedback integration allows converting user feedback into actionable work items
+
+**Status**: ✅ Complete - All 4 Batches Implemented
+
+**Components Created (20 new files)**:
+
+**Batch 1: Edit Foundation (10 components)**
+- `src/hooks/use-phase-aware-fields.ts` - Field visibility/locking logic
+- `src/lib/schemas/work-item-form-schema.ts` - Zod schemas for phases
+- `src/components/work-items/field-lock-indicator.tsx` - Lock icon with tooltip
+- `src/components/work-items/phase-aware-form-fields.tsx` - Reusable form component
+- `src/components/work-items/phase-context-badge.tsx` - Phase badge with field count
+- `src/components/work-items/edit-work-item-dialog.tsx` - Main edit dialog
+- `src/components/features/feature-edit-button.tsx` - Edit button wrapper
+
+**Batch 2: Timeline Status UI (3 components)**
+- `src/components/work-items/timeline-status-manager.tsx` - Inline status dropdown
+- 8 status states: not_started, planning, in_progress, blocked, review, completed, on_hold, cancelled
+
+**Batch 3: Feedback Integration (2 dialogs)**
+- `src/components/feedback/feedback-triage-dialog.tsx` - Triage workflow
+- `src/components/feedback/feedback-convert-dialog.tsx` - Convert to work item flow
+- `src/components/feedback/index.ts` - Barrel export
+
+**Batch 4: Testing (1 test suite)**
+- `e2e/05-work-items-edit-flows.spec.ts` - 16 E2E test scenarios (759 lines)
+
+**Files Modified (10)**:
+- `src/components/features/features-table-view.tsx` - Added edit button + status badges
+- `src/components/features/create-feature-dialog.tsx` - Added PhaseContextBadge
+- `src/components/features/create-timeline-item-dialog.tsx` - Added status field
+- `src/app/(dashboard)/workspaces/[id]/features/[featureId]/page.tsx` - Edit button
+- Various shape node TypeScript fixes
+
+**Key Features**:
+- ✅ Progressive disclosure: Research (4 fields) → Planning (+8) → Execution (+5)
+- ✅ Field locking in execution phase (planning fields locked)
+- ✅ 8 color-coded status states with optimistic updates
+- ✅ Feedback triage workflow (implement/defer/reject)
+- ✅ Feedback → Work item conversion with pre-filled forms
+- ✅ 16 E2E test scenarios covering all workflows
+
+**API Integration**:
+- `PATCH /api/work-items/[id]` - Edit work item
+- `PATCH /api/timeline-items/[id]` - Update timeline status
+- `POST /api/feedback/[id]/triage` - Triage feedback
+- `POST /api/feedback/[id]/convert` - Convert feedback to work item
+
+**Future Impact**:
+- Week 6: Timeline can use status workflow
+- Week 7: AI can analyze work item patterns
+- Week 8: Security audit can test permission enforcement
+
+**Edit Dialog Implementation Details**:
+- **Props**: `workItemId`, `workspaceId`, `phase`, `open`, `onOpenChange`, `onSuccess?`
+- **Features**: Data loading from Supabase, phase-aware Zod validation, loading/error states, optimistic updates, router refresh
+- **Known Limitations**: Tags/stakeholders not editable (junction tables), no phase change, no concurrent edit detection
+- **Key Files**: `edit-work-item-dialog.tsx`, `phase-aware-form-fields.tsx`, `use-phase-aware-fields.ts`
+
+**Links**:
+- Work Item Types: [../../next-app/src/lib/constants/work-item-types.ts](../../next-app/src/lib/constants/work-item-types.ts)
+- API Reference: [../reference/API_REFERENCE.md](../reference/API_REFERENCE.md#work-items)
+
+---
+
+### 5. Dual Canvas System & Workspace Redesign (2025-01-24)
+
+**What Changed**:
+- Implemented unified canvas system supporting both mind maps and feedback boards
+- Redesigned workspace page with Supabase-style sidebar navigation
+- Added multi-phase horizontal progress bar with auto-calculation
+- Created 5 template categories for quick canvas creation
+
+**Why**:
+- Single canvas engine reduces code duplication
+- Sidebar navigation scales better for 5+ modules
+- Multi-phase progress bar shows work distribution at a glance
+
+**Status**: ✅ Complete - Production ready
+
+**Key Components**:
+- `src/components/canvas/unified-canvas.tsx` - Shared canvas for mind maps + feedback
+- `src/components/workspaces/workspace-sidebar.tsx` - Collapsible navigation
+- `src/components/workspaces/multi-phase-progress-bar.tsx` - Phase distribution
+- 5 mind map templates: Product, Marketing, Research, Development, Design
+
+**Links**:
+- Canvas: [../../next-app/src/components/canvas/](../../next-app/src/components/canvas/)
+- Templates: [../../next-app/src/lib/constants/mind-map-templates.ts](../../next-app/src/lib/constants/mind-map-templates.ts)
+
+---
+
+### 6. Product Tasks System (2025-11-26)
+
+**What Changed**:
+- Implemented complete two-track task system (standalone OR linked to work items)
+- Created database schema with `product_tasks` table and RLS policies
+- Built comprehensive API routes (GET/POST/PATCH/DELETE + stats)
+- Developed UI components for task management (Kanban board + list views)
+- Added task-to-work-item conversion flow
+
+**Why**:
+- Product teams need granular task tracking within features
+- Two-track system allows flexibility (standalone tasks OR linked to work items/timeline items)
+- Kanban view provides familiar project management UX
+- Task statistics help track progress and identify bottlenecks
+
+**Status**: ✅ Complete - Full CRUD + conversion + stats
+
+**Database Migration**:
+- `supabase/migrations/20251126000001_fix_work_items_duplicate_parent.sql` - Consolidated parent_id columns
+- `supabase/migrations/20251126000002_add_timeline_item_to_product_tasks.sql` - Added timeline_item_id FK
+- `supabase/migrations/20251126000003_add_phase_to_timeline_items.sql` - Added phase column to timeline items
+
+**API Routes Created** (4 routes):
+1. `GET /api/product-tasks` - List tasks with filters (workspace, team, work_item, timeline_item, status, type)
+2. `POST /api/product-tasks` - Create new task
+3. `GET/PATCH/DELETE /api/product-tasks/[id]` - Task CRUD operations
+4. `GET /api/product-tasks/stats` - Workspace task statistics
+
+**Components Created** (4 files):
+1. `src/components/product-tasks/task-list.tsx` - Main task list with Kanban/list view toggle
+2. `src/components/product-tasks/task-card.tsx` - Individual task display with status dropdown
+3. `src/components/product-tasks/create-task-dialog.tsx` - Create task form with all fields
+4. `src/components/product-tasks/convert-task-dialog.tsx` - Convert task to work item
+
+**Task Types Supported**:
+- `research` - Research and discovery tasks
+- `design` - Design and UX tasks
+- `development` - Development and coding tasks
+- `qa` - Quality assurance and testing
+- `marketing` - Marketing and growth tasks
+- `ops` - Operations and infrastructure
+- `admin` - Administrative tasks
+
+**Key Features**:
+- ✅ Kanban board view (To Do → In Progress → Done)
+- ✅ List view with sorting and filtering
+- ✅ Task statistics bar (completion percentage, overdue count)
+- ✅ Search and filter by status/type
+- ✅ Estimated hours and due dates
+- ✅ Task-to-work-item conversion
+- ✅ Two-track linking (work_item_id OR timeline_item_id)
+- ✅ RLS policies for multi-tenant isolation
+
+**Dependencies Satisfied**:
+- ✅ Work items schema (Week 2)
+- ✅ Timeline items schema (Week 4)
+- ✅ Phase permission system (Week 5)
+- ✅ Team membership (Week 1)
+
+**Files Created**:
+- `src/components/product-tasks/*` - 4 UI components
+- `src/app/api/product-tasks/route.ts` - List/create API
+- `src/app/api/product-tasks/[id]/route.ts` - CRUD API
+- `src/app/api/product-tasks/stats/route.ts` - Statistics API
+- `src/lib/types/product-tasks.ts` - TypeScript types and configs
+
+**Future Impact**:
+- Week 6: Timeline can show task progress per timeline item
+- Week 7: AI can suggest task breakdowns
+- Week 8: Analytics can track team velocity
+
+**Links**:
+- Types: [../../next-app/src/lib/types/product-tasks.ts](../../next-app/src/lib/types/product-tasks.ts)
+- API Reference: [../reference/API_REFERENCE.md](../reference/API_REFERENCE.md#product-tasks)
+
+---
+
+### 7. Documentation Overhaul (2025-11-26)
+
+**What Changed**:
+- Consolidated 8 scattered markdown files in next-app root
+- Moved AI_MODELS_2025.md → docs/reference/AI_MODELS.md
+- Moved PARALLEL_SEARCH_USAGE.md → docs/reference/PARALLEL_SEARCH.md
+- Deleted 5 duplicate testing documentation files
+- Updated PROGRESS.md with current completion status (65%)
+
+**Why**:
+- CLAUDE.md mandates documentation organization in proper structure
+- Scattered files make maintenance difficult
+- Duplicate testing docs create confusion
+- PROGRESS.md was 313 days outdated
+
+**Status**: ✅ Complete - Documentation properly organized
+
+**Files Moved**:
+- `next-app/AI_MODELS_2025.md` → `docs/reference/AI_MODELS.md`
+- `next-app/PARALLEL_SEARCH_USAGE.md` → `docs/reference/PARALLEL_SEARCH.md`
+
+**Files Deleted** (duplicates):
+- `next-app/IMPLEMENTATION_COMPLETE.md`
+- `next-app/E2E_TESTING_SUMMARY.md`
+- `next-app/TESTING_INDEX.md`
+- `next-app/README_TESTING.md`
+- `next-app/TESTING_QUICK_REFERENCE.md`
+
+**Files Kept**:
+- `next-app/SUPABASE_SETUP.md` - Useful onboarding guide
+
+**Links**:
+- PROGRESS.md: [../planning/PROGRESS.md](../planning/PROGRESS.md)
+- AI Models: [../reference/AI_MODELS.md](../reference/AI_MODELS.md)
+- Parallel Search: [../reference/PARALLEL_SEARCH.md](../reference/PARALLEL_SEARCH.md)
 
 ---
 

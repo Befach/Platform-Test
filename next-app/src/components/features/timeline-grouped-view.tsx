@@ -4,8 +4,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
-import { Eye, Trash2, Calendar } from 'lucide-react'
-import { getItemIcon, getItemLabel } from '@/lib/constants/work-item-types'
+import { Eye, Trash2, Calendar, Target } from 'lucide-react'
+import { getItemIcon, getItemLabel, getPhaseLabel, getPhaseBgColor } from '@/lib/constants/work-item-types'
 import type { WorkItem, TimelineItem } from '@/lib/features/types'
 
 interface TimelineGroupedViewProps {
@@ -178,6 +178,12 @@ export function TimelineGroupedView({
                             >
                               {timeline.difficulty}
                             </Badge>
+                            {timeline.phase && (
+                              <Badge variant="outline" className={getPhaseBgColor(timeline.phase)}>
+                                <Target className="h-3 w-3 mr-1" />
+                                {getPhaseLabel(timeline.phase)}
+                              </Badge>
+                            )}
                           </div>
                         </div>
 

@@ -14,8 +14,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 import { useRouter } from 'next/navigation'
-import { Trash2, Check, Clock } from 'lucide-react'
+import { Trash2, Check, Clock, Target, ChevronDown, ChevronRight, ListTodo } from 'lucide-react'
+import { getPhaseLabel, getPhaseBgColor } from '@/lib/constants/work-item-types'
+import { TaskList } from '@/components/product-tasks/task-list'
 
 interface TimelineItem {
   id: string
@@ -23,6 +30,7 @@ interface TimelineItem {
   description: string | null
   timeline: string
   difficulty: string
+  phase: string | null
   order_index: number
   estimated_hours: number | null
   actual_hours: number | null
@@ -33,11 +41,26 @@ interface TimelineItem {
 interface TimelineItemsListProps {
   items: TimelineItem[]
   featureId: string
+  workspaceId?: string
+  teamId?: string
 }
 
-export function TimelineItemsList({ items, featureId }: TimelineItemsListProps) {
+export function TimelineItemsList({ items, featureId, workspaceId, teamId }: TimelineItemsListProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set())
+
+  const toggleTasks = (itemId: string) => {
+    setExpandedTasks((prev) => {
+      const next = new Set(prev)
+      if (next.has(itemId)) {
+        next.delete(itemId)
+      } else {
+        next.add(itemId)
+      }
+      return next
+    })
+  }
 
   const router = useRouter()
   const supabase = createClient()
@@ -143,6 +166,13 @@ export function TimelineItemsList({ items, featureId }: TimelineItemsListProps) 
                       {item.difficulty}
                     </Badge>
 
+                    {item.phase && (
+                      <Badge variant="outline" className={getPhaseBgColor(item.phase)}>
+                        <Target className="h-3 w-3 mr-1" />
+                        {getPhaseLabel(item.phase)}
+                      </Badge>
+                    )}
+
                     {item.estimated_hours && (
                       <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-300">
                         <Clock className="h-3 w-3 mr-1" />
@@ -160,6 +190,22 @@ export function TimelineItemsList({ items, featureId }: TimelineItemsListProps) 
                 </div>
 
                 <div className="flex items-center gap-2">
+                  {workspaceId && teamId && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleTasks(item.id)}
+                      title="View tasks"
+                      className="gap-1"
+                    >
+                      <ListTodo className="h-4 w-4" />
+                      {expandedTasks.has(item.id) ? (
+                        <ChevronDown className="h-3 w-3" />
+                      ) : (
+                        <ChevronRight className="h-3 w-3" />
+                      )}
+                    </Button>
+                  )}
                   <Button
                     variant={isCompleted ? 'outline' : 'default'}
                     size="icon"
@@ -180,6 +226,22 @@ export function TimelineItemsList({ items, featureId }: TimelineItemsListProps) 
                   </Button>
                 </div>
               </div>
+
+              {/* Collapsible Tasks Section */}
+              {workspaceId && teamId && expandedTasks.has(item.id) && (
+                <div className="mt-4 pt-4 border-t">
+                  <TaskList
+                    workspaceId={workspaceId}
+                    teamId={teamId}
+                    timelineItemId={item.id}
+                    timelineItemName={item.title}
+                    title={`Tasks for "${item.title}"`}
+                    showStats={false}
+                    showCreateButton={true}
+                    className="px-0"
+                  />
+                </div>
+              )}
             </div>
           )
         })}

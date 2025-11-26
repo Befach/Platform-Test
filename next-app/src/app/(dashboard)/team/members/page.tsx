@@ -182,7 +182,7 @@ export default function TeamMembersPage() {
             Active Members
           </CardTitle>
           <CardDescription>
-            {members?.length || 0} {members?.length === 1 ? 'member' : 'members'} in your team
+            {members?.length || 0} {members?.length === 1 ? 'member' : 'members'} in your organization
           </CardDescription>
         </CardHeader>
         <CardContent>

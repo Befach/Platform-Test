@@ -8,6 +8,7 @@ import { DependenciesView } from './dependencies-view';
 import { CanvasView } from './canvas-view';
 import { SettingsView } from './settings-view';
 import { TeamAnalyticsView } from './team-analytics-view';
+import { ProductTasksView } from './product-tasks-view';
 
 interface WorkspaceContentProps {
   view: string;
@@ -99,6 +100,13 @@ export function WorkspaceContent({
       case 'team-analytics':
         return (
           <TeamAnalyticsView
+            workspace={workspace}
+          />
+        );
+
+      case 'product-tasks':
+        return (
+          <ProductTasksView
             workspace={workspace}
           />
         );

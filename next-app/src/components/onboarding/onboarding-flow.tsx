@@ -15,20 +15,49 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Loader2, Rocket, Users, Layers, Check } from 'lucide-react'
+import { Loader2, Rocket, Users, Layers, Check, Plus, X, Mail } from 'lucide-react'
+import { PHASE_ORDER } from '@/lib/constants/workspace-phases'
 
 interface OnboardingFlowProps {
   user: any
 }
 
 export function OnboardingFlow({ user }: OnboardingFlowProps) {
-  const [step, setStep] = useState<'welcome' | 'team' | 'workspace'>('welcome')
+  const [step, setStep] = useState<'welcome' | 'team' | 'invite' | 'workspace'>('welcome')
   const [loading, setLoading] = useState(false)
   const [teamName, setTeamName] = useState('')
+  const [inviteEmails, setInviteEmails] = useState<string[]>([''])
   const [workspaceName, setWorkspaceName] = useState('')
   const [workspaceDescription, setWorkspaceDescription] = useState('')
   const router = useRouter()
   const supabase = createClient()
+
+  // Helper to validate email format
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
+  // Helper to add email input
+  const addEmailInput = () => {
+    setInviteEmails([...inviteEmails, ''])
+  }
+
+  // Helper to remove email input
+  const removeEmailInput = (index: number) => {
+    setInviteEmails(inviteEmails.filter((_, i) => i !== index))
+  }
+
+  // Helper to update email at index
+  const updateEmail = (index: number, value: string) => {
+    const newEmails = [...inviteEmails]
+    newEmails[index] = value
+    setInviteEmails(newEmails)
+  }
+
+  // Get valid emails for invitation
+  const getValidEmails = () => {
+    return inviteEmails.filter(email => email.trim() && isValidEmail(email.trim()))
+  }
 
   const handleCreateTeamAndWorkspace = async () => {
     setLoading(true)
@@ -69,6 +98,32 @@ export function OnboardingFlow({ user }: OnboardingFlowProps) {
       })
 
       if (workspaceError) throw workspaceError
+
+      // Send invitations for valid emails (non-blocking)
+      const validEmails = getValidEmails()
+      if (validEmails.length > 0) {
+        // Send invitations in the background - don't block user flow
+        Promise.all(
+          validEmails.map(email =>
+            fetch('/api/team/invitations', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                team_id: teamId,
+                email: email.trim(),
+                role: 'member',
+                phase_assignments: PHASE_ORDER.map(phase => ({
+                  workspace_id: workspaceId,
+                  phase,
+                  can_edit: true,
+                })),
+              }),
+            })
+          )
+        ).catch(err => {
+          console.error('Some invitations failed to send:', err)
+        })
+      }
 
       // Redirect to the new workspace
       router.push(`/workspaces/${workspaceId}`)
@@ -157,15 +212,15 @@ export function OnboardingFlow({ user }: OnboardingFlowProps) {
     return (
       <Card className="max-w-md w-full shadow-2xl border-0">
         <CardHeader>
-          <CardTitle>Create Your Team</CardTitle>
+          <CardTitle>Create Your Organization</CardTitle>
           <CardDescription>
-            Teams are organizations that contain multiple workspaces. You can invite
-            teammates later.
+            Organizations contain your team members and workspaces. You&apos;ll be able to
+            invite teammates next.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="teamName">Team Name *</Label>
+            <Label htmlFor="teamName">Organization Name *</Label>
             <Input
               id="teamName"
               placeholder="e.g., Acme Inc, My Startup"
@@ -184,7 +239,7 @@ export function OnboardingFlow({ user }: OnboardingFlowProps) {
             Back
           </Button>
           <Button
-            onClick={() => setStep('workspace')}
+            onClick={() => setStep('invite')}
             disabled={!teamName.trim() || loading}
           >
             Continue
@@ -193,6 +248,103 @@ export function OnboardingFlow({ user }: OnboardingFlowProps) {
       </Card>
     )
   }
+
+  if (step === 'invite') {
+    const validEmailCount = getValidEmails().length
+    return (
+      <Card className="max-w-md w-full shadow-2xl border-0">
+        <CardHeader>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="h-10 w-10 rounded-full bg-purple-500 flex items-center justify-center">
+              <Mail className="h-5 w-5 text-white" />
+            </div>
+            <CardTitle>Invite Team Members</CardTitle>
+          </div>
+          <CardDescription>
+            Invite colleagues to join your organization. They&apos;ll get access to all
+            workspaces. You can skip this and invite members later.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            {inviteEmails.map((email, index) => (
+              <div key={index} className="flex gap-2">
+                <Input
+                  type="email"
+                  placeholder="colleague@company.com"
+                  value={email}
+                  onChange={(e) => updateEmail(index, e.target.value)}
+                  disabled={loading}
+                  className={
+                    email.trim() && !isValidEmail(email.trim())
+                      ? 'border-red-300 focus-visible:ring-red-500'
+                      : ''
+                  }
+                />
+                {inviteEmails.length > 1 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeEmailInput(index)}
+                    disabled={loading}
+                    className="shrink-0"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addEmailInput}
+            disabled={loading || inviteEmails.length >= 10}
+            className="w-full"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Another Email
+          </Button>
+          {validEmailCount > 0 && (
+            <p className="text-sm text-muted-foreground text-center">
+              {validEmailCount} invitation{validEmailCount !== 1 ? 's' : ''} will be sent
+            </p>
+          )}
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button
+            variant="outline"
+            onClick={() => setStep('team')}
+            disabled={loading}
+          >
+            Back
+          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setInviteEmails([''])
+                setStep('workspace')
+              }}
+              disabled={loading}
+            >
+              Skip
+            </Button>
+            <Button
+              onClick={() => setStep('workspace')}
+              disabled={loading}
+            >
+              Continue
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+    )
+  }
+
+  const validEmailCount = getValidEmails().length
 
   return (
     <Card className="max-w-md w-full shadow-2xl border-0">
@@ -226,11 +378,19 @@ export function OnboardingFlow({ user }: OnboardingFlowProps) {
             rows={3}
           />
         </div>
+
+        {validEmailCount > 0 && (
+          <div className="rounded-lg bg-purple-50 border border-purple-100 p-3">
+            <p className="text-sm text-purple-800">
+              <strong>{validEmailCount}</strong> team member{validEmailCount !== 1 ? 's' : ''} will be invited after setup
+            </p>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button
           variant="outline"
-          onClick={() => setStep('team')}
+          onClick={() => setStep('invite')}
           disabled={loading}
         >
           Back

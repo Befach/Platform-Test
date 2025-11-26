@@ -112,6 +112,13 @@ export interface TimelineItem {
   status?: string
 
   /**
+   * Lifecycle phase of this timeline item
+   * Tracks where in the development lifecycle this item is
+   * @example 'research', 'planning', 'execution', 'review', 'complete'
+   */
+  phase?: string
+
+  /**
    * Estimated difficulty level
    * @see DIFFICULTY_CONFIG in table-config.ts
    */

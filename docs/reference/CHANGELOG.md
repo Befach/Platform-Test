@@ -1,6 +1,6 @@
 # 📜 CHANGELOG
 
-**Last Updated**: 2025-11-14
+**Last Updated**: 2025-11-26
 **Project**: Product Lifecycle Management Platform
 **Format**: Based on [Keep a Changelog](https://keepachangelog.com/)
 
@@ -191,21 +191,56 @@ All notable changes, migrations, and feature implementations are documented in t
 
 ## Migration History Summary
 
-| # | Date | Migration | Tables | Purpose |
-|---|------|-----------|--------|---------|
-| 1 | 2025-01-01 | Initial schema | 8 tables | Multi-tenant foundation |
-| 2 | 2025-01-01 | RLS policies | - | Security policies |
-| 3 | 2025-01-03 | Change IDs to TEXT | - | UUID → Timestamp IDs |
-| 4 | 2025-01-11 | Feature connections | 1 table | Dependency graph |
-| 5 | 2025-01-11 | Feature analytics | 2 tables | AI-powered insights |
-| 6 | 2025-01-12 | Tags table | 1 table | Feature categorization |
-| 7 | 2025-01-13 | Timeline dependencies | - | Enhanced dependencies |
-| 8 | 2025-01-13 | Rename features | - | Column consistency |
-| 9 | 2025-01-13 | Conversion tracking | 2 tables | Workflow tracking |
-| 10 | 2025-01-13 | Mind maps tables | 3 tables | Visual ideation |
+| # | Date | Migration | Purpose |
+|---|------|-----------|---------|
+| 1 | 2025-01-01 | `20250101000000_initial_schema.sql` | Initial multi-tenant schema with users, teams, workspaces |
+| 2 | 2025-01-01 | `20250101000001_disable_rls_for_anon.sql` | Disable RLS temporarily for development |
+| 3 | 2025-01-01 | `20250101000002_fix_anonymous_access.sql` | Fix anonymous access policies |
+| 4 | 2025-01-01 | `20250101000003_change_ids_to_text.sql` | Convert UUID IDs to TEXT (timestamp-based) |
+| 5 | 2025-01-01 | `20250101000004_remove_type_constraints.sql` | Remove strict type constraints for flexibility |
+| 6 | 2025-01-01 | `20250101000005_auto_generate_linked_item_ids.sql` | Auto-generate IDs for linked_items table |
+| 7 | 2025-01-01 | `20250101000006_remove_user_isolation.sql` | Remove user-level isolation for team-based access |
+| 8 | 2025-01-01 | `20250101000007_add_workspaces.sql` | Add workspaces table for project management |
+| 9 | 2025-01-01 | `20250101000008_migrate_existing_data.sql` | Migrate existing data to new schema |
+| 10 | 2025-01-11 | `20250111000001_add_execution_steps_table.sql` | Add execution_steps for task breakdown |
+| 11 | 2025-01-11 | `20250111000002_add_feature_resources_table.sql` | Add feature_resources for attachments |
+| 12 | 2025-01-11 | `20250111000003_add_feature_planning_tables.sql` | Add feature planning support tables |
+| 13 | 2025-01-11 | `20250111000004_add_inspiration_items_table.sql` | Add inspiration_items for research |
+| 14 | 2025-01-11 | `20250111000005_add_features_tracking_columns.sql` | Add tracking columns to features |
+| 15 | 2025-01-12 | `20250112000001_add_workflow_stages.sql` | Add workflow_stages for status tracking |
+| 16 | 2025-01-12 | `20251112115417_create_tags_table.sql` | Create tags table for categorization |
+| 17 | 2025-01-13 | `20250113000001_add_feature_connections_table.sql` | Add feature_connections for dependency graph |
+| 18 | 2025-01-13 | `20250113000002_add_feature_importance_scores_table.sql` | Add importance scores for AI prioritization |
+| 19 | 2025-01-13 | `20250113000003_add_feature_correlations_table.sql` | Add correlations for AI relationship detection |
+| 20 | 2025-01-13 | `20250113000004_add_connection_insights_table.sql` | Add connection_insights for AI analysis |
+| 21 | 2025-01-13 | `20250113000006_improve_timeline_dependencies.sql` | Enhance timeline dependencies tracking |
+| 22 | 2025-01-13 | `20250113000007_rename_features_to_work_items.sql` | Rename feature columns for consistency |
+| 23 | 2025-01-13 | `20250113000008_add_conversion_tracking.sql` | Add conversion_tracking for workflow analytics |
+| 24 | 2025-01-13 | `20250113000009_create_mind_maps_tables.sql` | Create mind_maps, mind_map_nodes, mind_map_edges |
+| 25 | 2025-01-15 | `20250115000001_re_enable_rls_security.sql` | Re-enable RLS after development |
+| 26 | 2025-01-15 | `20250115000002_upgrade_harsha_to_pro.sql` | Upgrade user subscription to Pro |
+| 27 | 2025-01-15 | `20250115143000_enable_rls_critical_tables.sql` | Enable RLS on critical tables |
+| 28 | 2025-01-15 | `20250115143100_enable_rls_public_tables.sql` | Enable RLS on public-facing tables |
+| 29 | 2025-01-15 | `20250115143200_add_subscriptions_rls_policies.sql` | Add RLS policies for subscriptions |
+| 30 | 2025-01-15 | `20250115143300_fix_function_search_path.sql` | Fix function search path security |
+| 31 | 2025-11-15 | `20251115133000_add_timeline_dates.sql` | Add start/end dates to timeline items |
+| 32 | 2025-01-17 | `20250117000001_create_phase_assignments.sql` | Create phase_assignments for team permissions |
+| 33 | 2025-01-17 | `20250117000002_add_phase_assignments_to_invitations.sql` | Add phase assignments to invitation flow |
+| 34 | 2025-01-17 | `20250117000003_fix_user_id_data_types.sql` | Fix user ID data type consistency |
+| 35 | 2025-01-17 | `20250117000004_add_phase_lead_role.sql` | Add phase_lead role for team hierarchy |
+| 36 | 2025-01-17 | `20250117000005_create_public_users_table.sql` | Create public users view for profiles |
+| 37 | 2025-11-17 | `20251117175229_comprehensive_phase_system.sql` | Comprehensive phase permission system |
+| 38 | 2025-01-19 | `20250119000001_add_teams_team_members_rls.sql` | Add RLS policies for teams and team_members |
+| 39 | 2025-01-20 | `20250120000001_add_unified_canvas_support.sql` | Add unified canvas support for dual canvases |
+| 40 | 2025-01-21 | `20250121000001_extend_mind_maps_for_two_canvas_system.sql` | Extend mind_maps for dual canvas (Ideas + Roadmap) |
+| 41 | 2025-01-24 | `20250124000001_consolidate_work_item_types.sql` | Consolidate work item types |
+| 42 | 2025-01-24 | `20250124000002_create_feedback_module.sql` | Create feedback module tables |
+| 43 | 2025-01-24 | `20250124000003_add_work_items_hierarchy.sql` | Add work_items hierarchy support |
+| 44 | 2025-01-24 | `20250124000004_extend_timeline_items_execution.sql` | Extend timeline_items for execution tracking |
+| 45 | 2025-11-25 | `20251125000001_create_product_tasks_table.sql` | Create product_tasks table |
 
-**Total Migrations**: 24 (some combined multiple operations)
-**Total Tables**: 20+
+**Total Migrations**: 45
+**Total Tables**: 26+
 
 ---
 
@@ -353,10 +388,10 @@ None yet (project is in initial development phase)
 
 ## References
 
-- [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) - 8-week roadmap
-- [PROGRESS.md](PROGRESS.md) - Current implementation status
-- [CLAUDE.md](CLAUDE.md) - Project guidelines and coding standards
-- [Supabase Migrations](supabase/migrations/) - All migration files
+- [docs/implementation/README.md](../implementation/README.md) - Implementation plan overview
+- [docs/planning/PROGRESS.md](../planning/PROGRESS.md) - Current implementation status
+- [CLAUDE.md](../../CLAUDE.md) - Project guidelines and coding standards
+- [supabase/migrations/](../../supabase/migrations/) - All migration files
 
 ---
 

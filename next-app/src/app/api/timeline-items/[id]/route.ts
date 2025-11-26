@@ -118,6 +118,7 @@ export async function PATCH(
       category,
       integration_type,
       status,
+      phase,
       progress_percent,
       assigned_to,
       planned_start_date,
@@ -172,6 +173,16 @@ export async function PATCH(
         )
       }
       updates.status = status
+    }
+    if (phase !== undefined) {
+      const validPhases = ['research', 'planning', 'execution', 'review', 'complete']
+      if (!validPhases.includes(phase)) {
+        return NextResponse.json(
+          { error: 'phase must be one of: research, planning, execution, review, complete' },
+          { status: 400 }
+        )
+      }
+      updates.phase = phase
     }
     if (progress_percent !== undefined) {
       if (progress_percent < 0 || progress_percent > 100) {

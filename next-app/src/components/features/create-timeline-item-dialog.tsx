@@ -24,7 +24,14 @@ import {
 } from '@/components/ui/select'
 import { useRouter } from 'next/navigation'
 import { Plus } from 'lucide-react'
-import { TIMELINE_ITEM_STATUSES, STATUS_METADATA, TimelineItemStatus } from '@/lib/constants/work-item-types'
+import {
+  TIMELINE_ITEM_STATUSES,
+  STATUS_METADATA,
+  TimelineItemStatus,
+  TIMELINE_ITEM_PHASES,
+  PHASE_METADATA,
+  TimelineItemPhase,
+} from '@/lib/constants/work-item-types'
 
 interface CreateTimelineItemDialogProps {
   featureId: string
@@ -44,6 +51,7 @@ export function CreateTimelineItemDialog({
   const [difficulty, setDifficulty] = useState<string>('MEDIUM')
   const [estimatedHours, setEstimatedHours] = useState('')
   const [status, setStatus] = useState<TimelineItemStatus>(TIMELINE_ITEM_STATUSES.NOT_STARTED)
+  const [phase, setPhase] = useState<TimelineItemPhase>(TIMELINE_ITEM_PHASES.PLANNING)
 
   const router = useRouter()
   const supabase = createClient()
@@ -70,6 +78,7 @@ export function CreateTimelineItemDialog({
         order_index: orderIndex,
         estimated_hours: estimatedHours ? parseInt(estimatedHours) : null,
         status,
+        phase,
       })
 
       if (error) throw error
@@ -80,6 +89,7 @@ export function CreateTimelineItemDialog({
       setDifficulty('MEDIUM')
       setEstimatedHours('')
       setStatus(TIMELINE_ITEM_STATUSES.NOT_STARTED)
+      setPhase(TIMELINE_ITEM_PHASES.PLANNING)
       setOpen(false)
 
       // Refresh the page
@@ -168,23 +178,38 @@ export function CreateTimelineItemDialog({
               </div>
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="status">Initial Status</Label>
-              <Select value={status} onValueChange={(value) => setStatus(value as TimelineItemStatus)}>
-                <SelectTrigger id="status">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.values(TIMELINE_ITEM_STATUSES).map((statusValue) => (
-                    <SelectItem key={statusValue} value={statusValue}>
-                      {STATUS_METADATA[statusValue].label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                Default status for this timeline item
-              </p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="status">Initial Status</Label>
+                <Select value={status} onValueChange={(value) => setStatus(value as TimelineItemStatus)}>
+                  <SelectTrigger id="status">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(TIMELINE_ITEM_STATUSES).map((statusValue) => (
+                      <SelectItem key={statusValue} value={statusValue}>
+                        {STATUS_METADATA[statusValue].label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="phase">Lifecycle Phase</Label>
+                <Select value={phase} onValueChange={(value) => setPhase(value as TimelineItemPhase)}>
+                  <SelectTrigger id="phase">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(TIMELINE_ITEM_PHASES).map((phaseValue) => (
+                      <SelectItem key={phaseValue} value={phaseValue}>
+                        {PHASE_METADATA[phaseValue].label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 

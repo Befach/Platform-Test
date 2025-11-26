@@ -12,7 +12,7 @@ import type { TeamRole } from '@/lib/types/team'
 interface Team {
   id: string
   name: string
-  subscription_plan: 'free' | 'pro' | 'enterprise'
+  plan: string
   created_at: string
 }
 
@@ -93,9 +93,9 @@ export default function TeamSettingsPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Team Settings</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Organization Settings</h1>
           <p className="text-muted-foreground mt-2">
-            Manage your team configuration and subscription
+            Manage your organization&apos;s configuration and subscription
           </p>
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function TeamSettingsPage() {
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList>
           <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="billing">Billing & Plans</TabsTrigger>
+          <TabsTrigger value="billing">Billing</TabsTrigger>
           <TabsTrigger value="integrations" disabled>Integrations</TabsTrigger>
         </TabsList>
 

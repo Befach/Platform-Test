@@ -9,13 +9,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Lock, UserCheck, Users, Mail } from 'lucide-react';
 import { WORKSPACE_PHASES, type WorkspacePhase } from '@/lib/constants/workspace-phases';
 import { cn } from '@/lib/utils';
 
@@ -90,95 +83,11 @@ export function PhaseSelect({
     );
   };
 
-  const getTooltipContent = (permission: PhasePermission) => {
-    const phaseName = WORKSPACE_PHASES.find((p) => p.id === permission.phase)?.label || permission.phase;
-
-    if (permission.canAssign) {
-      return (
-        <div className="space-y-2 max-w-xs">
-          <div className="flex items-center gap-2">
-            <UserCheck className="h-4 w-4 text-emerald-500" />
-            <span className="font-semibold">You can assign work items</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            You have edit permission for the {phaseName} phase. You can create and assign work items to this phase.
-          </p>
-          {permission.leadName && (
-            <div className="pt-2 border-t space-y-1">
-              <div className="flex items-center gap-2 text-sm">
-                <Users className="h-3.5 w-3.5" />
-                <span className="font-medium">Phase Lead:</span>
-              </div>
-              <p className="text-sm">{permission.leadName}</p>
-              {permission.leadEmail && (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Mail className="h-3 w-3" />
-                  <span>{permission.leadEmail}</span>
-                </div>
-              )}
-            </div>
-          )}
-          {showWorkload && permission.workloadCount !== undefined && (
-            <div className="pt-2 border-t">
-              <p className="text-xs text-muted-foreground">
-                Current workload: {permission.workloadCount} items in {phaseName}
-              </p>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    if (permission.canView) {
-      return (
-        <div className="space-y-2 max-w-xs">
-          <div className="flex items-center gap-2">
-            <Lock className="h-4 w-4 text-slate-500" />
-            <span className="font-semibold">View-only access</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            You can view work items in {phaseName} but cannot create or assign items to this phase.
-          </p>
-          {permission.leadName && (
-            <div className="pt-2 border-t space-y-1">
-              <p className="text-sm font-medium">To get edit access, contact:</p>
-              <p className="text-sm">{permission.leadName}</p>
-              {permission.leadEmail && (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Mail className="h-3 w-3" />
-                  <a
-                    href={`mailto:${permission.leadEmail}?subject=Request access to ${phaseName} phase`}
-                    className="hover:underline"
-                  >
-                    {permission.leadEmail}
-                  </a>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    return (
-      <div className="space-y-2 max-w-xs">
-        <div className="flex items-center gap-2">
-          <Lock className="h-4 w-4 text-red-500" />
-          <span className="font-semibold">No access</span>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          You don't have access to the {phaseName} phase. Contact your team admin to request access.
-        </p>
-      </div>
-    );
-  };
-
   const selectedPhase = WORKSPACE_PHASES.find((p) => p.id === value);
   const selectedPermission = permissions.find((p) => p.phase === value);
 
   return (
-    <TooltipProvider>
-      <div className={cn('space-y-2', className)}>
+    <div className={cn('space-y-2', className)}>
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             Phase
@@ -222,40 +131,32 @@ export function PhaseSelect({
               const isDisabled = !permission.canAssign;
 
               return (
-                <Tooltip key={phase.id} delayDuration={300}>
-                  <TooltipTrigger asChild>
-                    <div>
-                      <SelectItem
-                        value={phase.id}
-                        disabled={isDisabled}
-                        className={cn(
-                          'flex items-center gap-2 cursor-pointer',
-                          isDisabled && 'opacity-60 cursor-not-allowed'
-                        )}
-                      >
-                        <div className="flex items-center gap-3 w-full">
-                          <div
-                            className="w-3 h-3 rounded-full shrink-0"
-                            style={{ backgroundColor: phase.color }}
-                            aria-hidden="true"
-                          />
-                          <span className="flex-1">{phase.label}</span>
-                          <div className="flex items-center gap-2">
-                            {showWorkload && permission.workloadCount !== undefined && (
-                              <span className="text-xs text-muted-foreground">
-                                ({permission.workloadCount})
-                              </span>
-                            )}
-                            {getPermissionBadge(permission)}
-                          </div>
-                        </div>
-                      </SelectItem>
+                <SelectItem
+                  key={phase.id}
+                  value={phase.id}
+                  disabled={isDisabled}
+                  className={cn(
+                    'flex items-center gap-2 cursor-pointer',
+                    isDisabled && 'opacity-60 cursor-not-allowed'
+                  )}
+                >
+                  <div className="flex items-center gap-3 w-full">
+                    <div
+                      className="w-3 h-3 rounded-full shrink-0"
+                      style={{ backgroundColor: phase.color }}
+                      aria-hidden="true"
+                    />
+                    <span className="flex-1">{phase.label}</span>
+                    <div className="flex items-center gap-2">
+                      {showWorkload && permission.workloadCount !== undefined && (
+                        <span className="text-xs text-muted-foreground">
+                          ({permission.workloadCount})
+                        </span>
+                      )}
+                      {getPermissionBadge(permission)}
                     </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-sm">
-                    {getTooltipContent(permission)}
-                  </TooltipContent>
-                </Tooltip>
+                  </div>
+                </SelectItem>
               );
             })}
           </SelectContent>
@@ -266,7 +167,6 @@ export function PhaseSelect({
             * Required field
           </p>
         )}
-      </div>
-    </TooltipProvider>
+    </div>
   );
 }

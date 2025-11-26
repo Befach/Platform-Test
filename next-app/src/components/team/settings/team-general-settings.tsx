@@ -88,12 +88,12 @@ export function TeamGeneralSettings({ team, currentUserRole }: TeamGeneralSettin
                         <Settings className="h-5 w-5" />
                         General Information
                     </CardTitle>
-                    <CardDescription>Update your team name and basic settings</CardDescription>
+                    <CardDescription>Update your organization name and basic settings</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSaveTeamName} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="team-name">Team Name *</Label>
+                            <Label htmlFor="team-name">Organization Name *</Label>
                             <Input
                                 id="team-name"
                                 value={teamName}
@@ -104,7 +104,7 @@ export function TeamGeneralSettings({ team, currentUserRole }: TeamGeneralSettin
                             />
                             {!isOwner && (
                                 <p className="text-xs text-muted-foreground">
-                                    Only team owners can update the team name
+                                    Only organization owners can update the name
                                 </p>
                             )}
                         </div>
@@ -135,17 +135,17 @@ export function TeamGeneralSettings({ team, currentUserRole }: TeamGeneralSettin
                     <CardHeader>
                         <CardTitle className="text-red-600">Danger Zone</CardTitle>
                         <CardDescription>
-                            Irreversible actions that will permanently delete your team
+                            Irreversible actions that will permanently delete your organization
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         {!showDeleteConfirm ? (
                             <div className="flex items-start justify-between">
                                 <div className="flex-1">
-                                    <h4 className="font-medium text-sm mb-1">Delete this team</h4>
+                                    <h4 className="font-medium text-sm mb-1">Delete this organization</h4>
                                     <p className="text-sm text-muted-foreground">
-                                        Once you delete a team, there is no going back. All workspaces,
-                                        features, and team data will be permanently deleted.
+                                        Once you delete an organization, there is no going back. All workspaces,
+                                        features, and data will be permanently deleted.
                                     </p>
                                 </div>
                                 <Button
@@ -156,14 +156,14 @@ export function TeamGeneralSettings({ team, currentUserRole }: TeamGeneralSettin
                                     className="ml-4"
                                 >
                                     <Trash2 className="mr-2 h-4 w-4" />
-                                    Delete Team
+                                    Delete Organization
                                 </Button>
                             </div>
                         ) : (
                             <div className="space-y-4">
                                 <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                                     <h4 className="font-semibold text-red-800 mb-2">
-                                        ⚠️ Confirm Team Deletion
+                                        ⚠️ Confirm Organization Deletion
                                     </h4>
                                     <p className="text-sm text-red-700">
                                         Are you absolutely sure you want to delete <strong>{team.name}</strong>?

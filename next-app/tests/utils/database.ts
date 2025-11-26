@@ -63,6 +63,7 @@ export async function createWorkspaceInDatabase(
     name: string;
     description?: string;
     teamId: string;
+    phase?: string;
   },
 ): Promise<{ id: string; name: string; teamId: string }> {
   try {
@@ -76,7 +77,7 @@ export async function createWorkspaceInDatabase(
           name: workspaceData.name,
           description: workspaceData.description || '',
           team_id: workspaceData.teamId,
-          phase: 'research',
+          phase: workspaceData.phase || 'research',
           created_at: new Date().toISOString(),
         },
       ])

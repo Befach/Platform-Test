@@ -422,12 +422,12 @@ export function CreateFeatureDialog({
                 {step === 1 ? 'Step 1: Parent Details' : 'Step 2: Timeline Breakdown'}
               </span>
             </div>
-            <DialogDescription className="space-y-2">
-              <PhaseContextBadge phase={workspacePhase} />
-              <p className="text-sm text-muted-foreground">
+            <div className="space-y-2">
+              <PhaseContextBadge phase={workspacePhase} showFieldCount={false} />
+              <DialogDescription>
                 {getPhaseHelperText(workspacePhase)}
-              </p>
-            </DialogDescription>
+              </DialogDescription>
+            </div>
           </DialogHeader>
 
           <div className="grid gap-4 py-4 max-h-[600px] overflow-y-auto">

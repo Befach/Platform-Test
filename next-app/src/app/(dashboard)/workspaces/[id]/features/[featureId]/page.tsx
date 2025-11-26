@@ -211,7 +211,7 @@ export default async function FeatureDetailPage({
             </CardHeader>
             <CardContent>
               {mvpItems.length > 0 ? (
-                <TimelineItemsList items={mvpItems} featureId={featureId} />
+                <TimelineItemsList items={mvpItems} featureId={featureId} workspaceId={workspaceId} teamId={feature.workspace.team_id} />
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
                   No MVP items yet. Add your first core feature!
@@ -237,7 +237,7 @@ export default async function FeatureDetailPage({
             </CardHeader>
             <CardContent>
               {shortItems.length > 0 ? (
-                <TimelineItemsList items={shortItems} featureId={featureId} />
+                <TimelineItemsList items={shortItems} featureId={featureId} workspaceId={workspaceId} teamId={feature.workspace.team_id} />
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
                   No short-term items yet
@@ -263,7 +263,7 @@ export default async function FeatureDetailPage({
             </CardHeader>
             <CardContent>
               {longItems.length > 0 ? (
-                <TimelineItemsList items={longItems} featureId={featureId} />
+                <TimelineItemsList items={longItems} featureId={featureId} workspaceId={workspaceId} teamId={feature.workspace.team_id} />
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
                   No long-term items yet

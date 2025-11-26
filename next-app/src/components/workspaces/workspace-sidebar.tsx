@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import {
   BarChart3,
   Bot,
+  CheckSquare,
   ChevronDown,
   FileText,
   GitBranch,
@@ -148,6 +149,13 @@ export function WorkspaceSidebar({
           view: 'dependencies',
           icon: GitBranch,
           enabled: enabledModules.includes('dependencies'),
+        },
+        {
+          id: 'product-tasks',
+          name: 'Product Tasks',
+          view: 'product-tasks',
+          icon: CheckSquare,
+          enabled: true, // Always enabled - standalone tasks
         },
       ],
     },
