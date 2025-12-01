@@ -1,600 +1,76 @@
-<testsuites id="" name="" tests="114" failures="0" skipped="114" errors="0" time="0.13680000000000017">
-<testsuite name="01-auth.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="15" failures="0" skipped="15" time="0" errors="0">
-<testcase name="Authentication › should display login page with all elements" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should show email input validation error for invalid email" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should show empty email validation error" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should navigate to signup page when clicking signup link" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should display signup page with registration form" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should redirect unauthenticated users from protected routes" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should redirect from protected workspace route" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should persist authentication across page refreshes" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should disable submit button while form is submitting" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should handle network errors gracefully" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should logout user and clear session" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should clear authentication token on logout" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should show loading indicator while authenticating" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication - Error Handling › should show error for network timeout" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication - Error Handling › should focus on email field when it has an error" classname="01-auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="02-multi-tenant-isolation.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="24" failures="0" skipped="24" time="0" errors="0">
-<testcase name="Multi-Tenant Isolation - Security › should prevent accessing other team workspace via direct URL" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should prevent API access to other team workspaces" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should not list other team workspaces in workspace list" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should prevent accessing other team work items" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should prevent modifying other team data via API" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should not expose other team data in API responses" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should prevent SQL injection across team boundaries" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should isolate mind maps by team" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should isolate dependencies by team" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should isolate timeline items by team" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should prevent team member role escalation" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Security › should enforce RLS policies on all tables" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Team Member Access › should allow team member to access team workspaces" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Team Member Access › should prevent removed team member from accessing team data" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Team Member Access › should show correct workspace list for team member" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Team Member Access › should enforce workspace access in phase operations" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Permission Levels › should prevent guest users from accessing team data" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Permission Levels › should enforce role-based access control" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Permission Levels › should respect phase assignments for team members" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Data Integrity › should maintain data consistency during concurrent operations" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Data Integrity › should not leak data through error messages" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Data Integrity › should not leak data through response codes" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Data Integrity › should prevent data leakage through timestamps" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Multi-Tenant Isolation - Data Integrity › should prevent enumeration attacks on IDs" classname="02-multi-tenant-isolation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="03-team-management.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="23" failures="0" skipped="23" time="0" errors="0">
-<testcase name="Team Management - Invitations › should display team members page with invite button" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Invitations › should open invite member dialog when clicking invite button" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Invitations › should validate email input in invite form" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Invitations › should show role selection in invite form" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Invitations › should show phase assignments in invite form" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Invitations › should send invitation and show pending status" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Roles › should display team member list with roles" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Roles › should show different role badges for different members" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Roles › should allow role change through dropdown" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Roles › should restrict owner role assignment to current owner" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Roles › should show phase permissions for each member" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Removal › should show remove button for team members" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Removal › should show confirmation dialog when removing member" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Removal › should remove member and update list" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Member Removal › should prevent removed member from accessing team data" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Permissions Verification › should prevent non-owner from inviting members" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Permissions Verification › should prevent member from changing team settings" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Permissions Verification › should prevent regular member from removing other members" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Permissions Verification › should show read-only member list for viewers" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Phase Assignments › should display phase assignment matrix for members" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Phase Assignments › should allow assigning multiple phases to member" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Phase Assignments › should save phase assignments when confirmed" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Team Management - Phase Assignments › should enforce phase permissions when editing work items" classname="03-team-management.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="04-features.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="14" failures="0" skipped="14" time="0" errors="0">
-<testcase name="Features - CRUD Operations › should display features page with create button" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - CRUD Operations › should open create feature form when clicking create button" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - CRUD Operations › should create new feature with valid data" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - CRUD Operations › should display feature in list after creation" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - CRUD Operations › should display feature details when clicked" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - CRUD Operations › should edit feature and save changes" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - CRUD Operations › should delete feature with confirmation" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - Filtering and Search › should filter features by type" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - Filtering and Search › should filter features by priority" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - Filtering and Search › should search features by text" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - Filtering and Search › should clear search and show all features" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - Timeline Breakdown › should display timeline breakdown for feature" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - Timeline Breakdown › should allow adding timeline items" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Features - Phase Organization › should display features grouped by phase" classname="04-features.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="auth.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="5" failures="0" skipped="5" time="0" errors="0">
-<testcase name="Authentication › should display login page" classname="auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should redirect unauthenticated users to login" classname="auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should show email input validation" classname="auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should navigate to signup page" classname="auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Authentication › should display signup page correctly" classname="auth.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="dependencies.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="9" failures="0" skipped="9" time="0" errors="0">
-<testcase name="Dependency Management › should display dependency graph page" classname="dependencies.spec.ts" time="0">
+<testsuites id="" name="" tests="11" failures="0" skipped="9" errors="0" time="22.473512000000003">
+<testsuite name="03-team-management.spec.ts" timestamp="2025-11-30T13:47:12.971Z" hostname="chromium" tests="11" failures="0" skipped="9" time="8.39" errors="0">
+<testcase name="Team Management - Navigation › should navigate to team members page" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Dependency Management › should create dependency link" classname="dependencies.spec.ts" time="0">
+<testcase name="Team Management - Navigation › should navigate to team settings page" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Dependency Management › should show different link types with colors" classname="dependencies.spec.ts" time="0">
+<testcase name="Team Management - Members Page UI › should display page heading" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Dependency Management › should display critical path analysis" classname="dependencies.spec.ts" time="0">
+<testcase name="Team Management - Members Page UI › should show loading state or members list" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Dependency Management › should filter graph by feature type" classname="dependencies.spec.ts" time="0">
+<testcase name="Team Management - Members Page UI › should have invite button for authorized users" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Dependency Management › should zoom and pan dependency graph" classname="dependencies.spec.ts" time="0">
+<testcase name="Team Management - Invite Dialog › should open invite dialog when clicking invite button" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Dependency Management › should delete dependency link" classname="dependencies.spec.ts" time="0">
+<testcase name="Team Management - Invite Dialog › should close invite dialog on cancel" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Dependency Management › should show AI dependency suggestions" classname="dependencies.spec.ts" time="0">
+<testcase name="Team Management - Protected Routes › should redirect unauthenticated users from team members page" classname="03-team-management.spec.ts" time="4.764">
+</testcase>
+<testcase name="Team Management - Protected Routes › should redirect unauthenticated users from team settings page" classname="03-team-management.spec.ts" time="3.626">
+</testcase>
+<testcase name="Team Management - Error Handling › should handle invalid team routes gracefully" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>
 </skipped>
 </testcase>
-<testcase name="Dependency Management › should export dependency graph as image" classname="dependencies.spec.ts" time="0">
+<testcase name="Team Management - Error Handling › should not crash on rapid navigation" classname="03-team-management.spec.ts" time="0">
 <properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="features.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="8" failures="0" skipped="8" time="0" errors="0">
-<testcase name="Feature Management › should display features page" classname="features.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Feature Management › should create new feature" classname="features.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Feature Management › should add timeline items to feature" classname="features.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Feature Management › should edit feature details" classname="features.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Feature Management › should filter features by type" classname="features.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Feature Management › should search features by name" classname="features.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Feature Management › should delete feature with confirmation" classname="features.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Feature Management › should display timeline breakdown (MVP/SHORT/LONG)" classname="features.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="mind-map.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="6" failures="0" skipped="6" time="0" errors="0">
-<testcase name="Mind Mapping › should display mind map list page" classname="mind-map.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Mind Mapping › should create new mind map" classname="mind-map.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Mind Mapping › should add nodes to canvas" classname="mind-map.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Mind Mapping › should save mind map automatically" classname="mind-map.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Mind Mapping › should apply template to canvas" classname="mind-map.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Mind Mapping › should export mind map as PNG" classname="mind-map.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="security.spec.ts" timestamp="2025-11-19T10:17:47.911Z" hostname="chromium" tests="10" failures="0" skipped="10" time="0" errors="0">
-<testcase name="Security &amp; Multi-Tenant Isolation › should redirect unauthenticated users from protected routes" classname="security.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › Team A user cannot access Team B workspace" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › Team A user cannot see Team B features via API" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › User can only see workspaces from their teams" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › Mind map isolation - Team A cannot access Team B mind maps" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › Dependency links respect team isolation" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › Timeline items isolation - cannot modify other teams data" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › Work items isolation - Team A cannot delete Team B features" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › Anonymous users cannot access any data" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
-</property>
-</properties>
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Security &amp; Multi-Tenant Isolation › SQL injection attempts should be blocked" classname="security.spec.ts" time="0">
-<properties>
-<property name="skip" value="">
+<property name="skip" value="Requires auth fixture - app uses magic link, not password auth">
 </property>
 </properties>
 <skipped>

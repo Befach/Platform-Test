@@ -1,8 +1,12 @@
 # UX Design Decisions
 
-**Decision Date**: 2025-12-01
+**Decision ID(s)**: UX-001, UX-002, UX-003
 **Status**: Accepted
+**Research Date**: 2025-12-01
+**Last Reviewed**: 2025-12-01
+**Next Review**: End of Week 9 / After initial user feedback on templates and menus
 **Supersedes**: N/A
+**Superseded By**: N/A
 
 ---
 
@@ -20,7 +24,7 @@ Building a B2B SaaS platform requires balancing multiple user types:
 - Different teams need different views of the same data
 - Enterprise customers need configurability without chaos
 
-Research findings (see [ultra-deep-research-findings.md](ultra-deep-research-findings.md)):
+Research findings (see [ultra-deep-research-findings.md](../core-research/ultra-deep-research-findings.md)):
 - 75% of new users churn within first week without effective onboarding
 - 67% of B2B buyers abandon evaluations due to poor UX
 - 90% form completion with on-blur validation vs 68% with on-change
@@ -54,7 +58,7 @@ workflow requirements      opinionated simplicity      Notion/Airtable
 
 ---
 
-## Decision 1: Team Configuration - Templates + Customization
+## Decision 1: Team Configuration - Templates + Customization [UX-001]
 
 ### The Decision
 
@@ -118,7 +122,7 @@ type TemplateSource =
 
 ---
 
-## Decision 2: Cross-Team Connections - Notion-Style Progressive Menu
+## Decision 2: Cross-Team Connections - Notion-Style Progressive Menu [UX-002]
 
 ### The Decision
 
@@ -188,7 +192,7 @@ LEVEL 3: Deep Navigation (Click to Enter)
 
 ---
 
-## Decision 3: Strategy Alignment - User-Constrained + AI-Assisted
+## Decision 3: Strategy Alignment - User-Constrained + AI-Assisted [UX-003]
 
 ### The Decision
 
@@ -288,7 +292,7 @@ Reconsider these decisions when:
 
 ## Sources
 
-- Parallel AI Ultra Research (see [ultra-deep-research-findings.md](ultra-deep-research-findings.md))
+- Parallel AI Ultra Research (see [ultra-deep-research-findings.md](../core-research/ultra-deep-research-findings.md))
 - UXPin B2B SaaS Research
 - BCG B2B Strategy Analysis
 - Baymard Institute Form Validation Research

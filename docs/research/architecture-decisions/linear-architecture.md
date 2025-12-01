@@ -1,7 +1,12 @@
 # Linear Architecture Research
 
-**Research Date**: 2025-12-01
+**Decision ID(s)**: ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, ADR-006
 **Status**: Accepted
+**Research Date**: 2025-12-01
+**Last Reviewed**: 2025-12-01
+**Next Review**: End of Week 8 / After department implementation milestone
+**Supersedes**: N/A
+**Superseded By**: N/A
 **Research Method**: Parallel AI Ultra + Search API + Extract API
 
 ---
@@ -236,7 +241,7 @@ query ProjectIssues($projectId: ID!) {
 
 ## Key Decisions for Our Platform
 
-### Decision 1: Adopt Team-Scoped Work Items
+### Decision 1: Adopt Team-Scoped Work Items [ADR-001]
 
 **Linear's Approach**: Every issue belongs to exactly one team.
 
@@ -253,7 +258,20 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 -- department_id is required for all work items
 ```
 
-### Decision 2: Cross-Team Projects
+**Alternatives Considered**:
+
+| Option | Pros | Cons | Why Rejected |
+|--------|------|------|--------------|
+| **Team-scoped (Linear)** | Clear ownership, accurate metrics | May feel rigid for cross-functional work | ✅ SELECTED |
+| Shared work items | Flexibility | No clear owner, confusing metrics | Ownership ambiguity |
+| Multi-team assignment | Can belong to multiple teams | Conflicts in workflow, unclear accountability | Too complex |
+
+**Consequences**:
+- Positive: Clear ownership, team velocity accuracy, intentional collaboration
+- Negative: Requires explicit handoffs between teams
+- Risks: Teams may duplicate work items instead of collaborating
+
+### Decision 2: Cross-Team Projects [ADR-002]
 
 **Linear's Approach**: Projects aggregate issues from multiple teams.
 
@@ -263,7 +281,20 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 - Workspace = Project container
 - Work items from different departments can be in same workspace
 
-### Decision 3: Triage Workflow
+**Alternatives Considered**:
+
+| Option | Pros | Cons | Why Rejected |
+|--------|------|------|--------------|
+| **Workspace aggregation** | Already exists, fits our model | N/A | ✅ SELECTED |
+| Separate cross-team entity | More explicit | Adds complexity | Unnecessary abstraction |
+| No cross-team support | Simple | Can't coordinate | Blocks collaboration |
+
+**Consequences**:
+- Positive: Workspace already supports this pattern, no migration needed
+- Negative: None significant
+- Risks: Users may not understand workspace = project equivalence
+
+### Decision 3: Triage Workflow [ADR-003]
 
 **Linear's Approach**: Optional team inbox with Accept/Decline/Duplicate/Snooze.
 
@@ -278,7 +309,20 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 - Triage view filters by this status
 - Actions move item to proper state
 
-### Decision 4: Cycles/Sprints
+**Alternatives Considered**:
+
+| Option | Pros | Cons | Why Rejected |
+|--------|------|------|--------------|
+| **Simplified triage** | Handles intake, not complex | Less granular | ✅ SELECTED (good enough) |
+| Full Linear triage | All features | More implementation | Over-engineered for MVP |
+| No triage | Simple | No intake process | Loses quick capture value |
+
+**Consequences**:
+- Positive: Supports quick capture, integration intake, stakeholder requests
+- Negative: Less sophisticated than Linear's full triage
+- Risks: May need to expand triage features later
+
+### Decision 4: Cycles/Sprints [ADR-004]
 
 **Linear's Approach**: Auto-repeating team cycles.
 
@@ -288,7 +332,20 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 - Our timeline_items serve similar purpose
 - Can add cycles later without migration impact
 
-### Decision 5: Initiatives
+**Alternatives Considered**:
+
+| Option | Pros | Cons | Why Rejected |
+|--------|------|------|--------------|
+| **Defer cycles** | Focus on core flow | Missing sprint planning | ✅ SELECTED (timeline_items bridge gap) |
+| Implement cycles now | Complete feature | Delays other priorities | Not critical for MVP |
+| Never add cycles | Simple forever | May need later | Too limiting long-term |
+
+**Consequences**:
+- Positive: Focus on core features, can add later without breaking changes
+- Negative: Teams using sprint methodology may miss this
+- Risks: May need to retrofit cycles into existing timeline structure
+
+### Decision 5: Initiatives [ADR-005]
 
 **Linear's Approach**: OKR-level strategic grouping above projects.
 
@@ -298,7 +355,20 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 - Focus on core work item flow first
 - Our Product Strategy Foundation provides similar strategic layer
 
-### Decision 6: Issue ID Format
+**Alternatives Considered**:
+
+| Option | Pros | Cons | Why Rejected |
+|--------|------|------|--------------|
+| **Defer initiatives** | Focus on core | Missing strategic layer | ✅ SELECTED (strategy foundation bridges gap) |
+| Implement initiatives now | Full strategic alignment | Complex, delays MVP | Not critical for MVP |
+| Never add initiatives | Simple | No OKR connection | Too limiting for enterprise |
+
+**Consequences**:
+- Positive: Focus on execution features first, strategy foundation provides placeholder
+- Negative: Missing explicit OKR-to-work-item linking
+- Risks: May need to retrofit initiatives into existing workspace structure
+
+### Decision 6: Issue ID Format [ADR-006]
 
 **Linear's Format**: `TEAM-NUMBER` (e.g., ENG-123)
 
@@ -310,6 +380,20 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 - Timestamp works, no collisions
 - Changing ID format requires significant migration
 - Can add display format without changing underlying ID
+
+**Alternatives Considered**:
+
+| Option | Pros | Cons | Why Rejected |
+|--------|------|------|--------------|
+| **Keep timestamp IDs** | Works now, no migration | Not human-readable | ✅ SELECTED (good enough for MVP) |
+| Linear-style TEAM-NUM | Human-readable, team context | Requires counter per team, migration | High migration cost |
+| UUID | Standard, collision-free | Not human-readable | No advantage over timestamp |
+| Add display ID layer | Best of both | Added complexity | Can add later if needed |
+
+**Consequences**:
+- Positive: No migration needed, stable IDs, no collision risk
+- Negative: Not as user-friendly as TEAM-123 format
+- Risks: Users may request human-readable IDs later (can add as display layer)
 
 ---
 

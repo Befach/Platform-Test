@@ -389,7 +389,7 @@ Does the new option serve our primary persona?
 
 ## Related Research
 
-- [Progressive Disclosure UX](progressive-disclosure-ux.md) - Implementation details
+- [Progressive Disclosure UX](../core-research/progressive-disclosure-ux.md) - Implementation details
 - [Customization Patterns](customization-patterns.md) - When customization helps/hurts
 - [Onboarding Workflows](onboarding-workflows.md) - Simplifying first experience
 

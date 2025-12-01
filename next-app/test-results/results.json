@@ -4,13 +4,15 @@
     "rootDir": "C:/Users/harsh/Downloads/Platform Test/next-app/e2e",
     "forbidOnly": false,
     "fullyParallel": true,
-    "globalSetup": null,
-    "globalTeardown": null,
+    "globalSetup": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\tests\\global-setup.ts",
+    "globalTeardown": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\tests\\global-teardown.ts",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 1
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -45,8 +47,10 @@
       {
         "outputDir": "C:/Users/harsh/Downloads/Platform Test/next-app/test-results",
         "repeatEach": 1,
-        "retries": 0,
-        "metadata": {},
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Users/harsh/Downloads/Platform Test/next-app/e2e",
@@ -54,13 +58,15 @@
         "testMatch": [
           "*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "C:/Users/harsh/Downloads/Platform Test/next-app/test-results",
         "repeatEach": 1,
-        "retries": 0,
-        "metadata": {},
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "firefox",
         "name": "firefox",
         "testDir": "C:/Users/harsh/Downloads/Platform Test/next-app/e2e",
@@ -68,13 +74,15 @@
         "testMatch": [
           "*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "C:/Users/harsh/Downloads/Platform Test/next-app/test-results",
         "repeatEach": 1,
-        "retries": 0,
-        "metadata": {},
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "webkit",
         "name": "webkit",
         "testDir": "C:/Users/harsh/Downloads/Platform Test/next-app/e2e",
@@ -82,13 +90,15 @@
         "testMatch": [
           "*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "C:/Users/harsh/Downloads/Platform Test/next-app/test-results",
         "repeatEach": 1,
-        "retries": 0,
-        "metadata": {},
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
         "testDir": "C:/Users/harsh/Downloads/Platform Test/next-app/e2e",
@@ -96,13 +106,15 @@
         "testMatch": [
           "*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "C:/Users/harsh/Downloads/Platform Test/next-app/test-results",
         "repeatEach": 1,
-        "retries": 0,
-        "metadata": {},
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
         "testDir": "C:/Users/harsh/Downloads/Platform Test/next-app/e2e",
@@ -110,14 +122,14 @@
         "testMatch": [
           "*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       }
     ],
     "shard": null,
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.56.1",
-    "workers": 4,
+    "workers": 2,
     "webServer": {
       "command": "npm run dev",
       "url": "http://localhost:3000",
@@ -127,852 +139,6 @@
   },
   "suites": [
     {
-      "title": "01-auth.spec.ts",
-      "file": "01-auth.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Authentication",
-          "file": "01-auth.spec.ts",
-          "line": 17,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display login page with all elements",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-fafe04d2f9c0e66408f1",
-              "file": "01-auth.spec.ts",
-              "line": 25,
-              "column": 7
-            },
-            {
-              "title": "should show email input validation error for invalid email",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-96fbcd54a931b41ddb58",
-              "file": "01-auth.spec.ts",
-              "line": 46,
-              "column": 7
-            },
-            {
-              "title": "should show empty email validation error",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-5d0540f5aa9b97e83158",
-              "file": "01-auth.spec.ts",
-              "line": 71,
-              "column": 7
-            },
-            {
-              "title": "should navigate to signup page when clicking signup link",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-7e44cb29cd565ed3f893",
-              "file": "01-auth.spec.ts",
-              "line": 87,
-              "column": 7
-            },
-            {
-              "title": "should display signup page with registration form",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-57edaadb223879b63370",
-              "file": "01-auth.spec.ts",
-              "line": 100,
-              "column": 7
-            },
-            {
-              "title": "should redirect unauthenticated users from protected routes",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-4b1f2d8498f358461e70",
-              "file": "01-auth.spec.ts",
-              "line": 118,
-              "column": 7
-            },
-            {
-              "title": "should redirect from protected workspace route",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-9f69c1b713ae4070ccc2",
-              "file": "01-auth.spec.ts",
-              "line": 126,
-              "column": 7
-            },
-            {
-              "title": "should persist authentication across page refreshes",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-bf717f1e879fdf085387",
-              "file": "01-auth.spec.ts",
-              "line": 136,
-              "column": 7
-            },
-            {
-              "title": "should disable submit button while form is submitting",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-a2bfd20282c2b6b8d3f6",
-              "file": "01-auth.spec.ts",
-              "line": 148,
-              "column": 7
-            },
-            {
-              "title": "should handle network errors gracefully",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-cdcd00ff4a09a515e084",
-              "file": "01-auth.spec.ts",
-              "line": 171,
-              "column": 7
-            },
-            {
-              "title": "should logout user and clear session",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-ebd636b10ee75e2aacc9",
-              "file": "01-auth.spec.ts",
-              "line": 195,
-              "column": 7
-            },
-            {
-              "title": "should clear authentication token on logout",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-15dd637d77de812667a1",
-              "file": "01-auth.spec.ts",
-              "line": 209,
-              "column": 7
-            },
-            {
-              "title": "should show loading indicator while authenticating",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-a8a0d2286b486573ab1c",
-              "file": "01-auth.spec.ts",
-              "line": 218,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Authentication - Error Handling",
-          "file": "01-auth.spec.ts",
-          "line": 239,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should show error for network timeout",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-149b97f8fe76e23f99d5",
-              "file": "01-auth.spec.ts",
-              "line": 240,
-              "column": 7
-            },
-            {
-              "title": "should focus on email field when it has an error",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "791b3c4e0869e77b2651-82c4d6a78a6b3639a67a",
-              "file": "01-auth.spec.ts",
-              "line": 265,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "02-multi-tenant-isolation.spec.ts",
-      "file": "02-multi-tenant-isolation.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Multi-Tenant Isolation - Security",
-          "file": "02-multi-tenant-isolation.spec.ts",
-          "line": 26,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should prevent accessing other team workspace via direct URL",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-38db0856c2a75acde33b",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 108,
-              "column": 7
-            },
-            {
-              "title": "should prevent API access to other team workspaces",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-7fc27014c4252f4d2451",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 122,
-              "column": 7
-            },
-            {
-              "title": "should not list other team workspaces in workspace list",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-92065754f8260ee87ce8",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 132,
-              "column": 7
-            },
-            {
-              "title": "should prevent accessing other team work items",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-d030b1738fac01725d37",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 142,
-              "column": 7
-            },
-            {
-              "title": "should prevent modifying other team data via API",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-f2f14d79ae79c3c96e62",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 150,
-              "column": 7
-            },
-            {
-              "title": "should not expose other team data in API responses",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-a173a4f29cbb805c5bbf",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 161,
-              "column": 7
-            },
-            {
-              "title": "should prevent SQL injection across team boundaries",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-edea8921a43450f5246e",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 171,
-              "column": 7
-            },
-            {
-              "title": "should isolate mind maps by team",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-abd0aaca9414e1d8ca71",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 182,
-              "column": 7
-            },
-            {
-              "title": "should isolate dependencies by team",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-b241322ff01259b5c7b0",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 189,
-              "column": 7
-            },
-            {
-              "title": "should isolate timeline items by team",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-aa41c2ea3f12c59ad91a",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 196,
-              "column": 7
-            },
-            {
-              "title": "should prevent team member role escalation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-9b94b8d12b73b7ff07bb",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 203,
-              "column": 7
-            },
-            {
-              "title": "should enforce RLS policies on all tables",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-a4c41cd0f31658bd58a0",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 213,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Multi-Tenant Isolation - Team Member Access",
-          "file": "02-multi-tenant-isolation.spec.ts",
-          "line": 233,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should allow team member to access team workspaces",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-18cb25e85b44b661c9ef",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 272,
-              "column": 7
-            },
-            {
-              "title": "should prevent removed team member from accessing team data",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-876ab8f27c8a3880df70",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 278,
-              "column": 7
-            },
-            {
-              "title": "should show correct workspace list for team member",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-596661df244d92748178",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 288,
-              "column": 7
-            },
-            {
-              "title": "should enforce workspace access in phase operations",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-dfae51d3a4e3bbc9e16c",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 295,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Multi-Tenant Isolation - Permission Levels",
-          "file": "02-multi-tenant-isolation.spec.ts",
-          "line": 302,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should prevent guest users from accessing team data",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-b33feb94d293a68c35eb",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 303,
-              "column": 7
-            },
-            {
-              "title": "should enforce role-based access control",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-bb5a852635576d904632",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 313,
-              "column": 7
-            },
-            {
-              "title": "should respect phase assignments for team members",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-703a8fc065c5d25ac87d",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 325,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Multi-Tenant Isolation - Data Integrity",
-          "file": "02-multi-tenant-isolation.spec.ts",
-          "line": 337,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should maintain data consistency during concurrent operations",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-809047f40e08fedd5549",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 338,
-              "column": 7
-            },
-            {
-              "title": "should not leak data through error messages",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-cfff82984799da76adbb",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 348,
-              "column": 7
-            },
-            {
-              "title": "should not leak data through response codes",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-98318e75ffb606b6e476",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 358,
-              "column": 7
-            },
-            {
-              "title": "should prevent data leakage through timestamps",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-20714f1b6cc428d115b1",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 367,
-              "column": 7
-            },
-            {
-              "title": "should prevent enumeration attacks on IDs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "71c0d0429e36c6bfeb11-d40fc63fab5a6d059eea",
-              "file": "02-multi-tenant-isolation.spec.ts",
-              "line": 377,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
       "title": "03-team-management.spec.ts",
       "file": "03-team-management.spec.ts",
       "column": 0,
@@ -980,971 +146,503 @@
       "specs": [],
       "suites": [
         {
-          "title": "Team Management - Invitations",
+          "title": "Team Management - Navigation",
           "file": "03-team-management.spec.ts",
-          "line": 23,
+          "line": 20,
           "column": 6,
           "specs": [
             {
-              "title": "should display team members page with invite button",
+              "title": "should navigate to team members page",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
+                      "location": {
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 23,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:14.020Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 23,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
                   "status": "skipped"
                 }
               ],
-              "id": "13b113cbdabc65d0ec94-2fff20c9fd76d0d60355",
+              "id": "13b113cbdabc65d0ec94-d0a46cdbf14d95202b50",
               "file": "03-team-management.spec.ts",
-              "line": 51,
+              "line": 25,
               "column": 7
             },
             {
-              "title": "should open invite member dialog when clicking invite button",
+              "title": "should navigate to team settings page",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
+                      "location": {
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 23,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:14.020Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 23,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
                   "status": "skipped"
                 }
               ],
-              "id": "13b113cbdabc65d0ec94-cd2f9a6d532c6eb6a973",
+              "id": "13b113cbdabc65d0ec94-36dc993aa57ffb4a4840",
               "file": "03-team-management.spec.ts",
-              "line": 76,
-              "column": 7
-            },
-            {
-              "title": "should validate email input in invite form",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-1dc5b97a179c04243a81",
-              "file": "03-team-management.spec.ts",
-              "line": 97,
-              "column": 7
-            },
-            {
-              "title": "should show role selection in invite form",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-9eaf98aa4e47d645349a",
-              "file": "03-team-management.spec.ts",
-              "line": 126,
-              "column": 7
-            },
-            {
-              "title": "should show phase assignments in invite form",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-f1500a884bf76af4cc6e",
-              "file": "03-team-management.spec.ts",
-              "line": 148,
-              "column": 7
-            },
-            {
-              "title": "should send invitation and show pending status",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-7df70b024bf53af54d8a",
-              "file": "03-team-management.spec.ts",
-              "line": 167,
+              "line": 38,
               "column": 7
             }
           ]
         },
         {
-          "title": "Team Management - Member Roles",
+          "title": "Team Management - Members Page UI",
           "file": "03-team-management.spec.ts",
-          "line": 204,
+          "line": 50,
           "column": 6,
           "specs": [
             {
-              "title": "should display team member list with roles",
+              "title": "should display page heading",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
+                      "location": {
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 53,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:14.021Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 53,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
                   "status": "skipped"
                 }
               ],
-              "id": "13b113cbdabc65d0ec94-563a841f5987f489540e",
+              "id": "13b113cbdabc65d0ec94-09f850a46fd6b49f7d46",
               "file": "03-team-management.spec.ts",
-              "line": 231,
-              "column": 7
-            },
-            {
-              "title": "should show different role badges for different members",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-9d12acad855348db134b",
-              "file": "03-team-management.spec.ts",
-              "line": 247,
-              "column": 7
-            },
-            {
-              "title": "should allow role change through dropdown",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-bbd8a710e57fbe7143f2",
-              "file": "03-team-management.spec.ts",
-              "line": 258,
-              "column": 7
-            },
-            {
-              "title": "should restrict owner role assignment to current owner",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-a780ec364d9fdb10467b",
-              "file": "03-team-management.spec.ts",
-              "line": 277,
-              "column": 7
-            },
-            {
-              "title": "should show phase permissions for each member",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-e855268c09293b679129",
-              "file": "03-team-management.spec.ts",
-              "line": 287,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Team Management - Member Removal",
-          "file": "03-team-management.spec.ts",
-          "line": 302,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should show remove button for team members",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-55b0cfbe2478337ce8e8",
-              "file": "03-team-management.spec.ts",
-              "line": 330,
-              "column": 7
-            },
-            {
-              "title": "should show confirmation dialog when removing member",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-fd0d5e67c1c46467e31a",
-              "file": "03-team-management.spec.ts",
-              "line": 348,
-              "column": 7
-            },
-            {
-              "title": "should remove member and update list",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-c6adff70c37fa8ff43a2",
-              "file": "03-team-management.spec.ts",
-              "line": 367,
-              "column": 7
-            },
-            {
-              "title": "should prevent removed member from accessing team data",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-702586c75a61fdbf25a9",
-              "file": "03-team-management.spec.ts",
-              "line": 391,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Team Management - Permissions Verification",
-          "file": "03-team-management.spec.ts",
-          "line": 400,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should prevent non-owner from inviting members",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-6d7b3e5df05e6bd5e60d",
-              "file": "03-team-management.spec.ts",
-              "line": 401,
-              "column": 7
-            },
-            {
-              "title": "should prevent member from changing team settings",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-423ca4bbfbda8a1d568b",
-              "file": "03-team-management.spec.ts",
-              "line": 411,
-              "column": 7
-            },
-            {
-              "title": "should prevent regular member from removing other members",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-f2cd605ed0ac50ef22c2",
-              "file": "03-team-management.spec.ts",
-              "line": 417,
-              "column": 7
-            },
-            {
-              "title": "should show read-only member list for viewers",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-6d001163ddaf3f32119f",
-              "file": "03-team-management.spec.ts",
-              "line": 423,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Team Management - Phase Assignments",
-          "file": "03-team-management.spec.ts",
-          "line": 430,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display phase assignment matrix for members",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-d10e2c7a3dcca5dce3f6",
-              "file": "03-team-management.spec.ts",
-              "line": 458,
-              "column": 7
-            },
-            {
-              "title": "should allow assigning multiple phases to member",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-78c8931c439b7a8f2ba7",
-              "file": "03-team-management.spec.ts",
-              "line": 473,
-              "column": 7
-            },
-            {
-              "title": "should save phase assignments when confirmed",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-5449785157d17fb272f3",
-              "file": "03-team-management.spec.ts",
-              "line": 490,
-              "column": 7
-            },
-            {
-              "title": "should enforce phase permissions when editing work items",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "13b113cbdabc65d0ec94-6a35083b9dfe2de16ab5",
-              "file": "03-team-management.spec.ts",
-              "line": 506,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "04-features.spec.ts",
-      "file": "04-features.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Features - CRUD Operations",
-          "file": "04-features.spec.ts",
-          "line": 24,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display features page with create button",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "79cf92becb81c4a91749-6d9187b48306053b36e1",
-              "file": "04-features.spec.ts",
               "line": 55,
               "column": 7
             },
             {
-              "title": "should open create feature form when clicking create button",
+              "title": "should show loading state or members list",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
+                      "location": {
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 53,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:14.021Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 53,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
                   "status": "skipped"
                 }
               ],
-              "id": "79cf92becb81c4a91749-ba5406be0ffb20e823b2",
-              "file": "04-features.spec.ts",
-              "line": 76,
+              "id": "13b113cbdabc65d0ec94-a371faf00b4477f1a1be",
+              "file": "03-team-management.spec.ts",
+              "line": 74,
               "column": 7
             },
             {
-              "title": "should create new feature with valid data",
+              "title": "should have invite button for authorized users",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
+                      "location": {
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 53,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:14.022Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 53,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
                   "status": "skipped"
                 }
               ],
-              "id": "79cf92becb81c4a91749-682b5bb2e0d018915a3f",
-              "file": "04-features.spec.ts",
-              "line": 102,
-              "column": 7
-            },
-            {
-              "title": "should display feature in list after creation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "79cf92becb81c4a91749-5d195971d02528f15786",
-              "file": "04-features.spec.ts",
-              "line": 142,
-              "column": 7
-            },
-            {
-              "title": "should display feature details when clicked",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "79cf92becb81c4a91749-822a232180ca8863cb54",
-              "file": "04-features.spec.ts",
-              "line": 176,
-              "column": 7
-            },
-            {
-              "title": "should edit feature and save changes",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "79cf92becb81c4a91749-6939c12941f2d9c7a659",
-              "file": "04-features.spec.ts",
-              "line": 200,
-              "column": 7
-            },
-            {
-              "title": "should delete feature with confirmation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "79cf92becb81c4a91749-e4c27f55a241940ecf17",
-              "file": "04-features.spec.ts",
-              "line": 266,
+              "id": "13b113cbdabc65d0ec94-53ee9a5a2be2807d5ab6",
+              "file": "03-team-management.spec.ts",
+              "line": 90,
               "column": 7
             }
           ]
         },
         {
-          "title": "Features - Filtering and Search",
-          "file": "04-features.spec.ts",
-          "line": 318,
+          "title": "Team Management - Invite Dialog",
+          "file": "03-team-management.spec.ts",
+          "line": 115,
           "column": 6,
           "specs": [
             {
-              "title": "should filter features by type",
+              "title": "should open invite dialog when clicking invite button",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
+                      "location": {
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 118,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:14.022Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 118,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
                   "status": "skipped"
                 }
               ],
-              "id": "79cf92becb81c4a91749-b9e22d08b062c9555e67",
-              "file": "04-features.spec.ts",
-              "line": 377,
+              "id": "13b113cbdabc65d0ec94-04673a6b5e699286dad5",
+              "file": "03-team-management.spec.ts",
+              "line": 120,
               "column": 7
             },
             {
-              "title": "should filter features by priority",
+              "title": "should close invite dialog on cancel",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
+                      "location": {
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 118,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:14.022Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 118,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
                   "status": "skipped"
                 }
               ],
-              "id": "79cf92becb81c4a91749-083195352e3f3bc8f629",
-              "file": "04-features.spec.ts",
-              "line": 404,
-              "column": 7
-            },
-            {
-              "title": "should search features by text",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "79cf92becb81c4a91749-bcc7789f5ff680f3156c",
-              "file": "04-features.spec.ts",
-              "line": 427,
-              "column": 7
-            },
-            {
-              "title": "should clear search and show all features",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "79cf92becb81c4a91749-140ac77fc61bf8dc8812",
-              "file": "04-features.spec.ts",
-              "line": 448,
+              "id": "13b113cbdabc65d0ec94-8885eeb4827e70bb74b9",
+              "file": "03-team-management.spec.ts",
+              "line": 144,
               "column": 7
             }
           ]
         },
         {
-          "title": "Features - Timeline Breakdown",
-          "file": "04-features.spec.ts",
-          "line": 471,
+          "title": "Team Management - Protected Routes",
+          "file": "03-team-management.spec.ts",
+          "line": 169,
           "column": 6,
           "specs": [
             {
-              "title": "should display timeline breakdown for feature",
+              "title": "should redirect unauthenticated users from team members page",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
+                  "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4764,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:14.022Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "79cf92becb81c4a91749-01687a18e45ae1600f5b",
-              "file": "04-features.spec.ts",
-              "line": 514,
+              "id": "13b113cbdabc65d0ec94-07479dc52437860c39a9",
+              "file": "03-team-management.spec.ts",
+              "line": 170,
               "column": 7
             },
             {
-              "title": "should allow adding timeline items",
+              "title": "should redirect unauthenticated users from team settings page",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
+                  "timeout": 60000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3626,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:18.936Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "79cf92becb81c4a91749-1b023cc6649e34ad1dda",
-              "file": "04-features.spec.ts",
-              "line": 534,
+              "id": "13b113cbdabc65d0ec94-1950acb0b7a051b04416",
+              "file": "03-team-management.spec.ts",
+              "line": 178,
               "column": 7
             }
           ]
         },
         {
-          "title": "Features - Phase Organization",
-          "file": "04-features.spec.ts",
-          "line": 553,
+          "title": "Team Management - Error Handling",
+          "file": "03-team-management.spec.ts",
+          "line": 186,
           "column": 6,
           "specs": [
             {
-              "title": "should display features grouped by phase",
+              "title": "should handle invalid team routes gracefully",
               "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "79cf92becb81c4a91749-03cf8c0a04fa5f1c0aec",
-              "file": "04-features.spec.ts",
-              "line": 603,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "auth.spec.ts",
-      "file": "auth.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Authentication",
-          "file": "auth.spec.ts",
-          "line": 13,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display login page",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d748ac400d08b85935ef-0b088bf61d7827992643",
-              "file": "auth.spec.ts",
-              "line": 14,
-              "column": 7
-            },
-            {
-              "title": "should redirect unauthenticated users to login",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d748ac400d08b85935ef-992e910bc92de9311880",
-              "file": "auth.spec.ts",
-              "line": 24,
-              "column": 7
-            },
-            {
-              "title": "should show email input validation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d748ac400d08b85935ef-f73ffc13822a8d19c51a",
-              "file": "auth.spec.ts",
-              "line": 32,
-              "column": 7
-            },
-            {
-              "title": "should navigate to signup page",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d748ac400d08b85935ef-f29c2b8fc7f53cf68cb9",
-              "file": "auth.spec.ts",
-              "line": 47,
-              "column": 7
-            },
-            {
-              "title": "should display signup page correctly",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d748ac400d08b85935ef-5ef017c5cbbee7bafebc",
-              "file": "auth.spec.ts",
-              "line": 58,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "dependencies.spec.ts",
-      "file": "dependencies.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Dependency Management",
-          "file": "dependencies.spec.ts",
-          "line": 16,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display dependency graph page",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
+                  "timeout": 60000,
                   "annotations": [
                     {
                       "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
                       "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 17,
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 189,
                         "column": 8
                       }
                     }
@@ -1952,984 +650,92 @@
                   "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "da59e460a8ea0bd7bc25-4a69d58adb4408cd1964",
-              "file": "dependencies.spec.ts",
-              "line": 17,
-              "column": 8
-            },
-            {
-              "title": "should create dependency link",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
+                  "results": [
                     {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 27,
-                        "column": 8
-                      }
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:22.581Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 189,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
                     }
                   ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
                   "status": "skipped"
                 }
               ],
-              "id": "da59e460a8ea0bd7bc25-5891cb414b25a3b0f763",
-              "file": "dependencies.spec.ts",
-              "line": 27,
-              "column": 8
-            },
-            {
-              "title": "should show different link types with colors",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 52,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "da59e460a8ea0bd7bc25-c87f7b3c8ed7a7dc40f6",
-              "file": "dependencies.spec.ts",
-              "line": 52,
-              "column": 8
-            },
-            {
-              "title": "should display critical path analysis",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 71,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "da59e460a8ea0bd7bc25-84449601fb478df9d450",
-              "file": "dependencies.spec.ts",
-              "line": 71,
-              "column": 8
-            },
-            {
-              "title": "should filter graph by feature type",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 86,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "da59e460a8ea0bd7bc25-0a9b8823002aea6efd8f",
-              "file": "dependencies.spec.ts",
-              "line": 86,
-              "column": 8
-            },
-            {
-              "title": "should zoom and pan dependency graph",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 103,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "da59e460a8ea0bd7bc25-81c25578646721fb0d21",
-              "file": "dependencies.spec.ts",
-              "line": 103,
-              "column": 8
-            },
-            {
-              "title": "should delete dependency link",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 127,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "da59e460a8ea0bd7bc25-93d2976fc66245a5592e",
-              "file": "dependencies.spec.ts",
-              "line": 127,
-              "column": 8
-            },
-            {
-              "title": "should show AI dependency suggestions",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 146,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "da59e460a8ea0bd7bc25-530d29a007a1ef827153",
-              "file": "dependencies.spec.ts",
-              "line": 146,
-              "column": 8
-            },
-            {
-              "title": "should export dependency graph as image",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\dependencies.spec.ts",
-                        "line": 171,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "da59e460a8ea0bd7bc25-ea45139412e412a34ff5",
-              "file": "dependencies.spec.ts",
-              "line": 171,
-              "column": 8
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "features.spec.ts",
-      "file": "features.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Feature Management",
-          "file": "features.spec.ts",
-          "line": 17,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display features page",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\features.spec.ts",
-                        "line": 18,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "85b3cc1667c06e9efc8f-e57ac1dd56dff1374224",
-              "file": "features.spec.ts",
-              "line": 18,
-              "column": 8
-            },
-            {
-              "title": "should create new feature",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\features.spec.ts",
-                        "line": 28,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "85b3cc1667c06e9efc8f-e87f6cc480102ddae8e1",
-              "file": "features.spec.ts",
-              "line": 28,
-              "column": 8
-            },
-            {
-              "title": "should add timeline items to feature",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\features.spec.ts",
-                        "line": 48,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "85b3cc1667c06e9efc8f-ffb111f9f0a65cd6afcd",
-              "file": "features.spec.ts",
-              "line": 48,
-              "column": 8
-            },
-            {
-              "title": "should edit feature details",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\features.spec.ts",
-                        "line": 70,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "85b3cc1667c06e9efc8f-a4cc9d726b1ff65ae3f8",
-              "file": "features.spec.ts",
-              "line": 70,
-              "column": 8
-            },
-            {
-              "title": "should filter features by type",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\features.spec.ts",
-                        "line": 91,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "85b3cc1667c06e9efc8f-9a9718cb8e943c69d187",
-              "file": "features.spec.ts",
-              "line": 91,
-              "column": 8
-            },
-            {
-              "title": "should search features by name",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\features.spec.ts",
-                        "line": 108,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "85b3cc1667c06e9efc8f-a5cbcf602f4e0c4e0c26",
-              "file": "features.spec.ts",
-              "line": 108,
-              "column": 8
-            },
-            {
-              "title": "should delete feature with confirmation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\features.spec.ts",
-                        "line": 125,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "85b3cc1667c06e9efc8f-47383ddd186bc29eac98",
-              "file": "features.spec.ts",
-              "line": 125,
-              "column": 8
-            },
-            {
-              "title": "should display timeline breakdown (MVP/SHORT/LONG)",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\features.spec.ts",
-                        "line": 145,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "85b3cc1667c06e9efc8f-d04f3128bb900dcea12c",
-              "file": "features.spec.ts",
-              "line": 145,
-              "column": 8
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "mind-map.spec.ts",
-      "file": "mind-map.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Mind Mapping",
-          "file": "mind-map.spec.ts",
-          "line": 18,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display mind map list page",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\mind-map.spec.ts",
-                        "line": 22,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "275a4cab50b970ecc471-794594f03874ebeb46ab",
-              "file": "mind-map.spec.ts",
-              "line": 22,
-              "column": 8
-            },
-            {
-              "title": "should create new mind map",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\mind-map.spec.ts",
-                        "line": 33,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "275a4cab50b970ecc471-3274183201991b6a9e5a",
-              "file": "mind-map.spec.ts",
-              "line": 33,
-              "column": 8
-            },
-            {
-              "title": "should add nodes to canvas",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\mind-map.spec.ts",
-                        "line": 52,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "275a4cab50b970ecc471-95d0d7f7fad2ad81955d",
-              "file": "mind-map.spec.ts",
-              "line": 52,
-              "column": 8
-            },
-            {
-              "title": "should save mind map automatically",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\mind-map.spec.ts",
-                        "line": 68,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "275a4cab50b970ecc471-a1f0acc5b5dcd5f9de22",
-              "file": "mind-map.spec.ts",
-              "line": 68,
-              "column": 8
-            },
-            {
-              "title": "should apply template to canvas",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\mind-map.spec.ts",
-                        "line": 85,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "275a4cab50b970ecc471-134cd44396d766e78b1b",
-              "file": "mind-map.spec.ts",
-              "line": 85,
-              "column": 8
-            },
-            {
-              "title": "should export mind map as PNG",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\mind-map.spec.ts",
-                        "line": 105,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "275a4cab50b970ecc471-9a897edd2bfb92df0bb8",
-              "file": "mind-map.spec.ts",
-              "line": 105,
-              "column": 8
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "security.spec.ts",
-      "file": "security.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Security & Multi-Tenant Isolation",
-          "file": "security.spec.ts",
-          "line": 16,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should redirect unauthenticated users from protected routes",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-194f9364e344ba47517d",
-              "file": "security.spec.ts",
-              "line": 17,
-              "column": 7
-            },
-            {
-              "title": "Team A user cannot access Team B workspace",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 31,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-9a673fa54ca3fff13486",
-              "file": "security.spec.ts",
-              "line": 31,
-              "column": 8
-            },
-            {
-              "title": "Team A user cannot see Team B features via API",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 47,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-a754228a794cb383dcab",
-              "file": "security.spec.ts",
-              "line": 47,
-              "column": 8
-            },
-            {
-              "title": "User can only see workspaces from their teams",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 72,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-ae63db2fe608ddc5ef5c",
-              "file": "security.spec.ts",
-              "line": 72,
-              "column": 8
-            },
-            {
-              "title": "Mind map isolation - Team A cannot access Team B mind maps",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 92,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-cac996d44c31380f6237",
-              "file": "security.spec.ts",
-              "line": 92,
-              "column": 8
-            },
-            {
-              "title": "Dependency links respect team isolation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 106,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-968b82745ecca6f96f70",
-              "file": "security.spec.ts",
-              "line": 106,
-              "column": 8
-            },
-            {
-              "title": "Timeline items isolation - cannot modify other teams data",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 131,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-97478888ea299780b43a",
-              "file": "security.spec.ts",
-              "line": 131,
-              "column": 8
-            },
-            {
-              "title": "Work items isolation - Team A cannot delete Team B features",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 155,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-382f47454a96c0ce3aa5",
-              "file": "security.spec.ts",
-              "line": 155,
-              "column": 8
-            },
-            {
-              "title": "Anonymous users cannot access any data",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 175,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-f8b7191fb67a07a67b30",
-              "file": "security.spec.ts",
-              "line": 175,
-              "column": 8
-            },
-            {
-              "title": "SQL injection attempts should be blocked",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "location": {
-                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\security.spec.ts",
-                        "line": 191,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "expectedStatus": "skipped",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a7e9410bcc1ef00e9656-4bee6074621acd0f02a1",
-              "file": "security.spec.ts",
+              "id": "13b113cbdabc65d0ec94-e73acbfe693cbd771a95",
+              "file": "03-team-management.spec.ts",
               "line": 191,
-              "column": 8
+              "column": 7
+            },
+            {
+              "title": "should not crash on rapid navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Requires auth fixture - app uses magic link, not password auth",
+                      "location": {
+                        "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                        "line": 189,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-30T13:47:22.581Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Requires auth fixture - app uses magic link, not password auth",
+                          "location": {
+                            "file": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\e2e\\03-team-management.spec.ts",
+                            "line": 189,
+                            "column": 8
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "13b113cbdabc65d0ec94-9daf91a17eea282d0dc8",
+              "file": "03-team-management.spec.ts",
+              "line": 204,
+              "column": 7
             }
           ]
         }
@@ -2938,10 +744,10 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-11-19T10:17:47.779Z",
-    "duration": 136.80000000000018,
-    "expected": 0,
-    "skipped": 114,
+    "startTime": "2025-11-30T13:47:01.662Z",
+    "duration": 22473.512000000002,
+    "expected": 2,
+    "skipped": 9,
     "unexpected": 0,
     "flaky": 0
   }

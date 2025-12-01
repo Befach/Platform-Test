@@ -13,25 +13,26 @@
 
 #### Planning & Architecture
 1. **[docs/implementation/README.md](docs/implementation/README.md)** - Week-by-week implementation guide (main entry point)
-2. **[docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md)** - System architecture with Mermaid diagrams
-3. **[docs/reference/API_REFERENCE.md](docs/reference/API_REFERENCE.md)** - Complete API documentation (20+ routes)
+2. **[docs/planning/MASTER_IMPLEMENTATION_ROADMAP.md](docs/planning/MASTER_IMPLEMENTATION_ROADMAP.md)** - Complete dependency graph and implementation sequence for future features
+3. **[docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md)** - System architecture with Mermaid diagrams
+4. **[docs/reference/API_REFERENCE.md](docs/reference/API_REFERENCE.md)** - Complete API documentation (20+ routes)
 
 #### Progress Tracking
-4. **[docs/planning/PROGRESS.md](docs/planning/PROGRESS.md)** - Weekly tracker with completion percentages
-5. **[docs/reference/CHANGELOG.md](docs/reference/CHANGELOG.md)** - Migration history, feature tracking
-6. **[docs/planning/NEXT_STEPS.md](docs/planning/NEXT_STEPS.md)** - Immediate actions, priorities, blockers
+5. **[docs/planning/PROGRESS.md](docs/planning/PROGRESS.md)** - Weekly tracker with completion percentages
+6. **[docs/reference/CHANGELOG.md](docs/reference/CHANGELOG.md)** - Migration history, feature tracking
+7. **[docs/planning/NEXT_STEPS.md](docs/planning/NEXT_STEPS.md)** - Immediate actions, priorities, blockers
 
 #### Postponed Features
-7. **[docs/postponed/README.md](docs/postponed/README.md)** - Postponed features index
-8. **[docs/processes/POSTPONED_FEATURES_PROCESS.md](docs/processes/POSTPONED_FEATURES_PROCESS.md)** - Tracking process
+8. **[docs/postponed/README.md](docs/postponed/README.md)** - Postponed features index
+9. **[docs/processes/POSTPONED_FEATURES_PROCESS.md](docs/processes/POSTPONED_FEATURES_PROCESS.md)** - Tracking process
 
 #### Configuration & Standards
-9. **[docs/planning/RECOMMENDED_AGENTS.md](docs/planning/RECOMMENDED_AGENTS.md)** - Claude agents by phase
-10. **[docs/reference/CODE_PATTERNS.md](docs/reference/CODE_PATTERNS.md)** - TypeScript, Next.js, Supabase patterns
-11. **[docs/reference/MCP_USAGE_GUIDE.md](docs/reference/MCP_USAGE_GUIDE.md)** - MCP usage examples
+10. **[docs/planning/RECOMMENDED_AGENTS.md](docs/planning/RECOMMENDED_AGENTS.md)** - Claude agents by phase
+11. **[docs/reference/CODE_PATTERNS.md](docs/reference/CODE_PATTERNS.md)** - TypeScript, Next.js, Supabase patterns
+12. **[docs/reference/MCP_USAGE_GUIDE.md](docs/reference/MCP_USAGE_GUIDE.md)** - MCP usage examples
 
 #### UI Component Selection
-12. **[docs/reference/SHADCN_REGISTRY_COMPONENT_GUIDE.md](docs/reference/SHADCN_REGISTRY_COMPONENT_GUIDE.md)** - 14 shadcn/ui registries with 1000+ components
+13. **[docs/reference/SHADCN_REGISTRY_COMPONENT_GUIDE.md](docs/reference/SHADCN_REGISTRY_COMPONENT_GUIDE.md)** - 14 shadcn/ui registries with 1000+ components
 
 ### Tech Stack
 ```

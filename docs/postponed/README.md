@@ -1,6 +1,6 @@
 # 🔄 Postponed Features
 
-**Last Updated:** 2025-11-14
+**Last Updated:** December 1, 2025
 
 [← Back to Root](../../README.md)
 
@@ -19,6 +19,36 @@ Features that were planned but **strategically deferred** to later phases due to
 ---
 
 ## 📄 DOCUMENTS IN THIS FOLDER
+
+### **[WORKSPACE_MODES.md](WORKSPACE_MODES.md)**
+Context-aware workspace modes that adapt UX, AI behavior, and metrics based on product lifecycle stage
+
+**📅 Postponed Date:** December 1, 2025
+
+**🎯 Priority:** HIGH (Affects entire UX and AI behavior)
+
+**⏱️ Estimated Effort:** ~15 hours
+
+**Dependencies:**
+- [⏳] Workspace Timeline Architecture (WORKSPACE_TIMELINE_ARCHITECTURE.md)
+- [⏳] Work Item Detail Page (8-tab structure)
+- [⏳] AI Integration complete (Week 7)
+- [⏳] Dashboard module (Week 7)
+
+**Summary of Features:**
+- Two modes: Product Launch (pre-launch) vs Product Development (post-launch)
+- Mode-specific default timelines and phase emphasis
+- Adaptive AI personality and suggestions
+- Mode-aware dashboard metrics
+- Work item type weight adjustments
+- Celebration flow for launch event
+- Mode transition wizard and history tracking
+
+**When to Implement:** After Workspace Timeline Architecture
+
+**Review Trigger:** After workspace timelines stable + AI integration complete
+
+---
 
 ### **[WORKSPACE_TIMELINE_ARCHITECTURE.md](WORKSPACE_TIMELINE_ARCHITECTURE.md)**
 Major architecture refactor: workspace-level timelines, calculated status, effort vocabulary
@@ -44,6 +74,35 @@ Major architecture refactor: workspace-level timelines, calculated status, effor
 **When to Implement:** After Week 7 (AI Integration complete)
 
 **Review Trigger:** End of Week 7
+
+---
+
+### **[PRODUCT_STRATEGY_FOUNDATION.md](PRODUCT_STRATEGY_FOUNDATION.md)**
+Strategic foundation layer connecting every decision to customer, problem, and value proposition
+
+**📅 Postponed Date:** December 1, 2025
+
+**🎯 Priority:** MEDIUM (Valuable but not blocking launch)
+
+**⏱️ Estimated Effort:** ~20 hours
+
+**Dependencies:**
+- [⏳] Workspace Modes (strategy differs by workspace type)
+- [⏳] Work Item Detail Page (display alignment scores)
+- [⏳] AI Integration (Week 7) - for alignment suggestions and priority scoring
+- [⏳] Research Module (Week 7) - for auto-generated research questions
+
+**Summary of Features:**
+- Strategy Components: Target customer, core problem, value prop, strategic pillars, success metrics
+- Work item strategy alignment (customer impact, pillar fit, north star impact)
+- AI-calculated priority scores based on strategic fit
+- Auto-generated research questions based on target customers
+- Marketing messaging context generation
+- New hire onboarding with strategy overview
+
+**When to Implement:** After Week 8 (after Workspace Modes and AI Integration)
+
+**Review Trigger:** After Workspace Modes complete and AI Integration stable
 
 ---
 
@@ -98,6 +157,35 @@ Major architecture refactor: workspace-level timelines, calculated status, effor
 **When to Implement:** After Week 7 (AI Integration complete)
 
 **Review Trigger:** End of Week 7
+
+---
+
+### **[CROSS_TEAM_CONFIGURATION.md](CROSS_TEAM_CONFIGURATION.md)**
+Enterprise multi-department feature: different teams see different contextual views of the same work items
+
+**📅 Postponed Date:** December 1, 2025
+
+**🎯 Priority:** MEDIUM (High value for enterprise, but foundation needed first)
+
+**⏱️ Estimated Effort:** ~30 hours (plus ~15h foundation)
+
+**Dependencies:**
+- [⏳] Work Item Detail 8-tab structure (Week 6-7)
+- [⏳] Work Board 3.0 (Week 6)
+- [⏳] Departments table and architecture (Post-Week 8)
+- [⏳] Workflow States system (Post-Week 8)
+- [⏳] Workspace Modes (Project/Portfolio/Enterprise)
+
+**Summary of Features:**
+- One work item, multiple team contexts (Product, Engineering, Design, Marketing, Sales, Support)
+- Team-specific field templates with custom workflows
+- Cross-team connections (marketing_for, documentation_for, design_for, etc.)
+- Cross-Team Alignment Dashboard showing all team contexts
+- Team-specific board views with filtered workflows
+
+**When to Implement:** After Week 8 + Product Strategy Foundation (Weeks 11-13)
+
+**Review Trigger:** After Week 8 + enterprise beta feedback
 
 ---
 

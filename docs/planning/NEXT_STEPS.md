@@ -200,6 +200,7 @@ NEXT_PUBLIC_RAZORPAY_KEY_ID=your_key_id
 
 - [CLAUDE.md](../../CLAUDE.md) - Project guidelines
 - [docs/planning/PROGRESS.md](PROGRESS.md) - Progress tracker
+- [docs/planning/MASTER_IMPLEMENTATION_ROADMAP.md](MASTER_IMPLEMENTATION_ROADMAP.md) - Complete dependency graph for future features
 - [docs/implementation/README.md](../implementation/README.md) - Implementation plan
 - [docs/planning/RECOMMENDED_AGENTS.md](RECOMMENDED_AGENTS.md) - Claude agents guide
 

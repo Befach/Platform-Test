@@ -312,9 +312,9 @@ Lower tiers can EXTEND (not remove) higher tier options.
 
 ## Related Research
 
-- [Progressive Disclosure UX](progressive-disclosure-ux.md) - Hiding complexity
+- [Progressive Disclosure UX](../core-research/progressive-disclosure-ux.md) - Hiding complexity
 - [Flexibility vs Simplicity](flexibility-vs-simplicity.md) - Detailed decision framework
-- [Cross-Team Collaboration](cross-team-collaboration.md) - Team-specific needs
+- [Cross-Team Collaboration](../core-research/cross-team-collaboration.md) - Team-specific needs
 
 ---
 

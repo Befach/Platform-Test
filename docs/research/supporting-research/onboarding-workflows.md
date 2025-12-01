@@ -458,7 +458,7 @@ interface EmptyStateDesign {
 
 ## Related Research
 
-- [Progressive Disclosure UX](progressive-disclosure-ux.md) - Gradual complexity reveal
+- [Progressive Disclosure UX](../core-research/progressive-disclosure-ux.md) - Gradual complexity reveal
 - [Dashboard Design](dashboard-design.md) - First-time dashboard experience
 - [Flexibility vs Simplicity](flexibility-vs-simplicity.md) - Onboarding complexity balance
 

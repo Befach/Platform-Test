@@ -1,8 +1,12 @@
 # Scope Decisions: In-Scope vs Out-of-Scope Teams
 
-**Decision Date**: 2025-12-01
+**Decision ID(s)**: SCOPE-001, SCOPE-002, SCOPE-003, SCOPE-004
 **Status**: Accepted
+**Research Date**: 2025-12-01
+**Last Reviewed**: 2025-12-01
+**Next Review**: End of Week 10 / After integration features milestone
 **Supersedes**: N/A
+**Superseded By**: N/A
 
 ---
 
@@ -29,7 +33,31 @@ Product lifecycle management could theoretically include ALL company functions:
 
 ## The Decision
 
-### IN SCOPE (Native Features)
+### Decision 1: Native Support for Feedback Basics [SCOPE-001]
+
+**What**: Build basic feedback collection (forms, submissions, analysis) as native features.
+
+**Why**:
+- Essential for product lifecycle management
+- Validates product decisions before execution
+- Differentiates from pure project management tools
+
+**In Scope**:
+- Public/private feedback forms
+- Submission storage and management
+- Basic analysis and tagging
+- Connection to work items
+
+**Out of Scope**:
+- Advanced help desk features (ticket routing, SLAs)
+- Customer database management
+- Email support integration
+
+### Decision 2: Product/Engineering/Design Teams (Native Features) [SCOPE-002]
+
+**What**: Build native workflows for Product, Engineering, and Design teams.
+
+**Teams In Scope**:
 
 | Team | Rationale |
 |------|-----------|
@@ -37,12 +65,26 @@ Product lifecycle management could theoretically include ALL company functions:
 | **Engineering** | Tightly coupled with Product - same work items, dependencies |
 | **Design** | Part of the build cycle - design → develop → ship |
 
-### OUT OF SCOPE (Integration-Based)
+**Why This Scope**:
+- These teams collaborate on the same work items
+- Shared workflow states and dependencies
+- Direct integration creates most value
+
+### Decision 3: Sales/Support Teams (Integration-Based) [SCOPE-003]
+
+**What**: Treat Sales and Support as integration partners, not native features.
+
+**Teams Out of Scope**:
 
 | Team | Rationale | Integration Strategy |
 |------|-----------|---------------------|
 | **Sales** | CRM tools (HubSpot, Salesforce) are specialized and mature | Webhook/API to surface feature roadmap |
 | **Support** | Help desk tools (Zendesk, Intercom) own this workflow | Pull feedback/requests into Product Insights |
+
+**Why Not Native**:
+- Mature tools exist (10+ years of development)
+- Specialized workflows we can't compete with
+- Integration approach is industry standard
 
 ---
 
@@ -128,13 +170,23 @@ From our platform:
 - Expected delivery timeline
 - Release notes when shipped
 
-### Integration Levels
+### Decision 4: Integration Levels - Start Light [SCOPE-004]
+
+**What**: Progressive integration approach, starting with simple URL linking.
+
+**Integration Levels**:
 
 | Level | Scope | When |
 |-------|-------|------|
 | **Light** | Link external URLs as references on work items | MVP |
 | **Medium** | Pull metadata (priority, customer tier, request count) | Post-MVP |
 | **Deep** | Auto-create insights from patterns, bi-directional sync | Future |
+
+**Why Start Light**:
+- Delivers value without complex integration engineering
+- Validates integration use cases before heavy investment
+- Users can start linking immediately
+- Can progressively enhance without breaking changes
 
 ---
 

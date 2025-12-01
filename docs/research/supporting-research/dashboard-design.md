@@ -317,8 +317,8 @@ interface WidgetConfig {
 
 ## Related Research
 
-- [Progressive Disclosure UX](progressive-disclosure-ux.md) - Role-based interfaces
-- [Cross-Team Collaboration](cross-team-collaboration.md) - Team-specific views
+- [Progressive Disclosure UX](../core-research/progressive-disclosure-ux.md) - Role-based interfaces
+- [Cross-Team Collaboration](../core-research/cross-team-collaboration.md) - Team-specific views
 - [Flexibility vs Simplicity](flexibility-vs-simplicity.md) - Customization limits
 
 ---
