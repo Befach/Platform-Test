@@ -222,6 +222,182 @@ export type Database = {
           },
         ]
       }
+      customer_insights: {
+        Row: {
+          ai_confidence: number | null
+          ai_extracted: boolean | null
+          ai_summary: string | null
+          context: string | null
+          created_at: string
+          created_by: string | null
+          customer_company: string | null
+          customer_email: string | null
+          customer_name: string | null
+          customer_segment: string | null
+          frequency: number | null
+          id: string
+          impact_score: number | null
+          pain_point: string | null
+          quote: string | null
+          search_vector: unknown
+          sentiment: string | null
+          source: string
+          source_date: string | null
+          source_feedback_id: string | null
+          source_url: string | null
+          status: string | null
+          tags: string[] | null
+          team_id: string
+          title: string
+          updated_at: string
+          workspace_id: string | null
+        }
+        Insert: {
+          ai_confidence?: number | null
+          ai_extracted?: boolean | null
+          ai_summary?: string | null
+          context?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_company?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          customer_segment?: string | null
+          frequency?: number | null
+          id?: string
+          impact_score?: number | null
+          pain_point?: string | null
+          quote?: string | null
+          search_vector?: unknown
+          sentiment?: string | null
+          source: string
+          source_date?: string | null
+          source_feedback_id?: string | null
+          source_url?: string | null
+          status?: string | null
+          tags?: string[] | null
+          team_id: string
+          title: string
+          updated_at?: string
+          workspace_id?: string | null
+        }
+        Update: {
+          ai_confidence?: number | null
+          ai_extracted?: boolean | null
+          ai_summary?: string | null
+          context?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_company?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          customer_segment?: string | null
+          frequency?: number | null
+          id?: string
+          impact_score?: number | null
+          pain_point?: string | null
+          quote?: string | null
+          search_vector?: unknown
+          sentiment?: string | null
+          source?: string
+          source_date?: string | null
+          source_feedback_id?: string | null
+          source_url?: string | null
+          status?: string | null
+          tags?: string[] | null
+          team_id?: string
+          title?: string
+          updated_at?: string
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_insights_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_insights_source_feedback_id_fkey"
+            columns: ["source_feedback_id"]
+            isOneToOne: false
+            referencedRelation: "feedback"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_insights_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_insights_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      departments: {
+        Row: {
+          color: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          is_default: boolean
+          name: string
+          sort_order: number
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_default?: boolean
+          name: string
+          sort_order?: number
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_default?: boolean
+          name?: string
+          sort_order?: number
+          team_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "departments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "departments_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       execution_steps: {
         Row: {
           actual_hours: number | null
@@ -295,72 +471,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      work_item_connections: {
-        Row: {
-          confidence: number | null
-          connection_type: string
-          created_at: string | null
-          discovered_at: string | null
-          discovered_by: string | null
-          evidence: Json | null
-          id: string
-          is_bidirectional: boolean | null
-          last_reviewed_at: string | null
-          reason: string | null
-          source_work_item_id: string
-          status: string | null
-          strength: number | null
-          target_work_item_id: string
-          updated_at: string | null
-          user_confirmed: boolean | null
-          user_id: string
-          user_rejected: boolean | null
-          workspace_id: string
-        }
-        Insert: {
-          confidence?: number | null
-          connection_type: string
-          created_at?: string | null
-          discovered_at?: string | null
-          discovered_by?: string | null
-          evidence?: Json | null
-          id: string
-          is_bidirectional?: boolean | null
-          last_reviewed_at?: string | null
-          reason?: string | null
-          source_work_item_id: string
-          status?: string | null
-          strength?: number | null
-          target_work_item_id: string
-          updated_at?: string | null
-          user_confirmed?: boolean | null
-          user_id?: string
-          user_rejected?: boolean | null
-          workspace_id: string
-        }
-        Update: {
-          confidence?: number | null
-          connection_type?: string
-          created_at?: string | null
-          discovered_at?: string | null
-          discovered_by?: string | null
-          evidence?: Json | null
-          id?: string
-          is_bidirectional?: boolean | null
-          last_reviewed_at?: string | null
-          reason?: string | null
-          source_work_item_id?: string
-          status?: string | null
-          strength?: number | null
-          target_work_item_id?: string
-          updated_at?: string | null
-          user_confirmed?: boolean | null
-          user_id?: string
-          user_rejected?: boolean | null
-          workspace_id?: string
-        }
-        Relationships: []
       }
       feature_correlations: {
         Row: {
@@ -711,6 +821,58 @@ export type Database = {
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insight_votes: {
+        Row: {
+          created_at: string
+          id: string
+          insight_id: string
+          team_id: string
+          vote_type: string | null
+          voter_email: string
+          voter_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          insight_id: string
+          team_id: string
+          vote_type?: string | null
+          voter_email: string
+          voter_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          insight_id?: string
+          team_id?: string
+          vote_type?: string | null
+          voter_email?: string
+          voter_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insight_votes_insight_id_fkey"
+            columns: ["insight_id"]
+            isOneToOne: false
+            referencedRelation: "customer_insights"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insight_votes_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insight_votes_voter_id_fkey"
+            columns: ["voter_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -1231,6 +1393,110 @@ export type Database = {
           },
         ]
       }
+      product_strategies: {
+        Row: {
+          calculated_progress: number | null
+          color: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          metric_current: number | null
+          metric_name: string | null
+          metric_target: number | null
+          metric_unit: string | null
+          owner_id: string | null
+          parent_id: string | null
+          progress: number | null
+          progress_mode: string | null
+          sort_order: number | null
+          start_date: string | null
+          status: string | null
+          target_date: string | null
+          team_id: string
+          title: string
+          type: string
+          updated_at: string | null
+          workspace_id: string | null
+        }
+        Insert: {
+          calculated_progress?: number | null
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metric_current?: number | null
+          metric_name?: string | null
+          metric_target?: number | null
+          metric_unit?: string | null
+          owner_id?: string | null
+          parent_id?: string | null
+          progress?: number | null
+          progress_mode?: string | null
+          sort_order?: number | null
+          start_date?: string | null
+          status?: string | null
+          target_date?: string | null
+          team_id: string
+          title: string
+          type: string
+          updated_at?: string | null
+          workspace_id?: string | null
+        }
+        Update: {
+          calculated_progress?: number | null
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metric_current?: number | null
+          metric_name?: string | null
+          metric_target?: number | null
+          metric_unit?: string | null
+          owner_id?: string | null
+          parent_id?: string | null
+          progress?: number | null
+          progress_mode?: string | null
+          sort_order?: number | null
+          start_date?: string | null
+          status?: string | null
+          target_date?: string | null
+          team_id?: string
+          title?: string
+          type?: string
+          updated_at?: string | null
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_strategies_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_strategies_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "product_strategies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_strategies_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_strategies_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_tasks: {
         Row: {
           actual_hours: number | null
@@ -1330,6 +1596,176 @@ export type Database = {
           },
           {
             foreignKeyName: "product_tasks_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resource_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string
+          changes: Json | null
+          id: string
+          performed_at: string
+          resource_id: string
+          team_id: string
+          work_item_id: string | null
+          workspace_id: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id: string
+          changes?: Json | null
+          id?: string
+          performed_at?: string
+          resource_id: string
+          team_id: string
+          work_item_id?: string | null
+          workspace_id: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string
+          changes?: Json | null
+          id?: string
+          performed_at?: string
+          resource_id?: string
+          team_id?: string
+          work_item_id?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_audit_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_audit_log_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_audit_log_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_audit_log_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
+        Row: {
+          created_at: string
+          created_by: string
+          deleted_at: string | null
+          deleted_by: string | null
+          description: string | null
+          favicon_url: string | null
+          id: string
+          image_url: string | null
+          is_deleted: boolean
+          last_modified_by: string | null
+          notes: string | null
+          resource_type: string
+          search_vector: unknown
+          source_domain: string | null
+          team_id: string
+          title: string
+          updated_at: string
+          url: string | null
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string | null
+          favicon_url?: string | null
+          id?: string
+          image_url?: string | null
+          is_deleted?: boolean
+          last_modified_by?: string | null
+          notes?: string | null
+          resource_type?: string
+          search_vector?: unknown
+          source_domain?: string | null
+          team_id: string
+          title: string
+          updated_at?: string
+          url?: string | null
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string | null
+          favicon_url?: string | null
+          id?: string
+          image_url?: string | null
+          is_deleted?: boolean
+          last_modified_by?: string | null
+          notes?: string | null
+          resource_type?: string
+          search_vector?: unknown
+          source_domain?: string | null
+          team_id?: string
+          title?: string
+          updated_at?: string
+          url?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resources_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resources_deleted_by_fkey"
+            columns: ["deleted_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resources_last_modified_by_fkey"
+            columns: ["last_modified_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resources_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resources_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
@@ -1927,6 +2363,276 @@ export type Database = {
           },
         ]
       }
+      work_item_connections: {
+        Row: {
+          confidence: number | null
+          connection_type: string
+          created_at: string | null
+          discovered_at: string | null
+          discovered_by: string | null
+          evidence: Json | null
+          id: string
+          is_bidirectional: boolean | null
+          last_reviewed_at: string | null
+          reason: string | null
+          source_work_item_id: string
+          status: string | null
+          strength: number | null
+          target_work_item_id: string
+          updated_at: string | null
+          user_confirmed: boolean | null
+          user_id: string
+          user_rejected: boolean | null
+          workspace_id: string
+        }
+        Insert: {
+          confidence?: number | null
+          connection_type: string
+          created_at?: string | null
+          discovered_at?: string | null
+          discovered_by?: string | null
+          evidence?: Json | null
+          id: string
+          is_bidirectional?: boolean | null
+          last_reviewed_at?: string | null
+          reason?: string | null
+          source_work_item_id: string
+          status?: string | null
+          strength?: number | null
+          target_work_item_id: string
+          updated_at?: string | null
+          user_confirmed?: boolean | null
+          user_id?: string
+          user_rejected?: boolean | null
+          workspace_id: string
+        }
+        Update: {
+          confidence?: number | null
+          connection_type?: string
+          created_at?: string | null
+          discovered_at?: string | null
+          discovered_by?: string | null
+          evidence?: Json | null
+          id?: string
+          is_bidirectional?: boolean | null
+          last_reviewed_at?: string | null
+          reason?: string | null
+          source_work_item_id?: string
+          status?: string | null
+          strength?: number | null
+          target_work_item_id?: string
+          updated_at?: string | null
+          user_confirmed?: boolean | null
+          user_id?: string
+          user_rejected?: boolean | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_item_connections_source_work_item_id_fkey"
+            columns: ["source_work_item_id"]
+            isOneToOne: false
+            referencedRelation: "work_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_connections_target_work_item_id_fkey"
+            columns: ["target_work_item_id"]
+            isOneToOne: false
+            referencedRelation: "work_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_connections_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_item_insights: {
+        Row: {
+          id: string
+          insight_id: string
+          linked_at: string
+          linked_by: string | null
+          notes: string | null
+          relevance_score: number | null
+          team_id: string
+          work_item_id: string
+        }
+        Insert: {
+          id?: string
+          insight_id: string
+          linked_at?: string
+          linked_by?: string | null
+          notes?: string | null
+          relevance_score?: number | null
+          team_id: string
+          work_item_id: string
+        }
+        Update: {
+          id?: string
+          insight_id?: string
+          linked_at?: string
+          linked_by?: string | null
+          notes?: string | null
+          relevance_score?: number | null
+          team_id?: string
+          work_item_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_item_insights_insight_id_fkey"
+            columns: ["insight_id"]
+            isOneToOne: false
+            referencedRelation: "customer_insights"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_insights_linked_by_fkey"
+            columns: ["linked_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_insights_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_insights_work_item_id_fkey"
+            columns: ["work_item_id"]
+            isOneToOne: false
+            referencedRelation: "work_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_item_resources: {
+        Row: {
+          added_at: string
+          added_by: string
+          context_note: string | null
+          display_order: number
+          is_unlinked: boolean
+          resource_id: string
+          tab_type: string
+          team_id: string
+          unlinked_at: string | null
+          unlinked_by: string | null
+          work_item_id: string
+        }
+        Insert: {
+          added_at?: string
+          added_by: string
+          context_note?: string | null
+          display_order?: number
+          is_unlinked?: boolean
+          resource_id: string
+          tab_type?: string
+          team_id: string
+          unlinked_at?: string | null
+          unlinked_by?: string | null
+          work_item_id: string
+        }
+        Update: {
+          added_at?: string
+          added_by?: string
+          context_note?: string | null
+          display_order?: number
+          is_unlinked?: boolean
+          resource_id?: string
+          tab_type?: string
+          team_id?: string
+          unlinked_at?: string | null
+          unlinked_by?: string | null
+          work_item_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_item_resources_added_by_fkey"
+            columns: ["added_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_resources_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_resources_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_resources_unlinked_by_fkey"
+            columns: ["unlinked_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_resources_work_item_id_fkey"
+            columns: ["work_item_id"]
+            isOneToOne: false
+            referencedRelation: "work_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_item_strategies: {
+        Row: {
+          alignment_strength: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          strategy_id: string
+          work_item_id: string
+        }
+        Insert: {
+          alignment_strength?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          strategy_id: string
+          work_item_id: string
+        }
+        Update: {
+          alignment_strength?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          strategy_id?: string
+          work_item_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_item_strategies_strategy_id_fkey"
+            columns: ["strategy_id"]
+            isOneToOne: false
+            referencedRelation: "product_strategies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_item_strategies_work_item_id_fkey"
+            columns: ["work_item_id"]
+            isOneToOne: false
+            referencedRelation: "work_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       work_items: {
         Row: {
           acceptance_criteria: string[] | null
@@ -1944,7 +2650,6 @@ export type Database = {
           completed_steps: number | null
           contributors: string[] | null
           conversion_chain: Json | null
-          duration_days: number | null
           conversion_reason: string | null
           converted_at: string | null
           converted_by: string | null
@@ -1954,6 +2659,8 @@ export type Database = {
           created_by: string | null
           customer_impact: string | null
           definition_of_done: string[] | null
+          department_id: string | null
+          duration_days: number | null
           effort_confidence: string | null
           estimated_hours: number | null
           flow_id: string | null
@@ -1982,6 +2689,7 @@ export type Database = {
           status: string | null
           story_points: number | null
           strategic_alignment: string | null
+          strategy_id: string | null
           success_metrics: Json | null
           tags: string[] | null
           target_release: string | null
@@ -2018,6 +2726,7 @@ export type Database = {
           created_by?: string | null
           customer_impact?: string | null
           definition_of_done?: string[] | null
+          department_id?: string | null
           duration_days?: number | null
           effort_confidence?: string | null
           estimated_hours?: number | null
@@ -2047,6 +2756,7 @@ export type Database = {
           status?: string | null
           story_points?: number | null
           strategic_alignment?: string | null
+          strategy_id?: string | null
           success_metrics?: Json | null
           tags?: string[] | null
           target_release?: string | null
@@ -2074,7 +2784,6 @@ export type Database = {
           completed_steps?: number | null
           contributors?: string[] | null
           conversion_chain?: Json | null
-          duration_days?: number | null
           conversion_reason?: string | null
           converted_at?: string | null
           converted_by?: string | null
@@ -2084,6 +2793,8 @@ export type Database = {
           created_by?: string | null
           customer_impact?: string | null
           definition_of_done?: string[] | null
+          department_id?: string | null
+          duration_days?: number | null
           effort_confidence?: string | null
           estimated_hours?: number | null
           flow_id?: string | null
@@ -2112,6 +2823,7 @@ export type Database = {
           status?: string | null
           story_points?: number | null
           strategic_alignment?: string | null
+          strategy_id?: string | null
           success_metrics?: Json | null
           tags?: string[] | null
           target_release?: string | null
@@ -2139,6 +2851,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "work_items_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "work_items_flow_id_fkey"
             columns: ["flow_id"]
             isOneToOne: false
@@ -2150,6 +2869,20 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "work_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_items_strategy_id_fkey"
+            columns: ["strategy_id"]
+            isOneToOne: false
+            referencedRelation: "product_strategies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_items_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
         ]
@@ -2164,6 +2897,9 @@ export type Database = {
           enabled_modules: Json | null
           icon: string | null
           id: string
+          mode: string
+          mode_changed_at: string | null
+          mode_settings: Json | null
           name: string
           phase: string | null
           team_id: string | null
@@ -2181,6 +2917,9 @@ export type Database = {
           enabled_modules?: Json | null
           icon?: string | null
           id: string
+          mode?: string
+          mode_changed_at?: string | null
+          mode_settings?: Json | null
           name: string
           phase?: string | null
           team_id?: string | null
@@ -2198,6 +2937,9 @@ export type Database = {
           enabled_modules?: Json | null
           icon?: string | null
           id?: string
+          mode?: string
+          mode_changed_at?: string | null
+          mode_settings?: Json | null
           name?: string
           phase?: string | null
           team_id?: string | null
@@ -2218,7 +2960,33 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      cron_job_status: {
+        Row: {
+          active: boolean | null
+          database: string | null
+          jobid: number | null
+          jobname: string | null
+          schedule: string | null
+          username: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          database?: string | null
+          jobid?: number | null
+          jobname?: string | null
+          schedule?: string | null
+          username?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          database?: string | null
+          jobid?: number | null
+          jobname?: string | null
+          schedule?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       advance_feature_stage: {
@@ -2240,6 +3008,10 @@ export type Database = {
       }
       calculate_stage_completion: {
         Args: { feature_id_param: string }
+        Returns: number
+      }
+      calculate_strategy_progress: {
+        Args: { strategy_id_param: string }
         Returns: number
       }
       calculate_text_similarity: {
@@ -2318,7 +3090,7 @@ export type Database = {
         Args: { work_item_id_param: string }
         Returns: Json
       }
-      get_work_item_connections: {
+      get_feature_connections: {
         Args: { feature_id_param: string }
         Returns: {
           confidence: number
@@ -2341,6 +3113,17 @@ export type Database = {
           correlation_score: number
           correlation_type: string
           status: string
+        }[]
+      }
+      get_resource_history: {
+        Args: { resource_id_param: string }
+        Returns: {
+          action: string
+          actor_email: string
+          actor_id: string
+          changes: Json
+          performed_at: string
+          work_item_id: string
         }[]
       }
       get_timeline_dependencies: {
@@ -2397,12 +3180,48 @@ export type Database = {
         Args: { workspace_id_param: string }
         Returns: Json
       }
+      manual_purge_all_deleted: { Args: { days?: number }; Returns: Json }
+      purge_deleted_resources: { Args: { days?: number }; Returns: number }
+      purge_soft_deleted: {
+        Args: { days?: number; table_name: string }
+        Returns: number
+      }
+      purge_unlinked_work_item_resources: {
+        Args: { days?: number }
+        Returns: number
+      }
       recalculate_workspace_importance: {
         Args: { workspace_id_param: string }
         Returns: number
       }
-      user_is_team_admin: { Args: { check_team_id: string }; Returns: boolean }
-      user_is_team_member: { Args: { check_team_id: string }; Returns: boolean }
+      search_resources: {
+        Args: {
+          p_include_deleted?: boolean
+          p_limit?: number
+          p_offset?: number
+          p_query: string
+          p_resource_type?: string
+          p_team_id: string
+          p_workspace_id?: string
+        }
+        Returns: {
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          image_url: string
+          is_deleted: boolean
+          linked_work_items_count: number
+          notes: string
+          resource_type: string
+          search_rank: number
+          source_domain: string
+          title: string
+          url: string
+        }[]
+      }
+      user_is_team_admin: { Args: { p_team_id: string }; Returns: boolean }
+      user_is_team_member: { Args: { p_team_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

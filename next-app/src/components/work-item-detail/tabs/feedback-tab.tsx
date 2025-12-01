@@ -29,10 +29,12 @@ import {
   ExternalLink,
   MoreHorizontal,
   Inbox,
+  Lightbulb,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,6 +53,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
 import { useWorkItemDetailContext } from '../shared/detail-context'
 import { FeedbackTriageDialog } from '@/components/feedback/feedback-triage-dialog'
+import { InsightsSubTab } from './insights-sub-tab'
 import type { FeedbackWithRelations } from '@/lib/types/feedback'
 import { cn } from '@/lib/utils'
 
@@ -338,11 +341,11 @@ function StatsHeader({ total, pending, triaged, statusFilter, onStatusFilterChan
 }
 
 // ============================================================================
-// Main Feedback Tab Component
+// Feedback Content Component (internal)
 // ============================================================================
 
-export function FeedbackTab() {
-  const { workItem, counts } = useWorkItemDetailContext()
+function FeedbackContent() {
+  const { workItem } = useWorkItemDetailContext()
   const router = useRouter()
   const { toast } = useToast()
 
@@ -445,6 +448,40 @@ export function FeedbackTab() {
         onOpenChange={setTriageDialogOpen}
         onSuccess={handleTriageSuccess}
       />
+    </div>
+  )
+}
+
+// ============================================================================
+// Main Feedback Tab Component (with Insights sub-tab)
+// ============================================================================
+
+export function FeedbackTab() {
+  const [activeSubTab, setActiveSubTab] = useState<'feedback' | 'insights'>('feedback')
+
+  return (
+    <div className="space-y-4">
+      {/* Sub-tab Toggle */}
+      <Tabs value={activeSubTab} onValueChange={(v) => setActiveSubTab(v as 'feedback' | 'insights')}>
+        <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsTrigger value="feedback" className="gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Feedback
+          </TabsTrigger>
+          <TabsTrigger value="insights" className="gap-2">
+            <Lightbulb className="h-4 w-4" />
+            Insights
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="feedback" className="mt-6">
+          <FeedbackContent />
+        </TabsContent>
+
+        <TabsContent value="insights" className="mt-6">
+          <InsightsSubTab />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
