@@ -286,7 +286,6 @@ Reconsider these decisions when:
 
 - [Linear Architecture](linear-architecture.md) - Entity hierarchy inspiration
 - [Scope Decisions](scope-decisions.md) - What's in/out of scope
-- [Plan File](../../.claude/plans/enumerated-stirring-starlight.md) - Full implementation plan
 
 ---
 

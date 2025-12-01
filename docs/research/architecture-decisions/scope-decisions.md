@@ -263,7 +263,6 @@ Reconsider this decision when:
 
 - [Linear Architecture](linear-architecture.md) - Entity hierarchy inspiration
 - [UX Design Decisions](ux-design-decisions.md) - Templates, menus, alignment
-- [Plan File](../../.claude/plans/enumerated-stirring-starlight.md) - Full implementation plan
 
 ---
 

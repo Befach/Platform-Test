@@ -277,10 +277,6 @@ The following **Parallel AI Ultra-tier** research tasks were completed with comp
 - **[docs/postponed/README.md](../postponed/README.md)** - Features waiting for implementation
 - Many postponed features reference research from this directory
 
-### Plans (Claude)
-- **[.claude/plans/enumerated-stirring-starlight.md](../../.claude/plans/enumerated-stirring-starlight.md)** - Workspace Modes + CX
-- **[.claude/plans/clever-purring-cook.md](../../.claude/plans/clever-purring-cook.md)** - Timeline Architecture
-
 ---
 
 ## Contributing New Research

@@ -411,7 +411,6 @@ Reconsider these decisions when:
 
 - [UX Design Decisions](ux-design-decisions.md) - Templates, menus, alignment
 - [Scope Decisions](scope-decisions.md) - What's in/out of scope
-- [Plan File](../../.claude/plans/enumerated-stirring-starlight.md) - Full implementation plan
 
 ---
 
