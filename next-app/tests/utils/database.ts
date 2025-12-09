@@ -7,9 +7,15 @@
  *
  * IMPORTANT: Uses service role key for admin operations (bypasses RLS)
  * and anon key for testing RLS policies from user perspective.
+ *
+ * NOTE: If SUPABASE_SERVICE_ROLE_KEY is not set, tests that require
+ * admin operations will be gracefully skipped rather than failing.
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+
+// Track if we've already warned about missing service key
+let hasWarnedAboutMissingKey = false;
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -22,16 +28,29 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 let adminClient: SupabaseClient | null = null;
 
 /**
+ * Check if the admin client (service role key) is available
+ * Use this to conditionally skip tests that require admin access
+ */
+export function hasAdminClient(): boolean {
+  return !!supabaseServiceRoleKey;
+}
+
+/**
  * Get admin client that bypasses RLS (uses service role key)
  * Use this for test setup/cleanup, NOT for testing user access
+ * Returns null if service role key is not configured (tests should skip)
  */
-export function getAdminClient(): SupabaseClient {
+export function getAdminClient(): SupabaseClient | null {
   if (!adminClient) {
     if (!supabaseServiceRoleKey) {
-      throw new Error(
-        'SUPABASE_SERVICE_ROLE_KEY is required for admin operations. ' +
-        'Add it to .env.test file.'
-      );
+      if (!hasWarnedAboutMissingKey) {
+        console.warn(
+          '\n⚠️  SUPABASE_SERVICE_ROLE_KEY not set. Database admin operations will be skipped.\n' +
+          '   Add it to .env.test file to run the full test suite.\n'
+        );
+        hasWarnedAboutMissingKey = true;
+      }
+      return null;
     }
     adminClient = createClient(supabaseUrl, supabaseServiceRoleKey, {
       auth: { persistSession: false }
@@ -50,12 +69,16 @@ export function getRegularClient(): SupabaseClient {
 /**
  * Create a real Supabase auth user for testing
  * Returns user ID and email that can be used for authentication
+ * Returns null if admin client is not available
  */
 export async function createTestAuthUser(
   email: string,
   password: string
-): Promise<{ id: string; email: string }> {
+): Promise<{ id: string; email: string } | null> {
   const admin = getAdminClient();
+  if (!admin) {
+    return null;
+  }
 
   const { data, error } = await admin.auth.admin.createUser({
     email,
@@ -72,9 +95,13 @@ export async function createTestAuthUser(
 
 /**
  * Delete a test auth user
+ * Silently returns if admin client is not available
  */
 export async function deleteTestAuthUser(userId: string): Promise<void> {
   const admin = getAdminClient();
+  if (!admin) {
+    return;
+  }
 
   const { error } = await admin.auth.admin.deleteUser(userId);
 
@@ -98,9 +125,13 @@ interface GenerateLinkPropertiesWithTokens {
 /**
  * Create a Supabase client authenticated as a specific user
  * Use this to test RLS policies from that user's perspective
+ * Returns null if admin client is not available
  */
-export async function createClientAsUser(userId: string): Promise<SupabaseClient> {
+export async function createClientAsUser(userId: string): Promise<SupabaseClient | null> {
   const admin = getAdminClient();
+  if (!admin) {
+    return null;
+  }
 
   // Generate a magic link token for the user
   const { data, error } = await admin.auth.admin.generateLink({

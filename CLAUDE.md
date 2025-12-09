@@ -1,6 +1,6 @@
 # 📚 Project Guidelines & Quick Reference
 
-**Last Updated**: 2025-11-30 <!-- MCP config cleanup -->
+**Last Updated**: 2025-12-08 <!-- Added: Multi-Agent Orchestration, Context Management, Git Workflow, React Grab, Slash Commands -->
 **Project**: Product Lifecycle Management Platform
 **Tech Stack**: Next.js 15 + TypeScript + Supabase + Vercel
 **Current Status**: Week 6 (60-65% overall)
@@ -48,12 +48,25 @@ AI:           OpenRouter (Claude Haiku, Perplexity, Grok)
 Deployment:   Vercel (Serverless functions)
 ```
 
-### MCP Servers (2 Active)
+### MCP Servers (3 Active)
 
 | MCP | Purpose |
 |-----|---------|
 | **Supabase** | Migrations, queries, RLS, real-time, TypeScript types |
 | **shadcn/ui** | Component installation, multi-registry access |
+| **Context7** | Fetch up-to-date documentation for libraries/frameworks |
+
+#### Context7 Usage
+Use Context7 when you need current documentation for any library:
+- Before implementing a new library feature
+- When official docs may have changed since training
+- To verify API signatures and patterns
+- For framework-specific best practices
+
+```
+"Use Context7 to fetch the latest Next.js 15 App Router documentation"
+"Use Context7 to get current Supabase RLS policy examples"
+```
 
 ### Claude Skills
 
@@ -107,6 +120,144 @@ cd next-app && npm run dev
 - ✅ Only ONE dev server on port 3000
 - ❌ NEVER run on other ports (3001, 3002)
 - ❌ If port occupied, kill process first
+
+### React Grab (Frontend Speed Boost)
+
+**66% faster UI changes, 33% less tokens** by giving Claude exact file paths.
+
+**Install** (Dev Only):
+```bash
+cd next-app && npm install react-grab --save-dev
+```
+
+**Setup** - Add to `next-app/src/app/layout.tsx`:
+```tsx
+import { ReactGrab } from 'react-grab'
+
+// In your layout, add conditionally:
+{process.env.NODE_ENV === 'development' && <ReactGrab />}
+```
+
+**Usage**:
+1. Run dev server → Click any element in browser
+2. Copy component stack (shows file paths + line numbers)
+3. Paste into Claude prompt
+
+**Best For**: Spacing/layout tweaks, minor visual changes, finding component files.
+
+⚠️ **DEV ONLY** - Never use in production. Link: https://www.react-grab.com/
+
+---
+
+## 🤖 Multi-Agent Orchestration
+
+### When to Use Multiple Agents
+| Scenario | Pattern | Example |
+|----------|---------|---------|
+| Feature needs multiple specializations | **Parallel** | UI + Types + Schema |
+| Output of one feeds another | **Sequential** | Design → Implement → Test |
+| Critical feature needs QA | **Review Gate** | Implement → Security Audit → Review |
+| Uncertain scope | **Exploration** | Explore → Plan → Implement |
+
+### Parallel Execution (SINGLE message)
+Launch independent agents together for maximum efficiency:
+```
+"Launch frontend-developer and typescript-pro in parallel:
+- frontend-developer: Build ReactFlow canvas
+- typescript-pro: Create node/edge types"
+```
+
+### Sequential Pipeline
+When agents depend on each other:
+1. `api-architect` → Design endpoint structure
+2. `typescript-pro` → Create types from design
+3. `test-automator` → Write tests (TDD)
+4. `frontend-developer` → Build consuming UI
+
+### Context Handoff Template
+When switching agents mid-feature:
+```
+Previous: [agent-name] completed:
+- [What was done]
+- Files: [paths modified]
+- Decisions: [key choices made]
+
+Next: [agent-name] should:
+- [Specific tasks]
+- Build upon: [what to use]
+- Constraints: [limitations]
+```
+
+### Failure Recovery
+If an agent produces poor results:
+1. Review output, identify specific issues
+2. Provide corrective context
+3. Re-launch with more specific instructions
+
+---
+
+## 🧠 Context Management
+
+### When to Reset Context (`/clear`)
+- After 50+ tool calls in a session
+- Switching between unrelated features
+- Before complex multi-file changes
+- When Claude "forgets" earlier decisions
+
+### Sub-Agent Pattern
+Use Task tool to preserve main context:
+
+| Task Type | Agent | Benefit |
+|-----------|-------|---------|
+| Complex search | `Explore` | Doesn't pollute main context |
+| Architecture design | `Plan` | Isolated decision-making |
+| Code quality | `code-reviewer` | Fresh perspective |
+| Debug issues | `debugger` | Focused investigation |
+
+### Context Preservation Tips
+- Reference file paths explicitly (use React Grab!)
+- Summarize decisions before complex operations
+- Use TodoWrite for multi-step tasks
+- Break large features into smaller commits
+
+---
+
+## 🔀 Git Workflow
+
+### Branch Naming
+| Type | Format | Example |
+|------|--------|---------|
+| Feature | `feat/description` | `feat/mind-mapping-canvas` |
+| Bug fix | `fix/description` | `fix/dependency-cycle` |
+| Docs | `docs/description` | `docs/api-reference` |
+| Refactor | `refactor/description` | `refactor/timeline-component` |
+
+### Rules
+- ❌ Never commit directly to `main`
+- ✅ Create branch → implement → PR → merge
+- ✅ Use descriptive branch names
+- ✅ One feature per branch
+
+### Commit Message Format
+```
+feat: add mind mapping canvas with ReactFlow
+fix: resolve circular dependency detection
+docs: update API reference for work items
+refactor: extract timeline utils to separate module
+```
+
+### Parallel Development (Git Worktrees)
+Work on multiple features simultaneously:
+```bash
+# Create worktree for parallel feature
+git worktree add ../feature-x feat/feature-x
+
+# Work in separate directory
+cd ../feature-x
+
+# Remove when done
+git worktree remove ../feature-x
+```
 
 ---
 

@@ -5,8 +5,12 @@ import {
   createWorkItemInDatabase,
   cleanupTeamData,
   getWorkItemIdByTitle,
+  hasAdminClient,
 } from '../tests/utils/database';
 import { TEST_TEAMS, TEST_WORKSPACES, TEST_WORK_ITEMS, TEST_PATHS } from '../tests/fixtures/test-data';
+
+// Skip all tests if SUPABASE_SERVICE_ROLE_KEY is not configured
+const skipTests = !hasAdminClient();
 
 /**
  * Features/Work Items CRUD E2E Tests
@@ -22,6 +26,9 @@ import { TEST_TEAMS, TEST_WORKSPACES, TEST_WORK_ITEMS, TEST_PATHS } from '../tes
  */
 
 test.describe('Features - CRUD Operations', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
 
@@ -316,6 +323,9 @@ test.describe('Features - CRUD Operations', () => {
 });
 
 test.describe('Features - Filtering and Search', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
 
@@ -469,6 +479,9 @@ test.describe('Features - Filtering and Search', () => {
 });
 
 test.describe('Features - Timeline Breakdown', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   let workItemId: string;
@@ -551,6 +564,9 @@ test.describe('Features - Timeline Breakdown', () => {
 });
 
 test.describe('Features - Phase Organization', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
 

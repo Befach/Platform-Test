@@ -4,8 +4,12 @@ import {
   createWorkspaceInDatabase,
   createWorkItemInDatabase,
   cleanupTeamData,
+  hasAdminClient,
 } from '../tests/utils/database';
 import { TEST_PATHS } from '../tests/fixtures/test-data';
+
+// Skip all tests if SUPABASE_SERVICE_ROLE_KEY is not configured
+const skipTests = !hasAdminClient();
 
 /**
  * Work Items Edit Flows E2E Tests
@@ -19,6 +23,9 @@ import { TEST_PATHS } from '../tests/fixtures/test-data';
  */
 
 test.describe('Work Items - Phase-Aware Edit Flows', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let researchWorkspaceId: string;
   let planningWorkspaceId: string;
@@ -316,6 +323,9 @@ test.describe('Work Items - Phase-Aware Edit Flows', () => {
 });
 
 test.describe('Timeline Status Management', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   let featureId: string;
@@ -441,6 +451,9 @@ test.describe('Timeline Status Management', () => {
 });
 
 test.describe('Feedback Integration Flows', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   let feedbackId: string;
@@ -510,6 +523,9 @@ test.describe('Feedback Integration Flows', () => {
 });
 
 test.describe('Edit Dialog - Validation and Error Handling', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   let featureId: string;

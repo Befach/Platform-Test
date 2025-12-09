@@ -87,11 +87,15 @@ async function globalSetup(config: FullConfig) {
     console.log('✅ Test user credentials configured');
   }
 
-  // 5. Check for service role key (needed for advanced tests)
+  // 5. Check for service role key (needed for database tests)
   if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    console.log('✅ Service role key configured (admin operations enabled)');
+    console.log('✅ Service role key configured (all database tests enabled)');
   } else {
-    warnings.push('SUPABASE_SERVICE_ROLE_KEY not set - some admin tests may be skipped');
+    warnings.push(
+      'SUPABASE_SERVICE_ROLE_KEY not set - 80 database tests will be SKIPPED.\n' +
+      '      Copy .env.test.example to .env.test and add your service role key to run the full test suite.\n' +
+      '      Get the key from: Supabase Dashboard > Settings > API > service_role (secret)'
+    );
   }
 
   // Print warnings

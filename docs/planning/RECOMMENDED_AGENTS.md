@@ -606,19 +606,25 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 
 ## 📊 Optimization Summary
 
-**Total Agents**: 15 (optimized from 12)
-**Critical Additions**:
-- `security-engineer` - Multi-tenant SaaS requires dedicated security expertise
-- `api-architect` - Next.js API routes need consistent design patterns
-- `devops-engineer` - CI/CD and deployment orchestration
+**Total Agents Available**: 50+ specialized agents
+**Project-Recommended Agents**: 15 primary + cross-cutting
 
-**Expanded Usage**:
-- `typescript-pro` - Now used in Weeks 1-2, 3, 4, 7, 8 (was only 1-3)
-- `test-automator` - Starts in Week 4 for TDD (was only Week 8)
-- `docs-architect` - Ongoing from Week 1 (was only Week 8)
+**Primary Agents by Week**:
+- **Week 1-2**: `frontend-developer`, `typescript-pro`, `database-architect`, `security-auditor`, `deployment-engineer`
+- **Week 3**: `frontend-developer`, `typescript-pro`
+- **Week 4**: `frontend-developer`, `typescript-pro`, `database-optimizer`, `api-design-principles`, `test-automator`
+- **Week 5**: `frontend-developer`, `backend-architect`, `security-auditor`
+- **Week 6**: `frontend-developer`, `database-optimizer`
+- **Week 7**: `ai-engineer`, `frontend-developer`, `typescript-pro`, `api-design-principles`
+- **Week 8**: `payment-integration`, `test-automator`, `docs-architect`, `security-auditor`, `deployment-engineer`
 
-**No Duplicates Found**: Each agent serves a distinct purpose
-**Configuration Score**: 9/10 (up from 7/10)
+**Cross-Cutting Agents** (use throughout):
+- `code-reviewer` - After each major feature
+- `debugger` - When encountering issues
+- `Explore` - For codebase exploration
+- `Plan` - For architecture decisions
+
+**Configuration Score**: 10/10
 
 ---
 
@@ -637,7 +643,181 @@ You: "Launch test-automator agent to create Playwright E2E test suite"
 
 ---
 
-**Last Updated**: 2025-11-30
+## 🔄 Multi-Agent Orchestration Patterns
+
+### Pattern 1: Parallel Specialists
+**Use when**: Feature needs multiple specializations simultaneously
+
+**Example - Mind Mapping Canvas**:
+```
+Launch in SINGLE message:
+1. frontend-developer → Build ReactFlow canvas UI
+2. typescript-pro → Create MindMapNode, MindMapEdge types
+3. database-architect → Design mind_maps, mind_map_nodes tables
+```
+
+### Pattern 2: Sequential Pipeline
+**Use when**: Output of one agent feeds into another
+
+**Example - New API Endpoint**:
+```
+Step 1: api-architect → Design endpoint structure, request/response shape
+Step 2: typescript-pro → Create TypeScript types from design
+Step 3: test-automator → Write tests first (TDD)
+Step 4: backend implementation → Build the actual endpoint
+Step 5: frontend-developer → Create UI to consume the API
+```
+
+### Pattern 3: Review Gate
+**Use when**: Critical feature needs quality assurance before merge
+
+**Example - Payment Integration**:
+```
+1. payment-integration → Implement Razorpay Orders/Subscriptions
+2. security-auditor → Audit for vulnerabilities, webhook security
+3. test-automator → E2E payment flow tests
+4. code-reviewer → Final quality check
+```
+
+### Pattern 4: Exploration → Implementation
+**Use when**: Uncertain scope or multiple valid approaches
+
+**Example - Performance Optimization**:
+```
+1. Explore agent → Identify bottlenecks (queries, renders, network)
+2. [Choose based on findings]:
+   - database-optimizer → If DB queries are slow
+   - frontend-developer → If render performance issues
+   - devops-engineer → If infrastructure/caching needed
+3. debugger → Verify improvements
+```
+
+### Context Handoff Protocol
+When switching agents mid-feature:
+```
+## Handoff to [next-agent]
+
+### Completed by [previous-agent]:
+- [List completed items]
+- Files modified: [paths]
+- Key decisions: [choices made and why]
+
+### Your Task:
+- [Specific deliverables]
+- Build upon: [what to reference/extend]
+- Constraints: [any limitations or requirements]
+- Success criteria: [how to know when done]
+```
+
+---
+
+## 📚 Complete Agent Catalog
+
+### Core Agents (Built-in)
+| Agent | Use For |
+|-------|---------|
+| `Explore` | Fast codebase exploration, file searching, pattern discovery |
+| `Plan` | Designing implementation plans, architecture decisions |
+| `general-purpose` | Multi-step tasks, complex research |
+
+### Frontend & UI
+| Agent | Use For |
+|-------|---------|
+| `frontend-developer` | React 19, Next.js 15, components, state, accessibility |
+| `ui-ux-designer` | Interface designs, wireframes, design systems |
+| `ui-visual-validator` | Screenshot analysis, visual regression testing |
+
+### Backend & API
+| Agent | Use For |
+|-------|---------|
+| `backend-architect` | API design, microservices, distributed systems |
+| `fastapi-pro` | FastAPI, async APIs, Pydantic V2 |
+| `django-pro` | Django 5.x, DRF, Celery |
+| `graphql-architect` | GraphQL federation, performance, security |
+| `api-design-principles` | REST/GraphQL API design standards |
+
+### Database
+| Agent | Use For |
+|-------|---------|
+| `database-architect` | Schema design, technology selection, modeling |
+| `database-optimizer` | Query optimization, indexing, N+1 resolution |
+| `database-admin` | Cloud databases, automation, reliability |
+| `sql-pro` | Complex queries, OLTP/OLAP optimization |
+| `database-migration` | Zero-downtime migrations, data transformation |
+
+### TypeScript & JavaScript
+| Agent | Use For |
+|-------|---------|
+| `typescript-pro` | Advanced types, generics, strict type safety |
+| `javascript-pro` | ES6+, async patterns, Node.js |
+| `typescript-advanced-types` | Conditional types, mapped types, utilities |
+| `nodejs-backend-patterns` | Express/Fastify, middleware, API patterns |
+
+### Testing & Quality
+| Agent | Use For |
+|-------|---------|
+| `test-automator` | AI-powered test automation, CI/CD integration |
+| `tdd-orchestrator` | Red-green-refactor discipline, TDD governance |
+| `e2e-testing-patterns` | Playwright, Cypress, reliable test suites |
+| `code-reviewer` | Code quality, security scanning, performance |
+
+### Security
+| Agent | Use For |
+|-------|---------|
+| `security-auditor` | DevSecOps, vulnerability assessment, compliance |
+| `backend-security-coder` | Input validation, authentication, API security |
+| `frontend-security-coder` | XSS prevention, client-side security |
+| `auth-implementation-patterns` | JWT, OAuth2, session management, RBAC |
+
+### DevOps & Cloud
+| Agent | Use For |
+|-------|---------|
+| `deployment-engineer` | CI/CD pipelines, GitOps, deployment automation |
+| `cloud-architect` | AWS/Azure/GCP, IaC, FinOps |
+| `kubernetes-architect` | K8s, service mesh, GitOps |
+| `terraform-specialist` | IaC automation, state management |
+| `devops-troubleshooter` | Incident response, debugging, observability |
+
+### AI & ML
+| Agent | Use For |
+|-------|---------|
+| `ai-engineer` | LLM applications, RAG systems, agents |
+| `prompt-engineer` | Prompting techniques, LLM optimization |
+| `ml-engineer` | PyTorch, TensorFlow, model serving |
+| `rag-implementation` | Vector databases, semantic search |
+
+### Payments & Billing
+| Agent | Use For |
+|-------|---------|
+| `payment-integration` | Stripe, PayPal, checkout flows, PCI compliance |
+| `billing-automation` | Recurring payments, subscriptions, invoicing |
+
+### Documentation
+| Agent | Use For |
+|-------|---------|
+| `docs-architect` | Technical documentation, architecture guides |
+| `api-documenter` | OpenAPI 3.1, developer portals |
+| `tutorial-engineer` | Step-by-step tutorials, educational content |
+
+### Debugging & Performance
+| Agent | Use For |
+|-------|---------|
+| `debugger` | Error investigation, stack traces, issues |
+| `performance-engineer` | OpenTelemetry, load testing, optimization |
+| `observability-engineer` | Monitoring, logging, SLI/SLO management |
+
+### Other Languages
+| Agent | Use For |
+|-------|---------|
+| `python-pro` | Python 3.12+, async, uv, ruff |
+| `golang-pro` | Go 1.21+, concurrency, microservices |
+| `rust-pro` | Rust 1.75+, systems programming |
+| `java-pro` | Java 21+, Spring Boot 3.x |
+| `csharp-pro` | C#, .NET, enterprise patterns |
+
+---
+
+**Last Updated**: 2025-12-08
 **Project**: Product Lifecycle Management Platform
 **Timeline**: 8 weeks
 **Tech Stack**: Next.js 15 + TypeScript + Supabase + Vercel

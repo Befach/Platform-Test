@@ -9,8 +9,12 @@ import {
   cleanupResourcesData,
   getResourceAuditLog,
   searchResources,
+  hasAdminClient,
 } from '../tests/utils/database';
 import { TEST_RESOURCES } from '../tests/fixtures/test-data';
+
+// Skip all tests if SUPABASE_SERVICE_ROLE_KEY is not configured
+const skipTests = !hasAdminClient();
 
 /**
  * Resources Module E2E Tests
@@ -24,6 +28,9 @@ import { TEST_RESOURCES } from '../tests/fixtures/test-data';
  */
 
 test.describe('Resources - Full-Text Search', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   const testUserId = `test_user_${Date.now()}`;
@@ -206,6 +213,9 @@ test.describe('Resources - Full-Text Search', () => {
 });
 
 test.describe('Resources - Sharing (Many-to-Many)', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   let workItemId1: string;
@@ -419,6 +429,9 @@ test.describe('Resources - Sharing (Many-to-Many)', () => {
 });
 
 test.describe('Resources - Audit Trail', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   let resourceId: string;
@@ -581,6 +594,9 @@ test.describe('Resources - Audit Trail', () => {
 });
 
 test.describe('Resources - Soft Delete', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   let resourceId: string;
@@ -694,6 +710,9 @@ test.describe('Resources - Soft Delete', () => {
 });
 
 test.describe('Resources - CRUD Operations', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   const testUserId = `test_user_${Date.now()}`;
@@ -847,6 +866,9 @@ test.describe('Resources - CRUD Operations', () => {
 });
 
 test.describe('Resources - Type Classification', () => {
+  // Skip entire describe block if service role key not configured
+  test.skip(skipTests, 'SUPABASE_SERVICE_ROLE_KEY not configured - skipping database tests');
+
   let teamId: string;
   let workspaceId: string;
   const testUserId = `test_user_${Date.now()}`;
