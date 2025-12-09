@@ -3,6 +3,7 @@ import Script from "next/script";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { ReactGrabWrapper } from "@/components/dev/react-grab-wrapper";
 
 // Temporarily commented out due to Google Fonts network issue
 // const geistSans = Geist({
@@ -34,6 +35,8 @@ export default function RootLayout({
           strategy="afterInteractive"
           data-project-id="preview"
         />
+        {/* React Grab - DEV ONLY for Claude Code efficiency */}
+        <ReactGrabWrapper />
       </body>
     </html>
   );

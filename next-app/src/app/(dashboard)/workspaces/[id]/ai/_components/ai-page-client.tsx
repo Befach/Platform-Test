@@ -2,18 +2,19 @@
  * AI Page Client Component
  *
  * Client-side wrapper for the AI Assistant page.
- * Now uses the chat-first ChatInterface with tool shortcuts.
+ * Uses assistant-ui based chat interface with tool confirmation support.
  *
  * Architecture:
- * - Full-width chat interface (replaces split layout)
+ * - Full-width chat interface (assistant-ui)
  * - ToolShortcutBar above input for quick tool access
  * - Inline confirmation cards for agentic actions
- * - Free-form chat + optional tool shortcuts
+ * - Human-in-the-loop tool execution via /api/ai/agent/execute
+ * - Thread persistence with Supabase
  */
 
 'use client'
 
-import { ChatInterface } from '@/components/ai/chat-interface'
+import { ChatInterfaceV2 } from '@/components/ai/chat-interface-v2'
 import { Badge } from '@/components/ui/badge'
 import { Bot, Sparkles, History, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -116,13 +117,10 @@ export function AIPageClient({
 
       {/* Main Content - Full-width Chat Interface */}
       <div className="flex-1 overflow-hidden">
-        <ChatInterface
-          workspaceContext={{
-            workspaceId,
-            workspaceName,
-            workspacePhase,
-            teamId,
-          }}
+        <ChatInterfaceV2
+          teamId={teamId}
+          workspaceId={workspaceId}
+          workspaceName={workspaceName}
           className="h-full"
         />
       </div>
