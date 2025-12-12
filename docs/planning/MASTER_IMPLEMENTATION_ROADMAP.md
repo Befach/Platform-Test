@@ -45,16 +45,165 @@ This document serves as the **master planning roadmap** for all future features 
 | Multi-tenancy | Teams, users, workspaces with RLS | ✅ Complete |
 | Work Items | 4-type system (concept/feature/bug/enhancement) | ✅ Complete |
 | Timeline Items | MVP/SHORT/LONG breakdown | ✅ Complete |
-| Phase System | Research → Review → Execute → Complete | ✅ Complete |
+| Phase System | Research → Review → Execute → Complete | ✅ Core Complete (Enhancements in progress) |
 | Mind Mapping | ReactFlow canvas with 5 node types | ✅ Complete |
 | Product Tasks | Two-track system (standalone + linked) | ✅ Complete |
 | Resources Module | References, inspiration, documentation links | ✅ Complete |
-| AI Integration | Vercel AI SDK + OpenRouter + tool calling | ✅ Complete (20%) |
+| AI Integration | Vercel AI SDK + OpenRouter + tool calling | ✅ Complete (95%) |
 | Authentication | Supabase Auth with RLS | ✅ Complete |
 
 **Dependencies Satisfied**: None (foundation complete)
 
 **Blocks**: Everything in Layers 1-6
+
+---
+
+### LAYER 0.5: PHASE SYSTEM ENHANCEMENT (In Progress) 🔄
+
+**Status**: Architecture Finalized, Implementation Pending (6 sessions)
+**Reference**: [docs/ARCHITECTURE_CONSOLIDATION.md](../ARCHITECTURE_CONSOLIDATION.md)
+
+**Purpose**: Enhance phase system with validation, readiness prompts, workspace analysis, and Design Thinking integration
+
+**Total Effort**: ~44-56 hours (6 implementation sessions)
+
+#### Session Dependencies & File Structure
+
+```
+SESSION 1: Fix Phase Bugs & Validation (CRITICAL) 🔴
+├── Files to Modify:
+│   ├── workspace-phases.tsx (fix calculation overlap)
+│   ├── work-item-types.ts (add validation)
+│   └── phase-aware-form-fields.tsx (add field validation)
+├── Database Changes:
+│   └── Add phase_transitions JSONB to work_items
+└── Blocks: Session 2 (readiness calculation depends on validation)
+
+SESSION 2: Phase Readiness & Upgrade Prompts
+├── Files to Create:
+│   ├── lib/phase-readiness.ts
+│   └── components/work-items/phase-upgrade-prompt.tsx
+├── Depends on: Session 1 (validation logic)
+└── Blocks: Session 6 (polish depends on prompts working)
+
+SESSION 3: Workspace Analysis
+├── Files to Create:
+│   ├── lib/workspace-analyzer.ts
+│   ├── components/workspaces/workspace-health-card.tsx
+│   └── app/api/workspaces/[id]/analyze/route.ts
+├── Depends on: Session 1 (needs valid phase data)
+└── Blocks: Session 6 (workspace card update)
+
+SESSION 4: Design Thinking Integration
+├── Files to Create:
+│   ├── lib/design-thinking/frameworks.ts
+│   ├── lib/design-thinking/method-suggestions.ts
+│   └── components/work-items/methodology-guidance.tsx
+├── Files to Modify:
+│   └── AI chat system prompt
+├── Depends on: None (independent)
+└── Blocks: None (UI enhancement)
+
+SESSION 5: Strategy Customization
+├── Files to Create:
+│   ├── migrations/YYYYMMDDHHMMSS_add_strategy_user_fields.sql
+│   ├── components/strategies/strategy-organization-view.tsx
+│   └── components/strategies/strategy-work-item-view.tsx
+├── Files to Modify:
+│   └── lib/types/strategy-types.ts
+├── Depends on: Existing strategy system (already built)
+└── Blocks: None (enhancement to existing feature)
+
+SESSION 6: Polish & Testing
+├── Files to Modify:
+│   ├── feedback-convert-dialog.tsx (pre-fill phase)
+│   ├── workspace-card.tsx (show distribution)
+│   └── e2e/ test files
+├── Files to Create:
+│   └── docs/reference/PHASE_SYSTEM_GUIDE.md
+├── Depends on: Sessions 1-5 (testing all enhancements)
+└── Blocks: None (final polish)
+```
+
+#### Implementation Order (Critical Path)
+
+**Recommended Sequence**:
+1. **Session 1** (CRITICAL) - Must be done first, blocks Sessions 2 & 3
+2. **Sessions 2, 4, 5** (PARALLEL) - Can be done simultaneously
+3. **Session 3** - After Session 1 validation is fixed
+4. **Session 6** - After all other sessions complete
+
+**Minimum Duration**:
+- Sequential: 44 hours (~6 days)
+- Parallel (2 developers): 28 hours (~4 days)
+
+#### Key Architecture Decisions
+
+**Two-Layer System (NOT Three)**:
+- Workspace shows phase DISTRIBUTION across work items (aggregation view)
+- Work items have phase field that IS the status (no separate status field)
+- Timeline items have separate status field for execution tracking
+
+**Phase Transition Requirements**:
+| From → To | Required Fields | Threshold |
+|-----------|----------------|-----------|
+| research → planning | purpose, 1+ timeline item OR scope | 80% |
+| planning → execution | target_release, acceptance_criteria, priority, estimated_hours | 80% |
+| execution → review | progress_percent >= 80, actual_start_date | 80% |
+| review → complete | Feedback addressed, status = completed | 100% |
+
+**Design Thinking as Methodology**:
+- NOT lifecycle stages, but HOW to work at each phase
+- Major frameworks: d.school, Double Diamond, IDEO, IBM
+- AI suggests methods based on current phase
+- Guiding questions per phase as tooltips
+
+**Strategy Customization**:
+- New fields: user_stories[], user_examples[], case_studies[]
+- Organization view: Full tree, high-level metrics
+- Work item view: Aligned strategies only, strength indicators
+
+#### Known Issues to Fix (Session 1)
+
+| Issue | Severity | File | Lines |
+|-------|----------|------|-------|
+| Phase calculation overlap | CRITICAL | workspace-phases.tsx | 167-172 |
+| No phase transition validation | CRITICAL | work-item-types.ts | N/A |
+| No phase transition timestamps | HIGH | work_items table | N/A |
+| progress_percent no 0-100 validation | MEDIUM | phase-aware-form-fields.tsx | N/A |
+
+#### Success Criteria
+
+**Session 1 Complete**:
+- [ ] Phase calculation logic fixed with tests
+- [ ] validatePhaseTransition() function working
+- [ ] phase_transitions JSONB column added
+- [ ] Field validation enforced
+
+**Session 2 Complete**:
+- [ ] Readiness calculator accurate
+- [ ] Upgrade prompts show at 80%
+- [ ] Guiding questions visible
+
+**Session 3 Complete**:
+- [ ] Workspace analysis API working
+- [ ] Health card displays correctly
+- [ ] Manual refresh functional
+
+**Session 4 Complete**:
+- [ ] 4 frameworks documented
+- [ ] AI suggests methods per phase
+- [ ] Case study examples available
+
+**Session 5 Complete**:
+- [ ] New strategy fields populated
+- [ ] Organization view shows full tree
+- [ ] Work item view shows alignment
+
+**Session 6 Complete**:
+- [ ] All E2E tests passing
+- [ ] Documentation updated
+- [ ] Production-ready
 
 ---
 

@@ -1,198 +1,263 @@
 # 🎯 NEXT STEPS - Action Plan
 
-**Last Updated**: 2025-11-30
-**Current Week**: Week 6 (Timeline & Execution)
-**Overall Status**: ✅ On Track (60-65% complete)
+**Last Updated**: 2025-12-11
+**Current Week**: Week 7 (AI Integration & Analytics - 95% Complete)
+**Overall Status**: ✅ On Track (92% complete)
 
 ---
 
 ## 📊 CURRENT STATE SUMMARY
 
-### ✅ Completed (Weeks 1-5)
+### ✅ Completed (Weeks 1-7)
 | Week | Focus | Status |
 |------|-------|--------|
 | 1-2 | Foundation (Auth, Multi-tenant, RLS) | ✅ 100% |
 | 3 | Mind Mapping (ReactFlow, Custom Nodes) | ✅ 100% |
-| 4 | Feature Planning & Dependencies | ✅ 90% |
+| 4 | Feature Planning & Dependencies | ✅ 80% |
 | 5 | Review System, Team Management, Work Items UI | ✅ 100% |
+| 6 | Timeline & Execution | ⏳ 0% (Planned) |
+| 7 | AI Integration, Analytics, Strategies, Knowledge Base | ✅ 95% |
 
-### 🎯 Current (Week 6)
-- Timeline Visualization
-- Project Execution features
-- Real-time collaboration foundation
+### 🎯 Current Priority
+- Phase System Enhancement (6 sessions)
+- Architecture consolidation implementation
 
-### ⏳ Upcoming (Weeks 7-8)
-- Week 7: AI Integration & Analytics
-- Week 8: Billing, Testing & Launch
+### ⏳ Upcoming (Week 8)
+- Billing & Testing
+- Production deployment preparation
 
 ---
 
-## 🚨 IMMEDIATE ACTIONS (Week 6)
+## 🚨 IMMEDIATE ACTIONS (Phase System Enhancement)
 
-### Priority 1: Timeline Visualization
+**Reference Document**: [docs/ARCHITECTURE_CONSOLIDATION.md](../ARCHITECTURE_CONSOLIDATION.md)
+
+Based on the architecture consolidation, the following 6 implementation sessions are the immediate priorities:
+
+---
+
+### Session 1: Fix Phase Bugs & Validation 🔴 CRITICAL
 
 **Status**: ⏳ Not Started
-**Estimated Time**: 12-16 hours
-
-#### Tasks:
-1. **Gantt Chart Implementation**
-   - [ ] Create `(dashboard)/workspaces/[id]/timeline/page.tsx`
-   - [ ] Use react-gantt-timeline or build custom with ReactFlow
-   - [ ] Render work items as timeline bars
-   - [ ] Support swimlanes by phase (Research → Review → Execute)
-   - [ ] Color-code by status (not_started, in_progress, completed)
-
-2. **Drag-to-Reschedule**
-   - [ ] Implement drag handlers on timeline items
-   - [ ] Update start/end dates on drop
-   - [ ] Show dependency conflicts
-   - [ ] Auto-save changes
-
-3. **Dependency Visualization**
-   - [ ] Draw arrows between dependent items
-   - [ ] Highlight critical path
-   - [ ] Show blocked items in red
-
----
-
-### Priority 2: Real-time Collaboration Foundation
-
-**Status**: ⏳ Not Started
-**Estimated Time**: 8-12 hours
-
-#### Tasks:
-1. **Supabase Real-time Setup**
-   - [ ] Enable Realtime on work_items table
-   - [ ] Enable Realtime on timeline_items table
-   - [ ] Create subscription hooks
-
-2. **Live Cursor Tracking (Pro tier)**
-   - [ ] Track cursor position per user
-   - [ ] Broadcast via Supabase Realtime
-   - [ ] Display other users' cursors
-   - [ ] Show user avatars on cursor
-
-3. **Activity Feed**
-   - [ ] Log changes to work items
-   - [ ] Display recent activity in sidebar
-   - [ ] Notify on changes to assigned items
-
----
-
-### Priority 3: Complete Work Items Features
-
-**Status**: ⏳ 80% Complete
 **Estimated Time**: 4-6 hours
+**Priority**: CRITICAL - Blocking phase system reliability
 
-#### Remaining Tasks:
-- [ ] Bulk status update for selected items
-- [ ] Export work items to CSV
-- [ ] Import work items from CSV
-- [ ] Work item templates
+#### Tasks:
+1. **Fix Phase Calculation Overlap**
+   - [ ] Fix lines 167-172 in `workspace-phases.tsx`
+   - [ ] Remove overlapping phase calculations
+   - [ ] Add comprehensive tests for edge cases
 
----
+2. **Add Phase Transition Validation**
+   - [ ] Create `validatePhaseTransition()` in `work-item-types.ts`
+   - [ ] Implement required field checks per transition
+   - [ ] Add UI validation messages
 
-## 📅 WEEK 7 PRIORITIES
+3. **Add Phase Transition Timestamps**
+   - [ ] Add `phase_transitions` JSONB column to work_items
+   - [ ] Track: `{ research_at, planning_at, execution_at, review_at, complete_at }`
+   - [ ] Display transition history in UI
 
-### AI Integration & Analytics
+4. **Add Field Validation**
+   - [ ] Add 0-100 validation for `progress_percent`
+   - [ ] Add required field validation in phase-aware-form-fields.tsx
 
-**Target**: Enable AI assistant with tool calling
-
-#### AI Chat Panel (16-20 hours)
-- [ ] OpenRouter API client setup
-- [ ] Chat panel component (left sidebar)
-- [ ] Message streaming UI
-- [ ] Context injection (workspace, work items)
-- [ ] 5 essential tools:
-  1. Create Work Item
-  2. Update Work Item
-  3. Search Work Items
-  4. Analyze Dependencies
-  5. Generate Timeline Suggestion
-
-#### Analytics Dashboard (8-12 hours)
-- [ ] Dashboard builder UI
-- [ ] 4 pre-built charts:
-  1. Phase Progress (pie chart)
-  2. Work Item Status (bar chart)
-  3. Team Velocity (line chart)
-  4. Deadline Tracking (calendar heatmap)
-- [ ] Custom chart builder (Pro tier)
+**Files to Modify**:
+- `next-app/src/components/workspaces/workspace-phases.tsx`
+- `next-app/src/lib/types/work-item-types.ts`
+- `next-app/src/components/work-items/phase-aware-form-fields.tsx`
 
 ---
 
-## 📅 WEEK 8 PRIORITIES
+### Session 2: Phase Readiness & Upgrade Prompts
 
-### Billing, Testing & Launch
+**Status**: ⏳ Not Started
+**Estimated Time**: 6-8 hours
+**Priority**: HIGH - Core UX improvement
 
-#### Razorpay Integration (12-16 hours)
-**Note**: Using Razorpay instead of Stripe (Stripe is invite-only in India).
+#### Tasks:
+1. **Create Readiness Calculator**
+   - [ ] Create `lib/phase-readiness.ts` with field completion logic
+   - [ ] Calculate readiness percentage per phase transition
+   - [ ] Define required fields per transition (from ARCHITECTURE_CONSOLIDATION.md)
 
-- [ ] Install `razorpay` npm package
-- [ ] Create order API (`/api/razorpay/create-order`)
-- [ ] Payment verification (`/api/razorpay/verify`)
-- [ ] Webhook handler (`/api/razorpay/webhook`)
-- [ ] Subscription management (`/api/razorpay/subscription`)
-- [ ] Customer portal integration
-- [ ] Feature gates (Free vs Pro)
-- [ ] Usage limits enforcement
+2. **Build Upgrade Prompt UI**
+   - [ ] Create `PhaseUpgradePrompt` component (banner)
+   - [ ] Show when readiness >= 80%
+   - [ ] Display missing required fields
+   - [ ] One-click upgrade button
 
-**Environment Variables**:
-```env
-RAZORPAY_KEY_ID=your_key_id
-RAZORPAY_KEY_SECRET=your_key_secret
-NEXT_PUBLIC_RAZORPAY_KEY_ID=your_key_id
-```
+3. **Add Guiding Questions**
+   - [ ] Add tooltips with Design Thinking questions per phase
+   - [ ] Example: Research phase shows "Who has this problem?"
+   - [ ] Link to methodology documentation
 
-#### E2E Testing (8-12 hours)
-- [ ] Authentication flow test
-- [ ] Workspace creation test
-- [ ] Work item CRUD test
-- [ ] Team invitation test
-- [ ] Multi-tenant isolation test
-- [ ] Billing flow test
+**Files to Create**:
+- `next-app/src/lib/phase-readiness.ts`
+- `next-app/src/components/work-items/phase-upgrade-prompt.tsx`
 
-#### Launch Checklist
-- [ ] Security audit
-- [ ] Performance testing
-- [ ] Documentation review
-- [ ] Production environment setup
-- [ ] Monitoring & alerts
+**Files to Modify**:
+- Work item detail page to show prompt banner
 
 ---
 
-## 🛠️ TECHNICAL DEBT
+### Session 3: Workspace Analysis
 
-### Documentation (2-4 hours)
-- [ ] Update API_REFERENCE.md with new endpoints
-- [ ] Update database-schema.md with new tables
-- [ ] Review and fix broken links
+**Status**: ⏳ Not Started
+**Estimated Time**: 6-8 hours
+**Priority**: MEDIUM - Analytics & insights
 
-### Code Quality
-- [ ] Add TypeScript strict mode checks
-- [ ] Resolve TODO comments in codebase
-- [ ] Add error boundaries to React components
+#### Tasks:
+1. **Create Analyzer Service**
+   - [ ] Create `lib/workspace-analyzer.ts`
+   - [ ] Implement `analyzeWorkspace()` function
+   - [ ] Output: `WorkspaceAnalysis` interface (see consolidation doc)
+
+2. **Build Health Card Component**
+   - [ ] Create `WorkspaceHealthCard` component
+   - [ ] Show phase distribution
+   - [ ] List mismatched items
+   - [ ] Show upgrade opportunities
+   - [ ] Display health score (0-100)
+
+3. **Add API Endpoint**
+   - [ ] Create `GET /api/workspaces/[id]/analyze`
+   - [ ] Implement analysis logic
+   - [ ] Cache results for 2-3 days
+   - [ ] Add manual refresh button
+
+**Files to Create**:
+- `next-app/src/lib/workspace-analyzer.ts`
+- `next-app/src/components/workspaces/workspace-health-card.tsx`
+- `next-app/src/app/api/workspaces/[id]/analyze/route.ts`
+
+---
+
+### Session 4: Design Thinking Integration
+
+**Status**: ⏳ Not Started
+**Estimated Time**: 8-10 hours
+**Priority**: MEDIUM - Methodology guidance
+
+#### Tasks:
+1. **Add Methodology Guidance**
+   - [ ] Create `lib/design-thinking/frameworks.ts`
+   - [ ] Document d.school 5 Modes
+   - [ ] Document Double Diamond
+   - [ ] Document IDEO HCD
+   - [ ] Document IBM Enterprise DT
+
+2. **Include Other Frameworks**
+   - [ ] Add Agile/Scrum methods
+   - [ ] Add Lean Startup (Build-Measure-Learn)
+   - [ ] Add Jobs-to-be-Done framework
+   - [ ] Create framework selector in settings
+
+3. **AI Active Integration**
+   - [ ] Add framework awareness to AI chat
+   - [ ] AI suggests methods based on current phase
+   - [ ] AI provides case study examples
+   - [ ] AI shows guiding questions in responses
+
+**Files to Create**:
+- `next-app/src/lib/design-thinking/frameworks.ts`
+- `next-app/src/lib/design-thinking/method-suggestions.ts`
+- `next-app/src/components/work-items/methodology-guidance.tsx`
+
+**Files to Modify**:
+- AI chat system prompt to include methodology awareness
+
+---
+
+### Session 5: Strategy Customization
+
+**Status**: ⏳ Not Started
+**Estimated Time**: 6-8 hours
+**Priority**: MEDIUM - Strategy system enhancement
+
+#### Tasks:
+1. **Add New Strategy Fields**
+   - [ ] Migration: Add `user_stories TEXT[]` to product_strategies
+   - [ ] Migration: Add `user_examples TEXT[]` to product_strategies
+   - [ ] Migration: Add `case_studies TEXT[]` to product_strategies
+   - [ ] Update TypeScript types
+
+2. **Organization-Level Display Component**
+   - [ ] Create `StrategyOrganizationView` component
+   - [ ] Show full strategy tree
+   - [ ] Display user stories and case studies
+   - [ ] High-level metrics and alignment
+
+3. **Work-Item-Level Display Component**
+   - [ ] Create `StrategyWorkItemView` component
+   - [ ] Show only aligned strategies
+   - [ ] Display alignment strength (weak/medium/strong)
+   - [ ] Show specific requirements for this item
+
+**Files to Create**:
+- `supabase/migrations/YYYYMMDDHHMMSS_add_strategy_user_fields.sql`
+- `next-app/src/components/strategies/strategy-organization-view.tsx`
+- `next-app/src/components/strategies/strategy-work-item-view.tsx`
+
+**Files to Modify**:
+- `next-app/src/lib/types/strategy-types.ts`
+
+---
+
+### Session 6: Polish & Testing
+
+**Status**: ⏳ Not Started
+**Estimated Time**: 8-10 hours
+**Priority**: HIGH - Quality assurance
+
+#### Tasks:
+1. **Feedback Conversion Enhancement**
+   - [ ] Improve feedback-to-work-item conversion flow
+   - [ ] Auto-suggest phase based on feedback type
+   - [ ] Pre-fill fields from feedback content
+
+2. **Workspace Card Update**
+   - [ ] Update workspace cards to show phase distribution
+   - [ ] Add health score indicator
+   - [ ] Show mode badge (development/launch/growth/maintenance)
+
+3. **E2E Testing**
+   - [ ] Test phase transitions with validation
+   - [ ] Test upgrade prompts at 80% completion
+   - [ ] Test workspace analysis
+   - [ ] Test strategy customization
+   - [ ] Test Design Thinking integration
+
+4. **Documentation Update**
+   - [ ] Update API_REFERENCE.md with new endpoints
+   - [ ] Update CODE_PATTERNS.md with phase patterns
+   - [ ] Create PHASE_SYSTEM_GUIDE.md for users
+
+**Files to Modify**:
+- `next-app/src/components/feedback/feedback-convert-dialog.tsx`
+- `next-app/src/components/workspaces/workspace-card.tsx`
+- `e2e/` test files
+
+**Files to Create**:
+- `docs/reference/PHASE_SYSTEM_GUIDE.md`
 
 ---
 
 ## 📊 SUCCESS METRICS
 
-### Week 6 Goals
-- [ ] Timeline visualization functional
-- [ ] Real-time foundation in place
-- [ ] Work items export/import working
-- [ ] Progress: 60% → 70%
+### Phase System Enhancement Goals
+- [ ] All critical phase bugs fixed
+- [ ] Phase transition validation working
+- [ ] Upgrade prompts showing at 80% completion
+- [ ] Workspace analysis providing actionable insights
+- [ ] Design Thinking integration active in AI chat
+- [ ] Strategy customization fields populated
 
-### Week 7 Goals
-- [ ] AI chat panel functional
-- [ ] Basic analytics dashboard
-- [ ] Progress: 70% → 85%
-
-### Week 8 Goals
-- [ ] Razorpay billing integration complete
-- [ ] 10+ E2E tests passing
-- [ ] Launch-ready
-- [ ] Progress: 85% → 100%
+### Week 8 Goals (Upcoming)
+- [ ] Stripe/Razorpay billing integration
+- [ ] 15+ E2E tests passing
+- [ ] Launch-ready checklist complete
+- [ ] Progress: 92% → 100%
 
 ---
 

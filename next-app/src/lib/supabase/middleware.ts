@@ -1,6 +1,35 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const DEBUG_ENDPOINT = 'http://127.0.0.1:7242/ingest/ebdf2fd5-9696-479e-b2f1-d72537069b93'
+
+async function sendDebug(payload: {
+  sessionId?: string
+  runId?: string
+  hypothesisId?: string
+  location: string
+  message: string
+  data?: Record<string, unknown>
+  timestamp?: number
+}) {
+  const body = {
+    sessionId: 'debug-session',
+    runId: 'pre-fix2',
+    timestamp: Date.now(),
+    ...payload,
+  }
+
+  try {
+    await fetch(DEBUG_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+  } catch {
+    // Swallow; Edge runtime has no fs fallback
+  }
+}
+
 /**
  * Create a Supabase client for middleware usage
  * This handles refreshing auth tokens and maintaining user sessions
@@ -40,6 +69,18 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  // #region agent log
+  await sendDebug({
+    hypothesisId: 'H9',
+    location: 'supabase/middleware:updateSession:getUser',
+    message: 'updateSession user check',
+    data: {
+      hasUser: !!user,
+      cookies: request.cookies.getAll().map((c) => c.name),
+    },
+  })
+  // #endregion
 
   // Protected routes - redirect to login if not authenticated
   const isAuthPage = request.nextUrl.pathname.startsWith('/login') ||

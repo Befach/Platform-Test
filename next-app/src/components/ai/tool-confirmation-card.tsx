@@ -71,15 +71,89 @@ export interface ToolConfirmationCardProps {
 }
 
 // =============================================================================
-// HELPERS
+// PREMIUM STYLE CONSTANTS
 // =============================================================================
 
-const categoryConfig: Record<ToolCategoryType, { color: string; bgColor: string; borderColor: string }> = {
-  creation: { color: 'text-green-600', bgColor: 'bg-green-50 dark:bg-green-950/30', borderColor: 'border-green-500' },
-  analysis: { color: 'text-blue-600', bgColor: 'bg-blue-50 dark:bg-blue-950/30', borderColor: 'border-blue-500' },
-  optimization: { color: 'text-amber-600', bgColor: 'bg-amber-50 dark:bg-amber-950/30', borderColor: 'border-amber-500' },
-  strategy: { color: 'text-purple-600', bgColor: 'bg-purple-50 dark:bg-purple-950/30', borderColor: 'border-purple-500' },
+/**
+ * Premium category styles with gradients, glows, and accents
+ */
+const categoryConfig: Record<ToolCategoryType, {
+  // Legacy colors (still used for badges)
+  color: string
+  bgColor: string
+  borderColor: string
+  // Premium gradient styles
+  iconBg: string
+  iconColor: string
+  accentBar: string
+  glow: string
+  overlay: string
+  badgeClass: string
+  buttonGradient: string
+  buttonHover: string
+  buttonGlow: string
+}> = {
+  creation: {
+    color: 'text-emerald-500',
+    bgColor: 'bg-emerald-500/5',
+    borderColor: 'border-emerald-500',
+    iconBg: 'bg-gradient-to-br from-emerald-500/20 to-green-500/10 border border-emerald-500/30',
+    iconColor: 'text-emerald-400',
+    accentBar: 'bg-gradient-to-r from-emerald-500 to-green-500',
+    glow: 'shadow-emerald-500/10',
+    overlay: 'from-emerald-500/5 via-transparent to-green-500/5',
+    badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+    buttonGradient: 'bg-gradient-to-r from-emerald-500 to-green-500',
+    buttonHover: 'hover:from-emerald-400 hover:to-green-400',
+    buttonGlow: 'hover:shadow-lg hover:shadow-emerald-500/25',
+  },
+  analysis: {
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-500/5',
+    borderColor: 'border-blue-500',
+    iconBg: 'bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border border-blue-500/30',
+    iconColor: 'text-blue-400',
+    accentBar: 'bg-gradient-to-r from-blue-500 to-cyan-500',
+    glow: 'shadow-blue-500/10',
+    overlay: 'from-blue-500/5 via-transparent to-cyan-500/5',
+    badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+    buttonGradient: 'bg-gradient-to-r from-blue-500 to-cyan-500',
+    buttonHover: 'hover:from-blue-400 hover:to-cyan-400',
+    buttonGlow: 'hover:shadow-lg hover:shadow-blue-500/25',
+  },
+  optimization: {
+    color: 'text-amber-500',
+    bgColor: 'bg-amber-500/5',
+    borderColor: 'border-amber-500',
+    iconBg: 'bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30',
+    iconColor: 'text-amber-400',
+    accentBar: 'bg-gradient-to-r from-amber-500 to-orange-500',
+    glow: 'shadow-amber-500/10',
+    overlay: 'from-amber-500/5 via-transparent to-orange-500/5',
+    badgeClass: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+    buttonGradient: 'bg-gradient-to-r from-amber-500 to-orange-500',
+    buttonHover: 'hover:from-amber-400 hover:to-orange-400',
+    buttonGlow: 'hover:shadow-lg hover:shadow-amber-500/25',
+  },
+  strategy: {
+    color: 'text-purple-500',
+    bgColor: 'bg-purple-500/5',
+    borderColor: 'border-purple-500',
+    iconBg: 'bg-gradient-to-br from-purple-500/20 to-violet-500/10 border border-purple-500/30',
+    iconColor: 'text-purple-400',
+    accentBar: 'bg-gradient-to-r from-purple-500 to-violet-500',
+    glow: 'shadow-purple-500/10',
+    overlay: 'from-purple-500/5 via-transparent to-violet-500/5',
+    badgeClass: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+    buttonGradient: 'bg-gradient-to-r from-purple-500 to-violet-500',
+    buttonHover: 'hover:from-purple-400 hover:to-violet-400',
+    buttonGlow: 'hover:shadow-lg hover:shadow-purple-500/25',
+  },
 }
+
+// =============================================================================
+// HELPERS
+// =============================================================================
 
 const toolIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   createWorkItem: FileText,
@@ -134,7 +208,7 @@ export function ToolConfirmationCard({
   const [editedParams, setEditedParams] = useState<ConfirmationParams>(data.params)
   const [showRawParams, setShowRawParams] = useState(false)
 
-  const { color, bgColor, borderColor } = categoryConfig[data.category]
+  const styles = categoryConfig[data.category]
   const IconComponent = getToolIcon(data.toolName)
   const hasPreview = hasRichPreview(data.toolName)
 
@@ -164,43 +238,60 @@ export function ToolConfirmationCard({
   }, [])
 
   return (
-    <Card className={cn(
-      'w-full max-w-lg overflow-hidden',
-      bgColor,
-      'border-l-4',
-      borderColor,
-      className
-    )}>
+    <div
+      className={cn(
+        'w-full max-w-lg',
+        // Premium glassmorphism card
+        'relative overflow-hidden rounded-xl',
+        'bg-gradient-to-br from-background/95 via-background/90 to-background/80',
+        'backdrop-blur-xl',
+        'border border-white/10',
+        'shadow-lg shadow-black/5',
+        styles.glow,
+        // Hover effects
+        'transition-all duration-300',
+        'hover:shadow-xl',
+        'hover:border-white/20',
+        className
+      )}
+    >
+      {/* Premium gradient accent bar */}
+      <div className={cn('h-1 w-full', styles.accentBar)} />
+
+      {/* Subtle gradient overlay */}
+      <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', styles.overlay)} />
+
       {/* Header */}
-      <CardHeader className="pb-2 pt-3">
+      <CardHeader className="relative pb-2 pt-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className={cn('p-1.5 rounded', bgColor)}>
-              <IconComponent className={cn('h-4 w-4', color)} />
+          <div className="flex items-center gap-2.5">
+            {/* Premium icon with gradient background */}
+            <div className={cn('p-2 rounded-lg', styles.iconBg)}>
+              <IconComponent className={cn('h-4 w-4', styles.iconColor)} />
             </div>
             <div>
               <h3 className="font-semibold text-sm">{data.displayName}</h3>
               <p className="text-xs text-muted-foreground">{data.description}</p>
             </div>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             {isEditing && (
-              <Badge variant="secondary" className="text-xs gap-1">
+              <Badge variant="outline" className="text-xs gap-1 bg-white/5 border-white/20">
                 <Pencil className="h-3 w-3" />
                 Editing
               </Badge>
             )}
-            <Badge variant="outline" className={cn('text-xs', color)}>
+            <Badge variant="outline" className={cn('text-xs', styles.badgeClass)}>
               {data.category}
             </Badge>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="pb-3 space-y-3">
+      <CardContent className="relative pb-3 space-y-3">
         {/* Rich Preview or Fallback */}
         {hasPreview ? (
-          <div className="border rounded-lg overflow-hidden bg-background/50">
+          <div className="border border-white/10 rounded-lg overflow-hidden bg-background/30">
             <ToolPreviewRenderer
               toolName={data.toolName}
               params={isEditing ? editedParams : data.params}
@@ -210,7 +301,7 @@ export function ToolConfirmationCard({
           </div>
         ) : (
           // Fallback: Key-value display for tools without rich preview
-          <div className="space-y-2 p-3 border rounded-lg bg-background/50">
+          <div className="space-y-2 p-3 border border-white/10 rounded-lg bg-background/30">
             {displayParams.map(([key, value]) => (
               <div key={key} className="flex items-start gap-2 text-sm">
                 <span className="text-muted-foreground w-28 flex-shrink-0">
@@ -226,7 +317,7 @@ export function ToolConfirmationCard({
         {hasPreview && (
           <button
             onClick={() => setShowRawParams(!showRawParams)}
-            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors p-1.5 rounded hover:bg-white/5"
           >
             <Eye className="h-3 w-3" />
             <span>View raw parameters</span>
@@ -239,16 +330,16 @@ export function ToolConfirmationCard({
         )}
 
         {showRawParams && (
-          <div className="p-2 bg-muted/50 rounded text-xs font-mono overflow-x-auto">
-            <pre>{JSON.stringify(isEditing ? editedParams : data.params, null, 2)}</pre>
+          <div className="p-2.5 bg-black/20 rounded-lg border border-white/10 text-xs font-mono overflow-x-auto">
+            <pre className="text-muted-foreground">{JSON.stringify(isEditing ? editedParams : data.params, null, 2)}</pre>
           </div>
         )}
 
-        {/* Warnings */}
+        {/* Warnings with premium styling */}
         {data.warnings && data.warnings.length > 0 && (
-          <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-md border border-amber-200 dark:border-amber-800">
+          <div className="p-2.5 bg-amber-500/10 rounded-lg border border-amber-500/30">
             {data.warnings.map((warning, index) => (
-              <div key={index} className="flex items-start gap-2 text-xs text-amber-800 dark:text-amber-200">
+              <div key={index} className="flex items-start gap-2 text-xs text-amber-400">
                 <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
                 <span>{warning}</span>
               </div>
@@ -257,14 +348,21 @@ export function ToolConfirmationCard({
         )}
       </CardContent>
 
-      {/* Action Buttons */}
-      <CardFooter className="pt-0 pb-3 gap-2">
-        {/* Confirm Button */}
+      {/* Premium Action Buttons */}
+      <CardFooter className="relative pt-0 pb-3 gap-2">
+        {/* Confirm Button - Gradient with glow */}
         <Button
           size="sm"
           onClick={handleConfirm}
           disabled={isLoading}
-          className="flex-1"
+          className={cn(
+            'flex-1 text-white border-0',
+            styles.buttonGradient,
+            styles.buttonHover,
+            styles.buttonGlow,
+            'transition-all duration-200',
+            isLoading && 'opacity-70'
+          )}
         >
           {isLoading ? (
             <>
@@ -279,30 +377,31 @@ export function ToolConfirmationCard({
           )}
         </Button>
 
-        {/* Edit Button */}
+        {/* Edit Button - Outline with hover */}
         <Button
           size="sm"
           variant="outline"
           onClick={handleToggleEdit}
           disabled={isLoading}
+          className="border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30 transition-all"
         >
           <Pencil className="h-4 w-4 mr-1.5" />
           {isEditing ? 'Cancel' : 'Edit'}
         </Button>
 
-        {/* Reject Button */}
+        {/* Reject Button - Ghost with destructive hover */}
         <Button
           size="sm"
           variant="ghost"
           onClick={onCancel}
           disabled={isLoading}
-          className="text-muted-foreground hover:text-destructive"
+          className="text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-all"
         >
           <X className="h-4 w-4 mr-1" />
           Reject
         </Button>
       </CardFooter>
-    </Card>
+    </div>
   )
 }
 
@@ -333,7 +432,7 @@ export function CompletedActionCard({
   actionId,
   className,
 }: CompletedActionCardProps) {
-  const { color, bgColor } = categoryConfig[category]
+  const styles = categoryConfig[category]
   const IconComponent = getToolIcon(toolName)
   const hasPreview = hasRichPreview(toolName)
 
@@ -341,42 +440,83 @@ export function CompletedActionCard({
     ([key]) => !['workspaceId', 'teamId'].includes(key)
   )
 
-  return (
-    <Card className={cn('w-full max-w-lg overflow-hidden', className)}>
-      {/* Status bar */}
-      <div className={cn(
-        'h-1',
-        status === 'completed' ? 'bg-green-500' : 'bg-red-500'
-      )} />
+  // Status-specific premium styles
+  const statusStyles = {
+    completed: {
+      accentBar: 'bg-gradient-to-r from-emerald-500 to-green-500',
+      badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+      glow: 'shadow-emerald-500/10',
+      overlay: 'from-emerald-500/5 via-transparent to-green-500/5',
+    },
+    failed: {
+      accentBar: 'bg-gradient-to-r from-red-500 to-rose-500',
+      badge: 'bg-red-500/10 text-red-400 border-red-500/30',
+      glow: 'shadow-red-500/10',
+      overlay: 'from-red-500/5 via-transparent to-rose-500/5',
+    },
+  }
 
-      <CardHeader className="pb-2 pt-3">
+  const currentStatus = statusStyles[status]
+
+  return (
+    <div
+      className={cn(
+        'w-full max-w-lg',
+        // Premium glassmorphism card
+        'relative overflow-hidden rounded-xl',
+        'bg-gradient-to-br from-background/95 via-background/90 to-background/80',
+        'backdrop-blur-xl',
+        'border border-white/10',
+        'shadow-lg shadow-black/5',
+        currentStatus.glow,
+        className
+      )}
+    >
+      {/* Premium status gradient accent bar */}
+      <div className={cn('h-1 w-full', currentStatus.accentBar)} />
+
+      {/* Subtle gradient overlay */}
+      <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', currentStatus.overlay)} />
+
+      <CardHeader className="relative pb-2 pt-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className={cn('p-1.5 rounded', bgColor)}>
-              <IconComponent className={cn('h-4 w-4', color)} />
+          <div className="flex items-center gap-2.5">
+            {/* Premium icon with gradient background */}
+            <div className={cn('p-2 rounded-lg', styles.iconBg)}>
+              <IconComponent className={cn('h-4 w-4', styles.iconColor)} />
             </div>
             <h3 className="font-semibold text-sm">{displayName}</h3>
           </div>
           <Badge
-            variant={status === 'completed' ? 'default' : 'destructive'}
-            className="text-xs"
+            variant="outline"
+            className={cn('text-xs gap-1', currentStatus.badge)}
           >
-            {status === 'completed' ? '✓ Created' : '✗ Failed'}
+            {status === 'completed' ? (
+              <>
+                <Check className="h-3 w-3" />
+                Created
+              </>
+            ) : (
+              <>
+                <X className="h-3 w-3" />
+                Failed
+              </>
+            )}
           </Badge>
         </div>
       </CardHeader>
 
-      <CardContent className="pb-3 pt-0 space-y-2">
-        {/* Error message */}
+      <CardContent className="relative pb-3 pt-0 space-y-2">
+        {/* Error message with premium styling */}
         {status === 'failed' && error && (
-          <div className="p-2 bg-red-100 dark:bg-red-900/20 rounded text-xs text-red-700 dark:text-red-400">
+          <div className="p-2.5 bg-red-500/10 rounded-lg border border-red-500/30 text-xs text-red-400">
             {error}
           </div>
         )}
 
         {/* Success: Show mini preview */}
         {status === 'completed' && hasPreview && (
-          <div className="border rounded-lg overflow-hidden bg-muted/30 opacity-80">
+          <div className="border border-white/10 rounded-lg overflow-hidden bg-background/30 opacity-90">
             <ToolPreviewRenderer
               toolName={toolName}
               params={params}
@@ -387,7 +527,7 @@ export function CompletedActionCard({
 
         {/* Fallback for non-preview tools */}
         {status === 'completed' && !hasPreview && (
-          <div className="text-xs text-muted-foreground space-y-1">
+          <div className="text-xs text-muted-foreground space-y-1 p-2 bg-white/5 rounded-lg">
             {displayParams.slice(0, 3).map(([key, value]) => (
               <div key={key}>
                 <span className="font-medium">{formatParamLabel(key)}:</span>{' '}
@@ -395,19 +535,20 @@ export function CompletedActionCard({
               </div>
             ))}
             {displayParams.length > 3 && (
-              <div>+{displayParams.length - 3} more fields</div>
+              <div className="text-muted-foreground/70">+{displayParams.length - 3} more fields</div>
             )}
           </div>
         )}
 
-        {/* Action ID */}
+        {/* Action ID with premium styling */}
         {status === 'completed' && actionId && (
-          <div className="text-xs text-muted-foreground pt-1 border-t">
-            ID: <span className="font-mono">{actionId}</span>
+          <div className="text-xs text-muted-foreground pt-2 border-t border-white/5 flex items-center gap-1.5">
+            <span>ID:</span>
+            <span className="font-mono bg-white/5 px-1.5 py-0.5 rounded">{actionId}</span>
           </div>
         )}
       </CardContent>
-    </Card>
+    </div>
   )
 }
 

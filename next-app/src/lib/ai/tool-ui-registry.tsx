@@ -26,8 +26,76 @@ import type {
   CreateTimelineItemParams,
   CreateInsightParams,
 } from './schemas/agentic-schemas'
-import { Loader2, Search, CheckCircle2, XCircle, ExternalLink } from 'lucide-react'
+import { Loader2, Search, CheckCircle2, XCircle, ExternalLink, Ban } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+
+// =============================================================================
+// PREMIUM STYLE CONSTANTS FOR STREAMING TOOLS
+// =============================================================================
+
+/**
+ * Premium streaming tool state styles
+ */
+const streamingStyles = {
+  running: {
+    base: cn(
+      'relative overflow-hidden rounded-xl',
+      'bg-gradient-to-br from-background/95 via-background/90 to-background/80',
+      'backdrop-blur-xl',
+      'border border-white/10',
+      'shadow-lg shadow-black/5'
+    ),
+    blue: {
+      accentBar: 'bg-gradient-to-r from-blue-500 to-cyan-500',
+      overlay: 'from-blue-500/5 via-transparent to-cyan-500/5',
+      glow: 'shadow-blue-500/10',
+      iconBg: 'bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border border-blue-500/30',
+      iconColor: 'text-blue-400',
+      textColor: 'text-blue-300',
+    },
+    purple: {
+      accentBar: 'bg-gradient-to-r from-purple-500 to-violet-500',
+      overlay: 'from-purple-500/5 via-transparent to-violet-500/5',
+      glow: 'shadow-purple-500/10',
+      iconBg: 'bg-gradient-to-br from-purple-500/20 to-violet-500/10 border border-purple-500/30',
+      iconColor: 'text-purple-400',
+      textColor: 'text-purple-300',
+    },
+    amber: {
+      accentBar: 'bg-gradient-to-r from-amber-500 to-orange-500',
+      overlay: 'from-amber-500/5 via-transparent to-orange-500/5',
+      glow: 'shadow-amber-500/10',
+      iconBg: 'bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30',
+      iconColor: 'text-amber-400',
+      textColor: 'text-amber-300',
+    },
+  },
+  success: {
+    accentBar: 'bg-gradient-to-r from-emerald-500 to-green-500',
+    overlay: 'from-emerald-500/5 via-transparent to-green-500/5',
+    glow: 'shadow-emerald-500/10',
+    iconBg: 'bg-gradient-to-br from-emerald-500/20 to-green-500/10 border border-emerald-500/30',
+    iconColor: 'text-emerald-400',
+    textColor: 'text-emerald-300',
+  },
+  error: {
+    accentBar: 'bg-gradient-to-r from-red-500 to-rose-500',
+    overlay: 'from-red-500/5 via-transparent to-rose-500/5',
+    glow: 'shadow-red-500/10',
+    iconBg: 'bg-gradient-to-br from-red-500/20 to-rose-500/10 border border-red-500/30',
+    iconColor: 'text-red-400',
+    textColor: 'text-red-300',
+  },
+  cancelled: {
+    accentBar: 'bg-gradient-to-r from-slate-500 to-zinc-500',
+    overlay: 'from-slate-500/5 via-transparent to-zinc-500/5',
+    glow: 'shadow-slate-500/10',
+    iconBg: 'bg-gradient-to-br from-slate-500/20 to-zinc-500/10 border border-slate-500/30',
+    iconColor: 'text-slate-400',
+    textColor: 'text-slate-300',
+  },
+}
 
 // =============================================================================
 // TYPES
@@ -121,9 +189,10 @@ function ConfirmationToolWrapper<TArgs extends Record<string, unknown>>({
         executionResult: {
           success: executionResult.success,
           actionId: executionResult.actionId,
-          status: executionResult.status === 'pending' ? 'completed' : executionResult.status,
+          // If status is still 'pending' after auto-approval, something went wrong
+          status: executionResult.status === 'pending' ? 'failed' : executionResult.status,
           result: executionResult.result,
-          error: executionResult.error,
+          error: executionResult.error || (executionResult.status === 'pending' ? 'Approval incomplete' : undefined),
         },
       })
     } catch (error) {
@@ -147,13 +216,27 @@ function ConfirmationToolWrapper<TArgs extends Record<string, unknown>>({
     addResult({ confirmed: false, cancelled: true })
   }
 
-  // Tool completed - show completion card
-  if (result) {
+  // Check if this is a USER confirmation result (from addResult) vs TOOL preview result
+  // Tool preview result has: { requiresApproval, preview, toolCallId }
+  // User confirmation result has: { confirmed, executionResult, params, cancelled }
+  const isUserConfirmationResult = result && ('confirmed' in result || 'cancelled' in result)
+
+  // Tool completed by user - show completion card
+  if (isUserConfirmationResult && result) {
     if (result.cancelled) {
       return (
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-800/50 text-zinc-400 text-sm">
-          <XCircle className="h-4 w-4" />
-          <span>{config.displayName} cancelled</span>
+        <div className={cn(streamingStyles.running.base, streamingStyles.cancelled.glow)}>
+          {/* Cancelled accent bar */}
+          <div className={cn('h-1 w-full', streamingStyles.cancelled.accentBar)} />
+          {/* Overlay */}
+          <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.cancelled.overlay)} />
+          {/* Content */}
+          <div className="relative flex items-center gap-2.5 px-3 py-2.5">
+            <div className={cn('p-1.5 rounded-lg', streamingStyles.cancelled.iconBg)}>
+              <Ban className={cn('h-4 w-4', streamingStyles.cancelled.iconColor)} />
+            </div>
+            <span className={cn('text-sm', streamingStyles.cancelled.textColor)}>{config.displayName} cancelled</span>
+          </div>
         </div>
       )
     }
@@ -178,9 +261,18 @@ function ConfirmationToolWrapper<TArgs extends Record<string, unknown>>({
   if (executeError) {
     return (
       <div className="space-y-2">
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-900/20 text-red-400 text-sm">
-          <XCircle className="h-4 w-4" />
-          <span>Error: {executeError}</span>
+        <div className={cn(streamingStyles.running.base, streamingStyles.error.glow)}>
+          {/* Error accent bar */}
+          <div className={cn('h-1 w-full', streamingStyles.error.accentBar)} />
+          {/* Overlay */}
+          <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.error.overlay)} />
+          {/* Content */}
+          <div className="relative flex items-center gap-2.5 px-3 py-2.5">
+            <div className={cn('p-1.5 rounded-lg', streamingStyles.error.iconBg)}>
+              <XCircle className={cn('h-4 w-4', streamingStyles.error.iconColor)} />
+            </div>
+            <span className={cn('text-sm', streamingStyles.error.textColor)}>Error: {executeError}</span>
+          </div>
         </div>
         <ToolConfirmationCard
           data={{
@@ -261,25 +353,43 @@ function createStreamingToolUI<TArgs extends Record<string, unknown>, TResult>(
   return makeAssistantToolUI<TArgs, TResult>({
     toolName,
     render: function StreamingToolUIRender({ args, result, status }) {
-      // Still running - show loading state
+      // Still running - show premium loading state
       if (status.type === 'running') {
         return (
           config.renderRunning?.(args) || (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-800/50 text-sm">
-              <Loader2 className="h-4 w-4 animate-spin text-blue-400" />
-              <span className="text-zinc-300">{config.displayName}...</span>
+            <div className={cn(streamingStyles.running.base, streamingStyles.running.blue.glow)}>
+              {/* Running accent bar */}
+              <div className={cn('h-1 w-full', streamingStyles.running.blue.accentBar)} />
+              {/* Overlay */}
+              <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.running.blue.overlay)} />
+              {/* Content */}
+              <div className="relative flex items-center gap-2.5 px-3 py-2.5">
+                <div className={cn('p-1.5 rounded-lg', streamingStyles.running.blue.iconBg)}>
+                  <Loader2 className={cn('h-4 w-4 animate-spin', streamingStyles.running.blue.iconColor)} />
+                </div>
+                <span className={cn('text-sm', streamingStyles.running.blue.textColor)}>{config.displayName}...</span>
+              </div>
             </div>
           )
         )
       }
 
-      // Completed - show result
+      // Completed - show premium result
       if (result) {
         return (
           config.renderResult?.(result) || (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-900/20 text-sm">
-              <CheckCircle2 className="h-4 w-4 text-green-400" />
-              <span className="text-green-300">{config.displayName} completed</span>
+            <div className={cn(streamingStyles.running.base, streamingStyles.success.glow)}>
+              {/* Success accent bar */}
+              <div className={cn('h-1 w-full', streamingStyles.success.accentBar)} />
+              {/* Overlay */}
+              <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.success.overlay)} />
+              {/* Content */}
+              <div className="relative flex items-center gap-2.5 px-3 py-2.5">
+                <div className={cn('p-1.5 rounded-lg', streamingStyles.success.iconBg)}>
+                  <CheckCircle2 className={cn('h-4 w-4', streamingStyles.success.iconColor)} />
+                </div>
+                <span className={cn('text-sm', streamingStyles.success.textColor)}>{config.displayName} completed</span>
+              </div>
             </div>
           )
         )
@@ -365,33 +475,51 @@ export const WebSearchToolUI = createStreamingToolUI<WebSearchArgs, WebSearchRes
     displayName: 'Web Search',
     category: 'analysis',
     renderRunning: (args) => (
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-900/20 text-sm">
-        <Search className="h-4 w-4 animate-pulse text-blue-400" />
-        <span className="text-blue-300">Searching: &quot;{args.query}&quot;</span>
+      <div className={cn(streamingStyles.running.base, streamingStyles.running.blue.glow)}>
+        {/* Running accent bar */}
+        <div className={cn('h-1 w-full', streamingStyles.running.blue.accentBar)} />
+        {/* Overlay */}
+        <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.running.blue.overlay)} />
+        {/* Content */}
+        <div className="relative flex items-center gap-2.5 px-3 py-2.5">
+          <div className={cn('p-1.5 rounded-lg', streamingStyles.running.blue.iconBg)}>
+            <Search className={cn('h-4 w-4 animate-pulse', streamingStyles.running.blue.iconColor)} />
+          </div>
+          <span className={cn('text-sm', streamingStyles.running.blue.textColor)}>Searching: &quot;{args.query}&quot;</span>
+        </div>
       </div>
     ),
     renderResult: (result) => (
-      <div className="space-y-2 rounded-lg bg-zinc-800/50 p-3">
-        <div className="flex items-center gap-2 text-sm text-zinc-400">
-          <Search className="h-4 w-4" />
-          <span>Found {result.totalResults} results</span>
-        </div>
-        <div className="space-y-1.5">
-          {result.results.slice(0, 3).map((item, i) => (
-            <a
-              key={i}
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block p-2 rounded bg-zinc-900/50 hover:bg-zinc-700/50 transition-colors"
-            >
-              <div className="flex items-center gap-2 text-blue-400 text-sm font-medium">
-                <ExternalLink className="h-3 w-3" />
-                {item.title}
-              </div>
-              <p className="text-xs text-zinc-500 mt-1 line-clamp-2">{item.snippet}</p>
-            </a>
-          ))}
+      <div className={cn(streamingStyles.running.base, streamingStyles.success.glow)}>
+        {/* Success accent bar */}
+        <div className={cn('h-1 w-full', streamingStyles.success.accentBar)} />
+        {/* Overlay */}
+        <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.success.overlay)} />
+        {/* Content */}
+        <div className="relative p-3 space-y-2.5">
+          <div className="flex items-center gap-2 text-sm">
+            <div className={cn('p-1.5 rounded-lg', streamingStyles.success.iconBg)}>
+              <Search className={cn('h-4 w-4', streamingStyles.success.iconColor)} />
+            </div>
+            <span className={cn(streamingStyles.success.textColor)}>Found {result.totalResults} results</span>
+          </div>
+          <div className="space-y-1.5">
+            {result.results.slice(0, 3).map((item, i) => (
+              <a
+                key={i}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-2.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+              >
+                <div className="flex items-center gap-2 text-blue-400 text-sm font-medium">
+                  <ExternalLink className="h-3 w-3" />
+                  {item.title}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{item.snippet}</p>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     ),
@@ -416,26 +544,44 @@ export const ExtractDataToolUI = createStreamingToolUI<ExtractDataArgs, ExtractD
     displayName: 'Extract Data',
     category: 'analysis',
     renderRunning: (args) => (
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-900/20 text-sm">
-        <Loader2 className="h-4 w-4 animate-spin text-purple-400" />
-        <span className="text-purple-300">Extracting from: {args.url}</span>
+      <div className={cn(streamingStyles.running.base, streamingStyles.running.purple.glow)}>
+        {/* Running accent bar */}
+        <div className={cn('h-1 w-full', streamingStyles.running.purple.accentBar)} />
+        {/* Overlay */}
+        <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.running.purple.overlay)} />
+        {/* Content */}
+        <div className="relative flex items-center gap-2.5 px-3 py-2.5">
+          <div className={cn('p-1.5 rounded-lg', streamingStyles.running.purple.iconBg)}>
+            <Loader2 className={cn('h-4 w-4 animate-spin', streamingStyles.running.purple.iconColor)} />
+          </div>
+          <span className={cn('text-sm', streamingStyles.running.purple.textColor)}>Extracting from: {args.url}</span>
+        </div>
       </div>
     ),
-    renderResult: (result) => (
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-900/20 text-sm">
-        {result.success ? (
-          <>
-            <CheckCircle2 className="h-4 w-4 text-green-400" />
-            <span className="text-green-300">Data extracted successfully</span>
-          </>
-        ) : (
-          <>
-            <XCircle className="h-4 w-4 text-red-400" />
-            <span className="text-red-300">Extraction failed</span>
-          </>
-        )}
-      </div>
-    ),
+    renderResult: (result) => {
+      const styles = result.success ? streamingStyles.success : streamingStyles.error
+      return (
+        <div className={cn(streamingStyles.running.base, styles.glow)}>
+          {/* Result accent bar */}
+          <div className={cn('h-1 w-full', styles.accentBar)} />
+          {/* Overlay */}
+          <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', styles.overlay)} />
+          {/* Content */}
+          <div className="relative flex items-center gap-2.5 px-3 py-2.5">
+            <div className={cn('p-1.5 rounded-lg', styles.iconBg)}>
+              {result.success ? (
+                <CheckCircle2 className={cn('h-4 w-4', styles.iconColor)} />
+              ) : (
+                <XCircle className={cn('h-4 w-4', styles.iconColor)} />
+              )}
+            </div>
+            <span className={cn('text-sm', styles.textColor)}>
+              {result.success ? 'Data extracted successfully' : 'Extraction failed'}
+            </span>
+          </div>
+        </div>
+      )
+    },
   }
 )
 
@@ -465,34 +611,63 @@ export const AnalyzeFeedbackToolUI = createStreamingToolUI<AnalyzeFeedbackArgs, 
     displayName: 'Analyze Feedback',
     category: 'analysis',
     renderRunning: () => (
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-900/20 text-sm">
-        <Loader2 className="h-4 w-4 animate-spin text-amber-400" />
-        <span className="text-amber-300">Analyzing feedback...</span>
+      <div className={cn(streamingStyles.running.base, streamingStyles.running.amber.glow)}>
+        {/* Running accent bar */}
+        <div className={cn('h-1 w-full', streamingStyles.running.amber.accentBar)} />
+        {/* Overlay */}
+        <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.running.amber.overlay)} />
+        {/* Content */}
+        <div className="relative flex items-center gap-2.5 px-3 py-2.5">
+          <div className={cn('p-1.5 rounded-lg', streamingStyles.running.amber.iconBg)}>
+            <Loader2 className={cn('h-4 w-4 animate-spin', streamingStyles.running.amber.iconColor)} />
+          </div>
+          <span className={cn('text-sm', streamingStyles.running.amber.textColor)}>Analyzing feedback...</span>
+        </div>
       </div>
     ),
     renderResult: (result) => (
-      <div className="space-y-2 rounded-lg bg-zinc-800/50 p-3">
-        <p className="text-sm text-zinc-300">{result.summary}</p>
-        <div className="flex gap-2">
-          <Badge variant="outline" className="text-green-400 border-green-800">
-            +{result.sentimentBreakdown.positive}
-          </Badge>
-          <Badge variant="outline" className="text-zinc-400 border-zinc-700">
-            ~{result.sentimentBreakdown.neutral}
-          </Badge>
-          <Badge variant="outline" className="text-red-400 border-red-800">
-            -{result.sentimentBreakdown.negative}
-          </Badge>
-        </div>
-        {result.topThemes.length > 0 && (
-          <div className="flex flex-wrap gap-1 pt-1">
-            {result.topThemes.map((theme, i) => (
-              <Badge key={i} variant="secondary" className="text-xs">
-                {theme}
-              </Badge>
-            ))}
+      <div className={cn(streamingStyles.running.base, streamingStyles.running.amber.glow)}>
+        {/* Success accent bar */}
+        <div className={cn('h-1 w-full', streamingStyles.running.amber.accentBar)} />
+        {/* Overlay */}
+        <div className={cn('absolute inset-0 bg-gradient-to-br pointer-events-none', streamingStyles.running.amber.overlay)} />
+        {/* Content */}
+        <div className="relative p-3 space-y-2.5">
+          <p className="text-sm text-foreground/90">{result.summary}</p>
+          <div className="flex gap-2">
+            <Badge
+              variant="outline"
+              className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+            >
+              +{result.sentimentBreakdown.positive}
+            </Badge>
+            <Badge
+              variant="outline"
+              className="bg-slate-500/10 text-slate-400 border-slate-500/30"
+            >
+              ~{result.sentimentBreakdown.neutral}
+            </Badge>
+            <Badge
+              variant="outline"
+              className="bg-red-500/10 text-red-400 border-red-500/30"
+            >
+              -{result.sentimentBreakdown.negative}
+            </Badge>
           </div>
-        )}
+          {result.topThemes.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {result.topThemes.map((theme, i) => (
+                <Badge
+                  key={i}
+                  variant="outline"
+                  className="text-xs bg-white/5 border-white/10 hover:bg-white/10"
+                >
+                  {theme}
+                </Badge>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     ),
   }

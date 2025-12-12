@@ -200,7 +200,7 @@ CREATE INDEX idx_invitations_phase_assignments ON invitations USING gin (phase_a
 
 ### **workspaces**
 
-Projects/products with phase tracking and enabled modules.
+Projects/products with mode and enabled modules.
 
 ```sql
 CREATE TABLE workspaces (
@@ -208,10 +208,9 @@ CREATE TABLE workspaces (
   team_id TEXT REFERENCES teams(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   description TEXT,
-  phase TEXT CHECK (phase IN (
-    'research', 'planning', 'review',
-    'execution', 'testing', 'metrics', 'complete'
-  )) DEFAULT 'research',
+  mode TEXT CHECK (mode IN (
+    'development', 'launch', 'growth', 'maintenance'
+  )) DEFAULT 'development',
   enabled_modules JSONB DEFAULT '["research", "mind_map", "features"]'::jsonb,
   color TEXT DEFAULT '#3B82F6',
   icon TEXT DEFAULT '📊',
@@ -222,8 +221,18 @@ CREATE TABLE workspaces (
 );
 
 CREATE INDEX idx_workspaces_team_id ON workspaces(team_id);
-CREATE INDEX idx_workspaces_phase ON workspaces(phase);
+CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 ```
+
+**Field Explanations:**
+
+- **mode**: Workspace lifecycle context (NOT a stage). Determines default phase for new work items and type weighting.
+  - `development`: Building from scratch (default phase: planning)
+  - `launch`: Racing to release (default phase: execution)
+  - `growth`: Iterating on feedback (default phase: review)
+  - `maintenance`: Stability focus (default phase: execution)
+
+**Note:** Workspace does NOT have a `phase` or `stage` field. Phase distribution is AGGREGATED from work_items.
 
 ---
 
@@ -241,11 +250,15 @@ CREATE TABLE work_items (
   name TEXT NOT NULL,
   type TEXT NOT NULL, -- 'concept', 'feature', 'bug', 'enhancement'
   purpose TEXT,
-  status TEXT DEFAULT 'not_started', -- 'not_started', 'in_progress', 'in_review', 'completed', 'on_hold'
   owner TEXT, -- Assigned user ID
 
-  -- Phase-based access control
+  -- Phase IS the status (no separate status field!)
   phase TEXT NOT NULL CHECK (phase IN ('research', 'planning', 'execution', 'review', 'complete')),
+
+  -- Phase transition tracking
+  phase_changed_at TIMESTAMPTZ,
+  phase_changed_by UUID REFERENCES users(id),
+  previous_phase TEXT,
 
   -- Hierarchy support
   parent_id TEXT REFERENCES work_items(id) ON DELETE CASCADE,
@@ -289,6 +302,24 @@ CREATE INDEX idx_work_items_flow ON work_items(flow_id);
 CREATE INDEX idx_work_items_parent ON work_items(parent_work_item_id);
 CREATE INDEX idx_work_items_is_note ON work_items(is_note) WHERE is_note = true;
 ```
+
+**Field Explanations:**
+
+- **phase**: The lifecycle stage of this work item. **This IS the status** - there is NO separate status field.
+  - `research`: Initial exploration, problem understanding
+  - `planning`: Structure, scope, timeline breakdown
+  - `execution`: Active development work
+  - `review`: Testing, validation, feedback
+  - `complete`: Shipped, launched, done
+
+- **phase_changed_at**: Timestamp of last phase transition (for audit trail)
+- **phase_changed_by**: User who changed the phase (for accountability)
+- **previous_phase**: The phase before current one (for rollback context)
+
+**Critical Clarification:**
+- Work item `phase` = status (one field, dual purpose)
+- Timeline item has separate `status` field (not_started, in_progress, blocked, completed, on_hold, cancelled)
+- Workspace has NO phase field - only `mode` field and AGGREGATED phase distribution
 
 **RLS Policies:**
 - `Team members can view team work items` - SELECT via team membership
@@ -805,6 +836,95 @@ CREATE INDEX idx_feedback_priority ON feedback(priority);
 CREATE INDEX idx_feedback_status ON feedback(status);
 CREATE INDEX idx_feedback_received_at ON feedback(received_at DESC);
 ```
+
+---
+
+## Strategy System Tables
+
+### **product_strategies**
+
+Four-tier OKR/Pillar hierarchy for organization-wide and work-item-level strategy alignment.
+
+```sql
+CREATE TABLE public.product_strategies (
+  id TEXT PRIMARY KEY DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT::TEXT,
+  team_id TEXT NOT NULL REFERENCES public.teams(id) ON DELETE CASCADE,
+  workspace_id TEXT REFERENCES public.workspaces(id) ON DELETE CASCADE,
+
+  -- Hierarchy
+  parent_id TEXT REFERENCES public.product_strategies(id) ON DELETE CASCADE,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+
+  -- Strategy types (4-tier)
+  type TEXT NOT NULL CHECK (type IN ('pillar', 'objective', 'key_result', 'initiative')),
+
+  -- Core fields
+  name TEXT NOT NULL,
+  description TEXT,
+
+  -- Design Thinking fields (NEW - Phase System Enhancement)
+  user_stories TEXT[], -- User story examples for context
+  case_studies TEXT[], -- Reference case studies
+  user_examples TEXT[], -- Real user examples
+
+  -- Metrics
+  target_value NUMERIC,
+  current_value NUMERIC,
+  unit TEXT,
+
+  -- Tracking
+  status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'paused', 'cancelled')),
+  owner_id UUID REFERENCES public.users(id),
+
+  -- Timestamps
+  start_date DATE,
+  end_date DATE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_by UUID NOT NULL REFERENCES public.users(id)
+);
+
+CREATE INDEX idx_product_strategies_team ON public.product_strategies(team_id);
+CREATE INDEX idx_product_strategies_workspace ON public.product_strategies(workspace_id);
+CREATE INDEX idx_product_strategies_parent ON public.product_strategies(parent_id);
+CREATE INDEX idx_product_strategies_type ON public.product_strategies(type);
+CREATE INDEX idx_product_strategies_hierarchy ON public.product_strategies(parent_id, sort_order);
+```
+
+**Strategy Type Hierarchy:**
+
+| Level | Type | Purpose | Display Context |
+|-------|------|---------|-----------------|
+| 1 | **pillar** | Organization-wide theme | Full tree view with user stories, case studies |
+| 2 | **objective** | Team/department goal | Nested under pillar with metrics |
+| 3 | **key_result** | Measurable outcome | Progress indicators with target/actual |
+| 4 | **initiative** | Specific action | Task-like cards with timeline, assignees |
+
+**Design Thinking Fields (NEW):**
+
+- **user_stories**: TEXT[] - User story examples that provide context and inspiration
+  - Example: ["As a product manager, I want to...", "As a developer, I need to..."]
+
+- **case_studies**: TEXT[] - Reference case studies showing real-world implementations
+  - Example: ["Spotify's squad model", "Google's OKR framework"]
+
+- **user_examples**: TEXT[] - Real user examples demonstrating need or impact
+  - Example: ["Sarah spent 3 hours manually...", "Team reported 40% time savings..."]
+
+**Display Modes:**
+
+1. **Organization Level** (Full Strategy Tree):
+   - Shows complete hierarchy with all tiers
+   - Displays user stories, case studies, examples for pillars
+   - High-level metrics and team-wide alignment
+   - Used in `/workspaces/[id]/strategies` page
+
+2. **Work Item Level** (Alignment View):
+   - Shows derived/aligned strategies only
+   - Displays alignment strength (weak/medium/strong)
+   - Specific requirements for this work item
+   - Actionable, focused view
+   - Used in work item detail page "Strategy" tab
 
 ---
 

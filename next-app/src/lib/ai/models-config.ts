@@ -9,6 +9,11 @@
  * - This registry returns the appropriate model
  * - OpenRouter handles provider routing, failover, and rate limiting
  *
+ * Multi-Model Orchestration:
+ * - Invisible routing: Users don't see model switching
+ * - Two-step vision: Gemini analyzes images → chat model responds
+ * - Capability-based: Route by need (tools, reasoning, context size)
+ *
  * @see https://openrouter.ai/docs for provider-level features
  */
 
@@ -31,6 +36,7 @@ export type ModelCapability =
   | 'speed' // Optimized for speed / low latency
   | 'reasoning' // Deep reasoning capability
   | 'realtime' // Real-time data access
+  | 'vision' // Can analyze images (for internal use)
 
 /**
  * Provider configuration
@@ -38,6 +44,23 @@ export type ModelCapability =
  * Currently OpenRouter only, but designed for future multi-provider support.
  */
 export type ModelProvider = 'openrouter'
+
+/**
+ * Routing priority configuration
+ *
+ * Lower number = higher priority for that capability.
+ * Used by message analyzer to select optimal model.
+ */
+export interface RoutingPriority {
+  /** Priority for vision tasks (1 = best for vision) */
+  vision: number
+  /** Priority for tool use (1 = best for tools) */
+  tools: number
+  /** Priority for deep reasoning (1 = best for reasoning) */
+  reasoning: number
+  /** Priority as default model (1 = first choice) */
+  default: number
+}
 
 /**
  * Complete model configuration
@@ -81,6 +104,32 @@ export interface ModelConfig {
 
   /** Provider-specific settings (passed to OpenRouter) */
   providerSettings?: Record<string, unknown>
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // NEW: Capability flags for intelligent routing
+  // ─────────────────────────────────────────────────────────────────────────
+
+  /** Can this model analyze images? (Only Gemini Flash currently) */
+  supportsVision: boolean
+
+  /** Is this model optimized for tool calling? */
+  supportsTools: boolean
+
+  /** Does this model support extended thinking / deep reasoning? */
+  supportsReasoning: boolean
+
+  /** Should we show "Deep thinking..." indicator? (for slow models like DeepSeek) */
+  isSlowModel: boolean
+
+  /** Routing priority - lower number = higher priority for each capability */
+  priority: RoutingPriority
+
+  /**
+   * Model role in the system
+   * - 'chat': User-facing responses (Kimi K2, Claude, DeepSeek, Grok)
+   * - 'vision': Internal image analysis only (Gemini Flash)
+   */
+  role: 'chat' | 'vision'
 }
 
 // =============================================================================
@@ -104,7 +153,8 @@ export interface ModelConfig {
  */
 export const MODEL_REGISTRY: ModelConfig[] = [
   // ─────────────────────────────────────────────────────────────────────────
-  // Kimi K2 Thinking - CHEAPEST, good reasoning
+  // Kimi K2 Thinking - CHEAPEST, good reasoning, handles tools well
+  // DEFAULT model for all chat responses
   // ─────────────────────────────────────────────────────────────────────────
   {
     key: 'kimi-k2',
@@ -112,16 +162,48 @@ export const MODEL_REGISTRY: ModelConfig[] = [
     modelId: 'moonshotai/kimi-k2-thinking:nitro',
     displayName: 'Kimi K2 Thinking',
     icon: '🧠',
-    capabilities: ['default', 'cost_effective', 'reasoning'],
+    capabilities: ['default', 'cost_effective', 'reasoning', 'tool_use'],
     contextLimit: 262_000,
     compactAt: 210_000, // 80% of 262K
     costPer1M: { input: 0.15, output: 2.5 },
     isDefault: true,
     providerSettings: { data_collection: 'deny' },
+    // NEW: Capability flags
+    supportsVision: false,
+    supportsTools: true,
+    supportsReasoning: true,
+    isSlowModel: false,
+    priority: { vision: 99, tools: 2, reasoning: 2, default: 1 },
+    role: 'chat',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // DeepSeek V3.2 - Best for tool use / agentic workflows
+  // Claude Haiku 4.5 - Fast, reliable, BEST for tool use (agentic mode)
+  // Routes here when tools are needed
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    key: 'claude-haiku',
+    provider: 'openrouter',
+    modelId: 'anthropic/claude-haiku-4.5:nitro',
+    displayName: 'Claude Haiku 4.5',
+    icon: '⚡',
+    capabilities: ['quality', 'tool_use', 'speed'],
+    contextLimit: 200_000,
+    compactAt: 160_000, // 80% of 200K
+    costPer1M: { input: 1.0, output: 5.0 },
+    // Anthropic doesn't train on API data by default
+    // NEW: Capability flags
+    supportsVision: false,
+    supportsTools: true,
+    supportsReasoning: false,
+    isSlowModel: false,
+    priority: { vision: 99, tools: 1, reasoning: 3, default: 2 }, // Best for tools
+    role: 'chat',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // DeepSeek V3.2 - Deep reasoning (SLOW - shows "Deep thinking..." indicator)
+  // Routes here for complex analysis requests
   // ─────────────────────────────────────────────────────────────────────────
   {
     key: 'deepseek-v3',
@@ -129,15 +211,23 @@ export const MODEL_REGISTRY: ModelConfig[] = [
     modelId: 'deepseek/deepseek-v3.2:nitro',
     displayName: 'DeepSeek V3.2',
     icon: '🔮',
-    capabilities: ['tool_use', 'reasoning'],
+    capabilities: ['reasoning'],
     contextLimit: 163_000,
     compactAt: 130_000, // 80% of 163K
     costPer1M: { input: 0.28, output: 0.4 },
     providerSettings: { data_collection: 'deny' },
+    // NEW: Capability flags
+    supportsVision: false,
+    supportsTools: false, // Too slow for tool loops
+    supportsReasoning: true,
+    isSlowModel: true, // Shows "Deep thinking..." indicator
+    priority: { vision: 99, tools: 99, reasoning: 1, default: 4 }, // Best for reasoning
+    role: 'chat',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
   // Grok 4 Fast - LARGEST context (2M), real-time data
+  // Routes here when context exceeds 200K tokens
   // ─────────────────────────────────────────────────────────────────────────
   {
     key: 'grok-4',
@@ -150,22 +240,37 @@ export const MODEL_REGISTRY: ModelConfig[] = [
     compactAt: 1_600_000, // 80% of 2M
     costPer1M: { input: 0.2, output: 0.5 },
     // No data_collection setting - xAI doesn't train on API data
+    // NEW: Capability flags
+    supportsVision: false,
+    supportsTools: true,
+    supportsReasoning: false,
+    isSlowModel: false,
+    priority: { vision: 99, tools: 3, reasoning: 4, default: 3 },
+    role: 'chat',
   },
 
   // ─────────────────────────────────────────────────────────────────────────
-  // Claude Haiku 4.5 - Premium quality
+  // Gemini 2.5 Flash - VISION ONLY (internal image analyzer)
+  // NOT a chat model - only used for Step 1 of image analysis
+  // User NEVER sees output from this model directly
   // ─────────────────────────────────────────────────────────────────────────
   {
-    key: 'claude-haiku',
+    key: 'gemini-flash',
     provider: 'openrouter',
-    modelId: 'anthropic/claude-haiku-4.5:nitro',
-    displayName: 'Claude Haiku 4.5',
-    icon: '⚡',
-    capabilities: ['quality', 'reasoning'],
-    contextLimit: 200_000,
-    compactAt: 160_000, // 80% of 200K
-    costPer1M: { input: 1.0, output: 5.0 },
-    // Anthropic doesn't train on API data by default
+    modelId: 'google/gemini-2.5-flash-preview',
+    displayName: 'Gemini Flash (Vision)',
+    icon: '👁️',
+    capabilities: ['vision', 'speed'],
+    contextLimit: 1_000_000,
+    compactAt: 800_000, // 80% of 1M
+    costPer1M: { input: 0.15, output: 0.6 },
+    // NEW: Capability flags
+    supportsVision: true, // PRIMARY VISION MODEL
+    supportsTools: true,
+    supportsReasoning: false,
+    isSlowModel: false,
+    priority: { vision: 1, tools: 4, reasoning: 99, default: 99 }, // Only for vision
+    role: 'vision', // Internal only - never chat-facing
   },
 ]
 
@@ -240,6 +345,90 @@ export function getAllModels(): ModelConfig[] {
  */
 export function getAllModelKeys(): string[] {
   return MODEL_REGISTRY.map((m) => m.key)
+}
+
+// =============================================================================
+// INTELLIGENT ROUTING HELPERS
+// =============================================================================
+
+/**
+ * Get all chat-facing models (excludes vision-only models)
+ *
+ * Usage:
+ * ```typescript
+ * const chatModels = getChatModels()
+ * // Returns: [Kimi K2, Claude Haiku, DeepSeek, Grok] - NOT Gemini
+ * ```
+ */
+export function getChatModels(): ModelConfig[] {
+  return MODEL_REGISTRY.filter((m) => m.role === 'chat')
+}
+
+/**
+ * Get the vision model (for internal image analysis)
+ *
+ * Usage:
+ * ```typescript
+ * const visionModel = getVisionModel()
+ * // Returns: Gemini Flash
+ * ```
+ */
+export function getVisionModel(): ModelConfig | undefined {
+  return MODEL_REGISTRY.find((m) => m.supportsVision && m.role === 'vision')
+}
+
+/**
+ * Get the best model for a specific capability based on priority
+ *
+ * Usage:
+ * ```typescript
+ * const toolModel = getBestModelForCapability('tools')
+ * // Returns: Claude Haiku (priority.tools = 1)
+ *
+ * const reasoningModel = getBestModelForCapability('reasoning')
+ * // Returns: DeepSeek V3.2 (priority.reasoning = 1)
+ * ```
+ */
+export function getBestModelForCapability(
+  capability: keyof RoutingPriority
+): ModelConfig {
+  const chatModels = getChatModels()
+  return chatModels.reduce((best, current) =>
+    current.priority[capability] < best.priority[capability] ? current : best
+  )
+}
+
+/**
+ * Get model for large context overflow (>200K tokens)
+ *
+ * Usage:
+ * ```typescript
+ * const largeContextModel = getLargeContextModel()
+ * // Returns: Grok 4 (2M context)
+ * ```
+ */
+export function getLargeContextModel(): ModelConfig | undefined {
+  return MODEL_REGISTRY.find((m) => m.capabilities.includes('large_context'))
+}
+
+/**
+ * Check if a model shows the slow indicator
+ */
+export function isSlowModel(modelKey: string): boolean {
+  const model = getModelByKey(modelKey)
+  return model?.isSlowModel ?? false
+}
+
+/**
+ * Dev accounts that see the debug panel
+ */
+export const DEV_EMAILS = ['harsha@befach.com']
+
+/**
+ * Check if user is in dev mode
+ */
+export function isDevMode(email: string | null | undefined): boolean {
+  return email ? DEV_EMAILS.includes(email) : false
 }
 
 // =============================================================================

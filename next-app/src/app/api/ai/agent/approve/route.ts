@@ -37,6 +37,13 @@ import { createClient } from '@/lib/supabase/server'
 import { agentExecutor } from '@/lib/ai/agent-executor'
 import { z } from 'zod'
 
+// Import tools to ensure they are registered in the tool registry
+// These are side-effect imports that register tools when loaded
+import '@/lib/ai/tools/creation-tools'
+import '@/lib/ai/tools/analysis-tools'
+import '@/lib/ai/tools/optimization-tools'
+import '@/lib/ai/tools/strategy-tools'
+
 const ApproveRequestSchema = z.union([
   z.object({
     actionId: z.string().describe('Single action to approve'),

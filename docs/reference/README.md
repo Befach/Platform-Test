@@ -1,6 +1,6 @@
 # 📚 Technical Reference Documentation
 
-**Last Updated:** 2025-11-14
+**Last Updated:** 2025-12-09
 
 [← Back to Root](../../README.md)
 
@@ -27,7 +27,7 @@ Complete API documentation for all 20+ endpoints.
 - Review & Feedback API (public links, feedback submission)
 - AI Assistant API (chat, suggestions, tool calling)
 - Analytics API (dashboards, metrics)
-- Webhooks (Stripe, email delivery)
+- Webhooks (Razorpay, email delivery)
 
 ---
 
@@ -65,7 +65,7 @@ Complete migration and feature implementation history.
 - Understanding undocumented decisions
 
 **Tracks:**
-- 24 database migrations
+- 44 database migrations
 - Breaking changes
 - Undocumented decisions
 - Feature additions
@@ -100,7 +100,7 @@ Complete migration and feature implementation history.
 - **Auth**: Supabase Auth (magic links + OAuth)
 - **Real-time**: Supabase Realtime (WebSocket)
 - **AI**: OpenRouter (Claude Haiku, Perplexity, Grok)
-- **Payments**: Stripe (subscriptions + metered billing)
+- **Payments**: Razorpay (subscriptions + metered billing)
 - **Email**: Resend (transactional)
 - **Deployment**: Vercel (serverless)
 

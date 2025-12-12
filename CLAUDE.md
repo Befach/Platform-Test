@@ -1,9 +1,43 @@
 # 📚 Project Guidelines & Quick Reference
 
-**Last Updated**: 2025-12-08 <!-- Added: Multi-Agent Orchestration, Context Management, Git Workflow, React Grab, Slash Commands -->
+**Last Updated**: 2025-12-11 <!-- Added: Platform Architecture (Core Concepts) section with two-layer system, phase vs status, Design Thinking, strategy hierarchy -->
 **Project**: Product Lifecycle Management Platform
 **Tech Stack**: Next.js 15 + TypeScript + Supabase + Vercel
-**Current Status**: Week 6 (60-65% overall)
+**Current Status**: Week 7/12 (90% overall)
+
+---
+
+## 🚨 ARCHITECTURE GUARDRAILS (MANDATORY)
+
+**CRITICAL**: If the user proposes changes that contradict these established decisions, Claude MUST:
+1. **STOP** and question the deviation
+2. **REMIND** the user of the established architecture
+3. **ASK** "Why are we changing this approach? We already decided on X."
+
+### Established Architecture Decisions (Do NOT Deviate Without Explicit Discussion)
+
+| Decision | Correct Approach | WRONG Approach |
+|----------|------------------|----------------|
+| **Phase vs Status** | Phase IS the status for work items (same field) | Separate phase and status fields |
+| **Workspace Display** | Shows AGGREGATION (distribution across phases) | Has single stage/phase value |
+| **Timeline Items** | Have SEPARATE status field for task execution | Share status with work items |
+| **Design Thinking** | METHODOLOGY for how to work (not lifecycle) | Lifecycle stages to progress through |
+| **Strategy Display** | DIFFERENT at org level vs work-item level | Same display everywhere |
+| **Phase Upgrades** | Prompted at WORK ITEM level (80% threshold) | Prompted at workspace level |
+
+### Canonical Reference
+**`docs/ARCHITECTURE_CONSOLIDATION.md`** is the single source of truth. When in doubt, consult this file.
+
+### Example Corrections
+
+**User says**: "Let's add a status field to work items"
+**Claude responds**: "Wait - we established that phase IS the status for work items. They're the same field. Why do we need a separate status? The timeline items have separate status for task-level tracking. Are you sure you want to change this?"
+
+**User says**: "The workspace should show which stage it's in"
+**Claude responds**: "We decided that workspaces show phase DISTRIBUTION (aggregation), not a single stage. Each work item has its own phase. The workspace shows '10 in research, 15 in planning...' - why would we want a single stage value?"
+
+**User says**: "Design Thinking should be our lifecycle stages"
+**Claude responds**: "Design Thinking is documented as a METHODOLOGY/framework for HOW to work at each phase, not lifecycle stages to progress through. The phases are: research → planning → execution → review → complete. Design Thinking (Empathize, Define, Ideate, Prototype, Test) guides the APPROACH at each phase. Did you want to reconsider this?"
 
 ---
 
@@ -12,6 +46,7 @@
 ### Essential Documentation (Read These First!)
 
 #### Planning & Architecture
+0. **[docs/ARCHITECTURE_CONSOLIDATION.md](docs/ARCHITECTURE_CONSOLIDATION.md)** - ⭐ CANONICAL source of truth for all architecture decisions
 1. **[docs/implementation/README.md](docs/implementation/README.md)** - Week-by-week implementation guide (main entry point)
 2. **[docs/planning/MASTER_IMPLEMENTATION_ROADMAP.md](docs/planning/MASTER_IMPLEMENTATION_ROADMAP.md)** - Complete dependency graph and implementation sequence for future features
 3. **[docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md)** - System architecture with Mermaid diagrams
@@ -39,12 +74,13 @@
 Framework:    Next.js 15 + TypeScript (App Router, Server Components)
 Database:     Supabase (PostgreSQL + Real-time + Auth + RLS)
 UI:           shadcn/ui + Tailwind CSS + Lucide React
-Mind Mapping: ReactFlow (custom nodes, AI-powered)
+Mind Mapping: XYFlow/ReactFlow (custom nodes, AI-powered)
 Charts:       Recharts (10+ chart types)
-Testing:      Playwright (E2E) + Jest (Unit)
-Payments:     Razorpay (Orders + Subscriptions + Webhooks) - India-compatible
+Testing:      Playwright (E2E)
+Payments:     Stripe (Checkout, Subscriptions, Webhooks)
 Email:        Resend (Invitations, notifications)
-AI:           OpenRouter (Claude Haiku, Perplexity, Grok)
+AI:           OpenRouter (Kimi K2, DeepSeek V3.2, Grok 4, Claude Haiku 4.5)
+State:        Zustand + React Query
 Deployment:   Vercel (Serverless functions)
 ```
 
@@ -105,6 +141,25 @@ Skills must be invoked automatically at appropriate phases WITHOUT user promptin
   }
 }
 ```
+
+### Slash Commands
+
+#### MAKER Commands (Multi-Agent Reliability)
+| Command | Purpose | Agents Used |
+|---------|---------|-------------|
+| `/decompose` | Break task into atomic steps (MAD) | `Explore` → `Plan` → TodoWrite |
+| `/validate-consensus` | K-threshold voting (2/3 must approve) | `code-reviewer` + `architect-review` + `security-auditor` (PARALLEL) |
+| `/red-flag-check` | Detect issues by severity | `debugger` OR `code-reviewer` |
+
+#### Operational Commands
+| Command | Purpose | Description |
+|---------|---------|-------------|
+| `/db-migration` | Database migration workflow | RLS policies, team_id, migration template |
+| `/security-review` | OWASP security checklist | Top 10 + project-specific checks |
+| `/tdd-feature` | Test-driven development | Red-green-refactor workflow |
+| `/week-update` | Progress documentation | Weekly update template |
+
+**Full workflow docs**: [docs/processes/MAKER_WORKFLOW.md](docs/processes/MAKER_WORKFLOW.md)
 
 ### Dev Server Policy
 
@@ -273,20 +328,139 @@ Transform roadmap manager into **Product Lifecycle Management Platform**:
 5. **Test & Iterate** - User feedback collection and analysis
 6. **Measure Success** - Analytics, expected vs actual performance tracking
 
-### Key Features (10 Modules)
+### Key Features (15 Modules)
 
-| Module | Week | Priority | Description |
-|--------|------|----------|-------------|
-| **Mind Mapping** 🧠 | 3 | **CRITICAL** | ReactFlow canvas, 5 node types, convert to features |
-| Research & Discovery 🔍 | 7 | High | AI chat, web search, knowledge base |
-| Feature Planning 📋 | 4 | High | CRUD, timeline breakdown, rich text |
-| Dependency Management 🔗 | 4 | High | Visual graph, 4 link types, critical path |
-| Review & Feedback 👥 | 5 | Medium | Invite-based, public links, iframe (Pro) |
-| Project Execution 🚀 | 6 | Medium | Team assignment, status tracking |
-| Collaboration 🤝 | 6 | Medium | Real-time editing, live cursors (Pro) |
-| Timeline Visualization 📅 | 6 | High | Gantt chart, swimlanes, drag-to-reschedule |
-| Analytics & Metrics 📊 | 7 | Medium | 4 pre-built dashboards, custom builder (Pro) |
-| AI Assistant 🤖 | 7 | High | Chat panel, agentic mode, 20+ tools |
+| Module | Week | Status | Description |
+|--------|------|--------|-------------|
+| **Foundation & Multi-Tenancy** 🏗️ | 1-2 | ✅ 100% | Auth, teams, RLS, base schema |
+| **Mind Mapping** 🧠 | 3 | ✅ 100% | XYFlow canvas, 5 node types, convert to features |
+| Feature Planning 📋 | 4 | ⚠️ 80% | CRUD, timeline breakdown, rich text |
+| Dependency Management 🔗 | 4 | ⚠️ 80% | Visual graph, 4 link types (critical path pending) |
+| **Team Management** 👥 | 5 | ✅ 100% | Invitations, roles, phase assignments |
+| **Work Items UI** 📝 | 5 | ✅ 100% | Full CRUD, product tasks, dual canvas |
+| Timeline Visualization 📅 | 6 | ❌ 0% | Gantt chart, swimlanes, drag-to-reschedule |
+| Project Execution 🚀 | 6 | ❌ 0% | Team assignment, status tracking |
+| Collaboration 🤝 | 6 | ❌ 0% | Real-time editing, live cursors (Pro) |
+| **Analytics & Metrics** 📊 | 7 | ✅ 95% | 4 pre-built dashboards, custom builder (Pro) |
+| **AI Assistant** 🤖 | 7 | ✅ 95% | Chat panel, agentic mode, 20+ tools |
+| **Workspace Modes** 🎯 | 7 | ✅ 100% | 4 lifecycle modes, progressive forms, templates |
+| **Strategy Alignment** 🎯 | 7 | ✅ 100% | OKR/Pillar hierarchy, drag-drop, AI suggestions |
+| **Knowledge Base** 📚 | 7 | ✅ 90% | RAG, pgvector, L2-L4 compression |
+| Review & Feedback 👥 | 7 | ✅ 100% | Public forms, voting, insights dashboard |
+| Billing & Testing 💳 | 8 | ❌ 0% | Stripe integration, E2E test suite |
+
+---
+
+## 🏛️ PLATFORM ARCHITECTURE (Core Concepts)
+
+### Two-Layer System
+
+The platform uses a **two-layer architecture** (NOT three):
+
+```
+WORKSPACE (Aggregation View)
+├── mode: development | launch | growth | maintenance
+├── Shows: Phase DISTRIBUTION across all work items
+│   Example: "10 in research, 15 in planning, 8 in execution..."
+│
+└── WORK ITEMS (Individual Phase Tracking)
+    ├── phase: research | planning | execution | review | complete
+    │         ↑ THIS IS THE STATUS - No separate status field!
+    │
+    └── TIMELINE ITEMS (MVP/SHORT/LONG breakdowns)
+        └── status: not_started | in_progress | blocked | completed | on_hold | cancelled
+                    ↑ Separate status for task-level execution tracking
+```
+
+### Phase vs Status Clarification
+
+| Entity | Phase/Status Field | Purpose |
+|--------|-------------------|---------|
+| **Work Item** | `phase` (IS the status) | Lifecycle stage: research → planning → execution → review → complete |
+| **Timeline Item** | `status` (separate field) | Task execution: not_started, in_progress, blocked, completed, on_hold, cancelled |
+| **Workspace** | NO phase/status field | Shows DISTRIBUTION of work item phases |
+
+**Critical**: Work items do NOT have a separate `status` field. The `phase` field serves as both the lifecycle stage AND the status.
+
+### Design Thinking as Methodology
+
+Design Thinking is a **human-centered, iterative methodology** that guides HOW to work at each phase:
+
+| What It IS | What It Is NOT |
+|------------|-----------------|
+| Methodology/framework for problem-solving | Lifecycle stages or phases |
+| Guides the approach at each phase | Replacement for work item phases |
+| Provides tools (empathy maps, prototyping, testing) | Status tracking mechanism |
+| Informs AI suggestions and guiding questions | Workspace mode |
+
+**Major Frameworks**:
+- **Stanford d.school**: Empathize → Define → Ideate → Prototype → Test
+- **Double Diamond**: Discover → Define → Develop → Deliver
+- **IDEO HCD**: Inspiration → Ideation → Implementation
+- **IBM Enterprise**: The Loop + Hills, Playbacks, Sponsor Users
+
+**Platform Integration**: AI actively suggests Design Thinking methods, shows guiding questions as tooltips, and references case studies for inspiration.
+
+### Strategy Levels (Four-Tier Hierarchy)
+
+The platform supports a **phase-agnostic** strategy system with four levels:
+
+```
+ORGANIZATION STRATEGY (Pillars - Team-wide)
+    └── TEAM STRATEGY (Objectives - Department)
+         └── WORK ITEM STRATEGY (Alignment - Feature)
+              └── PROCESS STRATEGY (Methodology - Execution)
+```
+
+| Level | Name | Fields | Display Context |
+|-------|------|--------|-----------------|
+| **Pillar** | Organization-wide theme | user_stories, case_studies, examples | Full tree view at org level |
+| **Objective** | Team/department goal | metrics, owners | Nested under pillar |
+| **Key Result** | Measurable outcome | target, actual | Progress indicators |
+| **Initiative** | Specific action | timeline, assignees | Task-like cards |
+
+**Different Displays**:
+- **Organization Level**: Full strategy tree, high-level metrics, user stories, case studies
+- **Work Item Level**: Derived/aligned strategies only, alignment strength (weak/medium/strong), actionable view
+
+### Workspace Mode vs Phase
+
+| Concept | Definition | Applies To | Values |
+|---------|------------|------------|--------|
+| **Workspace Mode** | Lifecycle context for the project | Workspace (aggregation) | development, launch, growth, maintenance |
+| **Work Item Phase** | Lifecycle stage/status of individual item | Work Item | research, planning, execution, review, complete |
+
+**Mode Influences**:
+- Default phase for new work items
+- Type weight focus (e.g., maintenance mode prioritizes bugs)
+- Form field visibility
+- Template suggestions
+
+**Phase Does NOT**:
+- Have a "workspace phase" or "workspace stage"
+- Determine mode (mode is set explicitly by user)
+- Aggregate across items (workspace shows distribution)
+
+### Phase Upgrade Prompting
+
+**When to Prompt**: Real-time as fields are filled, when 80% threshold reached
+
+| Aspect | Details |
+|--------|---------|
+| **Threshold** | 80% field completion for current phase |
+| **Level** | Work item level (NOT workspace level) |
+| **Frequency** | Real-time as fields are filled |
+| **UI Location** | Banner in work item detail header |
+| **Calculation** | Based on required fields for phase transition |
+
+**Phase Transition Requirements**:
+
+| From → To | Required Fields | Rationale |
+|-----------|-----------------|-----------|
+| research → planning | `purpose` filled, 1+ timeline items OR scope defined | Ready to plan |
+| planning → execution | `target_release`, `acceptance_criteria`, `priority`, `estimated_hours` | Planning complete |
+| execution → review | `progress_percent` >= 80, `actual_start_date` set | Work substantially done |
+| review → complete | Feedback addressed, `status` = 'completed' | Approved |
 
 ---
 
@@ -305,7 +479,7 @@ Transform roadmap manager into **Product Lifecycle Management Platform**:
 users           - User accounts (Supabase Auth)
 teams           - Organizations/teams
 team_members    - Team membership and roles
-subscriptions   - Razorpay billing data
+subscriptions   - Stripe billing data
 workspaces      - Projects with phase and modules
 ```
 
@@ -404,20 +578,34 @@ Before implementing ANY feature, validate timing:
 
 ```
 docs/
-├── implementation/         # Week-by-week progress
+├── implementation/         # Week-by-week progress (11 files)
+│   ├── README.md          # Main implementation entry point
 │   ├── week-X-Y.md        # Add all week-related work HERE
 │   ├── database-schema.md # Schema reference
-│   └── postponed-features.md
-├── reference/              # Technical references
+│   ├── postponed-features.md
+│   └── advanced-ai-system/ # Advanced AI documentation
+├── reference/              # Technical references (15 files)
 │   ├── API_REFERENCE.md   # Consolidate all API docs HERE
 │   ├── ARCHITECTURE.md    # System design
-│   └── CODE_PATTERNS.md   # Code examples
-├── planning/               # Project management
+│   ├── CODE_PATTERNS.md   # Code examples
+│   ├── CHANGELOG.md       # Migration history
+│   ├── MCP_USAGE_GUIDE.md # MCP examples
+│   ├── PHASE_PERMISSIONS_GUIDE.md
+│   └── SHADCN_REGISTRY_COMPONENT_GUIDE.md
+├── planning/               # Project management (7 files)
 │   ├── PROGRESS.md        # Weekly progress tracking
-│   └── NEXT_STEPS.md      # Immediate priorities
-├── postponed/              # Deferred feature specs
+│   ├── NEXT_STEPS.md      # Immediate priorities
+│   ├── MASTER_IMPLEMENTATION_ROADMAP.md
+│   └── RECOMMENDED_AGENTS.md
+├── research/               # Architecture decisions & research (12 files)
+│   ├── architecture-decisions/
+│   ├── core-research/
+│   └── supporting-research/
+├── postponed/              # Deferred feature specs (6 files)
 │   └── [FEATURE_NAME].md
-└── processes/              # How-to guides
+├── testing/                # Testing & security
+│   └── SECURITY_AUDIT_REPORT.md
+└── processes/              # How-to guides (5 files)
 ```
 
 ### Documentation Rules
@@ -724,7 +912,7 @@ git add . && git commit -m "feat: description" && git push
 
 ### External
 - [Next.js 15](https://nextjs.org/docs) | [Supabase](https://supabase.com/docs) | [shadcn/ui](https://ui.shadcn.com)
-- [ReactFlow](https://reactflow.dev) | [Playwright](https://playwright.dev) | [Razorpay](https://razorpay.com/docs/)
+- [ReactFlow](https://reactflow.dev) | [Playwright](https://playwright.dev) | [Stripe](https://stripe.com/docs)
 
 ---
 
@@ -734,6 +922,7 @@ git add . && git commit -m "feat: description" && git push
 - ✅ Timestamp IDs: `Date.now().toString()`
 - ✅ Filter by `team_id` in ALL queries
 - ✅ Enable RLS on ALL tables
+- ✅ **`team_id TEXT NOT NULL`** in all multi-tenant tables (NULL breaks RLS silently!)
 - ✅ TypeScript strict mode, no `any`
 - ✅ shadcn/ui components only
 - ✅ Mobile-first design
@@ -743,6 +932,7 @@ git add . && git commit -m "feat: description" && git push
 - ❌ UUID for IDs
 - ❌ Skip RLS policies
 - ❌ Skip team_id filtering
+- ❌ Allow NULL team_id (causes silent RLS failures with empty `{}` errors)
 - ❌ Custom CSS files
 - ❌ Hardcode API keys
 

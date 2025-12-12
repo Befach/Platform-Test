@@ -1,10 +1,10 @@
 # 🚀 Product Lifecycle Management Platform - IMPLEMENTATION PLAN
 **Next.js 15 + TypeScript | 100% Open Source | 12 Weeks (Revised)**
 
-**Version:** 1.3
-**Last Updated:** 2025-11-30
+**Version:** 1.4
+**Last Updated:** 2025-12-10
 **Original Plan**: 8 weeks (2025-01-11)
-**Status:** 🟡 In Progress - Week 7 (70% complete)
+**Status:** 🟡 In Progress - Week 7 (90% complete)
 
 ---
 
@@ -162,43 +162,222 @@ Default Custom Model: [GPT-4o ▼]
 ```
 Organization (Team)
 ├── Workspace 1: "Mobile Fitness App"
-│   ├── Phase: Execution
+│   ├── Mode: Development
+│   ├── Phase Distribution: 10 research, 15 planning, 8 execution...
 │   ├── Enabled Modules: [Research, Mind Map, Features, Dependencies, Timeline, Execution, Collaboration]
-│   ├── Features: 25
+│   ├── Work Items: 25
 │   └── Team Members: 8
 │
 ├── Workspace 2: "AI Platform Research"
-│   ├── Phase: Research
+│   ├── Mode: Launch
+│   ├── Phase Distribution: 5 research, 3 planning, 2 execution...
 │   ├── Enabled Modules: [Research, Mind Map, AI Assistant]
-│   ├── Features: 5 (ideas)
+│   ├── Work Items: 5 (ideas)
 │   └── Team Members: 3
 │
 └── Workspace 3: "Web Dashboard v2"
-    ├── Phase: Review
+    ├── Mode: Growth
+    ├── Phase Distribution: 0 research, 2 planning, 8 review...
     ├── Enabled Modules: [Features, Timeline, Review, Analytics]
-    ├── Features: 15
+    ├── Work Items: 15
     └── Team Members: 5
 ```
 
-### Lifecycle Phases (Sequential Workflow)
+### Two-Layer Architecture
 
+**WORKSPACE LAYER** - Aggregation view showing distribution across all work items:
 ```
-Phase 1: Research 🔍
-   ↓ (Brainstorm → Structured ideas)
-Phase 2: Planning 📋
-   ↓ (Convert to features, plan timeline)
-Phase 3: Review 👥
-   ↓ (Get stakeholder/user feedback)
-Phase 4: Execution 🚀
-   ↓ (Build the product)
-Phase 5: Testing 🧪
-   ↓ (Beta test, iterate)
-Phase 6: Metrics 📊
-   ↓ (Measure success vs goals)
-Complete ✅
+workspace
+├── mode: development | launch | growth | maintenance
+└── Shows: Phase DISTRIBUTION across all work items
+    Example: "10 in research, 15 in planning, 8 in execution..."
 ```
+
+**WORK ITEM LAYER** - Each work item has its own phase (= status):
+```
+work_item
+├── phase: research | planning | execution | review | complete
+│         ↑ THIS IS THE STATUS - No separate status field!
+│
+└── timeline_items (MVP/SHORT/LONG breakdowns)
+    └── status: not_started | in_progress | blocked | completed | on_hold | cancelled
+                ↑ Separate status for task-level execution tracking
+```
+
+### Work Item Phases (= Status)
+
+| Phase | Description | Focus Area |
+|-------|-------------|------------|
+| **research** | Initial exploration, problem understanding | Empathy, user needs |
+| **planning** | Structure, scope, timeline breakdown | MVP definition, priorities |
+| **execution** | Active development work | Building, coding, creating |
+| **review** | Testing, validation, feedback | Quality, user testing |
+| **complete** | Shipped, launched, done | Retrospective, metrics |
+
+### Workspace Modes
+
+| Mode | Description | Default Phase | Type Weight Focus |
+|------|-------------|---------------|-------------------|
+| **development** | Building from scratch | planning | feature (10), concept (9) |
+| **launch** | Racing to release | execution | bug (10), feature (8) |
+| **growth** | Iterating on feedback | review | enhancement (9), feature (7) |
+| **maintenance** | Stability focus | execution | bug (10), enhancement (5) |
+
+**Note:** Workspace does NOT have a single stage - it shows phase DISTRIBUTION across work items.
 
 **Each phase auto-enables recommended modules** (can be customized in Settings → Modules).
+
+---
+
+## 🎯 PHASE SYSTEM ENHANCEMENT
+
+The Phase System Enhancement implements intelligent phase management with Design Thinking methodology integration, workspace health analysis, and phase upgrade prompting.
+
+### Overview
+
+The phase system operates on a **two-layer architecture**:
+
+1. **Workspace Layer**: Shows aggregated phase distribution (NOT a single stage)
+2. **Work Item Layer**: Each work item has its own phase (which IS its status)
+
+### Phase Transition Requirements
+
+Phase upgrades are based on field completion and readiness:
+
+| From → To | Required Fields | Rationale |
+|-----------|-----------------|-----------|
+| research → planning | `purpose` filled, 1+ timeline items OR scope defined | Ready to plan |
+| planning → execution | `target_release`, `acceptance_criteria`, `priority`, `estimated_hours` | Planning complete |
+| execution → review | `progress_percent` >= 80, `actual_start_date` set | Work substantially done |
+| review → complete | Feedback addressed, `status` = 'completed' | Approved |
+
+### Phase Upgrade Prompting
+
+**When:** Real-time as fields are filled
+**Threshold:** 80% field completion for target phase
+**Level:** Work item (NOT workspace)
+**UI:** Banner in work item detail header
+
+Example:
+```
+⬆️ This work item is 85% ready to move to Execution phase
+   Missing: target_release, estimated_hours
+   [Review Requirements] [Upgrade Now]
+```
+
+### Design Thinking Integration
+
+Design Thinking is a **human-centered, iterative methodology** that guides HOW to work at each phase:
+
+| Platform Phase | DT Methods | Guiding Questions |
+|----------------|------------|-------------------|
+| **Research** | Empathy Maps, Interviews, Personas | "Who has this problem?" |
+| **Planning** | HMW Questions, Brainstorming, Hills | "What's the MVP?" |
+| **Execution** | Rapid Prototyping, Storyboards | "How do we build it?" |
+| **Review** | Usability Testing, Playbacks | "Does it solve the problem?" |
+| **Complete** | Launch, Retrospectives | "What did we learn?" |
+
+**AI actively suggests Design Thinking methods** based on current phase and shows guiding questions as tooltips/hints.
+
+### Workspace Analysis
+
+**Frequency:** Every 2-3 days OR change-based (user-triggered button OR AI suggestion)
+
+**Purpose:** Detect phase mismatches, suggest upgrades, calculate health score
+
+**Analysis Output:**
+```typescript
+interface WorkspaceAnalysis {
+  phaseDistribution: Record<Phase, { count: number, percentage: number }>
+  mismatchedItems: { workItemId, currentPhase, suggestedPhase, reason }[]
+  upgradeOpportunities: { workItemId, canUpgradeTo, readinessPercent }[]
+  healthScore: number  // 0-100
+}
+```
+
+### Implementation Sessions
+
+The Phase System Enhancement is implemented across 6 focused sessions:
+
+#### **Session 1: Fix Phase Bugs**
+- Fix calculation logic overlap (lines 167-172 in workspace-phases.tsx)
+- Add phase transition validation
+- Add phase transition timestamps to work_items table
+
+**Files to Modify:**
+- `next-app/src/components/workspace/workspace-phases.tsx`
+- `next-app/src/lib/types/work-item-types.ts`
+- `supabase/migrations/[timestamp]_add_phase_transition_timestamps.sql`
+
+#### **Session 2: Phase Upgrade Prompts**
+- Create readiness calculator function
+- Build upgrade prompt UI banner component
+- Add guiding questions for each phase
+
+**Files to Create:**
+- `next-app/src/lib/phase/phase-readiness.ts`
+- `next-app/src/components/work-items/phase-upgrade-banner.tsx`
+- `next-app/src/lib/phase/guiding-questions.ts`
+
+#### **Session 3: Workspace Analysis**
+- Create analyzer service
+- Build health card component
+- Add API endpoint for analysis
+
+**Files to Create:**
+- `next-app/src/lib/phase/workspace-analyzer.ts`
+- `next-app/src/components/workspace/workspace-health-card.tsx`
+- `next-app/src/app/api/workspaces/[id]/analyze/route.ts`
+
+#### **Session 4: Design Thinking Integration**
+- Add methodology guidance system
+- Include other frameworks (Agile, Lean Startup, JTBD)
+- AI active integration with suggestions
+
+**Files to Create:**
+- `next-app/src/lib/methodologies/design-thinking.ts`
+- `next-app/src/lib/methodologies/framework-mapper.ts`
+- `next-app/src/components/ai/methodology-suggestions.tsx`
+
+#### **Session 5: Strategy Customization**
+- Add new fields to product_strategies (user_stories, case_studies, user_examples)
+- Create org-level display component with full tree view
+- Create work-item-level display component with alignment view
+
+**Files to Modify:**
+- `supabase/migrations/[timestamp]_add_strategy_fields.sql`
+
+**Files to Create:**
+- `next-app/src/components/strategies/org-strategy-view.tsx`
+- `next-app/src/components/strategies/work-item-strategy-view.tsx`
+
+#### **Session 6: Polish**
+- Feedback to work item conversion
+- Update workspace card with phase distribution
+- E2E testing for phase transitions
+
+**Files to Modify:**
+- `next-app/src/components/feedback/feedback-triage.tsx`
+- `next-app/src/components/workspace/workspace-card.tsx`
+
+**Files to Create:**
+- `tests/e2e/phase-transitions.spec.ts`
+
+### Success Criteria Checklist
+
+- [ ] Phase transition validation prevents invalid upgrades
+- [ ] Phase upgrade banners appear at 80% readiness threshold
+- [ ] Workspace health score calculates correctly (0-100)
+- [ ] Design Thinking guiding questions display per phase
+- [ ] AI actively suggests appropriate methodologies
+- [ ] Workspace analysis detects mismatched phase items
+- [ ] Strategy fields (user_stories, case_studies, examples) added
+- [ ] Org-level strategy view shows full tree with examples
+- [ ] Work-item-level strategy view shows alignment strength
+- [ ] Feedback can be converted to work items with phase context
+- [ ] Workspace cards show phase distribution (not single stage)
+- [ ] Phase transition timestamps logged for audit trail
+- [ ] E2E tests cover all phase transition scenarios
 
 ### Module System Design
 
@@ -307,12 +486,15 @@ This is not just a UI refresh - this is building a **complete enterprise-grade P
 1. **✅ Plan Approved** - You're reading this!
 2. **✅ Week 1-2** - [Foundation & Multi-Tenancy](week-1-2-foundation.md) - COMPLETED
 3. **✅ Week 3** - [Mind Mapping](week-3-mind-mapping.md) (critical feature) - COMPLETED
-4. **✅ Week 4** - [Feature Planning & Dependencies](week-4-dependencies.md) - COMPLETED
-5. **✅ Week 5** - [External Review System](week-5-review-system.md) - COMPLETED
-6. **🟡 Week 6** - [Timeline & Execution](week-6-timeline-execution.md) + [Work Item Detail Page](work-board-3.0.md#part-7-work-item-detail-page-8-tab-structure) - IN PROGRESS
-7. **⏳ Week 7** - [AI Integration & Analytics](week-7-ai-analytics.md) + [Feedback Module](work-board-3.0.md#part-8-feedback-module-full-platform) + [Integrations](work-board-3.0.md#part-9-integrations-module)
-8. **⏳ Week 8** - [Billing, Testing & Launch](week-8-billing-testing.md)
-9. **Week 9** - Launch! 🎉
+4. **⚠️ Week 4** - [Feature Planning & Dependencies](week-4-dependencies.md) - 80% (critical path pending)
+5. **✅ Week 5** - [External Review System](week-5-review-system.md) + Team Management - COMPLETED
+6. **❌ Week 6** - [Timeline & Execution](week-6-timeline-execution.md) - NOT STARTED (0%)
+7. **🟡 Week 7** - [AI Integration & Analytics](week-7-ai-analytics.md) - 95% DONE
+   - ✅ AI SDK v5, Parallel AI, Chat Panel, Agentic Mode
+   - ✅ Workspace Modes, Strategy Alignment, Feedback UI
+   - ✅ Analytics Dashboards, Knowledge Base
+8. **⏳ Week 8** - [Billing, Testing & Launch](week-8-billing-testing.md) - NOT STARTED
+9. **Week 9-12** - Remaining features, polish, launch! 🎉
 
 ---
 

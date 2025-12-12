@@ -57,7 +57,8 @@ export interface ChatMessage {
 interface UseThreadsOptions {
   teamId: string
   workspaceId: string
-  limit?: number
+  initialLimit?: number
+  pageSize?: number
 }
 
 interface UseMessagesOptions {
@@ -79,20 +80,24 @@ function generateId(): string {
 
 /**
  * Hook for managing chat threads in a workspace.
- * Provides CRUD operations and real-time updates.
+ * Provides CRUD operations, real-time updates, and pagination.
  */
-export function useThreads({ teamId, workspaceId, limit = 50 }: UseThreadsOptions) {
+export function useThreads({ teamId, workspaceId, initialLimit = 20, pageSize = 20 }: UseThreadsOptions) {
   const [threads, setThreads] = useState<ChatThread[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   const supabase = createClient()
 
-  // Fetch threads
+  // Fetch initial threads
   const fetchThreads = useCallback(async () => {
     try {
       setIsLoading(true)
       setError(null)
+
+      console.log('[useThreads] Fetching threads for:', { teamId, workspaceId })
 
       const { data, error: fetchError } = await supabase
         .from('chat_threads')
@@ -101,17 +106,54 @@ export function useThreads({ teamId, workspaceId, limit = 50 }: UseThreadsOption
         .eq('workspace_id', workspaceId)
         .eq('status', 'active')
         .order('updated_at', { ascending: false })
-        .limit(limit)
+        .limit(initialLimit)
 
-      if (fetchError) throw fetchError
+      if (fetchError) {
+        console.error('[useThreads] Fetch error:', fetchError)
+        throw fetchError
+      }
 
-      setThreads((data || []) as ChatThread[])
+      const fetchedThreads = (data || []) as ChatThread[]
+      console.log('[useThreads] Fetched threads:', fetchedThreads.length)
+      setThreads(fetchedThreads)
+      setHasMore(fetchedThreads.length >= initialLimit)
     } catch (err) {
+      console.error('[useThreads] Fetch failed:', err)
       setError(err instanceof Error ? err : new Error('Failed to fetch threads'))
     } finally {
       setIsLoading(false)
     }
-  }, [supabase, teamId, workspaceId, limit])
+  }, [supabase, teamId, workspaceId, initialLimit])
+
+  // Load more threads (infinite scroll)
+  const loadMore = useCallback(async () => {
+    if (isLoadingMore || !hasMore || threads.length === 0) return
+
+    try {
+      setIsLoadingMore(true)
+
+      const lastThread = threads[threads.length - 1]
+      const { data, error: fetchError } = await supabase
+        .from('chat_threads')
+        .select('*')
+        .eq('team_id', teamId)
+        .eq('workspace_id', workspaceId)
+        .eq('status', 'active')
+        .lt('updated_at', lastThread.updated_at)
+        .order('updated_at', { ascending: false })
+        .limit(pageSize)
+
+      if (fetchError) throw fetchError
+
+      const newThreads = (data || []) as ChatThread[]
+      setThreads((prev) => [...prev, ...newThreads])
+      setHasMore(newThreads.length >= pageSize)
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to load more threads'))
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }, [supabase, teamId, workspaceId, pageSize, threads, isLoadingMore, hasMore])
 
   // Create new thread
   const createThread = useCallback(
@@ -126,21 +168,28 @@ export function useThreads({ teamId, workspaceId, limit = 50 }: UseThreadsOption
           metadata: {},
         }
 
+        console.log('[useThreads] Creating thread:', newThread)
+
         const { data, error: insertError } = await supabase
           .from('chat_threads')
           .insert(newThread)
           .select()
           .single()
 
-        if (insertError) throw insertError
+        if (insertError) {
+          console.error('[useThreads] Insert error:', insertError)
+          throw insertError
+        }
 
         const thread = data as ChatThread
+        console.log('[useThreads] Thread created:', thread)
 
         // Optimistic update
         setThreads((prev) => [thread, ...prev])
 
         return thread
       } catch (err) {
+        console.error('[useThreads] Create thread failed:', err)
         setError(err instanceof Error ? err : new Error('Failed to create thread'))
         return null
       }
@@ -241,10 +290,13 @@ export function useThreads({ teamId, workspaceId, limit = 50 }: UseThreadsOption
   return {
     threads,
     isLoading,
+    isLoadingMore,
+    hasMore,
     error,
     createThread,
     updateThreadTitle,
     archiveThread,
+    loadMore,
     refetch: fetchThreads,
   }
 }
@@ -260,17 +312,29 @@ export function useThreads({ teamId, workspaceId, limit = 50 }: UseThreadsOption
 export function useMessages({ threadId, enabled = true }: UseMessagesOptions) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [hasLoaded, setHasLoaded] = useState(false) // Track if first load completed
   const [error, setError] = useState<Error | null>(null)
 
   const supabase = createClient()
 
+  // Reset hasLoaded when threadId changes
+  useEffect(() => {
+    setHasLoaded(false)
+    setMessages([])
+  }, [threadId])
+
   // Fetch messages for thread
   const fetchMessages = useCallback(async () => {
-    if (!threadId || !enabled) return
+    if (!threadId || !enabled) {
+      console.log('[useMessages] Skipping fetch - threadId:', threadId, 'enabled:', enabled)
+      return
+    }
 
     try {
       setIsLoading(true)
       setError(null)
+
+      console.log('[useMessages] Fetching messages for thread:', threadId)
 
       const { data, error: fetchError } = await supabase
         .from('chat_messages')
@@ -278,11 +342,31 @@ export function useMessages({ threadId, enabled = true }: UseMessagesOptions) {
         .eq('thread_id', threadId)
         .order('created_at', { ascending: true })
 
-      if (fetchError) throw fetchError
+      if (fetchError) {
+        console.error('[useMessages] Fetch error:', fetchError)
+        throw fetchError
+      }
 
-      setMessages((data || []) as ChatMessage[])
+      const fetchedMessages = (data || []) as ChatMessage[]
+      console.log('[useMessages] Fetched messages:', fetchedMessages.length)
+
+      // Log message details for debugging
+      fetchedMessages.forEach((msg, i) => {
+        console.log(`[useMessages] Message ${i}:`, {
+          id: msg.id,
+          role: msg.role,
+          hasContent: !!msg.content,
+          hasParts: Array.isArray(msg.parts) && msg.parts.length > 0,
+          partTypes: msg.parts?.map(p => p.type) || [],
+        })
+      })
+
+      setMessages(fetchedMessages)
+      setHasLoaded(true) // Mark as loaded AFTER setting messages
     } catch (err) {
+      console.error('[useMessages] Fetch failed:', err)
       setError(err instanceof Error ? err : new Error('Failed to fetch messages'))
+      setHasLoaded(true) // Still mark as loaded on error (so we don't show infinite loading)
     } finally {
       setIsLoading(false)
     }
@@ -291,7 +375,10 @@ export function useMessages({ threadId, enabled = true }: UseMessagesOptions) {
   // Add message to thread
   const addMessage = useCallback(
     async (message: Omit<ChatMessage, 'id' | 'thread_id' | 'created_at'>): Promise<ChatMessage | null> => {
-      if (!threadId) return null
+      if (!threadId) {
+        console.warn('[useMessages] Cannot add message - no thread ID')
+        return null
+      }
 
       try {
         const newMessage = {
@@ -300,21 +387,35 @@ export function useMessages({ threadId, enabled = true }: UseMessagesOptions) {
           ...message,
         }
 
+        console.log('[useMessages] Adding message:', {
+          id: newMessage.id,
+          threadId: newMessage.thread_id,
+          role: newMessage.role,
+          hasContent: !!newMessage.content,
+          hasParts: Array.isArray(newMessage.parts) && newMessage.parts.length > 0,
+          partTypes: newMessage.parts?.map(p => p.type) || [],
+        })
+
         const { data, error: insertError } = await supabase
           .from('chat_messages')
           .insert(newMessage)
           .select()
           .single()
 
-        if (insertError) throw insertError
+        if (insertError) {
+          console.error('[useMessages] Insert error:', insertError)
+          throw insertError
+        }
 
         const msg = data as ChatMessage
+        console.log('[useMessages] Message added successfully:', msg.id)
 
         // Optimistic update
         setMessages((prev) => [...prev, msg])
 
         return msg
       } catch (err) {
+        console.error('[useMessages] Add message failed:', err)
         setError(err instanceof Error ? err : new Error('Failed to add message'))
         return null
       }
@@ -396,6 +497,7 @@ export function useMessages({ threadId, enabled = true }: UseMessagesOptions) {
   return {
     messages,
     isLoading,
+    hasLoaded, // NEW: indicates first load completed
     error,
     addMessage,
     addMessages,
@@ -424,14 +526,18 @@ export function useCurrentThread({
   const {
     threads,
     isLoading: threadsLoading,
+    isLoadingMore,
+    hasMore,
     createThread,
     updateThreadTitle,
     archiveThread,
+    loadMore,
   } = useThreads({ teamId, workspaceId })
 
   const {
     messages,
     isLoading: messagesLoading,
+    hasLoaded: messagesHasLoaded,
     addMessage,
     addMessages,
     clearMessages,
@@ -447,9 +553,13 @@ export function useCurrentThread({
 
   // Create and select new thread
   const startNewThread = useCallback(async (): Promise<ChatThread | null> => {
+    console.log('[useCurrentThread] Starting new thread...')
     const thread = await createThread()
     if (thread) {
+      console.log('[useCurrentThread] New thread created, setting ID:', thread.id)
       setCurrentThreadId(thread.id)
+    } else {
+      console.log('[useCurrentThread] Failed to create thread')
     }
     return thread
   }, [createThread])
@@ -472,6 +582,12 @@ export function useCurrentThread({
     isLoading: threadsLoading || messagesLoading,
     threadsLoading,
     messagesLoading,
+    messagesHasLoaded, // NEW: indicates first load completed for current thread
+    isLoadingMore,
+
+    // Pagination
+    hasMore,
+    loadMore,
 
     // Thread actions
     selectThread,

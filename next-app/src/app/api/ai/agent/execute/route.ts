@@ -36,6 +36,13 @@ import { createClient } from '@/lib/supabase/server'
 import { agentExecutor } from '@/lib/ai/agent-executor'
 import { ExecuteToolRequestSchema } from '@/lib/ai/schemas/agentic-schemas'
 
+// Import tools to ensure they are registered in the tool registry
+// These are side-effect imports that register tools when loaded
+import '@/lib/ai/tools/creation-tools'
+import '@/lib/ai/tools/analysis-tools'
+import '@/lib/ai/tools/optimization-tools'
+import '@/lib/ai/tools/strategy-tools'
+
 export const maxDuration = 60 // Allow up to 60 seconds for tool execution
 
 export async function POST(request: Request) {

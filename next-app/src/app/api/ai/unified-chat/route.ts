@@ -18,13 +18,64 @@
  *              (search, research)          (return confirmation requests)
  */
 
-import { streamText, convertToCoreMessages, type UIMessage } from 'ai'
+import { streamText, convertToModelMessages, type UIMessage } from 'ai'
+import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { createClient } from '@/lib/supabase/server'
 import { parallelAITools, parallelAIQuickTools } from '@/lib/ai/tools/parallel-ai-tools'
 import { chatAgenticTools } from '@/lib/ai/tools/chat-agentic-tools'
 import { toolRegistry } from '@/lib/ai/tools/tool-registry'
 import { routeRequest, formatRoutingLog, type SessionState } from '@/lib/ai/session-router'
-import { getDefaultModel } from '@/lib/ai/models-config'
+import { getDefaultModel, isDevMode, getModelByKey } from '@/lib/ai/models-config'
+import {
+  analyzeMessage,
+  getRoutingDebugInfo,
+  type FileAttachment,
+  type ChatMode,
+} from '@/lib/ai/message-analyzer'
+import {
+  analyzeImages,
+  createImageContext,
+  getImageContextsFromMetadata,
+  addImageContextToMetadata,
+  type ImageData,
+} from '@/lib/ai/image-analyzer'
+import { buildContext, buildSystemPrompt as buildContextSystemPrompt } from '@/lib/ai/context-builder'
+import { createTaskPlan, type TaskPlan } from '@/lib/ai/task-planner'
+import fs from 'fs/promises'
+
+const DEBUG_ENDPOINT = 'http://127.0.0.1:7242/ingest/ebdf2fd5-9696-479e-b2f1-d72537069b93'
+const DEBUG_LOG_PATH = 'c:\\Users\\harsh\\Downloads\\Platform Test\\.cursor\\debug.log'
+
+async function sendDebug(payload: {
+  sessionId?: string
+  runId?: string
+  hypothesisId?: string
+  location: string
+  message: string
+  data?: Record<string, unknown>
+  timestamp?: number
+}) {
+  const body = {
+    sessionId: 'debug-session',
+    runId: 'pre-fix2',
+    timestamp: Date.now(),
+    ...payload,
+  }
+
+  try {
+    await fetch(DEBUG_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+  } catch (err) {
+    try {
+      await fs.appendFile(DEBUG_LOG_PATH, `${JSON.stringify(body)}\n`)
+    } catch {
+      // swallow secondary errors
+    }
+  }
+}
 
 // Import tool files to trigger registration (side-effects)
 import '@/lib/ai/tools/creation-tools'
@@ -77,14 +128,23 @@ const BASE_SYSTEM_PROMPT = `You are an AI assistant for the Product Lifecycle Pl
  * - Examples help the AI understand user intent patterns
  */
 function getToolExamplesForPrompt(): string {
-  // Get examples from registered tools (creation, analysis, optimization, strategy)
-  const toolDescriptions = toolRegistry.getToolDescriptionsWithExamples()
+  // Get COMPACT examples from registered tools to reduce token count
+  // Full examples were causing ~5000+ extra tokens and significant latency
+  const toolExamples = toolRegistry.getToolExamplesCompact()
 
-  if (!toolDescriptions || toolDescriptions === '## Available Tools\n\nNo tools available.') {
+  if (!toolExamples || Object.keys(toolExamples).length === 0) {
     return ''
   }
 
-  return `\n\n## Agentic Tools (require user confirmation)\n${toolDescriptions}`
+  // Format compact examples into a brief section
+  const toolLines = Object.entries(toolExamples)
+    .map(([name, { description, example }]) => {
+      const line = `- **${name}**: ${description}`
+      return example ? `${line}\n  Example: ${example}` : line
+    })
+    .join('\n')
+
+  return `\n\n## Agentic Tools (require user confirmation)\n${toolLines}`
 }
 
 /**
@@ -150,24 +210,44 @@ function getUnifiedTools(quickMode: boolean = false) {
 /**
  * POST /api/ai/unified-chat
  *
- * Handles chat requests with both research and agentic tools.
+ * Handles chat requests with intelligent model routing, vision support, and RAG integration.
  * Compatible with the AI SDK's useChat() hook.
  *
  * Request body:
  * - messages: UIMessage[] - Conversation history
  * - model?: string - Model key or 'auto' for intelligent routing (default: 'auto')
+ * - mode?: 'chat' | 'agentic' - Chat mode (default: 'chat')
  * - quickMode?: boolean - Use only quick tools (default: false)
  * - systemPrompt?: string - Custom system prompt (merged with base)
  * - workspaceContext?: object - Context about current workspace
  * - session?: SessionState - Session state for model persistence
+ * - files?: FileAttachment[] - Uploaded files (images supported)
+ * - threadMetadata?: object - Thread metadata including image contexts
+ * - devOverride?: string - Dev mode model override (only for dev accounts)
  *
  * Response headers:
  * - X-Session-State: JSON-encoded session state for client-side storage
  * - X-Model-Used: The model that was actually used for this request
  * - X-Routing-Reason: Why this model was selected
+ * - X-Routing-Debug: Full routing debug info (dev mode only)
+ * - X-Is-Slow-Model: Whether the model shows "Deep thinking..." indicator
+ * - X-Image-Analyzed: Whether images were analyzed in this request
  */
 export async function POST(request: Request) {
   try {
+    // #region agent log
+    await sendDebug({
+      hypothesisId: 'H14',
+      location: 'api/ai/unified-chat:entry',
+      message: 'Unified chat POST entry',
+      data: {
+        hasCookieHeader: request.headers.has('cookie'),
+        hasTeamHeader: request.headers.has('x-team-id'),
+        hasWorkspaceHeader: request.headers.has('x-workspace-id'),
+      },
+    })
+    // #endregion
+
     const supabase = await createClient()
 
     // Check authentication
@@ -176,22 +256,39 @@ export async function POST(request: Request) {
       error: authError,
     } = await supabase.auth.getUser()
 
+    // #region agent log
+    await sendDebug({
+      hypothesisId: 'H14',
+      location: 'api/ai/unified-chat:auth',
+      message: 'Auth check result',
+      data: { hasUser: !!user, hasAuthError: !!authError, userId: user?.id },
+    })
+    // #endregion
+
     if (authError || !user) {
       return new Response('Unauthorized', { status: 401 })
     }
+
+    // Check if user is in dev mode
+    const userIsDevMode = isDevMode(user.email)
 
     // Parse request body
     const body = await request.json()
     const {
       messages,
       model: modelInput,
+      mode = 'chat',
       quickMode = false,
       systemPrompt: customSystemPrompt,
       workspaceContext,
       session,
+      files = [],
+      threadMetadata = {},
+      devOverride,
     } = body as {
       messages: UIMessage[]
       model?: string
+      mode?: ChatMode
       quickMode?: boolean
       systemPrompt?: string
       workspaceContext?: {
@@ -202,24 +299,217 @@ export async function POST(request: Request) {
         currentWorkItems?: Array<{ id: string; name: string; type: string; status: string }>
       }
       session?: SessionState
+      files?: FileAttachment[]
+      threadMetadata?: Record<string, unknown>
+      devOverride?: string
     }
 
     if (!messages || messages.length === 0) {
       return new Response('Messages are required', { status: 400 })
     }
 
-    // Get unified tool set (needed before routing to check for tool use)
-    const tools = getUnifiedTools(quickMode)
+    // Get the latest user message for analysis
+    // In AI SDK v5, UIMessage uses 'parts' array instead of 'content'
+    const latestUserMessage = messages.filter(m => m.role === 'user').pop()
+    const messageText = latestUserMessage?.parts
+      ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+      .map(p => p.text)
+      .join('\n') || ''
+
+    // #region agent log
+    await sendDebug({
+      hypothesisId: 'H15',
+      location: 'api/ai/unified-chat:request-body',
+      message: 'Parsed chat request',
+      data: {
+        messagesCount: messages?.length ?? 0,
+        modelInput,
+        mode,
+        quickMode,
+        fileCount: files.length,
+        workspaceId: workspaceContext?.workspaceId,
+        teamId: workspaceContext?.teamId,
+        isDevMode: userIsDevMode,
+      },
+    })
+    // #endregion
+
+    // Debug: Log received messages
+    console.log('[Unified Chat] Received messages:', messages.length, 'files:', files.length)
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // INTELLIGENT MESSAGE ANALYSIS & ROUTING
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Estimate current context tokens
+    // In AI SDK v5, UIMessage uses 'parts' array instead of 'content'
+    const contextTokens = messages.reduce((sum, m) => {
+      const textContent = m.parts
+        ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+        .map(p => p.text)
+        .join('\n') || ''
+      return sum + Math.ceil(textContent.length / 4)
+    }, 0)
+
+    // Analyze message for routing decision
+    // Only allow dev override for dev accounts
+    const validDevOverride = userIsDevMode && devOverride ? devOverride : undefined
+    const analysisResult = analyzeMessage(
+      messageText,
+      files,
+      mode,
+      contextTokens,
+      validDevOverride
+    )
+
+    const routingDebugInfo = getRoutingDebugInfo(analysisResult)
+    console.log('[Unified Chat] Routing:', routingDebugInfo.explanation)
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // MULTI-STEP TASK DETECTION (Plan-based Execution)
+    // When a multi-step task is detected in agentic mode, create a plan
+    // and return it for user approval before autonomous execution.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    if (analysisResult.isMultiStepTask && mode === 'agentic') {
+      console.log('[Unified Chat] Multi-step task detected, creating plan...')
+      console.log('[Unified Chat] Task complexity:', analysisResult.multiStepComplexity)
+
+      try {
+        const planResult = await createTaskPlan({
+          userMessage: messageText,
+          teamId: workspaceContext?.teamId || '',
+          workspaceId: workspaceContext?.workspaceId || '',
+          conversationContext: messages
+            .slice(-5) // Last 5 messages for context
+            .map(m => {
+              const text = m.parts
+                ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+                .map(p => p.text)
+                .join('\n') || ''
+              return `${m.role}: ${text}`
+            })
+            .join('\n'),
+        })
+
+        if (planResult.success && planResult.plan) {
+          console.log('[Unified Chat] Plan created:', planResult.plan.id, 'with', planResult.plan.steps.length, 'steps')
+
+          // Return plan for UI approval instead of streaming chat
+          return new Response(
+            JSON.stringify({
+              type: 'plan-created',
+              plan: planResult.plan,
+            }),
+            {
+              status: 200,
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Plan-Created': 'true',
+                'X-Plan-Id': planResult.plan.id,
+                'X-Plan-Steps': String(planResult.plan.steps.length),
+                'X-Task-Complexity': analysisResult.multiStepComplexity,
+              },
+            }
+          )
+        } else {
+          // Plan creation failed - fall through to normal chat
+          console.warn('[Unified Chat] Plan creation failed:', planResult.error)
+        }
+      } catch (planError) {
+        console.error('[Unified Chat] Plan creation error:', planError)
+        // Fall through to normal chat on error
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // VISION PIPELINE (TWO-STEP)
+    // Step 1: Gemini Flash analyzes images (internal)
+    // Step 2: Chat model responds with image context
+    // ─────────────────────────────────────────────────────────────────────────
+
+    let updatedThreadMetadata = { ...threadMetadata }
+    let imageAnalysisPerformed = false
+
+    if (analysisResult.hasImages && analysisResult.images.length > 0) {
+      console.log('[Unified Chat] Analyzing', analysisResult.images.length, 'image(s) with Gemini Flash')
+
+      // Convert FileAttachment to ImageData format
+      const imageDataArray: ImageData[] = analysisResult.images.map((file) => ({
+        data: file.data,
+        mimeType: file.type,
+        filename: file.name,
+      }))
+
+      // Analyze images in parallel
+      const imageResults = await analyzeImages(imageDataArray)
+
+      // Store successful analyses in thread metadata
+      const messageId = Date.now().toString()
+      for (let i = 0; i < imageResults.length; i++) {
+        const result = imageResults[i]
+        if (result.success) {
+          const imageContext = createImageContext(
+            messageId,
+            result,
+            analysisResult.images[i]?.name
+          )
+          updatedThreadMetadata = addImageContextToMetadata(updatedThreadMetadata, imageContext)
+          imageAnalysisPerformed = true
+          console.log(`[Unified Chat] Image ${i + 1} analyzed in ${result.processingTime}ms`)
+        } else {
+          console.error(`[Unified Chat] Image ${i + 1} analysis failed:`, result.error)
+        }
+      }
+    }
+
+    // Get all image contexts (existing + new)
+    const imageContexts = getImageContextsFromMetadata(updatedThreadMetadata)
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // CONTEXT BUILDING (RAG + Platform + Images)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    let builtContext = null
+    if (workspaceContext?.teamId) {
+      try {
+        builtContext = await buildContext({
+          query: messageText,
+          workspaceId: workspaceContext.workspaceId,
+          teamId: workspaceContext.teamId,
+          imageContexts,
+          maxRagTokens: 2000,
+          includePlatformContext: true,
+          similarityThreshold: 0.6,
+        })
+        console.log('[Unified Chat] Context built:', {
+          ragUsed: builtContext.ragUsed,
+          ragItems: builtContext.ragStats?.itemCount || 0,
+          totalTokens: builtContext.totalTokens,
+        })
+      } catch (error) {
+        console.error('[Unified Chat] Context building failed:', error)
+        // Continue without RAG context - not fatal
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // MODEL SELECTION & TOOLS
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Get unified tool set (only in agentic mode)
+    const tools = mode === 'agentic' ? getUnifiedTools(quickMode) : {}
     const hasToolUse = Object.keys(tools).length > 0
 
-    // Convert messages for routing
-    const coreMessages = convertToCoreMessages(messages)
+    // Convert messages for the AI SDK
+    console.log('[Unified Chat] Converting messages, count:', messages.length)
+    const coreMessages = convertToModelMessages(messages)
 
-    // Route request through session router
-    // Handles: user override, session persistence, context compaction, overflow
+    // Use the existing session router for model initialization
+    // But override with our analyzed model selection
     const routingDecision = await routeRequest({
       messages: coreMessages,
-      userModelKey: modelInput,
+      userModelKey: analysisResult.selectedModel.key, // Use our analyzed model
       session,
       hasToolUse,
     })
@@ -227,20 +517,51 @@ export async function POST(request: Request) {
     // Log routing decision
     console.log(formatRoutingLog(routingDecision))
 
+    // #region agent log
+    await sendDebug({
+      hypothesisId: 'H15',
+      location: 'api/ai/unified-chat:routing',
+      message: 'Routing decision',
+      data: {
+        analyzedModel: analysisResult.selectedModel.key,
+        routingReason: analysisResult.routingReason,
+        model: analysisResult.selectedModel.modelId, // Use modelId from our analysis
+        compactedMessages: routingDecision.messages.length,
+        hasImages: analysisResult.hasImages,
+        needsTools: analysisResult.needsTools,
+        needsDeepReasoning: analysisResult.needsDeepReasoning,
+      },
+    })
+    // #endregion
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // SYSTEM PROMPT CONSTRUCTION
+    // ─────────────────────────────────────────────────────────────────────────
+
     // Build system prompt with dynamic tool examples
     const unifiedPrompt = buildUnifiedSystemPrompt()
-    const basePrompt = customSystemPrompt
+    let basePrompt = customSystemPrompt
       ? `${unifiedPrompt}\n\n## Additional Instructions\n${customSystemPrompt}`
       : unifiedPrompt
 
-    const fullSystemPrompt = buildSystemPrompt(basePrompt, workspaceContext)
+    // Add workspace context (legacy method)
+    const legacyContextPrompt = buildSystemPrompt(basePrompt, workspaceContext)
+
+    // Add RAG + image context if available
+    const fullSystemPrompt = builtContext
+      ? buildContextSystemPrompt(builtContext, legacyContextPrompt)
+      : legacyContextPrompt
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // STREAM RESPONSE
+    // ─────────────────────────────────────────────────────────────────────────
 
     // Stream the response using the routed model and messages
     const result = streamText({
       model: routingDecision.languageModel,
       system: fullSystemPrompt,
       messages: routingDecision.messages, // May be compacted
-      tools,
+      tools: hasToolUse ? tools : undefined,
       onFinish({ text, toolCalls, toolResults, finishReason, usage }) {
         if (toolCalls && toolCalls.length > 0) {
           console.log('[Unified Chat] Tool calls:', toolCalls.map((t) => t.toolName))
@@ -253,20 +574,55 @@ export async function POST(request: Request) {
 
     // Return response with session state in headers
     // AI SDK v5: Use toUIMessageStreamResponse() for useChat hook compatibility
-    const response = result.toUIMessageStreamResponse()
+    // sendReasoning: true enables reasoning content from models like Kimi K2, DeepSeek
+    const response = result.toUIMessageStreamResponse({
+      sendReasoning: true,
+    })
 
-    // Add routing metadata headers
+    // ─────────────────────────────────────────────────────────────────────────
+    // RESPONSE HEADERS (Including Dev Mode Debug Info)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Core routing headers
     response.headers.set('X-Session-State', JSON.stringify(routingDecision.session))
-    response.headers.set('X-Model-Used', routingDecision.model.displayName)
-    response.headers.set('X-Routing-Reason', routingDecision.reason)
+    response.headers.set('X-Model-Used', analysisResult.selectedModel.displayName)
+    response.headers.set('X-Routing-Reason', analysisResult.routingReason)
+    response.headers.set('X-Is-Slow-Model', String(analysisResult.selectedModel.isSlowModel))
 
+    // Image analysis header
+    if (imageAnalysisPerformed) {
+      response.headers.set('X-Image-Analyzed', 'true')
+      response.headers.set('X-Thread-Metadata', JSON.stringify(updatedThreadMetadata))
+    }
+
+    // Context compaction headers
     if (routingDecision.compaction?.wasCompacted) {
       response.headers.set('X-Context-Compacted', 'true')
       response.headers.set('X-Messages-Summarized', String(routingDecision.compaction.summarizedCount))
     }
 
+    // RAG context headers
+    if (builtContext?.ragUsed) {
+      response.headers.set('X-RAG-Used', 'true')
+      response.headers.set('X-RAG-Items', String(builtContext.ragStats?.itemCount || 0))
+    }
+
+    // Dev mode: Include full routing debug info
+    if (userIsDevMode) {
+      response.headers.set('X-Routing-Debug', JSON.stringify(routingDebugInfo))
+    }
+
     return response
   } catch (error) {
+    // #region agent log
+    await sendDebug({
+      hypothesisId: 'H15',
+      location: 'api/ai/unified-chat:error',
+      message: 'Unified chat exception',
+      data: { error: error instanceof Error ? error.message : 'unknown' },
+    })
+    // #endregion
+
     console.error('[Unified Chat] Error:', error)
     return new Response(
       JSON.stringify({
@@ -290,9 +646,9 @@ export async function GET() {
   const defaultModel = getDefaultModel()
 
   return Response.json({
-    version: '2.0.0',
+    version: '3.0.0',
     name: 'Unified AI Chat',
-    description: 'Chat-first AI with intelligent auto-routing, research, and agentic tools',
+    description: 'Multi-model AI orchestration with intelligent routing, vision support, and RAG integration',
     provider: 'openrouter',
     routing: {
       default: 'auto',
@@ -301,13 +657,33 @@ export async function GET() {
         name: defaultModel.displayName,
         modelId: defaultModel.modelId,
       },
-      capabilities: ['default', 'large_context', 'tool_use', 'quality', 'cost_effective', 'speed', 'reasoning', 'realtime'],
-      features: [
-        'Session persistence - model stays consistent within a chat',
-        'Context compaction - summarizes older messages at 80% of limit',
-        'Overflow routing - switches to large_context model when needed',
-        'Capability-based selection - routes by capability, not model name',
+      capabilities: ['default', 'large_context', 'tool_use', 'quality', 'cost_effective', 'speed', 'reasoning', 'realtime', 'vision'],
+      models: {
+        'kimi-k2': 'Default model - cost-effective, good reasoning',
+        'claude-haiku': 'Best for tool use (agentic mode)',
+        'deepseek-v3': 'Deep reasoning (shows "Deep thinking..." indicator)',
+        'grok-4': 'Large context (2M tokens)',
+        'gemini-flash': 'Vision only (internal image analyzer)',
+      },
+      decisionTree: [
+        '1. Has images? → Gemini analyzes (internal) → chat model responds',
+        '2. Agentic mode? → Claude Haiku (best for tools)',
+        '3. Deep reasoning? → DeepSeek V3.2 (slow)',
+        '4. Large context (>200K)? → Grok 4',
+        '5. Default → Kimi K2',
       ],
+    },
+    vision: {
+      enabled: true,
+      supportedTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+      pipeline: 'Two-step: Gemini Flash analyzes → Chat model responds',
+      note: 'Image context persists in thread for follow-up questions',
+    },
+    rag: {
+      enabled: true,
+      layers: ['L2 (summaries)', 'L3 (topics)', 'L4 (concepts)'],
+      maxTokens: 2000,
+      similarityThreshold: 0.6,
     },
     tools: {
       research: {
@@ -330,21 +706,35 @@ export async function GET() {
       },
     },
     features: [
-      'Chat-first experience',
-      'Intelligent auto-routing (default)',
+      'Invisible model routing - users don\'t see model switching',
+      'Two-step vision pipeline - Gemini analyzes, chat model responds',
+      'RAG integration - knowledge base context injection',
+      'Dev mode debug panel - for harsha@befach.com',
+      'Deep thinking indicator - shown for DeepSeek',
       'Session model persistence',
       'Context compaction before overflow',
       'Natural language to tool parameters',
       'Confirmation before execution',
-      'Research + agentic tools combined',
-      'Workspace context awareness',
     ],
     responseHeaders: {
       'X-Session-State': 'JSON-encoded session state for client-side storage',
       'X-Model-Used': 'The model that was actually used for this request',
       'X-Routing-Reason': 'Why this model was selected',
+      'X-Is-Slow-Model': 'Whether to show "Deep thinking..." indicator',
+      'X-Image-Analyzed': 'Whether images were analyzed in this request',
+      'X-Thread-Metadata': 'Updated thread metadata (includes image contexts)',
+      'X-RAG-Used': 'Whether RAG context was injected',
+      'X-RAG-Items': 'Number of RAG items included',
+      'X-Routing-Debug': 'Full routing debug info (dev mode only)',
       'X-Context-Compacted': 'Whether context was compacted (true/false)',
       'X-Messages-Summarized': 'Number of messages that were summarized',
+    },
+    devMode: {
+      accounts: ['harsha@befach.com'],
+      features: [
+        'X-Routing-Debug header with full analysis',
+        'devOverride parameter to force specific model',
+      ],
     },
   })
 }

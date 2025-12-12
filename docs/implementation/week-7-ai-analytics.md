@@ -191,6 +191,98 @@ AI chat, agentic mode, analytics dashboards, **Feedback Module**, **Integrations
 - [x] Fixed `error: any` → `error: unknown` with `instanceof Error`
 - [x] Added explicit Recharts interfaces (TooltipProps, LegendProps)
 
+### Day 14.5: Phase System Enhancement & Design Thinking ✅ PLANNED (2025-12-11)
+
+> **Architecture Consolidation Complete** - Two-layer system clarified, phase vs status resolved, Design Thinking integration planned.
+
+**What Changed:**
+
+Complete architectural clarification and enhancement plan for the phase system, resolving confusion between workspace stages and work item phases, and integrating Design Thinking methodology.
+
+**Architecture Decisions:**
+
+1. **Two-Layer System (NOT Three)**
+   - Workspace Layer: Shows phase DISTRIBUTION (aggregation), NOT a single stage
+   - Work Item Layer: Each work item has its own `phase` field (which IS the status)
+   - Timeline Item Layer: Has separate `status` field for execution tracking
+
+2. **Phase = Status for Work Items**
+   - Work item `phase` serves dual purpose as lifecycle stage AND status
+   - NO separate `status` field on work_items table
+   - Eliminates confusion and reduces redundancy
+
+3. **Workspace Has Mode, NOT Phase**
+   - Workspace has `mode` field: development | launch | growth | maintenance
+   - Mode determines default phase for new items and type weighting
+   - Workspace displays phase DISTRIBUTION across all work items
+
+4. **Design Thinking as Methodology**
+   - NOT lifecycle stages, but a framework for HOW to work
+   - Guides approach at each phase with methods and questions
+   - AI actively suggests Design Thinking methods based on current phase
+
+**5-Question Validation:**
+
+| Q | Status | Notes |
+|---|--------|-------|
+| 1. Data Dependencies | ✅ | Existing phase system tables, work_items, workspaces |
+| 2. Integration Points | ✅ | Integrates with AI, strategies, feedback modules |
+| 3. Standalone Value | ✅ | Provides intelligent phase management and guidance |
+| 4. Schema Finalized | ✅ | Fields defined (phase_changed_at, user_stories, etc.) |
+| 5. Can Test | ✅ | Phase transition validation, upgrade prompts testable |
+
+**Result**: ✅ PROCEED NOW - Full implementation across 6 sessions
+
+**Progress**: Week 7: 90% → 92% (Phase system architecture clarified)
+
+**Dependencies Satisfied:**
+- ✅ Workspace Modes system (Week 7, Day 14)
+- ✅ Strategy Alignment system (Week 7, Day 14-15)
+- ✅ Work Items CRUD (Week 4)
+
+**Dependencies Created:**
+- ⏳ [Session 1-6] - Phase bug fixes, upgrade prompts, workspace analysis
+- ⏳ [Week 8] - E2E testing for phase transitions
+
+**Files to Create/Modify (6 Sessions):**
+
+**Session 1: Fix Phase Bugs**
+- `next-app/src/components/workspace/workspace-phases.tsx` - Fix calculation overlap
+- `next-app/src/lib/types/work-item-types.ts` - Add transition validation
+- `supabase/migrations/[timestamp]_add_phase_transition_timestamps.sql` - New fields
+
+**Session 2: Phase Upgrade Prompts**
+- `next-app/src/lib/phase/phase-readiness.ts` - Readiness calculator (NEW)
+- `next-app/src/components/work-items/phase-upgrade-banner.tsx` - Banner UI (NEW)
+- `next-app/src/lib/phase/guiding-questions.ts` - Question database (NEW)
+
+**Session 3: Workspace Analysis**
+- `next-app/src/lib/phase/workspace-analyzer.ts` - Analysis service (NEW)
+- `next-app/src/components/workspace/workspace-health-card.tsx` - Health card (NEW)
+- `next-app/src/app/api/workspaces/[id]/analyze/route.ts` - API endpoint (NEW)
+
+**Session 4: Design Thinking Integration**
+- `next-app/src/lib/methodologies/design-thinking.ts` - DT framework (NEW)
+- `next-app/src/lib/methodologies/framework-mapper.ts` - Multi-framework (NEW)
+- `next-app/src/components/ai/methodology-suggestions.tsx` - AI suggestions (NEW)
+
+**Session 5: Strategy Customization**
+- `supabase/migrations/[timestamp]_add_strategy_fields.sql` - user_stories, case_studies, user_examples
+- `next-app/src/components/strategies/org-strategy-view.tsx` - Full tree view (NEW)
+- `next-app/src/components/strategies/work-item-strategy-view.tsx` - Alignment view (NEW)
+
+**Session 6: Polish & Testing**
+- `next-app/src/components/feedback/feedback-triage.tsx` - Conversion with phase context
+- `next-app/src/components/workspace/workspace-card.tsx` - Show distribution
+- `tests/e2e/phase-transitions.spec.ts` - E2E tests (NEW)
+
+**Links:**
+- Consolidation: [docs/ARCHITECTURE_CONSOLIDATION.md](../ARCHITECTURE_CONSOLIDATION.md)
+- Implementation: [docs/implementation/README.md#phase-system-enhancement](README.md#phase-system-enhancement)
+- Database: [docs/implementation/database-schema.md](database-schema.md)
+
+---
+
 ### Day 15-17: Feedback Module (Full Platform)
 
 > **📋 Full Design Spec:** See [work-board-3.0.md Part 8](work-board-3.0.md#part-8-feedback-module-full-platform)
