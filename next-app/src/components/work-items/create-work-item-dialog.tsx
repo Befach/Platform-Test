@@ -35,6 +35,8 @@ import {
   LifecycleStatus,
 } from '@/lib/constants/work-item-types'
 import { TagSelector } from './tag-selector'
+import { EnhancementCheckbox } from './enhancement-checkbox'
+import { ParentFeatureSelector } from './parent-feature-selector'
 
 // Type-specific placeholders (only placeholders change, not labels)
 const TYPE_PLACEHOLDERS = {
@@ -94,6 +96,11 @@ interface FormData {
   tags: string[]
   skipTimeline: boolean
 
+  // Enhancement fields (for features/enhancements)
+  isEnhancement: boolean
+  enhancesWorkItemId: string | null
+  version: number
+
   // Step 2: Timeline Breakdown (optional based on skipTimeline)
   mvp: TimelineData
   short: TimelineData
@@ -137,6 +144,10 @@ export function CreateWorkItemDialog({
     purpose: '',
     tags: [],
     skipTimeline: getDefaultSkipTimeline(initialItemType),
+    // Enhancement fields
+    isEnhancement: false,
+    enhancesWorkItemId: null,
+    version: 1,
     mvp: {
       description: '',
       difficulty: 'medium',
@@ -163,12 +174,17 @@ export function CreateWorkItemDialog({
   const router = useRouter()
   const supabase = createClient()
 
-  // Type change handler - also update skipTimeline default based on type
+  // Type change handler - also update skipTimeline default and reset enhancement fields
   const handleTypeChange = (newType: string) => {
+    const isEnhancementType = newType === 'feature' || newType === 'enhancement'
     setFormData((prev) => ({
       ...prev,
       type: newType,
       skipTimeline: getDefaultSkipTimeline(newType),
+      // Reset enhancement fields when switching away from feature/enhancement types
+      isEnhancement: isEnhancementType ? prev.isEnhancement : false,
+      enhancesWorkItemId: isEnhancementType ? prev.enhancesWorkItemId : null,
+      version: isEnhancementType ? prev.version : 1,
     }))
   }
 
@@ -176,6 +192,11 @@ export function CreateWorkItemDialog({
   const validateStep1 = (): boolean => {
     if (!formData.name.trim()) {
       alert(`${getItemLabel(formData.type)} name is required`)
+      return false
+    }
+    // Require parent feature when enhancement flag is checked
+    if (formData.isEnhancement && !formData.enhancesWorkItemId) {
+      alert('Please select a parent feature for this enhancement')
       return false
     }
     return true
@@ -238,6 +259,10 @@ export function CreateWorkItemDialog({
         priority: formData.priority,
         status: 'not_started',
         created_by: currentUserId,
+        // Enhancement fields
+        is_enhancement: formData.isEnhancement,
+        enhances_work_item_id: formData.enhancesWorkItemId,
+        version: formData.version,
       })
 
       if (workItemError) throw workItemError
@@ -331,6 +356,10 @@ export function CreateWorkItemDialog({
         purpose: '',
         tags: [],
         skipTimeline: getDefaultSkipTimeline(initialItemType),
+        // Reset enhancement fields
+        isEnhancement: false,
+        enhancesWorkItemId: null,
+        version: 1,
         mvp: {
           description: '',
           difficulty: 'medium',
@@ -490,6 +519,37 @@ export function CreateWorkItemDialog({
                     onTagsChange={(tags) => setFormData({ ...formData, tags })}
                   />
                 </div>
+
+                {/* Enhancement Flag (only for feature/enhancement types) */}
+                <EnhancementCheckbox
+                  type={formData.type}
+                  checked={formData.isEnhancement}
+                  onCheckedChange={(checked) => {
+                    setFormData({
+                      ...formData,
+                      isEnhancement: checked,
+                      // Reset parent selection when unchecking
+                      enhancesWorkItemId: checked ? formData.enhancesWorkItemId : null,
+                      version: checked ? formData.version : 1,
+                    })
+                  }}
+                />
+
+                {/* Parent Feature Selector (only when enhancement is checked) */}
+                {formData.isEnhancement && (
+                  <ParentFeatureSelector
+                    teamId={teamId}
+                    workspaceId={workspaceId}
+                    selectedFeatureId={formData.enhancesWorkItemId}
+                    onFeatureChange={(featureId, nextVersion) => {
+                      setFormData({
+                        ...formData,
+                        enhancesWorkItemId: featureId,
+                        version: nextVersion,
+                      })
+                    }}
+                  />
+                )}
 
                 {/* Skip Timeline Checkbox */}
                 <div className="flex items-center space-x-2 pt-2 border-t">

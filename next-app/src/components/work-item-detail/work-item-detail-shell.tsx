@@ -16,6 +16,7 @@ import { TasksTab } from './tabs/tasks-tab'
 import { FeedbackTab } from './tabs/feedback-tab'
 import { InspirationTab } from './tabs/inspiration-tab'
 import { ResourcesTab } from './tabs/resources-tab'
+import { ConceptWorkflowPanel } from '../work-items/concept-workflow-panel'
 import { TrackingSidebar, CollapsedSidebarToggle } from './tracking-sidebar'
 
 // ============================================================================
@@ -56,6 +57,8 @@ function WorkItemDetailContent({ className }: { className?: string }) {
         return <MetricsTabPlaceholder />
       case 'ai-copilot':
         return <AICopilotTabPlaceholder />
+      case 'concept-workflow':
+        return <ConceptWorkflowPanel />
       default:
         return <SummaryTab />
     }

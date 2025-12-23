@@ -20,8 +20,10 @@ import { getWorkItemSchema } from '@/lib/schemas/work-item-form-schema'
 import { PhaseAwareFormFields } from './phase-aware-form-fields'
 import { PhaseContextBadge } from './phase-context-badge'
 import { WorkspacePhase, WorkItemType } from '@/lib/constants/work-item-types'
-import { Loader2, AlertCircle } from 'lucide-react'
+import { Loader2, AlertCircle, GitBranch } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
+import { VersionHistory } from './version-history'
 
 interface EditWorkItemDialogProps {
   workItemId: string
@@ -76,6 +78,13 @@ export function EditWorkItemDialog({
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingData, setIsLoadingData] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
+
+  // Enhancement state
+  const [isEnhancement, setIsEnhancement] = useState(false)
+  const [enhancesWorkItemId, setEnhancesWorkItemId] = useState<string | null>(null)
+  const [version, setVersion] = useState(1)
+  const [workItemType, setWorkItemType] = useState<WorkItemType>('feature')
+  const [workItemPhase, setWorkItemPhase] = useState<string | null>(null)
 
   // Get phase-appropriate schema
   const schema = getWorkItemSchema(phase)
