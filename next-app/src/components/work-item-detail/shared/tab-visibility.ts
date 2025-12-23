@@ -22,11 +22,12 @@ import {
   MessageSquare,
   BarChart3,
   Bot,
+  Workflow,
   type LucideIcon,
 } from 'lucide-react'
 
 /**
- * Tab identifiers for the 8-tab structure
+ * Tab identifiers for the 9-tab structure
  */
 export type DetailTab =
   | 'summary'
@@ -37,6 +38,7 @@ export type DetailTab =
   | 'feedback'
   | 'metrics'
   | 'ai-copilot'
+  | 'concept-workflow'
 
 /**
  * Tab configuration with metadata
@@ -50,22 +52,25 @@ export interface TabConfig {
   visibleInPhases: WorkspacePhase[]
   /** Whether this is a Pro-tier feature */
   isPro?: boolean
+  /** Function to determine if tab should be visible based on work item type */
+  isVisibleForType?: (type: string) => boolean
 }
 
 /**
- * Complete tab configuration for the 8-tab structure
+ * Complete tab configuration for the 9-tab structure
  *
  * Tab Visibility Matrix (4-Phase System):
- * | Tab         | design | build | refine | launch |
- * |-------------|:------:|:-----:|:------:|:------:|
- * | Summary     | ✓      | ✓     | ✓      | ✓      |
- * | Inspiration | ✓      | -     | -      | -      |
- * | Resources   | ✓      | ✓     | ✓      | ✓      |
- * | Scope       | ✓      | ✓     | ✓      | ✓      |
- * | Tasks       | -      | ✓     | ✓      | ✓      |
- * | Feedback    | -      | ✓     | ✓      | ✓      |
- * | Metrics     | -      | ✓     | ✓      | ✓      |
- * | AI Copilot  | ✓      | ✓     | ✓      | ✓      |
+ * | Tab              | design | build | refine | launch | Type-Specific |
+ * |------------------|:------:|:-----:|:------:|:------:|:-------------:|
+ * | Summary          | ✓      | ✓     | ✓      | ✓      | -             |
+ * | Inspiration      | ✓      | -     | -      | -      | -             |
+ * | Resources        | ✓      | ✓     | ✓      | ✓      | -             |
+ * | Scope            | ✓      | ✓     | ✓      | ✓      | -             |
+ * | Tasks            | -      | ✓     | ✓      | ✓      | -             |
+ * | Feedback         | -      | ✓     | ✓      | ✓      | -             |
+ * | Metrics          | -      | ✓     | ✓      | ✓      | -             |
+ * | AI Copilot       | ✓      | ✓     | ✓      | ✓      | -             |
+ * | Concept Workflow | ✓      | ✓     | ✓      | ✓      | concept only  |
  */
 export const TAB_CONFIG: TabConfig[] = [
   {
@@ -126,15 +131,34 @@ export const TAB_CONFIG: TabConfig[] = [
     visibleInPhases: ['design', 'build', 'refine', 'launch'],
     isPro: true,
   },
+  {
+    id: 'concept-workflow',
+    label: 'Concept Workflow',
+    icon: Workflow,
+    description: 'Manage concept lifecycle and phase transitions',
+    visibleInPhases: ['design', 'build', 'refine', 'launch'],
+    isVisibleForType: (type: string) => type === 'concept',
+  },
 ]
 
 /**
  * Get visible tabs for a given phase
  * Supports both new and legacy phase values
  */
-export function getVisibleTabs(phase: WorkspacePhase | string): TabConfig[] {
+export function getVisibleTabs(phase: WorkspacePhase | string, workItemType?: string): TabConfig[] {
   const normalizedPhase = migratePhase(phase)
-  return TAB_CONFIG.filter((tab) => tab.visibleInPhases.includes(normalizedPhase))
+  return TAB_CONFIG.filter((tab) => {
+    // Check phase visibility
+    if (!tab.visibleInPhases.includes(normalizedPhase)) {
+      return false
+    }
+    // Check type-specific visibility
+    if (tab.isVisibleForType && workItemType) {
+      return tab.isVisibleForType(workItemType)
+    }
+    // If no type filter, show tab (unless it has a type filter but no type provided)
+    return !tab.isVisibleForType
+  })
 }
 
 /**

@@ -38,6 +38,8 @@ import {
   priorityDisplayMap,
   typeDisplayMap,
 } from '@/components/work-board/shared/filter-context'
+import { BugWorkflowPanel } from '@/components/work-items/bug-workflow-panel'
+import type { BugPhase, BugMetadata } from '@/lib/bug/workflow'
 
 export function SummaryTab() {
   const { workItem, counts, phase, updateWorkItem } = useWorkItemDetailContext()
@@ -82,6 +84,43 @@ export function SummaryTab() {
   const handleCancelEdit = () => {
     setEditedDescription(workItem.description || '')
     setIsEditingDescription(false)
+  }
+
+  // Bug workflow handlers
+  const handleBugPhaseChange = async (newPhase: BugPhase) => {
+    try {
+      const response = await fetch(`/api/work-items/${workItem.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phase: newPhase }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update phase')
+      }
+
+      updateWorkItem({ phase: newPhase })
+    } catch (error) {
+      console.error('Error updating bug phase:', error)
+    }
+  }
+
+  const handleBugMetadataUpdate = async (metadata: BugMetadata) => {
+    try {
+      const response = await fetch(`/api/work-items/${workItem.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ metadata }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update metadata')
+      }
+
+      updateWorkItem({ metadata })
+    } catch (error) {
+      console.error('Error updating bug metadata:', error)
+    }
   }
 
   // Get display info
@@ -201,6 +240,19 @@ export function SummaryTab() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Bug Workflow Panel - Only for bugs */}
+      {workItem.type === 'bug' && (
+        <BugWorkflowPanel
+          workItemId={workItem.id}
+          currentPhase={(workItem.phase || 'triage') as BugPhase}
+          metadata={workItem.metadata}
+          reviewEnabled={workItem.review_enabled}
+          reviewStatus={workItem.review_status}
+          onPhaseChange={handleBugPhaseChange}
+          onMetadataUpdate={handleBugMetadataUpdate}
+        />
+      )}
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

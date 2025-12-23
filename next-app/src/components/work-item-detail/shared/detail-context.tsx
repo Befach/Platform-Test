@@ -42,6 +42,13 @@ export interface WorkItemData {
   workspace_id: string
   team_id: string
   department_id?: string | null
+  // Phase and workflow fields
+  phase?: string
+  metadata?: unknown
+  rejection_reason?: string | null
+  archived?: boolean
+  review_enabled?: boolean
+  review_status?: string | null
   // Relationships loaded from server
   workspace?: {
     id: string
@@ -231,7 +238,7 @@ export function WorkItemDetailProvider({
   }, [workItem.status, workItem.assigned_to, initialTimelineItems.length])
 
   // Visible tabs based on phase
-  const visibleTabs = useMemo(() => getVisibleTabs(phase), [phase])
+  const visibleTabs = useMemo(() => getVisibleTabs(phase, workItem.type), [phase, workItem.type])
 
   // Preferences state (persisted to localStorage)
   const [preferences, setPreferencesState] = useState<DetailPreferences>(defaultPreferences)

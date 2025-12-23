@@ -111,6 +111,20 @@ export async function PATCH(
       }
     }
 
+    // Validate concept phase transitions
+    if (currentItem.type === 'concept' && body.status !== undefined) {
+      const { canTransitionConcept } = await import('@/lib/concept/workflow')
+      const currentConceptPhase = currentItem.status as 'ideation' | 'research' | 'validated' | 'rejected'
+      const targetConceptPhase = body.status as 'ideation' | 'research' | 'validated' | 'rejected'
+
+      if (!canTransitionConcept(currentConceptPhase, targetConceptPhase)) {
+        return NextResponse.json(
+          { error: `Invalid concept phase transition from ${currentConceptPhase} to ${targetConceptPhase}` },
+          { status: 400 }
+        )
+      }
+    }
+
     // 5. Prepare update data (merge with current values)
     const updateData: any = {
       updated_at: new Date().toISOString(),
@@ -143,6 +157,10 @@ export async function PATCH(
     if (body.has_timeline_breakdown !== undefined) updateData.has_timeline_breakdown = body.has_timeline_breakdown
     if (body.assigned_to !== undefined) updateData.assigned_to = body.assigned_to
     if (body.is_mind_map_conversion !== undefined) updateData.is_mind_map_conversion = body.is_mind_map_conversion
+
+    // Concept workflow fields
+    if (body.rejection_reason !== undefined) updateData.rejection_reason = body.rejection_reason
+    if (body.archived !== undefined) updateData.archived = body.archived
 
     // 6. Recalculate phase if relevant fields changed
     // Updated 2025-12-13: Always recalculate phase based on merged data
