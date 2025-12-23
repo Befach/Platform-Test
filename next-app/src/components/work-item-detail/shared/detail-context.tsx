@@ -42,6 +42,13 @@ export interface WorkItemData {
   workspace_id: string
   team_id: string
   department_id?: string | null
+  // Phase and workflow fields
+  phase?: string
+  metadata?: unknown
+  rejection_reason?: string | null
+  archived?: boolean
+  review_enabled?: boolean
+  review_status?: string | null
   // Relationships loaded from server
   workspace?: {
     id: string

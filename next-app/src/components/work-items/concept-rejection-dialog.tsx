@@ -26,6 +26,13 @@ import { Label } from '@/components/ui/label'
 import { AlertCircle } from 'lucide-react'
 
 // =============================================================================
+// CONSTANTS
+// =============================================================================
+
+const MIN_REJECTION_REASON_LENGTH = 10
+const MAX_REJECTION_REASON_LENGTH = 5000
+
+// =============================================================================
 // TYPES
 // =============================================================================
 
@@ -50,7 +57,10 @@ export function ConceptRejectionDialog({
   const [archive, setArchive] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isReasonValid = reason.trim().length >= 10
+  const reasonLength = reason.trim().length
+  const isReasonValid =
+    reasonLength >= MIN_REJECTION_REASON_LENGTH &&
+    reasonLength <= MAX_REJECTION_REASON_LENGTH
 
   const handleSubmit = async () => {
     if (!isReasonValid) return
@@ -105,9 +115,13 @@ export function ConceptRejectionDialog({
               rows={4}
               className="resize-none"
               disabled={isSubmitting}
+              maxLength={MAX_REJECTION_REASON_LENGTH}
             />
-            <p className="text-xs text-muted-foreground">
-              Minimum 10 characters required ({reason.trim().length}/10)
+            <p className={`text-xs ${reasonLength > MAX_REJECTION_REASON_LENGTH ? 'text-red-500' : 'text-muted-foreground'}`}>
+              {reasonLength < MIN_REJECTION_REASON_LENGTH
+                ? `Minimum ${MIN_REJECTION_REASON_LENGTH} characters required (${reasonLength}/${MIN_REJECTION_REASON_LENGTH})`
+                : `${reasonLength}/${MAX_REJECTION_REASON_LENGTH} characters`
+              }
             </p>
           </div>
 

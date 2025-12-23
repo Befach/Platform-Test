@@ -5,8 +5,7 @@
  * Concepts follow: ideation → research → validated | rejected
  */
 
-import { CONCEPT_PHASE_CONFIG } from '@/lib/constants/workspace-phases'
-import type { LucideIcon } from 'lucide-react'
+import { Lightbulb, Search, CheckCircle2, XCircle, type LucideIcon } from 'lucide-react'
 
 // =============================================================================
 // TYPES & CONSTANTS
@@ -14,6 +13,63 @@ import type { LucideIcon } from 'lucide-react'
 
 export const CONCEPT_PHASES = ['ideation', 'research', 'validated', 'rejected'] as const
 export type ConceptPhase = typeof CONCEPT_PHASES[number]
+
+/**
+ * Concept Phase UI Configuration
+ */
+interface ConceptPhaseUIConfig {
+  name: string
+  emoji: string
+  tagline: string
+  color: string
+  bgColor: string
+  textColor: string
+  borderColor: string
+  icon: LucideIcon
+}
+
+const CONCEPT_PHASE_CONFIG: Record<ConceptPhase, ConceptPhaseUIConfig> = {
+  ideation: {
+    name: 'Ideation',
+    emoji: '💡',
+    tagline: 'Explore ideas and hypotheses',
+    color: '#A855F7', // Purple-500
+    bgColor: 'bg-purple-500',
+    textColor: 'text-purple-600',
+    borderColor: 'border-purple-500',
+    icon: Lightbulb,
+  },
+  research: {
+    name: 'Research',
+    emoji: '🔍',
+    tagline: 'Validate through research',
+    color: '#6366F1', // Indigo-500
+    bgColor: 'bg-indigo-500',
+    textColor: 'text-indigo-600',
+    borderColor: 'border-indigo-500',
+    icon: Search,
+  },
+  validated: {
+    name: 'Validated',
+    emoji: '✅',
+    tagline: 'Proven and ready',
+    color: '#22C55E', // Green-500
+    bgColor: 'bg-green-500',
+    textColor: 'text-green-600',
+    borderColor: 'border-green-500',
+    icon: CheckCircle2,
+  },
+  rejected: {
+    name: 'Rejected',
+    emoji: '❌',
+    tagline: 'Not viable',
+    color: '#EF4444', // Red-500
+    bgColor: 'bg-red-500',
+    textColor: 'text-red-600',
+    borderColor: 'border-red-500',
+    icon: XCircle,
+  },
+}
 
 /**
  * Valid phase transitions for concepts
