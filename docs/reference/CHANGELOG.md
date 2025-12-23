@@ -10,6 +10,36 @@ All notable changes, migrations, and feature implementations are documented in t
 
 ## [Unreleased]
 
+### Changed
+
+#### Updated .cursorrules to Current Architecture (2025-12-23)
+Modernized Cursor AI rules from 347-day-old configuration to reflect current multi-tenant architecture.
+
+**Key Changes**:
+- ✅ Updated multi-tenancy model: `user_id = 'default'` → `team_id` (multi-tenant)
+- ✅ Corrected MCP count: 5 MCPs → 3 MCPs (Supabase, shadcn/ui, Context7)
+- ✅ Added type-aware 4-phase system (design→build→refine→launch)
+- ✅ Replaced `workspace_id` isolation with `team_id` isolation
+- ✅ Updated table names: `features` → `work_items`
+- ✅ Added versioning system, review process, Design Thinking methodology
+- ✅ Added comprehensive security checklist (OWASP Top 10)
+- ✅ Clarified: Phase IS the status for work items (no separate status field)
+
+**Impact**: Cursor AI now has accurate context for code generation and suggestions aligned with canonical architecture (`ARCHITECTURE_CONSOLIDATION.md`).
+
+**Files Modified**: `.cursorrules` (complete rewrite), backup created at `.cursorrules.backup-2025-12-23`
+
+### Fixed
+
+#### Canvas Work Item Status Field (2025-12-23)
+Fixed TypeScript error in `unified-canvas.tsx` where code referenced non-existent `status` field on work items.
+
+**Error**: `Property 'status' does not exist on type WorkItem`
+
+**Fix**: Changed `item.status` → `item.phase` (phase IS the status for work items, per canonical architecture)
+
+**Files Modified**: `next-app/src/components/canvas/unified-canvas.tsx:182`
+
 ### Added
 
 #### Type-Aware Phase System - Database Columns (2025-12-22)
@@ -65,6 +95,70 @@ ALTER TABLE work_items ADD COLUMN IF NOT EXISTS review_status TEXT;
 - Previous migrations were marked as applied but columns weren't actually created
 - Work items use `phase` as their status field (timeline items have separate execution status)
 - Enables type-aware phase workflows, versioning chains, and detached review process
+
+---
+
+#### Metorial Integration - Strategic Decision (2025-12-23)
+Strategic analysis and decision to migrate from self-hosted MCP Gateway to Metorial as primary integration method for Week 11-12 implementation.
+
+**Decision**: Approved - Migrate to Metorial as primary, keep self-hosted as advanced fallback
+
+**Key Insights**:
+- **User Experience**: 5 minutes setup vs 2-4 hours OAuth configuration per user
+- **Integration Coverage**: 600+ integrations vs 6 providers (100x increase)
+- **Cost**: Free tier for 90% of users vs $10-20/month infrastructure
+- **Open Source Friendly**: Non-technical users can self-host with easy Metorial setup
+- **Solo Dev Sustainable**: Cannot build/maintain 200-300 integrations alone
+
+**Implementation Timeline**:
+- **Now (Week 7-8)**: NO CHANGES - Continue with current work
+- **Week 11-12**: Add Metorial SDK integration (3-4 days)
+
+**Files Created**:
+- `docs/research/metorial-integration-decision.md` - Strategic decision summary (key points)
+- `C:\Users\harsh\.claude\plans\kind-mapping-quasar.md` - Full implementation plan (2,135 lines)
+
+**Files to Create** (Week 11-12):
+- `next-app/src/lib/ai/mcp/metorial-adapter.ts` - Metorial SDK wrapper
+- `next-app/src/lib/ai/mcp/integration-factory.ts` - Mode selection (metorial/self-hosted/hybrid)
+- `next-app/src/components/integrations/integration-status.tsx` - UI status component
+- `docs/reference/SELF_HOSTED_MCP_GATEWAY.md` - Advanced self-hosted guide
+- `docs/migration/METORIAL_MIGRATION.md` - Migration guide for existing users
+
+**Files to Modify** (Week 11-12):
+- `next-app/package.json` - Add Metorial SDK dependency
+- `next-app/.env.example` - Add integration mode configuration
+- `next-app/src/lib/ai/mcp/index.ts` - Update exports
+- `next-app/src/app/api/integrations/route.ts` - Use factory pattern
+- `docs/reference/MCP_USAGE_GUIDE.md` - Document both integration options
+- `README.md` - Quick start with integration setup
+
+**Files to Keep** (for fallback):
+- `next-app/src/lib/ai/mcp/gateway-client.ts` - Self-hosted MCP client
+- `docker/mcp-gateway/gateway.js` - Self-hosted gateway implementation
+- All existing MCP Gateway infrastructure
+
+**Rationale**:
+For an open-source self-hosted application:
+- Solo developer cannot build/maintain 200-300 integrations
+- Users need 6-10 integrations out of 200-300 possible (variable requirements)
+- Current approach: Users must configure OAuth apps for each integration (2-4 hours, high failure rate, technical users only)
+- Metorial approach: Users sign up + add API key + connect integrations (5 minutes, non-technical friendly, 600+ integrations)
+
+**Decision Validation** (5-Question Framework):
+- ✅ Data Dependencies: Metorial SDK available, documented APIs
+- ✅ Integration Points: Works with existing AI assistant and tools
+- ✅ Standalone Value: Provides immediate value (600+ integrations)
+- ✅ Schema Finalized: No database changes needed
+- ✅ Testing Feasibility: Can test with multiple providers
+
+**Result**: ✅ **PROCEED in Week 11-12** - All validation criteria met
+
+**References**:
+- **Strategic Decision**: [docs/research/metorial-integration-decision.md](../research/metorial-integration-decision.md)
+- **Full Plan**: `C:\Users\harsh\.claude\plans\kind-mapping-quasar.md`
+- **Progress Entry**: [docs/planning/PROGRESS.md](../planning/PROGRESS.md#metorial-integration---strategic-decision--2025-12-23)
+- **External**: https://metorial.com/ | https://docs.metorial.com/
 
 ---
 
