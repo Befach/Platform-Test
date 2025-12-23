@@ -7,7 +7,7 @@
  * Allows selecting type and customizing name/purpose
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Dialog,
@@ -39,6 +39,12 @@ import {
   getItemIcon,
   getItemDescription,
 } from '@/lib/constants/work-item-types'
+import {
+  getTypePhaseConfig,
+  getDefaultPhaseForType,
+  getValidPhasesForType,
+  type WorkItemType as PhaseWorkItemType,
+} from '@/lib/constants/workspace-phases'
 
 interface FeedbackConvertDialogProps {
   feedback: FeedbackWithRelations | null
@@ -57,8 +63,19 @@ export function FeedbackConvertDialog({
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [workItemType, setWorkItemType] = useState<WorkItemType>('feature')
+  const [workItemPhase, setWorkItemPhase] = useState<string>('design')
   const [workItemName, setWorkItemName] = useState('')
   const [workItemPurpose, setWorkItemPurpose] = useState('')
+
+  // Get available phases for the selected type
+  const availablePhases = useMemo(() => {
+    return getValidPhasesForType(workItemType as PhaseWorkItemType) as string[]
+  }, [workItemType])
+
+  // Get current phase config for display
+  const phaseConfig = useMemo(() => {
+    return getTypePhaseConfig(workItemType as PhaseWorkItemType, workItemPhase)
+  }, [workItemType, workItemPhase])
 
   // Initialize form with feedback data when dialog opens
   useEffect(() => {
@@ -73,6 +90,12 @@ export function FeedbackConvertDialog({
       setWorkItemPurpose(feedback.content)
     }
   }, [open, feedback])
+
+  // Update phase when type changes (set to default for that type)
+  useEffect(() => {
+    const defaultPhase = getDefaultPhaseForType(workItemType as PhaseWorkItemType)
+    setWorkItemPhase(defaultPhase)
+  }, [workItemType])
 
   if (!feedback) return null
 
@@ -98,6 +121,7 @@ export function FeedbackConvertDialog({
           work_item_type: workItemType,
           work_item_name: workItemName,
           work_item_purpose: workItemPurpose || undefined,
+          work_item_phase: workItemPhase,
         }),
       })
 
@@ -198,6 +222,45 @@ export function FeedbackConvertDialog({
               </Select>
               <p className="text-xs text-muted-foreground">
                 {getItemDescription(workItemType)}
+              </p>
+            </div>
+
+            {/* Initial Phase */}
+            <div className="space-y-2">
+              <Label htmlFor="phase">Initial Phase *</Label>
+              <Select value={workItemPhase} onValueChange={setWorkItemPhase}>
+                <SelectTrigger id="phase">
+                  <SelectValue>
+                    {phaseConfig && (
+                      <div className="flex items-center gap-2">
+                        <span>{phaseConfig.emoji}</span>
+                        <span>{phaseConfig.name}</span>
+                      </div>
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {availablePhases.map((phaseOption: string) => {
+                    const config = getTypePhaseConfig(workItemType as PhaseWorkItemType, phaseOption)
+                    if (!config) return null
+                    return (
+                      <SelectItem key={phaseOption} value={phaseOption}>
+                        <div className="flex items-center gap-2">
+                          <span>{config.emoji}</span>
+                          <div>
+                            <span className="font-medium">{config.name}</span>
+                            <p className="text-xs text-muted-foreground truncate max-w-[250px]">
+                              {config.description}
+                            </p>
+                          </div>
+                        </div>
+                      </SelectItem>
+                    )
+                  })}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                {phaseConfig?.description || 'Select a starting phase for this work item'}
               </p>
             </div>
 

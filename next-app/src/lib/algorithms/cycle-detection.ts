@@ -1,4 +1,4 @@
-import type { WorkItem } from '@/lib/work-items/types'
+import type { WorkItem } from '@/lib/types/work-items'
 import type { WorkItemConnection } from '@/lib/types/dependencies'
 
 export interface Cycle {
@@ -163,12 +163,18 @@ function calculateCycleSeverity(
 ): 'high' | 'medium' | 'low' {
   // High severity if:
   // - Cycle includes critical/high priority items
-  // - Cycle involves blocked/in_progress items
+  // - Cycle involves blocked items or active work phases
   // - Long cycle (> 4 items)
 
   const hasCriticalItems = workItems.some((item) => item.priority === 'critical')
-  const hasBlockedItems = workItems.some((item) => item.status === 'on_hold')
-  const hasInProgressItems = workItems.some((item) => item.status === 'in_progress')
+  const hasBlockedItems = workItems.some((item) => {
+    const blockers = item.blockers as any
+    return Array.isArray(blockers) && blockers.length > 0
+  })
+  const hasInProgressItems = workItems.some((item) => {
+    const activePhases = ['build', 'fixing', 'investigating', 'refine']
+    return activePhases.includes(item.phase || '')
+  })
   const isLongCycle = workItems.length > 4
 
   if (hasCriticalItems || (hasBlockedItems && hasInProgressItems)) {

@@ -84,6 +84,10 @@ export interface ProductStrategy {
   metric_current: number | null;
   metric_target: number | null;
   metric_unit: string | null;
+  // Context fields (primarily for Pillars)
+  user_stories: string[];
+  user_examples: string[];
+  case_studies: string[];
   // Ownership & display
   owner_id: string | null;
   color: string;
@@ -188,6 +192,10 @@ export interface CreateStrategyRequest {
   metric_current?: number;
   metric_target?: number;
   metric_unit?: string;
+  // Context fields (primarily for Pillars)
+  user_stories?: string[];
+  user_examples?: string[];
+  case_studies?: string[];
   owner_id?: string;
   color?: string;
   sort_order?: number;
@@ -209,6 +217,10 @@ export interface UpdateStrategyRequest {
   metric_current?: number | null;
   metric_target?: number | null;
   metric_unit?: string | null;
+  // Context fields (primarily for Pillars)
+  user_stories?: string[];
+  user_examples?: string[];
+  case_studies?: string[];
   owner_id?: string | null;
   color?: string;
   sort_order?: number;

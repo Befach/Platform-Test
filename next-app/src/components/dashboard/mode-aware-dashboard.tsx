@@ -23,6 +23,7 @@ import { QuickActionsWidget } from './mode-widgets/quick-actions-widget'
 import { BlockersWidget } from './mode-widgets/blockers-widget'
 import { FeedbackSummaryWidget } from './mode-widgets/feedback-summary-widget'
 import { TechDebtWidget } from './mode-widgets/tech-debt-widget'
+import { WorkspaceHealthCard } from '@/components/workspace/workspace-health-card'
 
 // ============================================================================
 // TYPES
@@ -226,6 +227,14 @@ export function ModeAwareDashboard({
             stats={techDebtStats}
             onViewItem={(id) => window.location.href = `/workspaces/${workspaceId}/work-items/${id}`}
             onViewAll={() => window.location.href = `/workspaces/${workspaceId}?view=work-items&tag=tech-debt`}
+          />
+        )
+
+      case 'workspace-health':
+        return (
+          <WorkspaceHealthCard
+            key={widget}
+            workspaceId={workspaceId}
           />
         )
 

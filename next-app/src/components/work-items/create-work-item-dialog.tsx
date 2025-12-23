@@ -56,12 +56,6 @@ const TYPE_PLACEHOLDERS = {
     description: 'Describe the bug and expected fix...',
     approach: 'Steps to reproduce or fix strategy...',
   },
-  enhancement: {
-    name: 'e.g., Faster search results',
-    purpose: 'What improvement does this bring? How will users benefit?',
-    description: 'Describe the improvement...',
-    approach: 'How to implement the enhancement...',
-  },
 } as const
 
 const getPlaceholder = (type: string, field: keyof typeof TYPE_PLACEHOLDERS.concept): string => {

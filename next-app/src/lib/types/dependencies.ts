@@ -4,7 +4,7 @@
  */
 
 import { Node as ReactFlowNode, Edge as ReactFlowEdge } from '@xyflow/react'
-import type { WorkItem, WorkItemStatus, WorkItemPriority } from '../work-items/types'
+import type { WorkItem, AnyWorkItemPhase, WorkItemPriority } from './work-items'
 
 // ========== CONNECTION TYPES ==========
 
@@ -344,8 +344,8 @@ export interface DependencyFilterState {
   /** Filter by connection type */
   connectionTypes: ConnectionType[]
 
-  /** Filter by work item status */
-  statuses: WorkItemStatus[]
+  /** Filter by work item phase */
+  phases: AnyWorkItemPhase[]
 
   /** Filter by work item priority */
   priorities: WorkItemPriority[]

@@ -22,7 +22,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateDependency } from '@/lib/hooks/use-dependencies'
 import { useToast } from '@/hooks/use-toast'
-import type { WorkItem } from '@/lib/work-items/types'
+import type { WorkItem } from '@/lib/types/work-items'
 import type { ConnectionType } from '@/lib/types/dependencies'
 import { CONNECTION_TYPE_CONFIGS } from '@/lib/types/dependencies'
 import { Plus, Loader2 } from 'lucide-react'

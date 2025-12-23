@@ -72,13 +72,20 @@ export default async function WorkItemDetailPage({
     .select('*', { count: 'exact', head: true })
     .eq('work_item_id', workItemId)
 
+  // Check if this work item has been enhanced by others (for version tab visibility)
+  const { count: enhancementCount } = await supabase
+    .from('work_items')
+    .select('*', { count: 'exact', head: true })
+    .eq('enhances_work_item_id', workItemId)
+
   // Transform data to match component types
   // Note: Database uses 'name' (not 'title'), 'purpose' (not 'description'), 'owner' (not 'assigned_to')
   const workItemData: WorkItemData = {
     id: workItem.id,
     title: workItem.name,
     description: workItem.purpose || null,
-    status: workItem.status,
+    phase: workItem.phase,
+    status: workItem.phase, // Backward compat - maps to phase
     priority: workItem.priority,
     type: workItem.type,
     assigned_to: workItem.owner || null,
@@ -90,6 +97,15 @@ export default async function WorkItemDetailPage({
     workspace: workItem.workspace,
     assigned_to_user: null, // Not implemented yet - would need FK to users table
     created_by_user: null, // Not implemented yet - would need FK to users table
+    // Versioning fields
+    version: workItem.version || 1,
+    enhances_work_item_id: workItem.enhances_work_item_id || null,
+    version_notes: workItem.version_notes || null,
+    // Additional fields from new schema
+    department_id: workItem.department_id || null,
+    is_enhancement: workItem.is_enhancement || false,
+    review_enabled: workItem.review_enabled || false,
+    review_status: workItem.review_status || null,
   }
 
   const timelineItemsData: TimelineItemData[] = (timelineItems || []).map(
@@ -118,6 +134,7 @@ export default async function WorkItemDetailPage({
       timelineItems={timelineItemsData}
       taskCount={taskCount || 0}
       feedbackCount={feedbackCount || 0}
+      hasEnhancements={(enhancementCount || 0) > 0}
     />
   )
 }

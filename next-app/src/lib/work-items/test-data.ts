@@ -4,6 +4,9 @@
  * Generates realistic test data for development and testing.
  * AI assistants can use these functions to create mock data quickly.
  *
+ * ⚠️ SECURITY WARNING: This module is for development/testing only.
+ * Production guards are in place to prevent accidental use.
+ *
  * @module features/test-data
  */
 
@@ -11,12 +14,25 @@ import type {
   WorkItem,
   TimelineItem,
   LinkedItem,
-  WorkItemStatus,
+  AnyWorkItemPhase,
   WorkItemPriority,
   TimelinePhase,
   DifficultyLevel,
-} from './types'
+} from '@/lib/types/work-items'
 import { generateTextId } from './utils'
+
+/**
+ * Security guard to prevent test data generation in production
+ * @throws {Error} If called in production environment
+ */
+function assertDevelopmentEnvironment(functionName: string): void {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      `[SECURITY] ${functionName} cannot be used in production. ` +
+      'Test data generators are for development/testing only.'
+    )
+  }
+}
 
 /**
  * Sample work item names by type
@@ -120,20 +136,29 @@ const SAMPLE_INTEGRATIONS = [
 export function generateTestWorkItem(
   overrides: Partial<WorkItem> = {}
 ): WorkItem {
-  const types = ['epic', 'feature', 'story', 'task', 'bug'] as const
-  const statuses: WorkItemStatus[] = [
-    'not_started',
-    'planned',
-    'in_progress',
-    'completed',
-    'on_hold',
-    'cancelled',
-  ]
+  assertDevelopmentEnvironment('generateTestWorkItem')
+
+  const types = ['concept', 'feature', 'enhancement', 'bug'] as const
+  // Type-aware phases: features/enhancements use design→launch, concepts use ideation→validated, bugs use triage→verified
+  const featurePhases: AnyWorkItemPhase[] = ['design', 'build', 'refine', 'launch']
+  const conceptPhases: AnyWorkItemPhase[] = ['ideation', 'research', 'validated', 'rejected']
+  const bugPhases: AnyWorkItemPhase[] = ['triage', 'investigating', 'fixing', 'verified']
   const priorities: WorkItemPriority[] = ['low', 'medium', 'high', 'critical']
 
   const type = overrides.type || types[Math.floor(Math.random() * types.length)]
-  const status =
-    overrides.status || statuses[Math.floor(Math.random() * statuses.length)]
+
+  // Select appropriate phase based on type
+  let phaseOptions: AnyWorkItemPhase[]
+  if (type === 'concept') {
+    phaseOptions = conceptPhases
+  } else if (type === 'bug') {
+    phaseOptions = bugPhases
+  } else {
+    phaseOptions = featurePhases // feature, enhancement
+  }
+
+  const phase =
+    overrides.phase || phaseOptions[Math.floor(Math.random() * phaseOptions.length)]
   const priority =
     overrides.priority || priorities[Math.floor(Math.random() * priorities.length)]
 
@@ -161,14 +186,21 @@ export function generateTestWorkItem(
     name,
     type,
     purpose,
-    status,
+    phase, // Phase IS the status for work items
     priority,
     tags,
-    linkedItemsCount: overrides.linkedItemsCount ?? Math.floor(Math.random() * 5),
     created_at: overrides.created_at || new Date().toISOString(),
     updated_at: overrides.updated_at || new Date().toISOString(),
     created_by: overrides.created_by || 'user_test',
-  }
+    user_id: null,
+    department_id: null,
+    is_enhancement: false,
+    enhances_work_item_id: null,
+    version: null,
+    version_notes: null,
+    review_enabled: false,
+    review_status: null,
+  } as WorkItem
 }
 
 /**
@@ -185,6 +217,8 @@ export function generateTestWorkItems(
   count: number,
   overrides: Partial<WorkItem> = {}
 ): WorkItem[] {
+  assertDevelopmentEnvironment('generateTestWorkItems')
+
   return Array.from({ length: count }, () => generateTestWorkItem(overrides))
 }
 
@@ -202,6 +236,8 @@ export function generateTestTimelineItem(
   workItemId: string,
   overrides: Partial<TimelineItem> = {}
 ): TimelineItem {
+  assertDevelopmentEnvironment('generateTestTimelineItem')
+
   const phases: TimelinePhase[] = ['MVP', 'SHORT', 'LONG']
   const difficulties: DifficultyLevel[] = ['easy', 'medium', 'hard']
 
@@ -228,30 +264,25 @@ export function generateTestTimelineItem(
       overrides.description ||
       descriptions[Math.floor(Math.random() * descriptions.length)],
     difficulty,
-    integration_system:
-      overrides.integration_system ||
-      (Math.random() > 0.5
-        ? SAMPLE_INTEGRATIONS[Math.floor(Math.random() * SAMPLE_INTEGRATIONS.length)]
-        : null),
-    integration_complexity:
-      overrides.integration_complexity ||
-      (Math.random() > 0.5
-        ? ['simple', 'moderate', 'complex'][Math.floor(Math.random() * 3)]
-        : null),
-    implementation_approach:
-      overrides.implementation_approach ||
-      (Math.random() > 0.5 ? 'Use industry best practices and proven patterns' : null),
-    implementation_tech_stack:
-      overrides.implementation_tech_stack ||
-      (Math.random() > 0.5
-        ? ['Next.js', 'TypeScript', 'Supabase', 'Tailwind']
-        : null),
-    implementation_estimated_duration:
-      overrides.implementation_estimated_duration ||
-      (Math.random() > 0.5 ? ['1 week', '2 weeks', '1 month'][Math.floor(Math.random() * 3)] : null),
-    order_index: overrides.order_index || 0,
+    status: 'not_started', // Timeline items have separate status field for task execution
+    actual_end_date: null,
+    actual_hours: null,
+    actual_start_date: null,
+    assigned_to: null,
+    blockers: null,
+    category: null,
     created_at: overrides.created_at || new Date().toISOString(),
-  }
+    estimated_hours: null,
+    integration_type: null,
+    is_blocked: false,
+    phase: null,
+    phase_transitions: null,
+    planned_end_date: null,
+    planned_start_date: null,
+    progress_percent: null,
+    updated_at: new Date().toISOString(),
+    user_id: null,
+  } as TimelineItem
 }
 
 /**
@@ -268,10 +299,11 @@ export function generateTestTimelines(
   workItemId: string,
   phases: TimelinePhase[] = ['MVP']
 ): TimelineItem[] {
-  return phases.map((phase, index) =>
+  assertDevelopmentEnvironment('generateTestTimelines')
+
+  return phases.map((phase) =>
     generateTestTimelineItem(workItemId, {
       timeline: phase,
-      order_index: index,
     })
   )
 }
@@ -294,6 +326,8 @@ export function generateTestLinkedItem(
   targetTimelineId: string,
   overrides: Partial<LinkedItem> = {}
 ): LinkedItem {
+  assertDevelopmentEnvironment('generateTestLinkedItem')
+
   const relationshipTypes = ['blocks', 'depends_on', 'relates_to'] as const
 
   return {
@@ -341,6 +375,8 @@ export function generateTestDataset(
   timelineItems: TimelineItem[]
   linkedItems: LinkedItem[]
 } {
+  assertDevelopmentEnvironment('generateTestDataset')
+
   const {
     teamId = 'team_test',
     workspaceId = 'workspace_test',
@@ -375,31 +411,6 @@ export function generateTestDataset(
     }
   }
 
-  // Calculate linked items count for work items
-  workItems.forEach((workItem) => {
-    const workItemTimelineIds = timelineItems
-      .filter((t) => t.work_item_id === workItem.id)
-      .map((t) => t.id)
-
-    const linkedWorkItemIds = new Set<string>()
-    linkedItems.forEach((link) => {
-      if (workItemTimelineIds.includes(link.source_item_id)) {
-        const targetTimeline = timelineItems.find(
-          (t) => t.id === link.target_item_id
-        )
-        if (targetTimeline) linkedWorkItemIds.add(targetTimeline.work_item_id)
-      }
-      if (workItemTimelineIds.includes(link.target_item_id)) {
-        const sourceTimeline = timelineItems.find(
-          (t) => t.id === link.source_item_id
-        )
-        if (sourceTimeline) linkedWorkItemIds.add(sourceTimeline.work_item_id)
-      }
-    })
-
-    workItem.linkedItemsCount = linkedWorkItemIds.size
-  })
-
   return { workItems, timelineItems, linkedItems }
 }
 
@@ -418,44 +429,46 @@ export function generateTestScenario(scenario: 'auth' | 'ecommerce' | 'social' |
   timelineItems: TimelineItem[]
   linkedItems: LinkedItem[]
 } {
+  assertDevelopmentEnvironment('generateTestScenario')
+
   const scenarios = {
     auth: {
       items: [
-        { name: 'User Authentication System', type: 'epic', status: 'in_progress' as const },
-        { name: 'Social Login Integration', type: 'feature', status: 'completed' as const },
-        { name: 'Email Verification', type: 'feature', status: 'in_progress' as const },
-        { name: 'Two-Factor Authentication', type: 'feature', status: 'planned' as const },
-        { name: 'Password Reset Flow', type: 'feature', status: 'completed' as const },
+        { name: 'User Authentication System', type: 'feature', phase: 'build' as const },
+        { name: 'Social Login Integration', type: 'feature', phase: 'launch' as const },
+        { name: 'Email Verification', type: 'feature', phase: 'build' as const },
+        { name: 'Two-Factor Authentication', type: 'feature', phase: 'design' as const },
+        { name: 'Password Reset Flow', type: 'feature', phase: 'refine' as const },
       ],
       tags: ['auth', 'security', 'backend', 'api'],
     },
     ecommerce: {
       items: [
-        { name: 'Payment Processing', type: 'epic', status: 'in_progress' as const },
-        { name: 'Stripe Integration', type: 'feature', status: 'completed' as const },
-        { name: 'Shopping Cart', type: 'feature', status: 'in_progress' as const },
-        { name: 'Order Management', type: 'feature', status: 'planned' as const },
-        { name: 'Invoice Generation', type: 'feature', status: 'not_started' as const },
+        { name: 'Payment Processing', type: 'feature', phase: 'build' as const },
+        { name: 'Stripe Integration', type: 'feature', phase: 'launch' as const },
+        { name: 'Shopping Cart', type: 'feature', phase: 'refine' as const },
+        { name: 'Order Management', type: 'feature', phase: 'design' as const },
+        { name: 'Invoice Generation', type: 'feature', phase: 'design' as const },
       ],
       tags: ['payments', 'ecommerce', 'stripe', 'backend'],
     },
     social: {
       items: [
-        { name: 'Social Features', type: 'epic', status: 'in_progress' as const },
-        { name: 'User Profiles', type: 'feature', status: 'completed' as const },
-        { name: 'Follow System', type: 'feature', status: 'in_progress' as const },
-        { name: 'Activity Feed', type: 'feature', status: 'planned' as const },
-        { name: 'Notifications', type: 'feature', status: 'in_progress' as const },
+        { name: 'Social Features', type: 'feature', phase: 'build' as const },
+        { name: 'User Profiles', type: 'feature', phase: 'launch' as const },
+        { name: 'Follow System', type: 'feature', phase: 'build' as const },
+        { name: 'Activity Feed', type: 'feature', phase: 'design' as const },
+        { name: 'Notifications', type: 'feature', phase: 'refine' as const },
       ],
       tags: ['social', 'frontend', 'realtime', 'ui/ux'],
     },
     analytics: {
       items: [
-        { name: 'Analytics Dashboard', type: 'epic', status: 'in_progress' as const },
-        { name: 'Event Tracking', type: 'feature', status: 'completed' as const },
-        { name: 'User Insights', type: 'feature', status: 'in_progress' as const },
-        { name: 'Custom Reports', type: 'feature', status: 'planned' as const },
-        { name: 'Data Export', type: 'feature', status: 'not_started' as const },
+        { name: 'Analytics Dashboard', type: 'feature', phase: 'build' as const },
+        { name: 'Event Tracking', type: 'feature', phase: 'launch' as const },
+        { name: 'User Insights', type: 'feature', phase: 'refine' as const },
+        { name: 'Custom Reports', type: 'feature', phase: 'design' as const },
+        { name: 'Data Export', type: 'feature', phase: 'design' as const },
       ],
       tags: ['analytics', 'dashboard', 'charts', 'data'],
     },

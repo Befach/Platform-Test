@@ -1,0 +1,62 @@
+name: CI - Type Check & Build
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'next-app/**'
+      - 'supabase/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'next-app/**'
+      - 'supabase/**'
+      - '.github/workflows/ci.yml'
+
+jobs:
+  typecheck-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: './next-app/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: ./next-app
+        run: npm ci
+
+      - name: TypeScript type checking
+        working-directory: ./next-app
+        run: npx tsc --noEmit
+
+      - name: ESLint
+        working-directory: ./next-app
+        run: npm run lint
+        continue-on-error: true # Don't fail build on lint warnings
+
+      - name: Build Next.js application
+        working-directory: ./next-app
+        run: npm run build
+        env:
+          # Required for build (dummy values for CI)
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: placeholder-service-role-key
+          OPENROUTER_API_KEY: placeholder-openrouter-key
+          PARALLEL_API_KEY: placeholder-parallel-key
+
+      - name: Report build size
+        working-directory: ./next-app
+        run: |
+          echo "### Build Size Report" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          du -sh .next/ >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

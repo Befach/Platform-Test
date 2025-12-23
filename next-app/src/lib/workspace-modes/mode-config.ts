@@ -50,7 +50,7 @@ export interface FieldVisibilityConfig {
 /**
  * Work item types
  */
-export type WorkItemType = 'concept' | 'feature' | 'bug' | 'enhancement'
+export type WorkItemType = 'concept' | 'feature' | 'bug'
 
 /**
  * Workspace phases (4-phase system) - Updated 2025-12-13
@@ -84,6 +84,7 @@ export interface SuggestedAction {
 export type DashboardWidget =
   | 'stats-grid'
   | 'phase-progress'
+  | 'workspace-health'
   | 'recent-items'
   | 'quick-create'
   | 'onboarding'
@@ -184,6 +185,7 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
     dashboardWidgets: [
       'stats-grid',
       'phase-progress',
+      'workspace-health',
       'recent-items',
       'quick-create',
       'onboarding',
@@ -192,10 +194,11 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
     widgetPriority: {
       'stats-grid': 1,
       'phase-progress': 2,
-      'recent-items': 3,
-      'quick-create': 4,
-      'onboarding': 5,
-      'activity-feed': 6,
+      'workspace-health': 3,
+      'recent-items': 4,
+      'quick-create': 5,
+      'onboarding': 6,
+      'activity-feed': 7,
       'launch-countdown': 99,
       'blockers-panel': 99,
       'critical-path': 99,
@@ -268,6 +271,7 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
     ],
     dashboardWidgets: [
       'stats-grid',
+      'workspace-health',
       'blockers-panel',
       'critical-path',
       'team-workload',
@@ -276,11 +280,12 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
     ],
     widgetPriority: {
       'stats-grid': 1,
-      'blockers-panel': 2,
-      'critical-path': 3,
-      'team-workload': 4,
-      'launch-countdown': 5,
-      'activity-feed': 6,
+      'workspace-health': 2,
+      'blockers-panel': 3,
+      'critical-path': 4,
+      'team-workload': 5,
+      'launch-countdown': 6,
+      'activity-feed': 7,
       'phase-progress': 99,
       'recent-items': 99,
       'quick-create': 99,
@@ -299,7 +304,7 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
   // -------------------------------------------------------------------------
   growth: {
     defaultPhase: 'refine',  // Was 'review'
-    defaultWorkItemType: 'enhancement',
+    defaultWorkItemType: 'feature', // Note: Set is_enhancement flag for iterations
     visibleFields: {
       essential: ['name', 'type', 'customer_impact'],
       expanded: [
@@ -352,6 +357,7 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
     ],
     dashboardWidgets: [
       'stats-grid',
+      'workspace-health',
       'feedback-summary',
       'feature-requests',
       'analytics-overview',
@@ -360,11 +366,12 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
     ],
     widgetPriority: {
       'stats-grid': 1,
-      'feedback-summary': 2,
-      'feature-requests': 3,
-      'analytics-overview': 4,
-      'recent-items': 5,
-      'activity-feed': 6,
+      'workspace-health': 2,
+      'feedback-summary': 3,
+      'feature-requests': 4,
+      'analytics-overview': 5,
+      'recent-items': 6,
+      'activity-feed': 7,
       'phase-progress': 99,
       'quick-create': 99,
       'onboarding': 99,
@@ -435,6 +442,7 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
     ],
     dashboardWidgets: [
       'stats-grid',
+      'workspace-health',
       'bug-queue',
       'tech-debt',
       'stability-metrics',
@@ -443,11 +451,12 @@ export const MODE_EXTENDED_CONFIG: Record<WorkspaceMode, ExtendedModeConfig> = {
     ],
     widgetPriority: {
       'stats-grid': 1,
-      'bug-queue': 2,
-      'tech-debt': 3,
-      'stability-metrics': 4,
-      'recent-items': 5,
-      'activity-feed': 6,
+      'workspace-health': 2,
+      'bug-queue': 3,
+      'tech-debt': 4,
+      'stability-metrics': 5,
+      'recent-items': 6,
+      'activity-feed': 7,
       'phase-progress': 99,
       'quick-create': 99,
       'onboarding': 99,

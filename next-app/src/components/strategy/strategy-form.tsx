@@ -36,7 +36,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Calendar, Calculator, Pencil, Loader2 } from 'lucide-react'
+import { Calendar, Calculator, Pencil, Loader2, Users, BookOpen, FileText } from 'lucide-react'
 import {
   STRATEGY_TYPES,
   STRATEGY_STATUSES,
@@ -82,6 +82,10 @@ interface FormValues {
   metric_current: string
   metric_target: string
   metric_unit: string
+  // Pillar context fields (newline-separated, converted to array on submit)
+  user_stories: string
+  user_examples: string
+  case_studies: string
   owner_id: string
   color: string
 }
@@ -129,6 +133,10 @@ export function StrategyForm({
       metric_current: strategy?.metric_current?.toString() || '',
       metric_target: strategy?.metric_target?.toString() || '',
       metric_unit: strategy?.metric_unit || '',
+      // Pillar context fields (join arrays to newline-separated strings)
+      user_stories: strategy?.user_stories?.join('\n') || '',
+      user_examples: strategy?.user_examples?.join('\n') || '',
+      case_studies: strategy?.case_studies?.join('\n') || '',
       owner_id: strategy?.owner_id || '',
       color: strategy?.color || STRATEGY_TYPE_COLORS[defaultType || 'objective'],
     },
@@ -178,10 +186,18 @@ export function StrategyForm({
       data.metric_unit = values.metric_unit || undefined
     }
 
+    // Handle pillar context fields (convert newline-separated to arrays)
+    if (values.type === 'pillar' || strategy?.type === 'pillar') {
+      data.user_stories = values.user_stories?.split('\n').filter(Boolean) || []
+      data.user_examples = values.user_examples?.split('\n').filter(Boolean) || []
+      data.case_studies = values.case_studies?.split('\n').filter(Boolean) || []
+    }
+
     await onSubmit(data)
   }
 
   const showMetricFields = selectedType === 'key_result' || strategy?.type === 'key_result'
+  const showPillarFields = selectedType === 'pillar' || strategy?.type === 'pillar'
 
   return (
     <Form {...form}>
@@ -421,6 +437,88 @@ export function StrategyForm({
                 )}
               />
             </div>
+          </div>
+        )}
+
+        {/* Pillar context fields (for Pillars) */}
+        {showPillarFields && (
+          <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
+            <Label className="text-sm font-medium flex items-center gap-2">
+              <Users className="h-4 w-4 text-indigo-500" />
+              Pillar Context
+            </Label>
+            <FormDescription className="text-xs">
+              Add user stories, case studies, and examples to provide context for this strategic pillar.
+            </FormDescription>
+
+            <FormField
+              control={form.control}
+              name="user_stories"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xs flex items-center gap-1.5">
+                    <Users className="h-3.5 w-3.5" />
+                    User Stories
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="As a product manager, I want to track feature progress...&#10;As a developer, I need clear requirements..."
+                      className="min-h-[80px] text-sm"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription className="text-xs">
+                    One user story per line
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="case_studies"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xs flex items-center gap-1.5">
+                    <BookOpen className="h-3.5 w-3.5" />
+                    Case Studies
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Spotify's squad model for team autonomy...&#10;Amazon's two-pizza team approach..."
+                      className="min-h-[80px] text-sm"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription className="text-xs">
+                    Reference case studies for inspiration (one per line)
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="user_examples"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xs flex items-center gap-1.5">
+                    <FileText className="h-3.5 w-3.5" />
+                    Real Examples
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Customer ABC reduced planning time by 40%...&#10;Team XYZ improved delivery predictability..."
+                      className="min-h-[80px] text-sm"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription className="text-xs">
+                    Real user examples demonstrating value (one per line)
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
           </div>
         )}
 

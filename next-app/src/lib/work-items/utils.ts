@@ -7,7 +7,8 @@
  * @module features/utils
  */
 
-import type { WorkItem, TimelineItem, LinkedItem, FilterState } from './types'
+import type { WorkItem, TimelineItem, FilterState } from '@/lib/types/work-items'
+import type { LinkedItem } from './types'
 
 /**
  * Filter work items based on filter state
@@ -42,8 +43,8 @@ export function filterWorkItems(
       }
     }
 
-    // Status filter
-    if (filters.status !== 'all' && item.status !== filters.status) {
+    // Phase filter
+    if (filters.phase !== 'all' && item.phase !== filters.phase) {
       return false
     }
 
@@ -209,24 +210,30 @@ export function groupWorkItems<K extends keyof WorkItem>(
 export function calculateWorkItemStats(items: WorkItem[]) {
   const stats = {
     total: items.length,
-    byStatus: {} as Record<string, number>,
+    byPhase: {} as Record<string, number>,
     byPriority: {} as Record<string, number>,
     byType: {} as Record<string, number>,
-    withLinks: items.filter((i) => i.linkedItemsCount > 0).length,
-    withoutLinks: items.filter((i) => i.linkedItemsCount === 0).length,
+    withLinks: 0, // Would need to query linked_items table separately
+    withoutLinks: items.length,
     withTags: items.filter((i) => i.tags && i.tags.length > 0).length,
     withoutTags: items.filter((i) => !i.tags || i.tags.length === 0).length,
   }
 
   items.forEach((item) => {
-    // Count by status
-    stats.byStatus[item.status] = (stats.byStatus[item.status] || 0) + 1
+    // Count by phase
+    if (item.phase) {
+      stats.byPhase[item.phase] = (stats.byPhase[item.phase] || 0) + 1
+    }
 
     // Count by priority
-    stats.byPriority[item.priority] = (stats.byPriority[item.priority] || 0) + 1
+    if (item.priority) {
+      stats.byPriority[item.priority] = (stats.byPriority[item.priority] || 0) + 1
+    }
 
     // Count by type
-    stats.byType[item.type] = (stats.byType[item.type] || 0) + 1
+    if (item.type) {
+      stats.byType[item.type] = (stats.byType[item.type] || 0) + 1
+    }
   })
 
   return stats
@@ -329,8 +336,8 @@ export function validateWorkItem(item: Partial<WorkItem>): {
     errors.push('Type is required')
   }
 
-  if (!item.status || item.status.trim().length === 0) {
-    errors.push('Status is required')
+  if (!item.phase || item.phase.trim().length === 0) {
+    errors.push('Phase is required')
   }
 
   if (!item.priority || item.priority.trim().length === 0) {
@@ -407,7 +414,7 @@ export function exportToCSV(items: WorkItem[]): string {
     'ID',
     'Name',
     'Type',
-    'Status',
+    'Phase',
     'Priority',
     'Purpose',
     'Tags',
@@ -419,12 +426,12 @@ export function exportToCSV(items: WorkItem[]): string {
     item.id,
     item.name,
     item.type,
-    item.status,
+    item.phase || '',
     item.priority,
     item.purpose || '',
     item.tags?.join('; ') || '',
-    item.linkedItemsCount.toString(),
-    formatDate(item.created_at, 'short'),
+    '-', // linkedItemsCount requires separate query to linked_items table
+    item.created_at ? formatDate(item.created_at, 'short') : '',
   ])
 
   const csvLines = [

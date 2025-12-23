@@ -69,7 +69,7 @@ test.describe('Work Items - Phase-Aware Edit Flows', () => {
       const researchFeature = await createWorkItemInDatabase({
         title: 'Research Feature for Edit',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId: researchWorkspaceId,
@@ -79,7 +79,7 @@ test.describe('Work Items - Phase-Aware Edit Flows', () => {
       const planningFeature = await createWorkItemInDatabase({
         title: 'Planning Feature for Edit',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId: planningWorkspaceId,
@@ -89,7 +89,7 @@ test.describe('Work Items - Phase-Aware Edit Flows', () => {
       const executionFeature = await createWorkItemInDatabase({
         title: 'Execution Feature for Edit',
         type: 'feature',
-        status: 'in_progress',
+        phase: 'build',
         priority: 'high',
         teamId,
         workspaceId: executionWorkspaceId,
@@ -348,7 +348,7 @@ test.describe('Timeline Status Management', () => {
       const feature = await createWorkItemInDatabase({
         title: 'Feature with Timeline',
         type: 'feature',
-        status: 'in_progress',
+        phase: 'build',
         priority: 'high',
         teamId,
         workspaceId,
@@ -548,7 +548,7 @@ test.describe('Edit Dialog - Validation and Error Handling', () => {
       const feature = await createWorkItemInDatabase({
         title: 'Validation Test Feature',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId,

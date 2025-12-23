@@ -22,11 +22,12 @@ import {
   MessageSquare,
   BarChart3,
   Bot,
+  History,
   type LucideIcon,
 } from 'lucide-react'
 
 /**
- * Tab identifiers for the 8-tab structure
+ * Tab identifiers for the 9-tab structure
  */
 export type DetailTab =
   | 'summary'
@@ -37,6 +38,7 @@ export type DetailTab =
   | 'feedback'
   | 'metrics'
   | 'ai-copilot'
+  | 'versions'
 
 /**
  * Tab configuration with metadata
@@ -50,22 +52,27 @@ export interface TabConfig {
   visibleInPhases: WorkspacePhase[]
   /** Whether this is a Pro-tier feature */
   isPro?: boolean
+  /** Whether visibility requires additional context (e.g., version history exists) */
+  conditionalVisibility?: boolean
 }
 
 /**
- * Complete tab configuration for the 8-tab structure
+ * Complete tab configuration for the 9-tab structure
  *
  * Tab Visibility Matrix (4-Phase System):
- * | Tab         | design | build | refine | launch |
- * |-------------|:------:|:-----:|:------:|:------:|
- * | Summary     | ✓      | ✓     | ✓      | ✓      |
- * | Inspiration | ✓      | -     | -      | -      |
- * | Resources   | ✓      | ✓     | ✓      | ✓      |
- * | Scope       | ✓      | ✓     | ✓      | ✓      |
- * | Tasks       | -      | ✓     | ✓      | ✓      |
- * | Feedback    | -      | ✓     | ✓      | ✓      |
- * | Metrics     | -      | ✓     | ✓      | ✓      |
- * | AI Copilot  | ✓      | ✓     | ✓      | ✓      |
+ * | Tab         | design | build | refine | launch | Notes           |
+ * |-------------|:------:|:-----:|:------:|:------:|-----------------|
+ * | Summary     | ✓      | ✓     | ✓      | ✓      |                 |
+ * | Inspiration | ✓      | -     | -      | -      |                 |
+ * | Resources   | ✓      | ✓     | ✓      | ✓      |                 |
+ * | Scope       | ✓      | ✓     | ✓      | ✓      |                 |
+ * | Tasks       | -      | ✓     | ✓      | ✓      |                 |
+ * | Feedback    | -      | ✓     | ✓      | ✓      |                 |
+ * | Metrics     | -      | ✓     | ✓      | ✓      | Pro tier        |
+ * | AI Copilot  | ✓      | ✓     | ✓      | ✓      | Pro tier        |
+ * | Versions    | ✓      | ✓     | ✓      | ✓      | Conditional*    |
+ *
+ * *Versions tab only visible when version history exists (version > 1 or has enhancements)
  */
 export const TAB_CONFIG: TabConfig[] = [
   {
@@ -126,6 +133,14 @@ export const TAB_CONFIG: TabConfig[] = [
     visibleInPhases: ['design', 'build', 'refine', 'launch'],
     isPro: true,
   },
+  {
+    id: 'versions',
+    label: 'Versions',
+    icon: History,
+    description: 'Version history and enhanced iterations',
+    visibleInPhases: ['design', 'build', 'refine', 'launch'],
+    conditionalVisibility: true, // Only show when version history exists
+  },
 ]
 
 /**
@@ -168,4 +183,63 @@ export function getTabConfig(tabId: DetailTab): TabConfig | undefined {
  */
 export function getVisibleTabCount(phase: WorkspacePhase | string): number {
   return getVisibleTabs(phase).length
+}
+
+/**
+ * Context for conditional tab visibility
+ */
+export interface TabVisibilityContext {
+  /** Work item version (>1 means has history) */
+  version?: number
+  /** ID of work item this enhances */
+  enhancesWorkItemId?: string | null
+  /** Whether this item has been enhanced by others */
+  hasEnhancements?: boolean
+}
+
+/**
+ * Get visible tabs for a given phase with context
+ * Handles conditional visibility (e.g., versions tab)
+ *
+ * @param phase - Current work item phase
+ * @param context - Additional context for conditional tabs
+ */
+export function getVisibleTabsWithContext(
+  phase: WorkspacePhase | string,
+  context?: TabVisibilityContext
+): TabConfig[] {
+  const normalizedPhase = migratePhase(phase)
+
+  return TAB_CONFIG.filter((tab) => {
+    // First check if tab is visible in this phase
+    if (!tab.visibleInPhases.includes(normalizedPhase)) {
+      return false
+    }
+
+    // Handle conditional visibility
+    if (tab.conditionalVisibility) {
+      // For versions tab, check if version history exists
+      if (tab.id === 'versions') {
+        if (!context) return false
+        const hasVersionHistory =
+          (context.version && context.version > 1) ||
+          !!context.enhancesWorkItemId ||
+          !!context.hasEnhancements
+        return hasVersionHistory
+      }
+    }
+
+    return true
+  })
+}
+
+/**
+ * Check if versions tab should be visible
+ */
+export function shouldShowVersionsTab(context: TabVisibilityContext): boolean {
+  return !!(
+    (context.version && context.version > 1) ||
+    context.enhancesWorkItemId ||
+    context.hasEnhancements
+  )
 }

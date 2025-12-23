@@ -96,12 +96,6 @@ const TYPE_CONFIG = {
     description: 'New functionality to build',
     color: 'text-blue-600 bg-blue-50',
   },
-  enhancement: {
-    icon: Zap,
-    label: 'Enhancement',
-    description: 'Improvement to existing feature',
-    color: 'text-amber-600 bg-amber-50',
-  },
   bug: {
     icon: Bug,
     label: 'Bug',

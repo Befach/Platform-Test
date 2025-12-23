@@ -16,6 +16,7 @@ import { TasksTab } from './tabs/tasks-tab'
 import { FeedbackTab } from './tabs/feedback-tab'
 import { InspirationTab } from './tabs/inspiration-tab'
 import { ResourcesTab } from './tabs/resources-tab'
+import { VersionsTab } from './tabs/versions-tab'
 import { TrackingSidebar, CollapsedSidebarToggle } from './tracking-sidebar'
 
 // ============================================================================
@@ -27,6 +28,8 @@ export interface WorkItemDetailShellProps {
   timelineItems: TimelineItemData[]
   taskCount?: number
   feedbackCount?: number
+  /** Whether this work item has been enhanced by other work items */
+  hasEnhancements?: boolean
   className?: string
 }
 
@@ -56,6 +59,8 @@ function WorkItemDetailContent({ className }: { className?: string }) {
         return <MetricsTabPlaceholder />
       case 'ai-copilot':
         return <AICopilotTabPlaceholder />
+      case 'versions':
+        return <VersionsTab />
       default:
         return <SummaryTab />
     }
@@ -133,6 +138,7 @@ export function WorkItemDetailShell({
   timelineItems,
   taskCount = 0,
   feedbackCount = 0,
+  hasEnhancements = false,
   className,
 }: WorkItemDetailShellProps) {
   return (
@@ -141,6 +147,7 @@ export function WorkItemDetailShell({
       timelineItems={timelineItems}
       taskCount={taskCount}
       feedbackCount={feedbackCount}
+      hasEnhancements={hasEnhancements}
     >
       <WorkItemDetailContent className={className} />
     </WorkItemDetailProvider>

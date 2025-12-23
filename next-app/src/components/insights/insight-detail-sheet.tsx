@@ -130,7 +130,6 @@ const workItemTypeIcons: Record<string, React.ElementType> = {
   concept: Lightbulb,
   feature: Rocket,
   bug: Bug,
-  enhancement: Zap,
   research: FileText,
 }
 

@@ -42,10 +42,11 @@ export interface ConnectionEntity {
 export interface WorkItemEntity extends ConnectionEntity {
   type: 'work-item'
   metadata: {
-    itemType: 'concept' | 'feature' | 'bug' | 'enhancement'
+    itemType: 'concept' | 'feature' | 'bug'
     status: string
     phase: string
     priority?: string
+    is_enhancement?: boolean
   }
 }
 

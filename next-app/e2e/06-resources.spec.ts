@@ -241,7 +241,7 @@ test.describe('Resources - Sharing (Many-to-Many)', () => {
       const workItem1 = await createWorkItemInDatabase({
         title: 'Feature: User Dashboard',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId,
@@ -251,7 +251,7 @@ test.describe('Resources - Sharing (Many-to-Many)', () => {
       const workItem2 = await createWorkItemInDatabase({
         title: 'Feature: Admin Panel',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'medium',
         teamId,
         workspaceId,
@@ -455,7 +455,7 @@ test.describe('Resources - Audit Trail', () => {
       const workItem = await createWorkItemInDatabase({
         title: 'Audit Test Feature',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId,

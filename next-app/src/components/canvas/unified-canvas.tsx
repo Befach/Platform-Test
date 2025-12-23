@@ -153,17 +153,18 @@ const nodeTypes: NodeTypes = {
   bug: WorkItemNode,
   note: WorkItemNode,
 
-  // New phase-aware types (from work-item-types.ts)
+  // Legacy canvas node types (kept for backward compatibility with old mind maps)
+  // Note: 'enhancement' and 'quality_enhancement' are deprecated - use 'feature' type with is_enhancement flag
   exploration: WorkItemNode,
   user_need: WorkItemNode,
   core_feature: WorkItemNode,
-  enhancement: WorkItemNode,
+  enhancement: WorkItemNode, // DEPRECATED - use feature with is_enhancement flag
   user_request: WorkItemNode,
   bug_fix: WorkItemNode,
   technical_debt: WorkItemNode,
-  integration: WorkItemNode, // ← Fixes the "Harsha vs Nitin" node
+  integration: WorkItemNode,
   performance_improvement: WorkItemNode,
-  quality_enhancement: WorkItemNode,
+  quality_enhancement: WorkItemNode, // DEPRECATED - use feature with is_enhancement flag
   analytics_feature: WorkItemNode,
   optimization: WorkItemNode,
 }

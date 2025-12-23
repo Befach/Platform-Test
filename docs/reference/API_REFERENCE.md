@@ -682,7 +682,8 @@ Get all work items for a workspace
 
 **Query Parameters:**
 - `workspace_id` (required): Workspace ID
-- `type`: Filter by type (concept, feature, bug, enhancement)
+- `type`: Filter by type (concept, feature, bug)
+- `is_enhancement`: Filter for enhancement features (boolean)
 - `status`: Filter by status
 - `phase`: Filter by phase
 

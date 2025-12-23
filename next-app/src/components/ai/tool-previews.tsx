@@ -64,11 +64,12 @@ export interface PreviewProps<T = Record<string, unknown>> {
 // Work Item types
 interface WorkItemParams {
   name: string
-  type: 'concept' | 'feature' | 'bug' | 'enhancement'
+  type: 'concept' | 'feature' | 'bug'
   purpose?: string
   priority?: 'critical' | 'high' | 'medium' | 'low'
   tags?: string[]
   phase?: string
+  is_enhancement?: boolean
 }
 
 // Task types
@@ -185,7 +186,6 @@ const typeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   concept: Lightbulb,
   feature: Sparkles,
   bug: Bug,
-  enhancement: FileText,
 }
 
 /**
@@ -210,12 +210,6 @@ const typeStyles = {
     accentBar: 'bg-gradient-to-r from-red-500 to-rose-500',
     badgeClass: 'bg-red-500/10 text-red-400 border-red-500/30',
   },
-  enhancement: {
-    iconBg: 'bg-gradient-to-br from-emerald-500/20 to-green-500/10 border border-emerald-500/30',
-    iconColor: 'text-emerald-400',
-    accentBar: 'bg-gradient-to-r from-emerald-500 to-green-500',
-    badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-  },
 }
 
 // Legacy flat colors (for backward compatibility)
@@ -223,7 +217,6 @@ const typeColors: Record<string, string> = {
   concept: 'bg-purple-100 text-purple-700 border-purple-200',
   feature: 'bg-blue-100 text-blue-700 border-blue-200',
   bug: 'bg-red-100 text-red-700 border-red-200',
-  enhancement: 'bg-green-100 text-green-700 border-green-200',
 }
 
 /**

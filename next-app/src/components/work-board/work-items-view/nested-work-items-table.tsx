@@ -103,7 +103,6 @@ interface NestedWorkItemsTableProps {
 const typeIcons: Record<string, typeof Sparkles> = {
   feature: Sparkles,
   bug: Bug,
-  enhancement: Zap,
   concept: Lightbulb,
   note: StickyNote,
 }

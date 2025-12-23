@@ -1,4 +1,4 @@
-import type { WorkItem } from '@/lib/work-items/types'
+import type { WorkItem } from '@/lib/types/work-items'
 import type { WorkItemConnection } from '@/lib/types/dependencies'
 
 export interface CriticalPathNode {
@@ -269,7 +269,7 @@ function getWorkItemDuration(item: WorkItem): number {
     low: 1.5,
   }
 
-  return Math.round(baseEstimate * (priorityMultiplier[item.priority] || 1.0))
+  return Math.round(baseEstimate * (priorityMultiplier[item.priority || 'medium'] || 1.0))
 }
 
 /**

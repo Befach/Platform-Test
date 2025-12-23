@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import type { CriticalPathNode } from '@/lib/algorithms/critical-path'
 import type { Cycle, CycleFix } from '@/lib/algorithms/cycle-detection'
-import type { WorkItem } from '@/lib/work-items/types'
+import type { WorkItem } from '@/lib/types/work-items'
 import { getItemIcon } from '@/lib/constants/work-item-types'
 
 interface CriticalPathPanelProps {

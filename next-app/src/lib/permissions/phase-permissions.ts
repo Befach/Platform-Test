@@ -186,11 +186,10 @@ export async function getWorkspacePhasePermissions(
     }
 
     return {
-      research: fullAccess,
-      planning: fullAccess,
-      execution: fullAccess,
-      review: fullAccess,
-      complete: fullAccess,
+      design: fullAccess,
+      build: fullAccess,
+      refine: fullAccess,
+      launch: fullAccess,
     }
   }
 
@@ -202,7 +201,7 @@ export async function getWorkspacePhasePermissions(
     .eq('workspace_id', workspaceId)
 
   // Build permission map
-  const phases: WorkspacePhase[] = ['research', 'planning', 'execution', 'review', 'complete']
+  const phases: WorkspacePhase[] = ['design', 'build', 'refine', 'launch']
   const permissions: Partial<WorkspacePhasePermissions> = {}
 
   phases.forEach((phase) => {

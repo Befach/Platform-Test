@@ -65,7 +65,6 @@ const WORK_ITEM_TYPE_ICONS: Record<string, LucideIcon> = {
   concept: Lightbulb,
   feature: Sparkles,
   bug: Bug,
-  enhancement: Zap,
 }
 
 const TYPE_COLORS: Record<ConnectionEntityType, string> = {

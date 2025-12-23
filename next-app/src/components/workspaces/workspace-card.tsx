@@ -1,5 +1,15 @@
 'use client'
 
+/**
+ * Workspace Card Component
+ *
+ * Displays a workspace summary card with:
+ * - Basic info (name, description)
+ * - Mode badge (development, launch, growth, maintenance)
+ * - Type-aware phase distribution (when work items are provided)
+ * - Module count and creation date
+ */
+
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -9,68 +19,147 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import {
+  TypeAwarePhaseDistribution,
+  DistributionSummary,
+  type WorkItemForDistribution,
+} from './type-aware-phase-distribution'
+
+// =============================================================================
+// TYPES
+// =============================================================================
 
 interface WorkspaceCardProps {
   workspace: {
     id: string
     name: string
     description: string | null
-    phase: string
+    phase: string // Legacy - now represents workspace "mode"
+    mode?: string // New mode field if available
     enabled_modules: string[] | null
     created_at: string
   }
+  /** Optional work items for showing type-aware distribution */
+  workItems?: WorkItemForDistribution[]
+  /** Show compact distribution bar (default: true) */
+  compact?: boolean
 }
 
-const PHASE_COLORS: Record<string, string> = {
-  research: 'bg-blue-100 text-blue-800',
-  planning: 'bg-purple-100 text-purple-800',
-  review: 'bg-yellow-100 text-yellow-800',
-  execution: 'bg-green-100 text-green-800',
-  testing: 'bg-orange-100 text-orange-800',
-  metrics: 'bg-pink-100 text-pink-800',
-  complete: 'bg-gray-100 text-gray-800',
+// =============================================================================
+// MODE CONFIGURATION
+// =============================================================================
+
+// Workspace modes (lifecycle context, not phase)
+const MODE_CONFIG: Record<string, { label: string; color: string; emoji: string }> = {
+  development: {
+    label: 'Development',
+    color: 'bg-violet-100 text-violet-800 border-violet-200',
+    emoji: '🔨',
+  },
+  launch: {
+    label: 'Launch',
+    color: 'bg-green-100 text-green-800 border-green-200',
+    emoji: '🚀',
+  },
+  growth: {
+    label: 'Growth',
+    color: 'bg-blue-100 text-blue-800 border-blue-200',
+    emoji: '📈',
+  },
+  maintenance: {
+    label: 'Maintenance',
+    color: 'bg-amber-100 text-amber-800 border-amber-200',
+    emoji: '🔧',
+  },
 }
 
-const PHASE_LABELS: Record<string, string> = {
-  research: 'Research',
-  planning: 'Planning',
-  review: 'Review',
-  execution: 'Execution',
-  testing: 'Testing',
-  metrics: 'Metrics',
-  complete: 'Complete',
+// Legacy phase to mode mapping
+const LEGACY_PHASE_TO_MODE: Record<string, string> = {
+  research: 'development',
+  planning: 'development',
+  execution: 'development',
+  review: 'launch',
+  complete: 'maintenance',
+  design: 'development',
+  build: 'development',
+  refine: 'launch',
+  launch: 'launch',
 }
 
-export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
-  const phaseColor = PHASE_COLORS[workspace.phase] || 'bg-gray-100 text-gray-800'
-  const phaseLabel = PHASE_LABELS[workspace.phase] || workspace.phase
+// =============================================================================
+// COMPONENT
+// =============================================================================
+
+export function WorkspaceCard({
+  workspace,
+  workItems,
+  compact = true,
+}: WorkspaceCardProps) {
+  // Determine the mode (prefer explicit mode, fallback to mapped phase)
+  const mode = workspace.mode || LEGACY_PHASE_TO_MODE[workspace.phase] || 'development'
+  const modeConfig = MODE_CONFIG[mode] || MODE_CONFIG.development
+
+  // Calculate work item counts by type
+  const hasWorkItems = workItems && workItems.length > 0
 
   return (
     <Link href={`/workspaces/${workspace.id}`}>
       <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <CardTitle className="text-xl">{workspace.name}</CardTitle>
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <CardTitle className="text-xl truncate">{workspace.name}</CardTitle>
               {workspace.description && (
-                <CardDescription className="mt-2">
+                <CardDescription className="mt-1 line-clamp-2">
                   {workspace.description}
                 </CardDescription>
               )}
             </div>
+            {/* Mode Badge */}
+            <Badge className={cn('flex-shrink-0', modeConfig.color)}>
+              <span className="mr-1">{modeConfig.emoji}</span>
+              {modeConfig.label}
+            </Badge>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-2">
-            <Badge className={phaseColor}>{phaseLabel}</Badge>
-            {workspace.enabled_modules && workspace.enabled_modules.length > 0 && (
-              <Badge variant="outline">
-                {workspace.enabled_modules.length} modules
-              </Badge>
-            )}
-          </div>
-          <div className="mt-4 text-xs text-muted-foreground">
-            Created {new Date(workspace.created_at).toLocaleDateString()}
+
+        <CardContent className="pt-0">
+          {/* Type-Aware Phase Distribution */}
+          {hasWorkItems && (
+            <div className="mb-4">
+              <div className="text-xs font-medium text-muted-foreground mb-2">
+                Work Items Distribution
+              </div>
+              <TypeAwarePhaseDistribution
+                workItems={workItems}
+                compact={compact}
+              />
+            </div>
+          )}
+
+          {/* Distribution Summary (text) */}
+          {hasWorkItems && (
+            <div className="text-xs text-muted-foreground mb-3">
+              <DistributionSummary workItems={workItems} />
+            </div>
+          )}
+
+          {/* Footer: Modules and Date */}
+          <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
+            <div className="flex items-center gap-2">
+              {workspace.enabled_modules && workspace.enabled_modules.length > 0 && (
+                <Badge variant="outline" className="text-xs">
+                  {workspace.enabled_modules.length} modules
+                </Badge>
+              )}
+              {!hasWorkItems && (
+                <span className="italic">No work items yet</span>
+              )}
+            </div>
+            <span>
+              Created {new Date(workspace.created_at).toLocaleDateString()}
+            </span>
           </div>
         </CardContent>
       </Card>

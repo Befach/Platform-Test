@@ -1,14 +1,23 @@
 /**
- * Workspace Phase Configuration - 4-Phase System
+ * Workspace Phase Configuration - Type-Aware Phase System
  *
- * Updated 2025-12-13: Migrated from 5 phases to 4 phases
- * - design (was research/planning) - "Shape your approach, define your path"
- * - build (was execution) - "Execute with clarity, create with care"
- * - refine (was review) - "Validate ideas, sharpen solutions"
- * - launch (was complete) - "Release, measure, and evolve"
+ * Updated 2025-12-16: Migrated to type-aware phases
  *
- * Ideation now lives at Workspace level (mind maps, concept boards)
- * not as a work item phase.
+ * FEATURE PHASES (unchanged):
+ * - design → build → refine → launch
+ *
+ * CONCEPT PHASES (NEW):
+ * - ideation → research → validated | rejected
+ * - Concepts are for discovery/ideation only
+ * - Once validated, they convert to Feature
+ *
+ * BUG PHASES (SIMPLIFIED):
+ * - triage → investigating → fixing → verified
+ * - Bugs skip planning - go straight to action
+ *
+ * ENHANCEMENT PHASES:
+ * - Same as Feature (design → build → refine → launch)
+ * - Links to parent via enhances_work_item_id
  *
  * Color Psychology Sources:
  * - Smashing Magazine: Psychology of Color in UX (2025)
@@ -20,9 +29,80 @@ import {
     Hammer,
     Sparkles,
     Rocket,
+    Lightbulb,
+    Search,
+    CheckCircle2,
+    XCircle,
+    AlertTriangle,
+    Bug,
+    Wrench,
+    ShieldCheck,
     type LucideIcon
 } from 'lucide-react';
 
+// =============================================================================
+// TYPE-SPECIFIC PHASE DEFINITIONS
+// =============================================================================
+
+/**
+ * Feature phases (full lifecycle)
+ */
+export type FeaturePhase = 'design' | 'build' | 'refine' | 'launch';
+
+/**
+ * Concept phases (discovery/validation flow)
+ */
+export type ConceptPhase = 'ideation' | 'research' | 'validated' | 'rejected';
+
+/**
+ * Bug phases (triage/fix flow)
+ */
+export type BugPhase = 'triage' | 'investigating' | 'fixing' | 'verified';
+
+/**
+ * Enhancement phases (same as Feature)
+ */
+export type EnhancementPhase = FeaturePhase;
+
+/**
+ * Union of all possible work item phases
+ */
+export type AnyWorkItemPhase = FeaturePhase | ConceptPhase | BugPhase;
+
+/**
+ * Work item types
+ */
+export type WorkItemType = 'concept' | 'feature' | 'bug';
+
+/**
+ * Map of work item types to their valid phases
+ * Note: Enhancement is now a flag on features (is_enhancement), not a separate type
+ */
+export const TYPE_PHASE_MAP: Record<WorkItemType, readonly string[]> = {
+    feature: ['design', 'build', 'refine', 'launch'] as const,
+    concept: ['ideation', 'research', 'validated', 'rejected'] as const,
+    bug: ['triage', 'investigating', 'fixing', 'verified'] as const,
+} as const;
+
+/**
+ * Phase order by type (for progression)
+ */
+export const TYPE_PHASE_ORDER: Record<WorkItemType, readonly string[]> = {
+    feature: ['design', 'build', 'refine', 'launch'],
+    concept: ['ideation', 'research', 'validated'], // rejected is terminal, not in progression
+    bug: ['triage', 'investigating', 'fixing', 'verified'],
+} as const;
+
+/**
+ * Terminal phases that cannot progress further
+ */
+export const TERMINAL_PHASES: Record<WorkItemType, readonly string[]> = {
+    feature: ['launch'],
+    concept: ['validated', 'rejected'],
+    bug: ['verified'],
+} as const;
+
+// Legacy type alias for backward compatibility
 export type WorkspacePhase =
     | 'design'
     | 'build'
@@ -37,8 +117,12 @@ export type LegacyWorkspacePhase =
     | 'review'
     | 'complete';
 
+// =============================================================================
+// PHASE CONFIG INTERFACE (Extended for all types)
+// =============================================================================
+
 export interface PhaseConfig {
-    id: WorkspacePhase;
+    id: string;             // Phase ID (type-specific)
     name: string;
     tagline: string;        // Short motivational tagline
     description: string;
@@ -109,6 +193,138 @@ export const PHASE_CONFIG: Record<WorkspacePhase, PhaseConfig> = {
         icon: Rocket,
         meaning: 'Bright green represents success, achievement, completion - universal success signal',
         emoji: '🚀',
+    },
+};
+
+// =============================================================================
+// CONCEPT PHASE CONFIGURATION
+// =============================================================================
+
+/**
+ * Concept Phase Color Palette:
+ * Purple → Indigo → Green → Red
+ * (Ideation → Research → Validated → Rejected)
+ *
+ * Concepts follow a discovery/validation flow, not a build flow.
+ */
+export const CONCEPT_PHASE_CONFIG: Record<ConceptPhase, PhaseConfig> = {
+    ideation: {
+        id: 'ideation',
+        name: 'Ideation',
+        tagline: 'Capture the spark of an idea',
+        description: 'Initial idea capture, hypothesis formation, problem identification',
+        color: '#A855F7',        // Purple-500
+        bgColor: 'bg-purple-500',
+        textColor: 'text-purple-600',
+        borderColor: 'border-purple-500',
+        icon: Lightbulb,
+        meaning: 'Purple represents creativity, imagination, and new possibilities',
+        emoji: '💡',
+    },
+    research: {
+        id: 'research',
+        name: 'Research',
+        tagline: 'Validate assumptions, gather evidence',
+        description: 'User research, market analysis, feasibility assessment, prototype testing',
+        color: '#6366F1',        // Indigo-500
+        bgColor: 'bg-indigo-500',
+        textColor: 'text-indigo-600',
+        borderColor: 'border-indigo-500',
+        icon: Search,
+        meaning: 'Indigo represents deep thinking, analysis, and investigation',
+        emoji: '🔍',
+    },
+    validated: {
+        id: 'validated',
+        name: 'Validated',
+        tagline: 'Ready to become a feature',
+        description: 'Concept proven viable, ready for promotion to feature or enhancement',
+        color: '#22C55E',        // Green-500
+        bgColor: 'bg-green-500',
+        textColor: 'text-green-600',
+        borderColor: 'border-green-500',
+        icon: CheckCircle2,
+        meaning: 'Green represents success, approval, and readiness to proceed',
+        emoji: '✅',
+    },
+    rejected: {
+        id: 'rejected',
+        name: 'Rejected',
+        tagline: 'Not viable at this time',
+        description: 'Concept did not pass validation, archived with learnings',
+        color: '#EF4444',        // Red-500
+        bgColor: 'bg-red-500',
+        textColor: 'text-red-600',
+        borderColor: 'border-red-500',
+        icon: XCircle,
+        meaning: 'Red represents a clear decision to not proceed',
+        emoji: '❌',
+    },
+};
+
+// =============================================================================
+// BUG PHASE CONFIGURATION
+// =============================================================================
+
+/**
+ * Bug Phase Color Palette:
+ * Amber → Blue → Emerald → Green
+ * (Triage → Investigating → Fixing → Verified)
+ *
+ * Bugs follow a triage/fix flow optimized for quick resolution.
+ */
+export const BUG_PHASE_CONFIG: Record<BugPhase, PhaseConfig> = {
+    triage: {
+        id: 'triage',
+        name: 'Triage',
+        tagline: 'Assess severity and priority',
+        description: 'Bug reported, needs reproduction and severity assessment',
+        color: '#F59E0B',        // Amber-500
+        bgColor: 'bg-amber-500',
+        textColor: 'text-amber-600',
+        borderColor: 'border-amber-500',
+        icon: AlertTriangle,
+        meaning: 'Amber represents attention needed, requires assessment',
+        emoji: '⚠️',
+    },
+    investigating: {
+        id: 'investigating',
+        name: 'Investigating',
+        tagline: 'Finding the root cause',
+        description: 'Reproducing issue, analyzing logs, identifying root cause',
+        color: '#3B82F6',        // Blue-500
+        bgColor: 'bg-blue-500',
+        textColor: 'text-blue-600',
+        borderColor: 'border-blue-500',
+        icon: Bug,
+        meaning: 'Blue represents focused investigation and analysis',
+        emoji: '🔬',
+    },
+    fixing: {
+        id: 'fixing',
+        name: 'Fixing',
+        tagline: 'Implementing the solution',
+        description: 'Active development of fix, code changes in progress',
+        color: '#10B981',        // Emerald-500
+        bgColor: 'bg-emerald-500',
+        textColor: 'text-emerald-600',
+        borderColor: 'border-emerald-500',
+        icon: Wrench,
+        meaning: 'Emerald represents active work and progress',
+        emoji: '🔧',
+    },
+    verified: {
+        id: 'verified',
+        name: 'Verified',
+        tagline: 'Fix confirmed working',
+        description: 'Fix deployed and verified, bug resolved',
+        color: '#22C55E',        // Green-500
+        bgColor: 'bg-green-500',
+        textColor: 'text-green-600',
+        borderColor: 'border-green-500',
+        icon: ShieldCheck,
+        meaning: 'Green represents successful resolution and verification',
+        emoji: '✔️',
     },
 };
 
@@ -328,3 +544,192 @@ export const PHASE_PERMISSIONS = {
     /** Delete access same as edit */
     DEFAULT_DELETE: false,
 } as const;
+
+// =============================================================================
+// TYPE-AWARE PHASE HELPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Get phase config by work item type and phase
+ * Returns the appropriate config based on the type's phase system
+ */
+export function getTypePhaseConfig(type: WorkItemType, phase: string): PhaseConfig | null {
+    switch (type) {
+        case 'concept':
+            return phase in CONCEPT_PHASE_CONFIG
+                ? CONCEPT_PHASE_CONFIG[phase as ConceptPhase]
+                : null;
+        case 'bug':
+            return phase in BUG_PHASE_CONFIG
+                ? BUG_PHASE_CONFIG[phase as BugPhase]
+                : null;
+        case 'feature':
+            return phase in PHASE_CONFIG
+                ? PHASE_CONFIG[phase as WorkspacePhase]
+                : null;
+        default:
+            return null;
+    }
+}
+
+/**
+ * Get all valid phases for a work item type
+ */
+export function getValidPhasesForType(type: WorkItemType): readonly string[] {
+    return TYPE_PHASE_MAP[type] || [];
+}
+
+/**
+ * Check if a phase is valid for a work item type
+ */
+export function isValidPhaseForType(type: WorkItemType, phase: string): boolean {
+    return TYPE_PHASE_MAP[type]?.includes(phase) || false;
+}
+
+/**
+ * Get the next phase for a work item type
+ * Returns null if at terminal phase
+ */
+export function getNextPhaseForType(type: WorkItemType, currentPhase: string): string | null {
+    const phases = TYPE_PHASE_ORDER[type];
+    if (!phases) return null;
+
+    const currentIndex = phases.indexOf(currentPhase);
+    if (currentIndex === -1 || currentIndex >= phases.length - 1) {
+        return null;
+    }
+    return phases[currentIndex + 1];
+}
+
+/**
+ * Get the previous phase for a work item type
+ * Returns null if at first phase
+ */
+export function getPreviousPhaseForType(type: WorkItemType, currentPhase: string): string | null {
+    const phases = TYPE_PHASE_ORDER[type];
+    if (!phases) return null;
+
+    const currentIndex = phases.indexOf(currentPhase);
+    if (currentIndex <= 0) {
+        return null;
+    }
+    return phases[currentIndex - 1];
+}
+
+/**
+ * Check if a phase transition is valid for a work item type
+ * Special handling for concept rejection (can reject from any phase)
+ */
+export function isValidTypePhaseTransition(
+    type: WorkItemType,
+    from: string,
+    to: string
+): boolean {
+    const phases = TYPE_PHASE_ORDER[type];
+    if (!phases) return false;
+
+    // Special case: concepts can be rejected from any phase
+    if (type === 'concept' && to === 'rejected') {
+        return true;
+    }
+
+    const fromIndex = phases.indexOf(from);
+    const toIndex = phases.indexOf(to);
+
+    // Both phases must be valid for this type
+    if (fromIndex === -1 || toIndex === -1) return false;
+
+    // Can only move forward or stay in same phase
+    return toIndex >= fromIndex;
+}
+
+/**
+ * Get the default (initial) phase for a work item type
+ */
+export function getDefaultPhaseForType(type: WorkItemType): string {
+    const phases = TYPE_PHASE_ORDER[type];
+    return phases?.[0] || 'design';
+}
+
+/**
+ * Check if a phase is terminal (cannot progress further)
+ */
+export function isTerminalPhase(type: WorkItemType, phase: string): boolean {
+    const terminals = TERMINAL_PHASES[type];
+    return terminals?.includes(phase) || false;
+}
+
+/**
+ * Get phase progress percentage for visualization
+ * Returns 0-100 based on position in phase progression
+ */
+export function getPhaseProgress(type: WorkItemType, phase: string): number {
+    const phases = TYPE_PHASE_ORDER[type];
+    if (!phases) return 0;
+
+    const currentIndex = phases.indexOf(phase);
+    if (currentIndex === -1) return 0;
+
+    // Calculate percentage (e.g., phase 2 of 4 = 50%)
+    return Math.round(((currentIndex + 1) / phases.length) * 100);
+}
+
+/**
+ * Get phase index for a type (useful for sorting)
+ */
+export function getPhaseIndex(type: WorkItemType, phase: string): number {
+    const phases = TYPE_PHASE_ORDER[type];
+    if (!phases) return -1;
+    return phases.indexOf(phase);
+}
+
+/**
+ * Universal phase config getter that works for any type
+ * Useful when you have a work item and need its phase config
+ */
+export function getUniversalPhaseConfig(workItem: {
+    type: string;
+    phase: string;
+}): PhaseConfig | null {
+    return getTypePhaseConfig(workItem.type as WorkItemType, workItem.phase);
+}
+
+/**
+ * Calculate type-aware phase distribution from work items
+ * Groups work items by type, then by phase within each type
+ */
+export function calculateTypeAwarePhaseDistribution(workItems: Array<{
+    type: string;
+    phase?: string;
+}>): Record<WorkItemType, Record<string, { count: number; percentage: number }>> {
+    const result: Record<WorkItemType, Record<string, { count: number; percentage: number }>> = {
+        feature: {},
+        concept: {},
+        bug: {},
+    };
+
+    // Group by type
+    const byType = workItems.reduce((acc, item) => {
+        const type = item.type as WorkItemType;
+        if (!acc[type]) acc[type] = [];
+        acc[type].push(item);
+        return acc;
+    }, {} as Record<WorkItemType, typeof workItems>);
+
+    // Calculate distribution for each type
+    for (const type of Object.keys(TYPE_PHASE_MAP) as WorkItemType[]) {
+        const items = byType[type] || [];
+        const total = items.length;
+        const phases = TYPE_PHASE_MAP[type];
+
+        for (const phase of phases) {
+            const count = items.filter(i => i.phase === phase).length;
+            result[type][phase] = {
+                count,
+                percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+            };
+        }
+    }
+
+    return result;
+}

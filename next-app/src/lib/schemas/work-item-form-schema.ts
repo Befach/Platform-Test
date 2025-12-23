@@ -39,7 +39,6 @@ const baseSchema = z.object({
     WORK_ITEM_TYPES.CONCEPT,
     WORK_ITEM_TYPES.FEATURE,
     WORK_ITEM_TYPES.BUG,
-    WORK_ITEM_TYPES.ENHANCEMENT,
   ] as const, {
     message: 'Please select a valid work item type',
   }),
@@ -48,6 +47,11 @@ const baseSchema = z.object({
     .array(z.string().trim().min(1))
     .optional()
     .default([]),
+
+  is_enhancement: z
+    .boolean()
+    .optional()
+    .default(false),
 })
 
 /**
@@ -195,15 +199,12 @@ const executionSchema = planningSchema.extend({
  */
 export function getWorkItemSchema(phase: WorkspacePhase) {
   switch (phase) {
-    case 'research':
-      return baseSchema
-
-    case 'planning':
+    case 'design':
       return planningSchema
 
-    case 'execution':
-    case 'review':
-    case 'complete':
+    case 'build':
+    case 'refine':
+    case 'launch':
       return executionSchema
 
     default:

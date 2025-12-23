@@ -14,9 +14,9 @@ export const WORK_ITEM_STATUSES: WorkItemStatus[] = ['planned', 'in_progress', '
 export type TaskStatus = 'todo' | 'in_progress' | 'done'
 export const TASK_STATUSES: TaskStatus[] = ['todo', 'in_progress', 'done']
 
-// Work Item types
-export type WorkItemType = 'feature' | 'bug' | 'enhancement' | 'concept' | 'note'
-export const WORK_ITEM_TYPES: WorkItemType[] = ['feature', 'bug', 'enhancement', 'concept', 'note']
+// Work Item types (enhancement is now a flag on features)
+export type WorkItemType = 'feature' | 'bug' | 'concept' | 'note'
+export const WORK_ITEM_TYPES: WorkItemType[] = ['feature', 'bug', 'concept', 'note']
 
 // Task types
 export type TaskType = 'research' | 'design' | 'development' | 'qa' | 'marketing' | 'ops' | 'admin'
@@ -355,7 +355,6 @@ export const typeDisplayMap: Record<string, { label: string; icon: string; color
   // Work Item types
   feature: { label: 'Feature', icon: 'Sparkles', color: 'bg-purple-100 text-purple-700' },
   bug: { label: 'Bug', icon: 'Bug', color: 'bg-red-100 text-red-700' },
-  enhancement: { label: 'Enhancement', icon: 'Zap', color: 'bg-blue-100 text-blue-700' },
   concept: { label: 'Concept', icon: 'Lightbulb', color: 'bg-yellow-100 text-yellow-700' },
   note: { label: 'Note', icon: 'StickyNote', color: 'bg-gray-100 text-gray-700' },
   // Task types

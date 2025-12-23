@@ -46,7 +46,7 @@ interface WorkItem {
   name: string
   type: string
   purpose: string | null
-  status: string
+  phase: string
   priority: string
   tags: string[] | null
   linkedItemsCount: number
@@ -68,12 +68,7 @@ interface TimelineItem {
   timeline: 'MVP' | 'SHORT' | 'LONG'
   description: string | null
   difficulty: string
-  status: string | null
-  integration_system?: string | null
-  integration_complexity?: string | null
-  implementation_approach?: string | null
-  implementation_tech_stack?: string[] | null
-  implementation_estimated_duration?: string | null
+  status: string | null // Timeline items have separate status field for task execution
 }
 
 interface WorkItemsTableViewProps {
@@ -236,12 +231,12 @@ export function WorkItemsTableView({
           </TableCell>
         )}
 
-        {/* Status - Inline Editable */}
-        {columnVisibility.status && (
+        {/* Phase - Inline Editable (Phase IS the status) */}
+        {columnVisibility.phase && (
           <TableCell className="px-3 py-2">
             <InlineStatusEditor
-              value={item.status}
-              onValueChange={(value) => handleInlineUpdate(item.id, 'status', value)}
+              value={item.phase}
+              onValueChange={(value) => handleInlineUpdate(item.id, 'phase', value)}
               variant="badge"
             />
           </TableCell>
@@ -285,13 +280,7 @@ export function WorkItemsTableView({
         {columnVisibility.integration && (
           <TableCell className="px-3 py-2">
             <div className="text-xs">
-              {mvpTimeline?.integration_system ? (
-                <Badge variant="secondary" className="px-1.5 py-0.5 text-[10px] font-medium">
-                  {mvpTimeline.integration_system}
-                </Badge>
-              ) : (
-                <span className="text-[11px] text-muted-foreground">None</span>
-              )}
+              <span className="text-[11px] text-muted-foreground">-</span>
             </div>
           </TableCell>
         )}
@@ -439,12 +428,12 @@ export function WorkItemsTableView({
             </TableCell>
           )}
 
-          {/* Status - Inline Editable */}
-          {columnVisibility.status && (
+          {/* Phase - Inline Editable */}
+          {columnVisibility.phase && (
             <TableCell className="px-3 py-2">
               <InlineStatusEditor
-                value={item.status}
-                onValueChange={(value) => handleInlineUpdate(item.id, 'status', value)}
+                value={item.phase}
+                onValueChange={(value) => handleInlineUpdate(item.id, 'phase', value)}
                 variant="badge"
               />
             </TableCell>
@@ -617,8 +606,8 @@ export function WorkItemsTableView({
                 </TableCell>
               )}
 
-              {/* Status - Empty for child rows */}
-              {columnVisibility.status && <TableCell className="px-3 py-2"></TableCell>}
+              {/* Phase - Empty for child rows */}
+              {columnVisibility.phase && <TableCell className="px-3 py-2"></TableCell>}
 
               {/* Priority - Empty for child rows */}
               {columnVisibility.priority && <TableCell className="px-3 py-2"></TableCell>}
@@ -632,17 +621,8 @@ export function WorkItemsTableView({
               {/* Integration */}
               {columnVisibility.integration && (
                 <TableCell className="px-3 py-2">
-                  <div className="space-y-1">
-                    {timeline.integration_system && (
-                      <Badge variant="secondary" className="px-1.5 py-0.5 text-[10px] font-medium">
-                        {timeline.integration_system}
-                      </Badge>
-                    )}
-                    {timeline.integration_complexity && (
-                      <div className="text-[10px] text-muted-foreground">
-                        {timeline.integration_complexity}
-                      </div>
-                    )}
+                  <div className="text-xs">
+                    <span className="text-[11px] text-muted-foreground">-</span>
                   </div>
                 </TableCell>
               )}
@@ -676,7 +656,7 @@ export function WorkItemsTableView({
                 {viewMode === 'collapsed' ? 'Timeline' : 'Timeline / Phase'}
               </TableHead>
             )}
-            {columnVisibility.status && <TableHead className="font-semibold text-xs px-3 py-2">Status</TableHead>}
+            {columnVisibility.phase && <TableHead className="font-semibold text-xs px-3 py-2">Phase</TableHead>}
             {columnVisibility.priority && <TableHead className="font-semibold text-xs px-3 py-2">Priority</TableHead>}
             {columnVisibility.department && <TableHead className="font-semibold text-xs px-3 py-2">Department</TableHead>}
             {columnVisibility.purpose && <TableHead className="font-semibold text-xs px-3 py-2">Purpose</TableHead>}
@@ -701,7 +681,7 @@ export function WorkItemsTableView({
                   1 +
                   (columnVisibility.type ? 1 : 0) +
                   (columnVisibility.timeline ? 1 : 0) +
-                  (columnVisibility.status ? 1 : 0) +
+                  (columnVisibility.phase ? 1 : 0) +
                   (columnVisibility.priority ? 1 : 0) +
                   (columnVisibility.department ? 1 : 0) +
                   (columnVisibility.purpose ? 1 : 0) +

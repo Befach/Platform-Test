@@ -314,3 +314,71 @@ export const AlignmentSuggestionsSchema = z.object({
 })
 
 export type AlignmentSuggestionsAI = z.infer<typeof AlignmentSuggestionsSchema>
+
+// =============================================================================
+// METHODOLOGY SUGGESTION SCHEMA
+// =============================================================================
+
+/**
+ * Valid Design Thinking frameworks
+ */
+export const DesignThinkingFrameworkSchema = z.enum([
+  'stanford',
+  'double-diamond',
+  'ideo',
+  'ibm',
+])
+
+export type DesignThinkingFrameworkAI = z.infer<typeof DesignThinkingFrameworkSchema>
+
+/**
+ * Schema for a single method/tool suggestion
+ */
+export const SuggestedMethodSchema = z.object({
+  toolId: z.string().describe('ID of the recommended Design Thinking tool'),
+  toolName: z.string().describe('Name of the tool'),
+  reason: z
+    .string()
+    .max(200)
+    .describe('Why this tool is recommended for the current context'),
+  priority: z
+    .enum(['high', 'medium', 'low'])
+    .describe('Priority of using this tool'),
+})
+
+export type SuggestedMethod = z.infer<typeof SuggestedMethodSchema>
+
+/**
+ * Schema for methodology suggestion response
+ *
+ * Used by: POST /api/ai/methodology/suggest
+ */
+export const MethodologySuggestionSchema = z.object({
+  primaryFramework: DesignThinkingFrameworkSchema.describe(
+    'Recommended primary Design Thinking framework'
+  ),
+  frameworkReason: z
+    .string()
+    .max(300)
+    .describe('Why this framework fits the work item and current phase'),
+  suggestedMethods: z
+    .array(SuggestedMethodSchema)
+    .min(1)
+    .max(5)
+    .describe('Specific tools/methods to use (1-5 recommendations)'),
+  nextSteps: z
+    .array(z.string().max(150))
+    .min(1)
+    .max(3)
+    .describe('Actionable next steps the team should take (1-3 items)'),
+  relevantCaseStudies: z
+    .array(z.string())
+    .max(3)
+    .describe('IDs of relevant case studies for inspiration'),
+  phaseSpecificTips: z
+    .array(z.string().max(150))
+    .max(3)
+    .describe('Tips tailored to the current phase'),
+})
+
+export type MethodologySuggestion = z.infer<typeof MethodologySuggestionSchema>

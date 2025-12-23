@@ -109,7 +109,6 @@ const WORK_ITEM_TYPE_ICONS: Record<string, LucideIcon> = {
   concept: Lightbulb,
   feature: Sparkles,
   bug: Bug,
-  enhancement: Zap,
 }
 
 function getTemplateIcon(iconName: string): LucideIcon {

@@ -203,28 +203,22 @@ export interface PhaseTransitionRule {
  */
 export const DEFAULT_TRANSITION_RULES: PhaseTransitionRule[] = [
   {
-    from: 'research',
-    to: 'planning',
+    from: 'design',
+    to: 'build',
     requiresTimeline: false,
-    warningMessage: 'Moving to Planning. Consider adding timeline breakdown.',
+    warningMessage: 'Moving to Build. Consider adding timeline breakdown.',
   },
   {
-    from: 'planning',
-    to: 'execution',
+    from: 'build',
+    to: 'refine',
     requiresOwner: true,
-    requiresTimeline: true,
-    warningMessage: 'Moving to Execution requires an owner and timeline breakdown.',
-  },
-  {
-    from: 'execution',
-    to: 'review',
     requiresCompletion: false,
-    warningMessage: 'Moving to Review. Ensure work is ready for QA.',
+    warningMessage: 'Moving to Refine. Ensure work is ready for review.',
   },
   {
-    from: 'review',
-    to: 'complete',
-    warningMessage: 'Moving to Complete. Ensure all feedback is addressed.',
+    from: 'refine',
+    to: 'launch',
+    warningMessage: 'Moving to Launch. Ensure all feedback is addressed.',
   },
 ];
 

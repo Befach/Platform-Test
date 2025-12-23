@@ -76,7 +76,8 @@ test.describe('Versioning System', () => {
       await supabase.from('work_items').insert({
         id: enhancedId,
         title: 'Enhanced Feature v2',
-        type: 'enhancement',
+        type: 'feature',
+        is_enhancement: true,
         phase: 'build',
         priority: 'high',
         version: 2,
@@ -321,7 +322,8 @@ test.describe('Versioning System', () => {
         {
           id: v2Id,
           title: 'Navigation Test v2',
-          type: 'enhancement',
+          type: 'feature',
+          is_enhancement: true,
           phase: 'build',
           priority: 'high',
           version: 2,

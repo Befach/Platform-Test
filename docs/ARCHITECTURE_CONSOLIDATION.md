@@ -1,7 +1,7 @@
 # ARCHITECTURE CONSOLIDATION - Master Reference
 
 **Created**: 2025-12-11
-**Updated**: 2025-12-13 (Migrated to 4-Phase System)
+**Updated**: 2025-12-23 (3-Type System: Enhancement is now a flag, not a type)
 **Purpose**: Single source of truth for platform architecture decisions
 **Status**: CANONICAL - All other docs should align with this
 
@@ -15,11 +15,13 @@
 WORKSPACE (Aggregation View)
 ├── mode: development | launch | growth | maintenance
 ├── Shows: Phase DISTRIBUTION across all work items
-│   Example: "10 in design, 15 in build, 8 in refine..."
+│   Example: "5 features in build, 2 bugs in triage, 1 concept in research..."
 │
-└── WORK ITEMS (Each has own phase)
-    ├── phase: design | build | refine | launch
-    │         ↑ THIS IS THE STATUS - No separate status field!
+└── WORK ITEMS (Each has own type-specific phase)
+    ├── Feature: design → build → refine → launch (use is_enhancement flag for iterations)
+    ├── Concept: ideation → research → validated | rejected
+    ├── Bug: triage → investigating → fixing → verified
+    │         ↑ PHASE IS THE STATUS - No separate status field!
     │
     └── TIMELINE ITEMS (MVP/SHORT/LONG breakdowns)
         └── status: not_started | in_progress | blocked | completed | on_hold | cancelled
@@ -37,10 +39,30 @@ WORKSPACE (Aggregation View)
 
 ---
 
-## 2. PHASE SYSTEM (4-Phase)
+## 2. PHASE SYSTEM (Type-Aware)
 
-### 2.1 Work Item Phases (= Status)
+### 2.1 Type-Specific Phase Workflows
 
+Different work item types follow different phase progressions:
+
+```
+FEATURE:
+  design → build → refine → launch
+  (Standard product development lifecycle)
+  Note: Use is_enhancement flag for iterations/improvements
+
+CONCEPT:
+  ideation → research → validated | rejected
+  (Exploration with terminal outcomes)
+
+BUG:
+  triage → investigating → fixing → verified
+  (Issue resolution workflow)
+```
+
+### 2.2 Phase Definitions by Type
+
+**Feature Phases** (includes enhancements via is_enhancement flag):
 | Phase | Description | Focus Area |
 |-------|-------------|------------|
 | **design** | Research, ideation, problem definition | Empathy, user needs, scope planning |
@@ -48,7 +70,38 @@ WORKSPACE (Aggregation View)
 | **refine** | Testing, validation, iteration | Quality, user testing, feedback |
 | **launch** | Shipped, deployed, done | Release, retrospective, metrics |
 
-### 2.2 Phase Mapping (Migration Reference)
+**Concept Phases**:
+| Phase | Description | Focus Area |
+|-------|-------------|------------|
+| **ideation** | Initial idea capture | Brainstorming, exploration |
+| **research** | Validation research | User interviews, market analysis |
+| **validated** | Concept approved (TERMINAL) | Ready for promotion to feature |
+| **rejected** | Concept rejected (TERMINAL) | Not viable, lessons learned |
+
+**Bug Phases**:
+| Phase | Description | Focus Area |
+|-------|-------------|------------|
+| **triage** | Initial assessment | Severity, priority, assignment |
+| **investigating** | Root cause analysis | Debugging, reproduction |
+| **fixing** | Active fix development | Code changes, testing |
+| **verified** | Fix confirmed (TERMINAL) | Deployed and validated |
+
+### 2.3 Terminal Phases
+
+Some phases are **terminal** - they cannot progress further:
+- `validated` / `rejected` for concepts
+- `verified` for bugs
+- `launch` for features/enhancements
+
+### 2.4 Default Phases by Type
+
+| Type | Default Phase | Rationale |
+|------|---------------|-----------|
+| feature | design | Start with planning (use is_enhancement flag for iterations) |
+| concept | ideation | Start with exploration |
+| bug | triage | Start with assessment |
+
+### 2.5 Phase Mapping (Migration Reference)
 
 | Old (5-Phase) | New (4-Phase) | Rationale |
 |--------------|---------------|-----------|
@@ -57,7 +110,7 @@ WORKSPACE (Aggregation View)
 | review | **refine** | Better reflects iteration nature |
 | complete | **launch** | Action-oriented completion |
 
-### 2.3 Timeline Item Status (Separate)
+### 2.6 Timeline Item Status (Separate)
 
 | Status | Description |
 |--------|-------------|
@@ -68,20 +121,36 @@ WORKSPACE (Aggregation View)
 | `on_hold` | Paused intentionally |
 | `cancelled` | No longer needed |
 
-### 2.4 Phase Transition Requirements
+### 2.7 Phase Transition Requirements
 
+**Feature/Enhancement Transitions**:
 | From → To | Required Fields | Rationale |
 |-----------|-----------------|-----------|
 | design → build | `purpose` filled, 1+ timeline items OR scope defined | Ready to build |
 | build → refine | `progress_percent` >= 80, `actual_start_date` set | Work substantially done |
-| refine → launch | Feedback addressed, quality approved | Ready to ship |
+| refine → launch | Feedback addressed, review approved (if enabled) | Ready to ship |
 
-### 2.5 Phase Upgrade Prompting
+**Concept Transitions**:
+| From → To | Required Fields | Rationale |
+|-----------|-----------------|-----------|
+| ideation → research | `purpose` filled, hypothesis defined | Ready to validate |
+| research → validated | Research complete, viable confirmed | Concept approved |
+| research → rejected | Research complete, not viable | Concept rejected |
 
-- **Threshold**: 80% field completion
+**Bug Transitions**:
+| From → To | Required Fields | Rationale |
+|-----------|-----------------|-----------|
+| triage → investigating | Priority set, assigned | Ready to investigate |
+| investigating → fixing | Root cause identified | Ready to fix |
+| fixing → verified | Fix deployed, review approved (if enabled) | Bug resolved |
+
+### 2.8 Phase Upgrade Prompting
+
+- **Threshold**: 80% field completion for current phase
 - **Level**: Work item (NOT workspace)
 - **Frequency**: Real-time as fields are filled
 - **UI**: Banner in work item detail header
+- **Type-Aware**: Different thresholds per type/phase combination
 
 ---
 
@@ -184,15 +253,151 @@ case_studies TEXT[]     -- Reference case studies
 
 ---
 
-## 6. PERIODIC ANALYSIS
+## 6. VERSIONING SYSTEM
 
-### 6.1 Workspace Analysis
+### 6.1 Version Chain Concept
+
+Work items can be **enhanced** to create new versions, forming a version chain:
+
+```
+Original Feature (v1)
+    └── Enhanced Feature (v2)
+         └── Enhanced Feature (v3)
+              └── ...
+```
+
+### 6.2 Database Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `version` | INTEGER | Version number (starts at 1) |
+| `enhances_work_item_id` | TEXT | Reference to previous version |
+| `version_notes` | TEXT | Description of what changed |
+
+### 6.3 Version Chain API
+
+**GET /api/work-items/[id]/versions**
+```typescript
+{
+  versions: WorkItemVersion[],
+  current_id: string,
+  original_id: string,
+}
+```
+
+**POST /api/work-items/[id]/enhance**
+```typescript
+// Request
+{
+  title?: string,       // Optional new title
+  description?: string, // Optional new description
+  version_notes: string // Required: what changed
+}
+
+// Response
+{
+  work_item: WorkItem,      // New enhanced version
+  previous_version: WorkItem // Original
+}
+```
+
+### 6.4 Concept Promotion
+
+Validated concepts can be **promoted** to features:
+
+```
+Concept (validated) → Feature (v1)
+    └── enhances_work_item_id = concept.id
+```
+
+**UI Flow**:
+1. Concept reaches `validated` phase
+2. Promotion dialog appears
+3. User can:
+   - **Promote to Feature**: Creates linked feature
+   - **Keep as Concept**: Stays as validated concept
+
+### 6.5 Version History UI
+
+- Shown as a **Versions tab** in work item detail
+- Only visible when `version > 1` or linked items exist
+- Timeline view showing version chain
+- Click to navigate between versions
+
+---
+
+## 7. REVIEW PROCESS
+
+### 7.1 Detached Review System
+
+Review is **optional and detached** from phases:
+- Can be enabled/disabled per work item
+- Required before certain phase transitions (when enabled)
+- Applies to bugs (fixing → verified) and features (refine → launch)
+
+### 7.2 Review States
+
+| Status | Description | Next Actions |
+|--------|-------------|--------------|
+| `null` | Review not requested | Enable review |
+| `pending` | Awaiting review | Approve / Reject |
+| `approved` | Review passed | Proceed to next phase |
+| `rejected` | Review failed | Re-request after changes |
+
+### 7.3 Database Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `review_enabled` | BOOLEAN | Whether review is required |
+| `review_status` | TEXT | Current review status |
+| `review_requested_at` | TIMESTAMPTZ | When review was requested |
+| `review_completed_at` | TIMESTAMPTZ | When review was completed |
+| `review_reason` | TEXT | Rejection reason (if rejected) |
+
+### 7.4 Review Permissions
+
+| Action | Allowed Roles |
+|--------|---------------|
+| Enable/disable review | owner, admin, member |
+| Request review | owner, admin, member |
+| Approve review | owner, admin |
+| Reject review | owner, admin |
+
+### 7.5 Phase Blocking
+
+When `review_enabled = true`:
+- **Bugs**: Cannot move from `fixing` to `verified` without approval
+- **Features**: Cannot move from `refine` to `launch` without approval
+- UI shows blocking message with review status
+
+### 7.6 Review API
+
+**POST /api/work-items/[id]/review**
+```typescript
+// Request
+{
+  action: 'approve' | 'reject' | 'request',
+  reason?: string  // Required for reject
+}
+
+// Response
+{
+  work_item: WorkItem,
+  review_history: ReviewAction[]
+}
+```
+
+---
+
+## 8. PERIODIC ANALYSIS
+
+### 8.1 Workspace Analysis
 
 - **Frequency**: Every 2-3 days OR change-based
 - **Purpose**: Detect phase mismatches, suggest upgrades
 - **Trigger**: User button OR AI suggestion
 
-### 6.2 Analysis Output
+### 8.2 Analysis Output
 
 ```typescript
 interface WorkspaceAnalysis {
@@ -205,9 +410,9 @@ interface WorkspaceAnalysis {
 
 ---
 
-## 7. TAB & FIELD CONFIGURATION
+## 9. TAB & FIELD CONFIGURATION
 
-### 7.1 Eight Tabs (Phase-Aware)
+### 9.1 Eight Tabs (Phase-Aware)
 
 | Tab | design | build | refine | launch |
 |-----|:------:|:-----:|:------:|:------:|
@@ -220,7 +425,7 @@ interface WorkspaceAnalysis {
 | Metrics | - | ✓ | ✓ | ✓ |
 | AI Copilot | ✓ | ✓ | ✓ | ✓ |
 
-### 7.2 Three Field Groups (Progressive Disclosure)
+### 9.2 Three Field Groups (Progressive Disclosure)
 
 **Group 1: Basic** (Always visible)
 - name, purpose, type, tags
@@ -235,7 +440,7 @@ interface WorkspaceAnalysis {
 
 ---
 
-## 8. KNOWN ISSUES (Session 1 Complete)
+## 10. KNOWN ISSUES (Session 1 Complete)
 
 | Issue | Status | Resolution |
 |-------|--------|------------|
@@ -247,20 +452,25 @@ interface WorkspaceAnalysis {
 
 ---
 
-## 9. TERMINOLOGY GLOSSARY
+## 11. TERMINOLOGY GLOSSARY
 
 | Term | Definition | NOT This |
 |------|------------|----------|
 | **Workspace** | A product/project container | Organization |
 | **Work Item** | Feature, bug, enhancement, concept | Task |
 | **Timeline Item** | MVP/SHORT/LONG breakdown task | Work Item |
-| **Phase** | Work item lifecycle stage (= status): design, build, refine, launch | Separate from status |
+| **Phase** | Work item lifecycle stage (= status), type-specific | Separate from status |
 | **Mode** | Workspace lifecycle context | Stage |
 | **Stage** | (Deprecated) Use "Phase" for work items | - |
+| **Terminal Phase** | Phase that cannot progress further (validated, rejected, verified, launch) | Intermediate phase |
+| **Version** | An iteration of a work item (v1, v2, etc.) | Copy/duplicate |
+| **Enhancement** | New version that builds on previous | Replacement |
+| **Review** | Optional approval process before phase transitions | Mandatory gate |
+| **Concept Promotion** | Converting validated concept to feature | Type change |
 
 ---
 
-## 10. IMPLEMENTATION SESSIONS
+## 12. IMPLEMENTATION SESSIONS
 
 ### Session 1: Fix Phase Bugs ✅ COMPLETE (2025-12-13)
 - ✅ Fixed calculation logic overlap
@@ -269,30 +479,39 @@ interface WorkspaceAnalysis {
 - ✅ Added phase_transitions JSONB column
 - ✅ Applied database migration
 
-### Session 2: Phase Upgrade Prompts ⏳ PENDING
-- Create readiness calculator
-- Build upgrade prompt UI
-- Add guiding questions
+### Session 2: Phase Upgrade Prompts ✅ COMPLETE (2025-12-16)
+- ✅ Created readiness calculator (`calculatePhaseReadiness`)
+- ✅ Built phase upgrade banner UI (`PhaseUpgradeBanner`)
+- ✅ Added guiding questions system (`GuidingQuestionsTooltip`)
+- ✅ Implemented `usePhaseReadiness` hook
 
-### Session 3: Workspace Analysis ⏳ PENDING
-- Create analyzer service
-- Build health card
-- Add API endpoint
+### Session 3: Type-Specific UI Components ✅ COMPLETE (2025-12-18)
+- ✅ Updated `PhaseContextBadge` with type awareness
+- ✅ Created `ConceptPromotionDialog` for validated concepts
+- ✅ Created `BugReviewToggle` for review mode
+- ✅ Updated `WorkItemDetailHeader` with type-aware config
 
-### Session 4: Design Thinking Integration ⏳ PENDING
-- Add methodology guidance
-- Include other frameworks
-- AI active integration
+### Session 4: Versioning System ✅ COMPLETE (2025-12-19)
+- ✅ Created `VersionHistory` component
+- ✅ Implemented `useWorkItemVersions` hook
+- ✅ Created `/api/work-items/[id]/enhance` endpoint
+- ✅ Created `/api/work-items/[id]/versions` endpoint
+- ✅ Added Versions tab to work item detail
 
-### Session 5: Strategy Customization ⏳ PENDING
-- Add new fields
-- Org-level display component
-- Work-item-level display component
+### Session 5: Review Process ✅ COMPLETE (2025-12-19)
+- ✅ Created `review-process.ts` configuration
+- ✅ Built `ReviewStatus` component
+- ✅ Created `/api/work-items/[id]/review` endpoint
+- ✅ Updated phase permissions with review blocking
+- ✅ Integrated feedback conversion with phase selector
 
-### Session 6: Polish ⏳ PENDING
-- Feedback conversion
-- Workspace card update
-- E2E testing
+### Session 6: Polish & Testing ✅ COMPLETE (2025-12-20)
+- ✅ Updated `workspace-card.tsx` with type-aware distribution
+- ✅ Created `TypeAwarePhaseDistribution` component
+- ✅ Created E2E tests: `type-phases.spec.ts`
+- ✅ Created E2E tests: `versioning.spec.ts`
+- ✅ Created E2E tests: `review-process.spec.ts`
+- ✅ Updated documentation (ARCHITECTURE_CONSOLIDATION.md)
 
 ---
 

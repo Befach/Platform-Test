@@ -9,16 +9,20 @@ import {
   useEffect,
   type ReactNode,
 } from 'react'
+import type { WorkItem } from '@/lib/types/work-items'
 import {
   calculateWorkItemPhase,
   type WorkspacePhase,
 } from '@/lib/constants/workspace-phases'
 import {
   getVisibleTabs,
+  getVisibleTabsWithContext,
   getDefaultTab,
   isTabVisible,
+  shouldShowVersionsTab,
   type DetailTab,
   type TabConfig,
+  type TabVisibilityContext,
 } from './tab-visibility'
 
 // ============================================================================
@@ -32,7 +36,8 @@ export interface WorkItemData {
   id: string
   title: string
   description: string | null
-  status: string
+  status: string // Backward compat - maps to phase
+  phase: string // Primary field - replaces status in new architecture
   priority: string
   type: string
   assigned_to: string | null
@@ -42,6 +47,14 @@ export interface WorkItemData {
   workspace_id: string
   team_id: string
   department_id?: string | null
+  // Versioning fields
+  version?: number
+  enhances_work_item_id?: string | null
+  version_notes?: string | null
+  is_enhancement?: boolean
+  // Review fields
+  review_enabled?: boolean
+  review_status?: string
   // Relationships loaded from server
   workspace?: {
     id: string
@@ -105,6 +118,42 @@ export interface DetailPreferences {
   tasksViewMode: TabViewMode
   /** Whether the tracking sidebar is collapsed */
   sidebarCollapsed: boolean
+}
+
+// ============================================================================
+// Adapter Functions
+// ============================================================================
+
+/**
+ * Converts database WorkItem to component WorkItemData
+ * Handles field name mapping and provides backward compatibility
+ */
+export function toWorkItemData(workItem: WorkItem): WorkItemData {
+  return {
+    id: workItem.id,
+    title: workItem.name,
+    description: workItem.purpose,
+    status: workItem.phase || '', // Backward compat: status = phase
+    phase: workItem.phase || '', // Primary field
+    priority: workItem.priority || '',
+    type: workItem.type || '',
+    assigned_to: workItem.user_id,
+    created_by: workItem.created_by || '',
+    created_at: workItem.created_at || new Date().toISOString(),
+    updated_at: workItem.updated_at,
+    workspace_id: workItem.workspace_id || '',
+    team_id: workItem.team_id || '',
+    department_id: workItem.department_id,
+    // Versioning fields
+    version: workItem.version || undefined,
+    enhances_work_item_id: workItem.enhances_work_item_id,
+    version_notes: workItem.version_notes || undefined,
+    is_enhancement: workItem.is_enhancement || false,
+    // Review fields
+    review_enabled: workItem.review_enabled || false,
+    review_status: workItem.review_status || undefined,
+    // Relationships populated separately
+  }
 }
 
 // ============================================================================
@@ -190,6 +239,8 @@ interface WorkItemDetailProviderProps {
   taskCount?: number
   /** Feedback count (fetched separately) */
   feedbackCount?: number
+  /** Whether this work item has been enhanced by others */
+  hasEnhancements?: boolean
 }
 
 // ============================================================================
@@ -210,6 +261,7 @@ export function WorkItemDetailProvider({
   defaultTab = 'summary',
   taskCount = 0,
   feedbackCount = 0,
+  hasEnhancements = false,
 }: WorkItemDetailProviderProps) {
   // Track if component has mounted (to avoid hydration mismatch with localStorage)
   const [hasMounted, setHasMounted] = useState(false)
@@ -230,8 +282,18 @@ export function WorkItemDetailProvider({
     })
   }, [workItem.status, workItem.assigned_to, initialTimelineItems.length])
 
-  // Visible tabs based on phase
-  const visibleTabs = useMemo(() => getVisibleTabs(phase), [phase])
+  // Version context for conditional tab visibility
+  const versionContext = useMemo<TabVisibilityContext>(() => ({
+    version: workItem.version,
+    enhancesWorkItemId: workItem.enhances_work_item_id,
+    hasEnhancements,
+  }), [workItem.version, workItem.enhances_work_item_id, hasEnhancements])
+
+  // Visible tabs based on phase and context
+  const visibleTabs = useMemo(
+    () => getVisibleTabsWithContext(phase, versionContext),
+    [phase, versionContext]
+  )
 
   // Preferences state (persisted to localStorage)
   const [preferences, setPreferencesState] = useState<DetailPreferences>(defaultPreferences)
@@ -365,5 +427,11 @@ export function WorkItemDetailProvider({
 // Re-export types for convenience
 // ============================================================================
 
-export type { DetailTab, TabConfig } from './tab-visibility'
-export { TAB_CONFIG, getVisibleTabs, getDefaultTab } from './tab-visibility'
+export type { DetailTab, TabConfig, TabVisibilityContext } from './tab-visibility'
+export {
+  TAB_CONFIG,
+  getVisibleTabs,
+  getVisibleTabsWithContext,
+  getDefaultTab,
+  shouldShowVersionsTab,
+} from './tab-visibility'

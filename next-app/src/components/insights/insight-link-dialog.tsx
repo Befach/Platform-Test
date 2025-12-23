@@ -45,7 +45,6 @@ const workItemIcons: Record<string, React.ElementType> = {
   concept: Lightbulb,
   feature: Rocket,
   bug: Bug,
-  enhancement: Zap,
   research: FileText,
 }
 
@@ -54,7 +53,6 @@ const workItemColors: Record<string, string> = {
   concept: 'bg-purple-100 text-purple-700',
   feature: 'bg-blue-100 text-blue-700',
   bug: 'bg-red-100 text-red-700',
-  enhancement: 'bg-green-100 text-green-700',
   research: 'bg-orange-100 text-orange-700',
 }
 

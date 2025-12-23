@@ -86,11 +86,11 @@ export const WORKSPACE_MODE_CONFIG: Record<WorkspaceMode, WorkspaceModeConfig> =
 /**
  * Type weights for work item prioritization by mode
  * Higher values = more emphasis on that type
+ * Note: Enhancement is a flag on features, not a separate type - use feature weight
  */
 export interface ModeTypeWeights {
   concept: number;
   feature: number;
-  enhancement: number;
   bug: number;
 }
 
@@ -122,19 +122,19 @@ export interface WorkspaceModeSettings {
  */
 export const DEFAULT_MODE_SETTINGS: Record<WorkspaceMode, WorkspaceModeSettings> = {
   development: {
-    type_weights: { concept: 9, feature: 10, enhancement: 5, bug: 3 },
+    type_weights: { concept: 9, feature: 10, bug: 3 },
     ai_personality: { bias: 'balanced', suggestion_frequency: 'medium' },
   },
   launch: {
-    type_weights: { concept: 2, feature: 8, enhancement: 4, bug: 10 },
+    type_weights: { concept: 2, feature: 8, bug: 10 },
     ai_personality: { bias: 'ship_fast', suggestion_frequency: 'high' },
   },
   growth: {
-    type_weights: { concept: 5, feature: 7, enhancement: 9, bug: 6 },
+    type_weights: { concept: 5, feature: 9, bug: 6 }, // Feature weight increased to account for enhancements
     ai_personality: { bias: 'user_driven', suggestion_frequency: 'high' },
   },
   maintenance: {
-    type_weights: { concept: 2, feature: 3, enhancement: 5, bug: 10 },
+    type_weights: { concept: 2, feature: 5, bug: 10 }, // Feature weight increased to account for enhancements
     ai_personality: { bias: 'stability', suggestion_frequency: 'low' },
   },
 };

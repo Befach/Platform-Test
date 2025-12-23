@@ -165,20 +165,18 @@ export async function createClientAsUser(userId: string): Promise<SupabaseClient
 export async function createTeamInDatabase(
   teamData: {
     name: string;
-    description?: string;
     ownerId: string;
   },
 ): Promise<{ id: string; name: string }> {
   try {
     const teamId = `team_${Date.now()}`;
 
-    const { data, error } = await supabase
+    const { data, error} = await supabase
       .from('teams')
       .insert([
         {
           id: teamId,
           name: teamData.name,
-          description: teamData.description || '',
           owner_id: teamData.ownerId,
           created_at: new Date().toISOString(),
         },
@@ -253,11 +251,12 @@ export async function createWorkItemInDatabase(
   workItemData: {
     title: string;
     description?: string;
-    type: 'feature' | 'bug' | 'enhancement' | 'epic';
-    status: string;
+    type: 'feature' | 'bug' | 'concept';
+    phase: string;
     priority: string;
     workspaceId: string;
     teamId: string;
+    is_enhancement?: boolean;
   },
 ): Promise<{ id: string; title: string }> {
   try {
@@ -268,13 +267,14 @@ export async function createWorkItemInDatabase(
       .insert([
         {
           id: workItemId,
-          title: workItemData.title,
+          name: workItemData.title,
           description: workItemData.description || '',
           type: workItemData.type,
-          status: workItemData.status,
+          phase: workItemData.phase,
           priority: workItemData.priority,
           workspace_id: workItemData.workspaceId,
           team_id: workItemData.teamId,
+          is_enhancement: workItemData.is_enhancement || false,
           created_at: new Date().toISOString(),
         },
       ])
@@ -288,7 +288,7 @@ export async function createWorkItemInDatabase(
 
     return {
       id: data.id,
-      title: data.title,
+      title: data.name,
     };
   } catch (error) {
     console.error('Failed to create work item in database:', error);

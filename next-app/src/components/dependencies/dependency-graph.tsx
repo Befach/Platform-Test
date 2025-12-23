@@ -50,7 +50,7 @@ import {
   X,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
-import type { WorkItem } from '@/lib/work-items/types'
+import type { WorkItem } from '@/lib/types/work-items'
 import type {
   WorkItemConnection,
   DependencyGraphNode,
@@ -171,7 +171,7 @@ function DependencyGraphInner({
     setNodes((nds) => {
       updatedNodes = nds.map((node) => {
         const workItem = node.data.workItem
-        const statusMatch = statusFilters.has(workItem.status || 'planned')
+        const statusMatch = statusFilters.has(workItem.phase || 'design')
         const priorityMatch = priorityFilters.has(workItem.priority || 'medium')
         return {
           ...node,
@@ -528,7 +528,7 @@ function DependencyGraphInner({
       <rect width="280" height="120" rx="8" fill="white" stroke="#e2e8f0" stroke-width="2"/>
       <text x="140" y="30" text-anchor="middle" font-size="14" font-weight="600">${workItem.name}</text>
       <text x="140" y="60" text-anchor="middle" font-size="12" fill="#64748b">${workItem.type || 'Feature'}</text>
-      <text x="140" y="90" text-anchor="middle" font-size="12" fill="#64748b">${workItem.status || 'planned'}</text>
+      <text x="140" y="90" text-anchor="middle" font-size="12" fill="#64748b">${workItem.phase || 'design'}</text>
     </g>`
       })
 

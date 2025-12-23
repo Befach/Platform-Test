@@ -23,7 +23,7 @@ interface WorkItem {
   name: string
   type: string
   purpose: string | null
-  status: string
+  phase: string
   priority: string
   tags: string[] | null
   linkedItemsCount: number
@@ -76,7 +76,7 @@ export function WorkItemsViewWrapper({
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
     type: true,
     timeline: true,
-    status: true,
+    phase: true,
     priority: true,
     purpose: false,
     integration: false,
@@ -114,8 +114,8 @@ export function WorkItemsViewWrapper({
       if (!matchesName && !matchesPurpose && !matchesTags) return false
     }
 
-    // Status filter
-    if (effectiveStatus !== 'all' && effectiveStatus && item.status !== effectiveStatus) return false
+    // Phase filter (phase IS the status for work items)
+    if (effectiveStatus !== 'all' && effectiveStatus && item.phase !== effectiveStatus) return false
 
     // Priority filter
     if (effectivePriority !== 'all' && effectivePriority && item.priority !== effectivePriority) return false

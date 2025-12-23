@@ -1,7 +1,11 @@
 # 🚀 Product Lifecycle Management Platform
 
-**Last Updated**: 2025-12-09
-**Status**: 🏗️ **In Development** (Week 7 / 8-week timeline - 92% Complete)
+![CI Status](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml/badge.svg)
+![Link Checker](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/check-links.yml/badge.svg)
+![E2E Tests](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/playwright.yml/badge.svg?event=workflow_dispatch)
+
+**Last Updated**: 2025-12-23
+**Status**: 🏗️ **In Development** (Week 7 / 8-week timeline - 95% Complete)
 **Live Preview**: [https://platform-test-cyan.vercel.app](https://platform-test-cyan.vercel.app)
 
 A comprehensive AI-first platform for managing the complete product lifecycle - from research and ideation to execution and analytics.

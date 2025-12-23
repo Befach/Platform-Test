@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
 import { Eye, Trash2, Calendar, Target } from 'lucide-react'
 import { getItemIcon, getItemLabel, getLifecycleStatusLabel, getLifecycleStatusBgColor } from '@/lib/constants/work-item-types'
-import type { WorkItem, TimelineItem } from '@/lib/work-items/types'
+import type { WorkItem, TimelineItem } from '@/lib/types/work-items'
 
 interface TimelineGroupedViewProps {
   workItems: WorkItem[]
@@ -39,17 +39,36 @@ export function TimelineGroupedView({
     }
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'not_started':
-        return 'bg-gray-100 text-gray-700 border-gray-300'
-      case 'in_progress':
+  const getPhaseColor = (phase: string | null) => {
+    if (!phase) return 'bg-gray-100 text-gray-700 border-gray-300'
+
+    switch (phase) {
+      // Feature phases
+      case 'design':
         return 'bg-blue-100 text-blue-700 border-blue-300'
-      case 'completed':
-        return 'bg-green-100 text-green-700 border-green-300'
-      case 'on_hold':
+      case 'build':
+        return 'bg-purple-100 text-purple-700 border-purple-300'
+      case 'refine':
         return 'bg-orange-100 text-orange-700 border-orange-300'
-      case 'cancelled':
+      case 'launch':
+        return 'bg-green-100 text-green-700 border-green-300'
+      // Bug phases
+      case 'triage':
+        return 'bg-yellow-100 text-yellow-700 border-yellow-300'
+      case 'investigating':
+        return 'bg-blue-100 text-blue-700 border-blue-300'
+      case 'fixing':
+        return 'bg-purple-100 text-purple-700 border-purple-300'
+      case 'verified':
+        return 'bg-green-100 text-green-700 border-green-300'
+      // Concept phases
+      case 'ideation':
+        return 'bg-indigo-100 text-indigo-700 border-indigo-300'
+      case 'research':
+        return 'bg-cyan-100 text-cyan-700 border-cyan-300'
+      case 'validated':
+        return 'bg-green-100 text-green-700 border-green-300'
+      case 'rejected':
         return 'bg-red-100 text-red-700 border-red-300'
       default:
         return 'bg-gray-100 text-gray-700 border-gray-300'
@@ -109,17 +128,17 @@ export function TimelineGroupedView({
               </div>
 
               <div className="flex flex-wrap items-center gap-2 mt-3">
-                <Badge className={getStatusColor(item.status)} variant="outline">
-                  {item.status.replace('_', ' ')}
+                <Badge className={getPhaseColor(item.phase)} variant="outline">
+                  {item.phase?.replace('_', ' ') || 'No phase'}
                 </Badge>
-                <Badge className={getPriorityColor(item.priority)} variant="outline">
-                  {item.priority}
+                <Badge className={getPriorityColor(item.priority || 'medium')} variant="outline">
+                  {item.priority || 'medium'}
                 </Badge>
                 <Badge variant="outline" className="bg-purple-100 text-purple-700 border-purple-300">
                   {getItemLabel(item.type)}
                 </Badge>
                 <span className="text-xs text-muted-foreground ml-auto">
-                  Created: {new Date(item.created_at).toLocaleDateString()}
+                  Created: {item.created_at ? new Date(item.created_at).toLocaleDateString() : 'N/A'}
                 </span>
               </div>
 
@@ -150,8 +169,10 @@ export function TimelineGroupedView({
                   </h4>
                   {timelines
                     .sort((a, b) => {
-                      const order = { MVP: 0, SHORT: 1, LONG: 2 }
-                      return order[a.timeline] - order[b.timeline]
+                      const order: Record<string, number> = { MVP: 0, SHORT: 1, LONG: 2 }
+                      const aOrder = a.timeline ? (order[a.timeline] ?? 999) : 999
+                      const bOrder = b.timeline ? (order[b.timeline] ?? 999) : 999
+                      return aOrder - bOrder
                     })
                     .map((timeline) => (
                       <div
@@ -178,10 +199,10 @@ export function TimelineGroupedView({
                             >
                               {timeline.difficulty}
                             </Badge>
-                            {timeline.phase && (
-                              <Badge variant="outline" className={getLifecycleStatusBgColor(timeline.phase)} title="Status">
+                            {timeline.status && (
+                              <Badge variant="outline" className={getLifecycleStatusBgColor(timeline.status)} title="Status">
                                 <Target className="h-3 w-3 mr-1" />
-                                {getLifecycleStatusLabel(timeline.phase)}
+                                {getLifecycleStatusLabel(timeline.status)}
                               </Badge>
                             )}
                           </div>
@@ -192,57 +213,6 @@ export function TimelineGroupedView({
                             <p className="text-sm font-medium text-gray-700 mb-1">Description:</p>
                             <p className="text-sm text-muted-foreground">
                               {timeline.description}
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Integration Information */}
-                        {timeline.integration_system && (
-                          <div className="mb-2">
-                            <p className="text-sm font-medium text-gray-700 mb-1">Integration:</p>
-                            <div className="flex items-center gap-2">
-                              <Badge variant="secondary" className="text-xs">
-                                {timeline.integration_system}
-                              </Badge>
-                              {timeline.integration_complexity && (
-                                <Badge variant="outline" className="text-xs">
-                                  {timeline.integration_complexity} complexity
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Implementation Details */}
-                        {timeline.implementation_approach && (
-                          <div className="mb-2">
-                            <p className="text-sm font-medium text-gray-700 mb-1">Implementation:</p>
-                            <p className="text-xs text-muted-foreground">
-                              {timeline.implementation_approach}
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Tech Stack */}
-                        {timeline.implementation_tech_stack && (
-                          <div className="mb-2">
-                            <p className="text-sm font-medium text-gray-700 mb-1">Tech Stack:</p>
-                            <div className="flex flex-wrap gap-1">
-                              {timeline.implementation_tech_stack.map((tech: string) => (
-                                <Badge key={tech} variant="outline" className="text-xs">
-                                  {tech}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Estimated Duration */}
-                        {timeline.implementation_estimated_duration && (
-                          <div>
-                            <p className="text-sm font-medium text-gray-700 mb-1">Estimated Duration:</p>
-                            <p className="text-xs text-muted-foreground">
-                              {timeline.implementation_estimated_duration}
                             </p>
                           </div>
                         )}

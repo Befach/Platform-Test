@@ -26,10 +26,11 @@ export interface TemplateDepartment {
  */
 export interface TemplateWorkItem {
   name: string
-  type: 'concept' | 'feature' | 'bug' | 'enhancement'
+  type: 'concept' | 'feature' | 'bug'
   purpose: string
   priority?: 'low' | 'medium' | 'high' | 'critical'
   department?: string // Department name reference
+  is_enhancement?: boolean
 }
 
 /**

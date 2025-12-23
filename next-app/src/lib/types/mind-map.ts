@@ -300,8 +300,9 @@ export interface CreateEdgeRequest {
 
 export interface ConvertNodeToWorkItemRequest {
   node_id: string
-  work_item_type: 'concept' | 'feature' | 'bug' | 'enhancement'
+  work_item_type: 'concept' | 'feature' | 'bug'
   timeline?: 'MVP' | 'SHORT' | 'LONG'
+  is_enhancement?: boolean
 }
 
 // ========== TEMPLATE TYPES ==========

@@ -1,16 +1,16 @@
 /**
- * Work Item Types - Consolidated 4-Type System
+ * Work Item Types - Consolidated 3-Type System
  *
- * Simplified from 13 types to 4 core types with phase-aware field visibility.
+ * Simplified to 3 core types with phase-aware field visibility.
+ * Enhancement is now a flag on features (is_enhancement), not a separate type.
  * Use tags for sub-categorization instead of proliferating types.
  */
 
-// 4 Core Work Item Types
+// 3 Core Work Item Types
 export const WORK_ITEM_TYPES = {
   CONCEPT: 'concept',
   FEATURE: 'feature',
   BUG: 'bug',
-  ENHANCEMENT: 'enhancement',
 } as const
 
 export type WorkItemType = typeof WORK_ITEM_TYPES[keyof typeof WORK_ITEM_TYPES]
@@ -41,7 +41,7 @@ export const ITEM_TYPE_METADATA: Record<WorkItemType, {
     singular: 'Feature',
     plural: 'Features',
     icon: '⭐',
-    description: 'New functionality to be built',
+    description: 'New functionality to be built (use is_enhancement flag for iterations)',
     color: 'purple',
   },
   bug: {
@@ -50,13 +50,6 @@ export const ITEM_TYPE_METADATA: Record<WorkItemType, {
     icon: '🐛',
     description: 'Something broken that needs fixing',
     color: 'red',
-  },
-  enhancement: {
-    singular: 'Enhancement',
-    plural: 'Enhancements',
-    icon: '✨',
-    description: 'Make existing functionality better',
-    color: 'green',
   },
 }
 
@@ -503,14 +496,14 @@ export function getSuggestedPriority(source: FeedbackSource): FeedbackPriority {
 
 /**
  * Get conversion-appropriate types (what an item can be converted to)
- * Simplified: concept → feature/bug, feature ↔ enhancement ↔ bug
+ * Simplified 3-type system: concept → feature/bug, feature ↔ bug
+ * Note: When converting to feature, UI can optionally set is_enhancement flag
  */
 export function getConversionTargets(currentType: WorkItemType): WorkItemType[] {
   const conversionMap: Record<WorkItemType, WorkItemType[]> = {
-    concept: [WORK_ITEM_TYPES.FEATURE, WORK_ITEM_TYPES.BUG, WORK_ITEM_TYPES.ENHANCEMENT],
-    feature: [WORK_ITEM_TYPES.ENHANCEMENT, WORK_ITEM_TYPES.BUG],
-    bug: [WORK_ITEM_TYPES.FEATURE, WORK_ITEM_TYPES.ENHANCEMENT],
-    enhancement: [WORK_ITEM_TYPES.FEATURE, WORK_ITEM_TYPES.BUG],
+    concept: [WORK_ITEM_TYPES.FEATURE, WORK_ITEM_TYPES.BUG],
+    feature: [WORK_ITEM_TYPES.BUG],
+    bug: [WORK_ITEM_TYPES.FEATURE],
   }
 
   return conversionMap[currentType] || []

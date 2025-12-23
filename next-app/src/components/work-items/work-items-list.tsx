@@ -23,7 +23,7 @@ interface Feature {
   name: string
   type: string
   purpose: string | null
-  status: string
+  phase: string // Phase IS the status for work items
   priority: string
   tags: string[] | null
   created_at: string
@@ -137,8 +137,8 @@ export function WorkItemsList({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <Badge className={getStatusColor(feature.status)} variant="outline">
-                {feature.status.replace('_', ' ')}
+              <Badge className={getStatusColor(feature.phase)} variant="outline">
+                {feature.phase.replace('_', ' ')}
               </Badge>
               <Badge className={getPriorityColor(feature.priority)} variant="outline">
                 {feature.priority}

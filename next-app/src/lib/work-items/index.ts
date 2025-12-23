@@ -44,7 +44,6 @@ export type {
 } from './types'
 
 export {
-  isWorkItemStatus,
   isWorkItemPriority,
   isTimelinePhase,
   isDifficultyLevel,

@@ -23,7 +23,7 @@ import { useToast } from '@/hooks/use-toast'
 import { Loader2, ArrowRight, Lightbulb, Zap, Bug, Sparkles } from 'lucide-react'
 import type { ProductTaskWithRelations } from '@/lib/types/product-tasks'
 
-type WorkItemType = 'concept' | 'feature' | 'bug' | 'enhancement'
+type WorkItemType = 'concept' | 'feature' | 'bug'
 
 const WORK_ITEM_TYPES: { value: WorkItemType; label: string; icon: React.ComponentType<{ className?: string }>; description: string }[] = [
   {
@@ -36,19 +36,13 @@ const WORK_ITEM_TYPES: { value: WorkItemType; label: string; icon: React.Compone
     value: 'feature',
     label: 'Feature',
     icon: Zap,
-    description: 'New functionality to be built',
+    description: 'New functionality to be built (use is_enhancement flag for iterations)',
   },
   {
     value: 'bug',
     label: 'Bug',
     icon: Bug,
     description: 'Something that needs fixing',
-  },
-  {
-    value: 'enhancement',
-    label: 'Enhancement',
-    icon: Sparkles,
-    description: 'Improvement to existing functionality',
   },
 ]
 

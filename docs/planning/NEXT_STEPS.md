@@ -285,6 +285,40 @@ The platform now uses a **4-phase system** for work item lifecycle:
 
 ---
 
+## FUTURE ACTIONS (Week 11-12)
+
+### Metorial Integration - Approved for Implementation
+
+**Status**: Strategic decision approved (2025-12-23)
+**Implementation Timeline**: Week 11-12 (3-4 days)
+**Priority**: HIGH - User experience improvement
+
+**Decision**: Migrate to Metorial as primary integration method, keep self-hosted MCP Gateway as advanced fallback
+
+**Why This Matters**:
+- **User Experience**: 5 minutes setup vs 2-4 hours OAuth configuration
+- **Integration Coverage**: 600+ integrations vs 6 providers (100x increase)
+- **Open Source Friendly**: Free tier for 90% of users
+- **Solo Dev Sustainable**: Cannot build/maintain 200+ integrations alone
+
+**Implementation Checklist** (When Ready):
+- [ ] Install Metorial SDK: `npm install metorial @metorial/ai-sdk`
+- [ ] Create `metorial-adapter.ts` (SDK wrapper)
+- [ ] Create `integration-factory.ts` (mode selection: metorial/self-hosted/hybrid)
+- [ ] Update integration API routes to use factory pattern
+- [ ] Add integration status component to UI
+- [ ] Update documentation (MCP_USAGE_GUIDE.md, README.md)
+- [ ] Create SELF_HOSTED_MCP_GATEWAY.md for advanced users
+- [ ] Test all integration modes
+- [ ] Deploy and monitor
+
+**Reference Documents**:
+- **Strategic Decision**: [docs/research/metorial-integration-decision.md](../research/metorial-integration-decision.md)
+- **Full Implementation Plan**: `C:\Users\harsh\.claude\plans\kind-mapping-quasar.md` (2,135 lines)
+- **Progress Entry**: [docs/planning/PROGRESS.md](PROGRESS.md#metorial-integration---strategic-decision--2025-12-23)
+
+---
+
 ## REFERENCES
 
 - [CLAUDE.md](../../CLAUDE.md) - Project guidelines

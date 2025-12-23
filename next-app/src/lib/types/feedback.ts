@@ -65,10 +65,11 @@ export interface FeedbackTriageData {
 
 // Feedback conversion data
 export interface FeedbackConversionData {
-  work_item_type: 'concept' | 'feature' | 'bug' | 'enhancement'
+  work_item_type: 'concept' | 'feature' | 'bug'
   work_item_name: string
   work_item_purpose?: string
   workspace_id: string
+  is_enhancement?: boolean
 }
 
 // Feedback filters

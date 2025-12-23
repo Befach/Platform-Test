@@ -347,7 +347,7 @@ test.describe('Features - Filtering and Search', () => {
       await createWorkItemInDatabase({
         title: 'Feature: User Authentication',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId,
@@ -356,7 +356,7 @@ test.describe('Features - Filtering and Search', () => {
       await createWorkItemInDatabase({
         title: 'Bug: Dashboard Performance',
         type: 'bug',
-        status: 'active',
+        phase: 'triage',
         priority: 'high',
         teamId,
         workspaceId,
@@ -364,8 +364,9 @@ test.describe('Features - Filtering and Search', () => {
 
       await createWorkItemInDatabase({
         title: 'Enhancement: Dark Mode',
-        type: 'enhancement',
-        status: 'planned',
+        type: 'feature',
+        is_enhancement: true,
+        phase: 'design',
         priority: 'medium',
         teamId,
         workspaceId,
@@ -504,7 +505,7 @@ test.describe('Features - Timeline Breakdown', () => {
       const feature = await createWorkItemInDatabase({
         title: 'Timeline Feature',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId,
@@ -588,7 +589,7 @@ test.describe('Features - Phase Organization', () => {
       await createWorkItemInDatabase({
         title: 'Research: Market Analysis',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId,
@@ -597,7 +598,7 @@ test.describe('Features - Phase Organization', () => {
       await createWorkItemInDatabase({
         title: 'Planning: Architecture Design',
         type: 'feature',
-        status: 'planned',
+        phase: 'design',
         priority: 'high',
         teamId,
         workspaceId,

@@ -88,7 +88,6 @@ const columnConfig: Record<WorkItemStatus, { label: string; color: string; bgCol
 const typeIcons: Record<string, typeof Sparkles> = {
   feature: Sparkles,
   bug: Bug,
-  enhancement: Zap,
   concept: Lightbulb,
   note: StickyNote,
 }

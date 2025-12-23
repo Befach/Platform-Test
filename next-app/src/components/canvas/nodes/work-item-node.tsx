@@ -109,13 +109,8 @@ const typeConfig = {
     bgColor: 'bg-white',
     accentColor: 'bg-blue-100',
   },
-  enhancement: {
-    icon: Star,
-    iconColor: 'text-cyan-600',
-    borderColor: 'border-cyan-200',
-    bgColor: 'bg-white',
-    accentColor: 'bg-cyan-100',
-  },
+  // Note: enhancement removed - now a flag on features
+  // Legacy node types below kept for backward compatibility
   user_request: {
     icon: FileText,
     iconColor: 'text-indigo-600',

@@ -2,14 +2,26 @@
 
 import { Badge } from '@/components/ui/badge'
 import { WorkspacePhase, migrateLifecyclePhase } from '@/lib/constants/work-item-types'
-import { PHASE_CONFIG } from '@/lib/constants/workspace-phases'
+import {
+  PHASE_CONFIG,
+  getTypePhaseConfig,
+  isTerminalPhase,
+  type WorkItemType
+} from '@/lib/constants/workspace-phases'
 import { usePhaseAwareFields } from '@/hooks/use-phase-aware-fields'
+import { GuidingQuestionsTooltip } from './guiding-questions-tooltip'
 import { cn } from '@/lib/utils'
 
 interface PhaseContextBadgeProps {
   phase: WorkspacePhase | string
+  /** Work item type for type-aware phase config */
+  type?: WorkItemType
   showFieldCount?: boolean
   className?: string
+  /** Show guiding questions tooltip on hover */
+  showTooltip?: boolean
+  /** Callback when user wants to open methodology panel */
+  onOpenMethodologyPanel?: () => void
 }
 
 /**
@@ -34,37 +46,61 @@ interface PhaseContextBadgeProps {
  */
 export function PhaseContextBadge({
   phase,
+  type = 'feature',
   showFieldCount = true,
-  className
+  className,
+  showTooltip = false,
+  onOpenMethodologyPanel,
 }: PhaseContextBadgeProps) {
-  // Migrate legacy phases to new phases
-  const normalizedPhase = migrateLifecyclePhase(phase)
-  const { visibleFields } = usePhaseAwareFields(normalizedPhase)
+  // Migrate legacy phases to new phases (only for feature phases)
+  // Note: Enhancement is now a flag on features, not a separate type
+  const normalizedPhase = type === 'feature'
+    ? migrateLifecyclePhase(phase)
+    : (phase as string)
 
-  // Get phase config from constants
-  const phaseInfo = PHASE_CONFIG[normalizedPhase]
+  // usePhaseAwareFields only works for feature phases
+  const { visibleFields } = usePhaseAwareFields(
+    type === 'feature' ? normalizedPhase as WorkspacePhase : 'design'
+  )
 
-  // Phase-specific styling matching workspace design system
-  // Using Violet → Emerald → Amber → Green progression
-  const phaseStyles: Record<WorkspacePhase, string> = {
-    design: 'bg-violet-100 text-violet-800 border-violet-200 dark:bg-violet-900/30 dark:text-violet-300 dark:border-violet-800',
-    build: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800',
-    refine: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800',
-    launch: 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800',
+  // Get type-aware phase config
+  const phaseInfo = getTypePhaseConfig(type, normalizedPhase)
+
+  // Don't render if no phase info (invalid phase for type)
+  if (!phaseInfo) {
+    return null
   }
+
+  // Check if terminal phase (no field count for terminal phases)
+  const isTerminal = isTerminalPhase(type, normalizedPhase)
+
+  const badgeContent = (
+    <Badge
+      className={cn(
+        'font-medium cursor-pointer',
+        phaseInfo.bgColor,
+        phaseInfo.textColor
+      )}
+      title={!showTooltip ? phaseInfo.description : undefined}
+    >
+      {phaseInfo.emoji} {phaseInfo.name}
+    </Badge>
+  )
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      <Badge
-        className={cn(
-          'font-medium',
-          phaseStyles[normalizedPhase]
-        )}
-        title={phaseInfo.description}
-      >
-        {phaseInfo.emoji} {phaseInfo.name}
-      </Badge>
-      {showFieldCount && (
+      {showTooltip ? (
+        <GuidingQuestionsTooltip
+          phase={normalizedPhase}
+          type={type}
+          onOpenPanel={onOpenMethodologyPanel}
+        >
+          {badgeContent}
+        </GuidingQuestionsTooltip>
+      ) : (
+        badgeContent
+      )}
+      {showFieldCount && !isTerminal && (
         <span className="text-xs text-muted-foreground">
           {visibleFields.length} field{visibleFields.length !== 1 ? 's' : ''} available
         </span>

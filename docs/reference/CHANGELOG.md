@@ -12,6 +12,40 @@ All notable changes, migrations, and feature implementations are documented in t
 
 ### Changed
 
+#### 3-Type System: Enhancement is Now a Flag (2025-12-23)
+Migrated from 4-type to 3-type work item system by converting `enhancement` from a type to a boolean flag on features.
+
+**Architecture Change**:
+- **Before**: 4 types (concept, feature, bug, enhancement)
+- **After**: 3 types (concept, feature, bug) + `is_enhancement` flag on features
+- **Rationale**: Enhancement is an attribute of features, not a separate type. Reduces type proliferation while maintaining functionality.
+
+**Database Migration**: `20251223000001_fix_enhancement_architecture_v2.sql`
+- ✅ Added `is_enhancement` column (boolean, default false)
+- ✅ Migrated existing enhancement-type items to feature + flag
+- ✅ Updated CHECK constraint to only allow 3 types
+- ✅ Created index on `is_enhancement` for performance
+
+**TypeScript Changes**:
+- ✅ Removed `ENHANCEMENT` from `WORK_ITEM_TYPES` constant (9 files updated)
+- ✅ Updated `TYPE_PHASE_MAP` to exclude enhancement (3 files)
+- ✅ Updated form validation schema to 3-type enum
+- ✅ Updated conversion logic: concept → [feature, bug], feature ↔ bug
+- ✅ Fixed 9 TypeScript compilation errors
+- ✅ All type definitions now consistent across codebase
+
+**UI Changes**:
+- ✅ Removed enhancement as selectable type in forms and dialogs
+- ✅ Canvas nodes marked as deprecated (kept for backward compatibility)
+- ✅ Growth mode defaults to feature type (with is_enhancement flag)
+- ✅ Type-aware components updated (badges, tooltips, distribution)
+
+**Documentation**: Updated `ARCHITECTURE_CONSOLIDATION.md` to reflect 3-type system
+
+**Files Modified**: 15 files across TypeScript constants, UI components, API routes, and docs
+
+**Breaking Change**: Forms/APIs no longer accept `type='enhancement'` - will be rejected by validation. Use `type='feature'` with `is_enhancement=true` instead.
+
 #### Updated .cursorrules to Current Architecture (2025-12-23)
 Modernized Cursor AI rules from 347-day-old configuration to reflect current multi-tenant architecture.
 
@@ -39,6 +73,33 @@ Fixed TypeScript error in `unified-canvas.tsx` where code referenced non-existen
 **Fix**: Changed `item.status` → `item.phase` (phase IS the status for work items, per canonical architecture)
 
 **Files Modified**: `next-app/src/components/canvas/unified-canvas.tsx:182`
+
+#### Enhancement Architecture Phase 2 - Security & Consistency (2025-12-23)
+Complete security hardening and UI consistency cleanup following 4-type to 3-type migration.
+
+**Security Improvements**:
+- ✅ **Defense-in-Depth**: Added explicit authentication and team membership checks to enhance API endpoint
+- ✅ **Input Validation**: Replaced manual validation with comprehensive Zod schema
+- ✅ **Proper HTTP Codes**: 401 (unauthorized), 403 (forbidden), 404 (not found), 400 (validation error)
+- ✅ **Explicit Flags**: `is_enhancement` explicitly set in INSERT operations (no reliance on DB defaults)
+
+**UI Consistency**:
+- ✅ Removed 'enhancement' from 12 component icon/color mappings
+- ✅ Removed 'enhancement' from form placeholder configurations
+- ✅ Verified canvas deprecation comments for backward compatibility
+- ✅ All UI components now consistently use 3-type system (concept/feature/bug)
+
+**Type Safety**:
+- ✅ Added `is_enhancement` validation to form schema (optional boolean, default false)
+- ✅ TypeScript compilation passes with 0 errors
+- ✅ No 'enhancement' references in active code paths (only deprecated legacy nodes)
+
+**Files Modified**:
+- API: `next-app/src/app/api/work-items/[id]/enhance/route.ts` (security hardening)
+- Components: 12 files (insight-link-dialog, tool-previews, connection-menu, ai-alignment-suggestions, strategy-detail-sheet, create-work-item-dialog, template-preview, smart-work-item-form, work-items-board-view, nested-work-items-table, filter-context, insight-detail-sheet)
+- Schema: `next-app/src/lib/schemas/work-item-form-schema.ts` (is_enhancement validation)
+
+**Impact**: Production-ready security posture for enhance endpoint + consistent 3-type UX across all components.
 
 ### Added
 

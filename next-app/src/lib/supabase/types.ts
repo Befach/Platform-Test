@@ -3735,6 +3735,7 @@ export type Database = {
           health: string | null
           id: string
           is_blocked: boolean | null
+          is_enhancement: boolean | null
           is_epic: boolean
           is_note: boolean | null
           is_placeholder: boolean | null
@@ -3807,6 +3808,7 @@ export type Database = {
           health?: string | null
           id?: string
           is_blocked?: boolean | null
+          is_enhancement?: boolean | null
           is_epic?: boolean
           is_note?: boolean | null
           is_placeholder?: boolean | null
@@ -3879,6 +3881,7 @@ export type Database = {
           health?: string | null
           id?: string
           is_blocked?: boolean | null
+          is_enhancement?: boolean | null
           is_epic?: boolean
           is_note?: boolean | null
           is_placeholder?: boolean | null
