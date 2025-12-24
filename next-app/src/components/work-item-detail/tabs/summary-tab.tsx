@@ -39,7 +39,7 @@ import {
   typeDisplayMap,
 } from '@/components/work-board/shared/filter-context'
 import { BugWorkflowPanel } from '@/components/work-items/bug-workflow-panel'
-import type { BugPhase, BugMetadata } from '@/lib/bug/workflow'
+import { BUG_PHASES, type BugPhase, type BugMetadata } from '@/lib/bug/workflow'
 
 export function SummaryTab() {
   const { workItem, counts, phase, updateWorkItem } = useWorkItemDetailContext()
@@ -242,17 +242,25 @@ export function SummaryTab() {
       </Card>
 
       {/* Bug Workflow Panel - Only for bugs */}
-      {workItem.type === 'bug' && (
-        <BugWorkflowPanel
-          workItemId={workItem.id}
-          currentPhase={(workItem.phase || 'triage') as BugPhase}
-          metadata={workItem.metadata}
-          reviewEnabled={workItem.review_enabled}
-          reviewStatus={workItem.review_status}
-          onPhaseChange={handleBugPhaseChange}
-          onMetadataUpdate={handleBugMetadataUpdate}
-        />
-      )}
+      {workItem.type === 'bug' && (() => {
+        const bugPhase = (workItem.phase || 'triage') as BugPhase
+        // Validate phase is a valid BugPhase before rendering
+        if (!BUG_PHASES.includes(bugPhase)) {
+          console.warn(`Invalid bug phase: ${bugPhase}, defaulting to 'triage'`)
+          return null
+        }
+        return (
+          <BugWorkflowPanel
+            workItemId={workItem.id}
+            currentPhase={bugPhase}
+            metadata={workItem.metadata}
+            reviewEnabled={workItem.review_enabled}
+            reviewStatus={workItem.review_status}
+            onPhaseChange={handleBugPhaseChange}
+            onMetadataUpdate={handleBugMetadataUpdate}
+          />
+        )
+      })()}
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

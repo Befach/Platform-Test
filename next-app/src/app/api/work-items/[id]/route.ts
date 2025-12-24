@@ -14,6 +14,7 @@ import {
 } from '@/lib/middleware/permission-middleware'
 import { calculateWorkItemPhase, isValidPhaseTransition, migratePhase } from '@/lib/constants/workspace-phases'
 import type { WorkspacePhase } from '@/lib/constants/workspace-phases'
+import { CONCEPT_PHASES, type ConceptPhase } from '@/lib/concept/workflow'
 
 /** Typed update payload for work items */
 interface WorkItemUpdateData {
@@ -159,9 +160,17 @@ export async function PATCH(
 
     // Validate concept phase transitions (if type is concept and phase is changing)
     if (currentItem.type === 'concept' && body.phase !== undefined && body.phase !== currentItem.phase) {
+      // Validate both phases are valid concept phases before casting
+      if (!CONCEPT_PHASES.includes(body.phase as ConceptPhase)) {
+        return NextResponse.json(
+          { error: `Invalid concept phase: ${body.phase}. Must be one of: ${CONCEPT_PHASES.join(', ')}` },
+          { status: 400 }
+        )
+      }
+
       const { canTransitionConcept } = await import('@/lib/concept/workflow')
-      const currentConceptPhase = currentItem.phase as any
-      const targetConceptPhase = body.phase as any
+      const currentConceptPhase = currentItem.phase as ConceptPhase
+      const targetConceptPhase = body.phase as ConceptPhase
 
       if (!canTransitionConcept(currentConceptPhase, targetConceptPhase)) {
         return NextResponse.json(

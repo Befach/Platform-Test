@@ -53,7 +53,7 @@ export interface BugTriageData {
  * Extended metadata for bugs stored in work_items.metadata
  */
 export interface BugMetadata {
-  triage?: BugTriageData
+  triage?: Partial<BugTriageData>
   investigation?: {
     rootCause?: string
     affectedAreas?: string[]
@@ -380,7 +380,7 @@ export function createInitialTriageData(): Partial<BugTriageData> {
  */
 export function createInitialBugMetadata(): BugMetadata {
   return {
-    triage: createInitialTriageData() as BugTriageData,
+    triage: createInitialTriageData(),
   }
 }
 
@@ -391,7 +391,32 @@ export function parseBugMetadata(metadata: unknown): BugMetadata {
   if (!metadata || typeof metadata !== 'object') {
     return {}
   }
-  return metadata as BugMetadata
+
+  // Validate structure before casting
+  const parsed = metadata as Record<string, unknown>
+  const result: BugMetadata = {}
+
+  // Validate triage data if present
+  if (parsed.triage && typeof parsed.triage === 'object') {
+    result.triage = parsed.triage as Partial<BugTriageData>
+  }
+
+  // Validate investigation data if present
+  if (parsed.investigation && typeof parsed.investigation === 'object') {
+    result.investigation = parsed.investigation as BugMetadata['investigation']
+  }
+
+  // Validate fix data if present
+  if (parsed.fix && typeof parsed.fix === 'object') {
+    result.fix = parsed.fix as BugMetadata['fix']
+  }
+
+  // Validate verification data if present
+  if (parsed.verification && typeof parsed.verification === 'object') {
+    result.verification = parsed.verification as BugMetadata['verification']
+  }
+
+  return result
 }
 
 /**

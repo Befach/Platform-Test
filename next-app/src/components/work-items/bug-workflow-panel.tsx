@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -267,13 +268,13 @@ export function BugWorkflowPanel({
               <Label htmlFor="prLink" className="text-sm font-medium">
                 PR Link (Optional)
               </Label>
-              <Textarea
+              <Input
                 id="prLink"
+                type="url"
                 placeholder="https://github.com/..."
                 value={localMetadata.fix?.prLink ?? ''}
                 onChange={(e) => handleFixUpdate({ prLink: e.target.value })}
                 disabled={disabled || isUpdating}
-                className="min-h-[60px] resize-y"
               />
             </div>
 

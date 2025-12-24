@@ -29,7 +29,6 @@ import type { WorkItemForReadiness } from '@/lib/phase/readiness-calculator'
 import { Loader2, AlertCircle, GitBranch } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
-import { VersionHistory } from './version-history'
 
 interface EditWorkItemDialogProps {
   workItemId: string
@@ -86,13 +85,6 @@ export function EditWorkItemDialog({
   const [loadError, setLoadError] = useState<string | null>(null)
   const [loadedWorkItem, setLoadedWorkItem] = useState<WorkItemForReadiness | null>(null)
   const [timelineItemsCount, setTimelineItemsCount] = useState(0)
-
-  // Enhancement state
-  const [isEnhancement, setIsEnhancement] = useState(false)
-  const [enhancesWorkItemId, setEnhancesWorkItemId] = useState<string | null>(null)
-  const [version, setVersion] = useState(1)
-  const [workItemType, setWorkItemType] = useState<WorkItemType>('feature')
-  const [workItemPhase, setWorkItemPhase] = useState<string | null>(null)
 
   // Get phase-appropriate schema
   const schema = getWorkItemSchema(phase)

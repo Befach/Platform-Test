@@ -32,6 +32,7 @@ import { ConceptRejectionDialog } from './concept-rejection-dialog'
 
 // Workflow logic
 import {
+  CONCEPT_PHASES,
   canTransitionConcept,
   getConceptPhaseConfig,
   getConceptColors,
@@ -69,6 +70,13 @@ export function ConceptWorkflowPanel() {
   }
 
   const currentPhase = workItem.status as ConceptPhase
+
+  // Validate phase is a valid ConceptPhase
+  if (!CONCEPT_PHASES.includes(currentPhase)) {
+    console.warn(`Invalid concept phase: ${currentPhase}`)
+    return null
+  }
+
   const phaseConfig = getConceptPhaseConfig(currentPhase)
   if (!phaseConfig) return null
 

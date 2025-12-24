@@ -17,7 +17,6 @@
 import { Check, XCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
-  CONCEPT_PHASES,
   getConceptPhaseConfig,
   getConceptColors,
   type ConceptPhase,

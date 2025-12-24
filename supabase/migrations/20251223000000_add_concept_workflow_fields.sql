@@ -15,6 +15,10 @@ ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT FALSE;
 CREATE INDEX IF NOT EXISTS idx_work_items_archived
 ON work_items(team_id, workspace_id, archived);
 
+-- Add composite index for concept workflow queries (type, phase, archived filtering)
+CREATE INDEX IF NOT EXISTS idx_work_items_concept_queries
+ON work_items(team_id, type, phase, archived) WHERE type = 'concept';
+
 -- Add comments for documentation
 COMMENT ON COLUMN work_items.rejection_reason IS 'Reason for rejecting a concept (null for non-rejected items)';
 COMMENT ON COLUMN work_items.archived IS 'Whether the work item is archived (soft deleted)';

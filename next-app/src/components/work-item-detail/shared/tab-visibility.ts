@@ -171,8 +171,8 @@ export function getVisibleTabs(phase: WorkspacePhase | string, workItemType?: st
     if (tab.isVisibleForType && workItemType) {
       return tab.isVisibleForType(workItemType)
     }
-    // If no type filter, show tab (unless it has a type filter but no type provided)
-    return !tab.isVisibleForType
+    // If no type filter specified, show tab by default
+    return true
   })
 }
 

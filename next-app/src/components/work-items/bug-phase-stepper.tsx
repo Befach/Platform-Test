@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { Check, ChevronRight } from 'lucide-react'
+import { Check } from 'lucide-react'
 import {
   BUG_PHASES,
   BUG_PHASE_CONFIG,
