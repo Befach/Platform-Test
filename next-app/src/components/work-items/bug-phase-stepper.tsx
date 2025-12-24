@@ -187,7 +187,7 @@ export function BugPhaseStepperInline({
   return (
     <div className={cn('flex items-center gap-1.5', className)}>
       {BUG_PHASES.map((phase, index) => {
-        const phaseConfig = getBugPhaseConfig(phase)
+        const phaseConfig = BUG_PHASE_CONFIG[phase]
         const isCompleted = index < currentIndex
         const isCurrent = phase === currentPhase
 
