@@ -155,7 +155,7 @@ export function ConceptWorkflowPanel() {
 
       // Optimistic update
       updateWorkItem({
-        status: 'rejected',
+        phase: 'rejected',
         rejection_reason: reason,
         archived: archive,
       })
