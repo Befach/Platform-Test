@@ -53,23 +53,23 @@ export function ConceptWorkflowPanel() {
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   // Track previous phase to detect validation
-  const prevPhaseRef = useRef(workItem.status as ConceptPhase)
+  const prevPhaseRef = useRef(workItem.phase as ConceptPhase)
 
   // Auto-show promotion dialog when validated
   useEffect(() => {
-    const currentPhase = workItem.status as ConceptPhase
+    const currentPhase = workItem.phase as ConceptPhase
     if (prevPhaseRef.current !== 'validated' && currentPhase === 'validated') {
       setShowPromotionDialog(true)
     }
     prevPhaseRef.current = currentPhase
-  }, [workItem.status])
+  }, [workItem.phase])
 
   // Only show for concepts
   if (!workItem || workItem.type !== 'concept') {
     return null
   }
 
-  const currentPhase = workItem.status as ConceptPhase
+  const currentPhase = workItem.phase as ConceptPhase
 
   // Validate phase is a valid ConceptPhase
   if (!CONCEPT_PHASES.includes(currentPhase)) {
@@ -99,7 +99,7 @@ export function ConceptWorkflowPanel() {
       const response = await fetch(`/api/work-items/${workItem.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: targetPhase }),
+        body: JSON.stringify({ phase: targetPhase }),
       })
 
       if (!response.ok) {
@@ -108,7 +108,7 @@ export function ConceptWorkflowPanel() {
       }
 
       // Optimistic update
-      updateWorkItem({ status: targetPhase })
+      updateWorkItem({ phase: targetPhase })
 
       toast({
         title: 'Phase updated',
@@ -142,7 +142,7 @@ export function ConceptWorkflowPanel() {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          status: 'rejected',
+          phase: 'rejected',
           rejection_reason: reason,
           archived: archive,
         }),
