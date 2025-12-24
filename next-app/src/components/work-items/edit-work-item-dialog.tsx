@@ -395,8 +395,8 @@ export function EditWorkItemDialog({
                 isEdit={true}
               />
 
-              {/* Version History - only show for features/enhancements */}
-              {(workItemType === 'feature' || workItemType === 'enhancement') && (
+              {/* Version History - only show for features (including enhancements which are flagged features) */}
+              {workItemType === 'feature' && (
                 <VersionHistory
                   workItemId={workItemId}
                   currentVersion={version}

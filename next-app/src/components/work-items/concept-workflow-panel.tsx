@@ -148,9 +148,7 @@ export function ConceptWorkflowPanel() {
       // Optimistic update
       updateWorkItem({
         status: 'rejected',
-        // @ts-expect-error - rejection_reason not in WorkItemData type yet
         rejection_reason: reason,
-        // @ts-expect-error - archived not in WorkItemData type yet
         archived: archive,
       })
 

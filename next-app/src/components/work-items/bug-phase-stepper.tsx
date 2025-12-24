@@ -204,8 +204,8 @@ export function BugPhaseStepperInline({
                   )}
                   style={isCurrent ? {
                     backgroundColor: phaseConfig.color,
-                    ringColor: phaseConfig.color,
-                  } : undefined}
+                    '--tw-ring-color': phaseConfig.color,
+                  } as React.CSSProperties : undefined}
                 />
               </TooltipTrigger>
               <TooltipContent side="bottom">
