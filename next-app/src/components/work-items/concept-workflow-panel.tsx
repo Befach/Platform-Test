@@ -20,6 +20,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { CheckCircle2, AlertCircle, Info } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
@@ -50,6 +60,8 @@ export function ConceptWorkflowPanel() {
 
   const [showPromotionDialog, setShowPromotionDialog] = useState(false)
   const [showRejectionDialog, setShowRejectionDialog] = useState(false)
+  const [showAdvanceDialog, setShowAdvanceDialog] = useState(false)
+  const [pendingPhase, setPendingPhase] = useState<ConceptPhase | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   // Track previous phase to detect validation
@@ -261,9 +273,8 @@ export function ConceptWorkflowPanel() {
                   onClick={() => {
                     const action = phaseConfig.actions.primary!
                     if (action.requiresConfirmation) {
-                      if (confirm(`Are you sure you want to ${action.label.toLowerCase()}?`)) {
-                        handlePhaseTransition(action.targetPhase)
-                      }
+                      setPendingPhase(action.targetPhase)
+                      setShowAdvanceDialog(true)
                     } else {
                       handlePhaseTransition(action.targetPhase)
                     }
@@ -308,6 +319,29 @@ export function ConceptWorkflowPanel() {
         onConfirm={handleRejection}
         conceptName={workItem.title}
       />
+
+      {/* Advance Confirmation Dialog */}
+      <AlertDialog open={showAdvanceDialog} onOpenChange={setShowAdvanceDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Phase Transition</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to {phaseConfig.actions.primary?.label.toLowerCase()}?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (pendingPhase) handlePhaseTransition(pendingPhase)
+                setShowAdvanceDialog(false)
+              }}
+            >
+              Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
