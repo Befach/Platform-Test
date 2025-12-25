@@ -156,7 +156,7 @@ export default function SignupPage() {
             </div>
           )}
 
-          <form onSubmit={handleSignup} className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-4" data-testid="signup-form">
             <div className="space-y-2">
               <Label htmlFor="fullName">Full Name</Label>
               <Input
@@ -167,6 +167,7 @@ export default function SignupPage() {
                 onChange={(e) => setFullName(e.target.value)}
                 required
                 disabled={loading}
+                data-testid="fullname-input"
               />
             </div>
 
@@ -180,6 +181,7 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                data-testid="email-input"
               />
             </div>
 
@@ -194,6 +196,7 @@ export default function SignupPage() {
                 required
                 disabled={loading}
                 minLength={8}
+                data-testid="password-input"
               />
               <p className="text-xs text-muted-foreground">
                 Must be at least 8 characters
@@ -211,10 +214,11 @@ export default function SignupPage() {
                 required
                 disabled={loading}
                 minLength={8}
+                data-testid="confirm-password-input"
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading} data-testid="submit-button">
               {loading ? 'Creating account...' : 'Create Account'}
             </Button>
           </form>
@@ -236,6 +240,7 @@ export default function SignupPage() {
             className="w-full"
             onClick={handleGoogleSignIn}
             disabled={loading}
+            data-testid="google-signup-button"
           >
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path
@@ -264,6 +269,7 @@ export default function SignupPage() {
             <Link
               href="/login"
               className="text-primary underline-offset-4 hover:underline font-medium"
+              data-testid="signin-link"
             >
               Sign in
             </Link>

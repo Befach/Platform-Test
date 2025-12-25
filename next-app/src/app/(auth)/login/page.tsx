@@ -114,7 +114,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleMagicLink} className="space-y-4">
+          <form onSubmit={handleMagicLink} className="space-y-4" data-testid="login-form">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -125,9 +125,10 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                data-testid="email-input"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full" disabled={loading} data-testid="submit-button">
               {loading ? 'Sending...' : 'Send Magic Link'}
             </Button>
           </form>
@@ -149,6 +150,7 @@ export default function LoginPage() {
             className="w-full"
             onClick={handleGoogleSignIn}
             disabled={loading}
+            data-testid="google-signin-button"
           >
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path
@@ -177,6 +179,7 @@ export default function LoginPage() {
             <Link
               href="/signup"
               className="text-primary underline-offset-4 hover:underline font-medium"
+              data-testid="signup-link"
             >
               Sign up
             </Link>

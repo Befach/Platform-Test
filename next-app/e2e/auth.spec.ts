@@ -60,7 +60,7 @@ test.describe('Authentication', () => {
 
     // Verify signup page elements
     await expect(page.getByPlaceholder('name@example.com')).toBeVisible();
-    await expect(page.getByRole('button', { name: /send magic link/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /create account/i })).toBeVisible();
     await expect(page.getByRole('link', { name: /sign in/i })).toBeVisible();
   });
 
