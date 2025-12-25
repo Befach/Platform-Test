@@ -1,31 +1,23 @@
 name: Playwright E2E Tests
 
-# READY TO ENABLE: Uncomment the triggers below once Supabase secrets are configured
 # Required secrets in GitHub repo settings:
-# - SUPABASE_URL (from Supabase project settings)
-# - SUPABASE_ANON_KEY (from Supabase project settings)
-# - SUPABASE_SERVICE_ROLE_KEY (from Supabase project settings)
-#
-# To enable automated tests:
-# 1. Go to GitHub repo Settings → Secrets and variables → Actions
-# 2. Add the 3 secrets above
-# 3. Uncomment the on: push/pull_request triggers below
-# 4. Comment out the workflow_dispatch trigger
-
-# on:
-#   push:
-#     branches: [ main, develop ]
-#     paths:
-#       - 'next-app/**'
-#       - '.github/workflows/playwright.yml'
-#   pull_request:
-#     branches: [ main, develop ]
-#     paths:
-#       - 'next-app/**'
-#       - '.github/workflows/playwright.yml'
+# - NEXT_PUBLIC_SUPABASE_URL
+# - NEXT_PUBLIC_SUPABASE_ANON_KEY
+# - TEST_USER_EMAIL
+# - TEST_USER_PASSWORD
 
 on:
-  workflow_dispatch: # Manual trigger only until secrets configured
+  push:
+    branches: [ main ]
+    paths:
+      - 'next-app/**'
+      - '.github/workflows/playwright.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'next-app/**'
+      - '.github/workflows/playwright.yml'
+  workflow_dispatch: # Manual trigger still available
 
 jobs:
   test:
