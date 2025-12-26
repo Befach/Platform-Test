@@ -79,7 +79,7 @@ export default async function ProfilePage() {
           <CardHeader>
             <CardTitle>Team Memberships</CardTitle>
             <CardDescription>
-              Teams you're a part of and your role in each
+              Teams you&apos;re a part of and your role in each
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -106,7 +106,7 @@ export default async function ProfilePage() {
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
-                You're not a member of any teams yet
+                You&apos;re not a member of any teams yet
               </p>
             )}
           </CardContent>

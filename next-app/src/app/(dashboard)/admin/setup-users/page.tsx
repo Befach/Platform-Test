@@ -99,7 +99,7 @@ export default function SetupUsersPage() {
           )}
 
           <div className="pt-4 border-t">
-            <h3 className="font-semibold mb-2">Manual Setup (if button doesn't work):</h3>
+            <h3 className="font-semibold mb-2">Manual Setup (if button doesn&apos;t work):</h3>
             <p className="text-sm text-muted-foreground mb-2">
               Go to your Supabase dashboard → SQL Editor and run:
             </p>

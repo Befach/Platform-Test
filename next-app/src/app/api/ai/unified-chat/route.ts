@@ -540,7 +540,7 @@ export async function POST(request: Request) {
 
     // Build system prompt with dynamic tool examples
     const unifiedPrompt = buildUnifiedSystemPrompt()
-    let basePrompt = customSystemPrompt
+    const basePrompt = customSystemPrompt
       ? `${unifiedPrompt}\n\n## Additional Instructions\n${customSystemPrompt}`
       : unifiedPrompt
 

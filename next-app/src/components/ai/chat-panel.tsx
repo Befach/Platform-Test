@@ -118,7 +118,7 @@ export function ChatPanel({
   const [inputValue, setInputValue] = useState('')
 
   // Note: AI SDK v5 has different API - using type assertions for compatibility
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const chatHelpers = useChat({
     api: '/api/ai/sdk-chat',
     body: {

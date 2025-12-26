@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     const memberWithEmail = null  // Will check manually in the UI
 
     // Check phase assignments if member exists
-    let phaseAssignments = null
+    const phaseAssignments = null
     // Note: This code is disabled because memberWithEmail is null
     // if (memberWithEmail) {
     //   const { data: assignments } = await supabase

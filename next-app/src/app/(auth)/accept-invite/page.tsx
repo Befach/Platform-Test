@@ -222,9 +222,9 @@ export default function AcceptInvitePage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="text-5xl mb-4">🎉</div>
-          <CardTitle className="text-2xl">You're Invited!</CardTitle>
+          <CardTitle className="text-2xl">You&apos;re Invited!</CardTitle>
           <CardDescription>
-            You've been invited to join a team on Product Lifecycle Platform
+            You&apos;ve been invited to join a team on Product Lifecycle Platform
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

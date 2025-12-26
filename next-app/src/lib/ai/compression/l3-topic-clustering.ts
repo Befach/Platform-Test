@@ -99,7 +99,7 @@ export async function clusterTopics(options: ClusterTopicsOptions): Promise<Clus
     const supabase = await createClient()
 
     // Fetch all document summaries with embeddings
-    let query = supabase
+    const query = supabase
       .from('document_summaries')
       .select(`
         id,

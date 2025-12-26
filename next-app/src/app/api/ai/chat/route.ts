@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Enrich context with web search if enabled
-    let enrichedMessages = [...messages]
+    const enrichedMessages = [...messages]
     let searchResults: any[] = []
 
     if (enableSearch) {
