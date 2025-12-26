@@ -121,12 +121,26 @@ export default function WidgetPage() {
     // 'auto' uses system preference
   }, [theme])
 
-  // Notify parent of resize
+  // Get the parent origin for secure postMessage communication
+  // Wildcard fallback is intentional - this is a PUBLIC widget embeddable on any domain
+  const getParentOrigin = (): string => {
+    try {
+      if (document.referrer) {
+        return new URL(document.referrer).origin
+      }
+    } catch {
+      // Invalid referrer URL
+    }
+    return '*' // Public widget: wildcard is acceptable
+  }
+
+  // Notify parent of resize and other events
   const notifyParent = (type: string, data?: any) => {
     if (window.parent !== window) {
+      const targetOrigin = getParentOrigin()
       window.parent.postMessage(
         { source: 'feedback-widget', type, workspaceId, ...data },
-        '*'
+        targetOrigin
       )
     }
   }

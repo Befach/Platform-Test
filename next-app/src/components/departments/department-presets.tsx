@@ -98,7 +98,8 @@ export function DepartmentPresets({
 
     try {
       // Create departments sequentially to ensure proper sort_order
-      for (const index of Array.from(selectedPresets).sort()) {
+      // Use numeric compare to avoid alphabetical sorting of numbers
+      for (const index of Array.from(selectedPresets).sort((a, b) => a - b)) {
         const preset = DEPARTMENT_PRESETS[index];
         const department: DepartmentInsert = {
           team_id: teamId,

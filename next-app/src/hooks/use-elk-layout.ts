@@ -159,8 +159,9 @@ export function useElkLayout(
 
   useEffect(() => {
     // Create fingerprint of current nodes/edges to detect actual changes
-    const currentNodeIds = nodes.map(n => n.id).sort().join(',')
-    const currentEdgeIds = edges.map(e => `${e.source}-${e.target}`).sort().join(',')
+    // Use localeCompare for consistent string sorting across browsers
+    const currentNodeIds = nodes.map(n => n.id).sort((a, b) => a.localeCompare(b)).join(',')
+    const currentEdgeIds = edges.map(e => `${e.source}-${e.target}`).sort((a, b) => a.localeCompare(b)).join(',')
 
     // Only recompute if nodes/edges have actually changed
     if (currentNodeIds === prevNodeIds && currentEdgeIds === prevEdgeIds) {

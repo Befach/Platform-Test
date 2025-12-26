@@ -280,8 +280,9 @@ function removeDuplicateCycles(cycles: Cycle[]): Cycle[] {
 
   cycles.forEach((cycle) => {
     // Normalize cycle path by sorting and creating signature
+    // Use localeCompare for consistent string sorting across browsers
     const pathWithoutLast = cycle.path.slice(0, -1)
-    const normalizedPath = [...pathWithoutLast].sort().join(',')
+    const normalizedPath = [...pathWithoutLast].sort((a, b) => a.localeCompare(b)).join(',')
 
     if (!seenCycles.has(normalizedPath)) {
       seenCycles.add(normalizedPath)
