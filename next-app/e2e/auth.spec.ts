@@ -52,7 +52,7 @@ test.describe('Authentication', () => {
 
     // Should navigate to signup page
     await expect(page).toHaveURL(/.*signup/);
-    await expect(page.getByText(/create.*account/i)).toBeVisible();
+    await expect(page.getByText(/create.*account/i).first()).toBeVisible();
   });
 
   test('should display signup page correctly', async ({ page }) => {

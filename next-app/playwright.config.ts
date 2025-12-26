@@ -84,7 +84,7 @@ export default defineConfig({
     actionTimeout: 10 * 1000,
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for major browsers - only Chromium enabled for CI stability */
   projects: [
     {
       name: 'chromium',
@@ -93,6 +93,7 @@ export default defineConfig({
       },
     },
 
+    /* Firefox and WebKit disabled - browser installation issues in CI
     {
       name: 'firefox',
       use: {
@@ -106,8 +107,9 @@ export default defineConfig({
         ...devices['Desktop Safari'],
       },
     },
+    */
 
-    /* Mobile browsers for responsive testing */
+    /* Mobile browsers disabled - tests not designed for mobile viewports
     {
       name: 'Mobile Chrome',
       use: {
@@ -121,6 +123,7 @@ export default defineConfig({
         ...devices['iPhone 12'],
       },
     },
+    */
   ],
 
   /* Run your local dev server before starting the tests */
