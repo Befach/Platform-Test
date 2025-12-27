@@ -21,6 +21,8 @@ on:
 
 jobs:
   test:
+    # Skip E2E tests for Dependabot PRs (they can't access secrets, but Type Check & Build still validates them)
+    if: github.actor != 'dependabot[bot]'
     timeout-minutes: 15
     runs-on: ubuntu-latest
 
