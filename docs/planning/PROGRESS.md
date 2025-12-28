@@ -516,7 +516,7 @@ Complete redesign of tool UI with glassmorphism, gradients, and micro-interactio
 
 ## Security & Infrastructure Sprint (2025-12-25 to 2025-12-28)
 
-**Status**: ✅ **Complete** | **PRs Merged**: 12
+**Status**: ✅ **Complete** | **PRs Merged**: 13
 
 ### Security Hardening ✅
 - 67 CodeQL alerts resolved (ReDoS, HTML injection, prototype pollution, insecure randomness)
@@ -537,6 +537,10 @@ Complete redesign of tool UI with glassmorphism, gradients, and micro-interactio
 - Next.js 16.0.1 → 16.1.1
 - @modelcontextprotocol/sdk 1.21.0 → 1.25.1
 - nodemailer, js-yaml, body-parser patches
+- **27 production dependencies** (PR #27) - React 19.2.3 security fix, react-grid-layout v2
+  - Pinned @ai-sdk/react to v2 (v3/AI SDK 6 is BETA)
+  - Upgraded react-grid-layout v2 with legacy API compatibility
+  - Removed @types/react-grid-layout (v2 includes types)
 
 ---
 
