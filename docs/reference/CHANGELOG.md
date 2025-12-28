@@ -1,6 +1,6 @@
 # 📜 CHANGELOG
 
-**Last Updated**: 2025-12-23
+**Last Updated**: 2025-12-28
 **Project**: Product Lifecycle Management Platform
 **Format**: Based on [Keep a Changelog](https://keepachangelog.com/)
 
@@ -9,6 +9,142 @@ All notable changes, migrations, and feature implementations are documented in t
 ---
 
 ## [Unreleased]
+
+### Security
+
+#### CodeQL Security Vulnerability Fixes (2025-12-28) - PR #19
+Comprehensive security hardening addressing 67 CodeQL vulnerability alerts.
+
+**Critical Security Fixes**:
+- **ReDoS Vulnerability**: Replaced vulnerable email regex with bounded HTML5 pattern
+- **HTML Injection**: Implemented DOMPurify (`isomorphic-dompurify`) for secure HTML sanitization
+- **Prototype Pollution**: Added validation for dangerous keys (`__proto__`, `constructor`, `prototype`) and Object.hasOwn checks
+- **Insecure Randomness**: Changed from `Math.random()` to `crypto.randomUUID()` for secure ID generation
+- **Workflow Security**: Added `permissions: contents: read` to all GitHub workflows (ci.yml, playwright.yml, check-links.yml)
+- **Archive Cleanup**: Deleted legacy `/archive/vanilla-version/` folder (25+ vulnerability alerts eliminated)
+
+**Configuration**:
+- Created `.github/codeql/codeql-config.yml` to ignore auto-generated files (playwright-report, test-results, .next, node_modules)
+
+**Files Modified**: 120+ files across security-focused cleanup
+**Breaking Changes**: None
+
+#### SonarCloud Critical Security Fixes (2025-12-25) - PR #9
+Resolved 4 critical/high security and reliability issues identified by SonarCloud.
+
+**Security Fixes**:
+- **S2819**: Added target origin to `postMessage()` in widget page (prevents cross-origin message leaks)
+
+**Reliability Fixes**:
+- **S2871**: Added numeric compare function to `Array.sort()` in department-presets
+- **S2871**: Added `localeCompare` to string sorts in use-elk-layout
+- **S2871**: Added `localeCompare` to string sorts in cycle-detection
+
+**Configuration**:
+- Added `sonar-project.properties` with exclusions for archive/ and playwright-report/
+
+**Files Modified**: 4 files
+
+### Changed
+
+#### ESLint & TypeScript Cleanup (2025-12-26) - PR #11
+Comprehensive code quality cleanup resolving 316 ESLint warnings and TypeScript errors across 40+ files.
+
+**ESLint Fixes (200+ warnings)**:
+- Escaped unescaped entities in JSX (`"You're"` → `"You&apos;re"`)
+- Removed 50+ unused imports across codebase
+- Prefixed unused parameters with underscore (`_teamId`, `_error`)
+- Added eslint-disable comments for intentional `any` patterns
+- Fixed `no-explicit-any` violations with proper types
+
+**TypeScript Fixes (116 errors)**:
+- Added proper type guards for `error: unknown` catch blocks
+- Fixed interface property naming
+- Added missing imports (`useMemo`, `AIModel` type)
+- Removed invalid `alt` attributes from Lucide icons
+- Updated test fixture types
+
+**Files Modified**: 40+ component files across mind-map, dependencies, canvas, insights, feedback, dashboard, API routes, and hooks
+
+**Note**: 93 TypeScript errors remain (Supabase type mismatches - pre-existing, unrelated to this PR)
+
+#### Playwright E2E Test Fixes (2025-12-26) - PR #10
+Fixed ~40% of E2E test failures for CI stability.
+
+**Changes**:
+- Disabled mobile browser projects (Pixel 5, iPhone 12) in `playwright.config.ts`
+- Disabled Firefox and WebKit browsers in CI (installation issues)
+- Fixed title assertions to accept "Product Lifecycle Platform"
+- Changed heading selectors to use `getByText()` instead of h1/h2 (shadcn/ui renders as div)
+- Fixed `auth.spec.ts` selector to use `.first()` for strict mode
+
+**Impact**: Tests now run reliably on Chromium only in CI
+
+### Added
+
+#### CI/CD Optimization (2025-12-28)
+Comprehensive CI/CD improvements to reduce deployment frequency and improve workflow efficiency.
+
+**Workflow Concurrency**:
+- Added concurrency groups to all GitHub workflows (ci.yml, playwright.yml, check-links.yml)
+- Cancels redundant in-progress runs when new commits are pushed
+- Reduces CI resource consumption
+
+**Dependabot Grouping** (`.github/dependabot.yml`):
+- Weekly schedule: Mondays 09:00 EST
+- Production dependencies grouped in single PR
+- Development dependencies (@types, eslint, etc.) grouped separately
+- Reduces 5+ individual PRs to ~2 grouped PRs
+- Labels: `dependencies`, `automated`
+
+**Vercel Deploy Optimization** (`vercel.json` ignoreCommand):
+- Skip deploys for Dependabot commits
+- Skip deploys for documentation-only changes (docs/, *.md, .github/)
+- ~60% reduction in unnecessary deployments
+
+**Impact**:
+- Faster CI feedback loops
+- Cleaner GitHub PR list
+- Reduced Vercel usage costs
+
+#### Greptile AI Code Review Configuration (2025-12-27) - PR #12
+Added automated AI-powered code review to all pull requests.
+
+**Configuration** (`greptile.json`):
+- `triggerOnUpdates: true` - Reviews every new commit pushed to PR
+- `statusCheck: true` - Creates GitHub status checks
+- `fixWithAI: true` - Provides AI-generated fix suggestions
+- `strictness: 2` - Medium strictness level (balanced)
+- All comment types enabled: syntax, logic, style
+
+**Impact**: Automated code review on all future PRs with AI suggestions
+
+#### Dependabot Skip for E2E Tests (2025-12-28) - PR #18
+Added workflow condition to skip E2E tests for Dependabot PRs.
+
+**Problem**: Dependabot PRs don't have access to GitHub Actions secrets, causing Playwright tests to fail (missing Supabase credentials).
+
+**Solution**:
+- E2E tests skipped for `dependabot[bot]` PRs
+- Type Check & Build validation still runs for all dependency updates
+- Full E2E tests continue for manual PRs and main branch
+
+**Impact**: Unblocked PRs #13-17 (dependency updates)
+
+### Dependencies
+
+#### Dependency Updates (2025-12-28) - PRs #13-17
+Automated Dependabot updates for security and performance:
+
+| Package | Old Version | New Version | Type |
+|---------|-------------|-------------|------|
+| `next` | 16.0.1 | 16.1.1 | Framework (major feature update) |
+| `@modelcontextprotocol/sdk` | 1.21.0 | 1.25.1 | AI SDK (4 minor versions) |
+| `nodemailer` | 7.0.10 | 7.0.11 | Email (patch) |
+| `js-yaml` | 4.1.0 | 4.1.1 | Dev dependency (patch) |
+| `body-parser` | 2.2.0 | 2.2.1 | Indirect dependency (patch) |
+
+**Note**: All updates validated via CI (type check + build passing)
 
 ### Changed
 

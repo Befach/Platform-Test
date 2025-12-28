@@ -1,9 +1,9 @@
 # 📚 Project Guidelines & Quick Reference
 
-**Last Updated**: 2025-12-11 <!-- Added: Platform Architecture (Core Concepts) section with two-layer system, phase vs status, Design Thinking, strategy hierarchy -->
+**Last Updated**: 2025-12-28 <!-- Security Sprint Complete: 12 PRs merged, 67 CodeQL fixes, Next.js 16.1.1, Greptile AI reviews -->
 **Project**: Product Lifecycle Management Platform
-**Tech Stack**: Next.js 15 + TypeScript + Supabase + Vercel
-**Current Status**: Week 7/12 (90% overall)
+**Tech Stack**: Next.js 16.1.1 + TypeScript + Supabase + Vercel
+**Current Status**: Week 7/12 Complete + Security Sprint (95% overall)
 
 ---
 
@@ -71,12 +71,13 @@
 
 ### Tech Stack
 ```
-Framework:    Next.js 15 + TypeScript (App Router, Server Components)
+Framework:    Next.js 16.1.1 + TypeScript (App Router, Server Components)
 Database:     Supabase (PostgreSQL + Real-time + Auth + RLS)
 UI:           shadcn/ui + Tailwind CSS + Lucide React
 Mind Mapping: XYFlow/ReactFlow (custom nodes, AI-powered)
 Charts:       Recharts (10+ chart types)
-Testing:      Playwright (E2E)
+Testing:      Playwright (E2E, Chromium-only CI)
+Code Review:  Greptile (AI-powered PR reviews)
 Payments:     Stripe (Checkout, Subscriptions, Webhooks)
 Email:        Resend (Invitations, notifications)
 AI:           OpenRouter (Kimi K2, DeepSeek V3.2, Grok 4, Claude Haiku 4.5)
@@ -106,14 +107,17 @@ Use Context7 when you need current documentation for any library:
 
 ### Claude Skills
 
-#### ⚠️ MANDATORY: Parallel AI for All Research
-**ALL web search and research MUST use the Parallel AI skill.**
+#### ⚠️ MANDATORY: Parallel AI for ALL Web Operations
+**ALL web operations MUST use the Parallel AI skill - NO EXCEPTIONS.**
 - Web search → `parallel-ai` Search API
 - URL extraction → `parallel-ai` Extract API
 - Deep research → `parallel-ai` Task API (pro/ultra)
 - Quick answers → `parallel-ai` Chat API
+- Claude Code documentation → `parallel-ai` (NOT claude-code-guide agent)
+- Any external documentation → `parallel-ai`
 
-**NEVER use WebFetch/WebSearch tools when Parallel AI can handle the task.**
+**NEVER use WebFetch/WebSearch tools OR agents that use them internally.**
+**This includes the `claude-code-guide` agent which uses WebFetch - use Parallel AI instead.**
 
 #### Proactive Skill Usage
 Skills must be invoked automatically at appropriate phases WITHOUT user prompting:
