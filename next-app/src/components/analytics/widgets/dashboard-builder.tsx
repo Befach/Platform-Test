@@ -7,7 +7,7 @@
  */
 
 import { useState, useCallback, useMemo } from 'react'
-import GridLayout, { Layout, LayoutItem } from 'react-grid-layout/legacy'
+import GridLayout, { Layout } from 'react-grid-layout/legacy'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -71,8 +71,8 @@ export function DashboardBuilder({
   const [editNameValue, setEditNameValue] = useState(dashboardName)
 
   // Convert widgets to grid layout format
-  // In v2, Layout = readonly LayoutItem[], so we use LayoutItem[] for mutable array
-  const layout: LayoutItem[] = useMemo(() => {
+  // In v2, Layout = readonly LayoutItem[], useMemo returns Layout (readonly) for GridLayout
+  const layout: Layout = useMemo(() => {
     return widgets.map((widget) => ({
       i: widget.id,
       x: widget.position.x,
