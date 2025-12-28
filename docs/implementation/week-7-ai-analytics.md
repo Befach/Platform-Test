@@ -1400,7 +1400,7 @@ Complete security hardening and UI consistency cleanup following the 4-type to 3
 | 4. Integration | 2 | Chat context injection, priority helper |
 
 **Files Created**:
-- `C:\Users\harsh\.claude\plans\distributed-drifting-quail.md` - Full architecture plan (680+ lines)
+- Local plan file - Full architecture plan (680+ lines)
 
 **Dependencies Created**:
 - ⏳ [P0] Fix Agentic Panel gap before Knowledge System
@@ -1408,7 +1408,6 @@ Complete security hardening and UI consistency cleanup following the 4-type to 3
 - ⏳ [Week 9-10] Knowledge & Decision System implementation
 
 **Related Documentation**:
-- [Plan File](C:\Users\harsh\.claude\plans\distributed-drifting-quail.md) - Full technical specification
 - [ARCHITECTURE_CONSOLIDATION.md](../ARCHITECTURE_CONSOLIDATION.md) - Platform architecture
 
 ---
