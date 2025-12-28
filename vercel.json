@@ -1,4 +1,5 @@
 {
+  "ignoreCommand": "bash -c \"[[ $VERCEL_GIT_COMMIT_AUTHOR_NAME == 'dependabot[bot]' ]] && exit 0 || git diff HEAD^ HEAD --quiet -- . ':!docs' ':!*.md' ':!.github' ':!README.md' ':!CLAUDE.md' && exit 0 || exit 1\"",
   "rewrites": [
     {
       "source": "/(.*)",

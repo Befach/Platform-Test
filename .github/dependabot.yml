@@ -1,0 +1,61 @@
+# Dependabot configuration for automated dependency updates
+# Groups updates weekly to reduce PR noise and deployment frequency
+
+version: 2
+updates:
+  # NPM dependencies for Next.js app
+  - package-ecosystem: "npm"
+    directory: "/next-app"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+
+    # Group dependencies to reduce PR count (5+ PRs → 2 PRs)
+    groups:
+      # Production dependencies grouped together
+      production-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@types/*"
+          - "eslint*"
+          - "prettier*"
+          - "typescript"
+          - "@playwright/*"
+          - "playwright*"
+
+      # Development dependencies grouped together
+      development-dependencies:
+        patterns:
+          - "@types/*"
+          - "eslint*"
+          - "prettier*"
+          - "typescript"
+          - "@playwright/*"
+          - "playwright*"
+
+    # Limit open PRs to reduce noise
+    open-pull-requests-limit: 5
+
+    # Consistent commit message format
+    commit-message:
+      prefix: "chore(deps)"
+
+    # Labels for easy filtering
+    labels:
+      - "dependencies"
+      - "automated"
+
+  # GitHub Actions updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
+      - "github-actions"

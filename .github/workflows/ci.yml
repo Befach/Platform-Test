@@ -14,6 +14,11 @@ on:
       - 'supabase/**'
       - '.github/workflows/ci.yml'
 
+# Cancel in-progress runs when a new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

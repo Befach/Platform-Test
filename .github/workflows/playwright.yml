@@ -19,6 +19,11 @@ on:
       - '.github/workflows/playwright.yml'
   workflow_dispatch: # Manual trigger still available
 
+# Cancel in-progress runs when a new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
