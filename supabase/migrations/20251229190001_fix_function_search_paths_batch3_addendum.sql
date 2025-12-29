@@ -1,27 +1,26 @@
 -- ============================================================================
 -- Migration: Fix Function Search Path Vulnerabilities (Batch 3 Addendum)
 -- Date: 2025-12-29
--- Purpose: Fix two issues missed in batch3 migration:
---          1. search_documents needs exact vector(1536) type signature
---          2. get_next_version(TEXT) single-param version was missed
+-- Purpose: Apply fixes that were added to batch3 file AFTER it was deployed
+-- ============================================================================
+--
+-- CONTEXT: The batch3 migration was applied to the database, then issues were
+-- discovered and the batch3 FILE was updated. However, Supabase won't re-run
+-- already-applied migrations, so this addendum applies the corrections.
+--
+-- The batch3 file was updated to include:
+--   1. Correct vector(1536) signature for search_documents
+--   2. Both get_next_version(TEXT) and get_next_version(TEXT, TEXT)
+--
+-- This addendum ensures the database receives those fixes.
 -- ============================================================================
 
--- ============================================================================
--- FIX 1: search_documents with correct vector(1536) signature
--- ============================================================================
--- The original batch3 migration used extensions.vector instead of extensions.vector(1536)
--- PostgreSQL requires exact type match for ALTER FUNCTION
-
+-- search_documents with correct vector(1536) signature
 DO $$ BEGIN
   ALTER FUNCTION public.search_documents(TEXT, extensions.vector(1536), TEXT, TEXT, INTEGER, FLOAT) SET search_path = '';
 EXCEPTION WHEN undefined_function THEN NULL; END $$;
 
--- ============================================================================
--- FIX 2: get_next_version(TEXT) - single parameter version
--- ============================================================================
--- The original batch3 migration only fixed get_next_version(TEXT, TEXT)
--- This fixes the single-param version from 20251216190751_add_type_specific_phases.sql
-
+-- get_next_version(TEXT) - single parameter version
 DO $$ BEGIN
   ALTER FUNCTION public.get_next_version(TEXT) SET search_path = '';
 EXCEPTION WHEN undefined_function THEN NULL; END $$;
