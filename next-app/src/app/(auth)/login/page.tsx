@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { createClient, resetClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -26,12 +26,15 @@ export default function LoginPage() {
 
   const searchParams = useSearchParams()
   const returnTo = searchParams.get('returnTo')
-  const supabase = createClient()
 
   const handleMagicLink = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setMessage(null)
+
+    // Reset singleton before new auth to ensure clean state
+    resetClient()
+    const freshClient = createClient()
 
     try {
       // Build callback URL with returnTo parameter if present
@@ -40,7 +43,7 @@ export default function LoginPage() {
         callbackUrl += `?returnTo=${encodeURIComponent(returnTo)}`
       }
 
-      const { error } = await supabase.auth.signInWithOtp({
+      const { error } = await freshClient.auth.signInWithOtp({
         email,
         options: {
           emailRedirectTo: callbackUrl,
@@ -69,6 +72,10 @@ export default function LoginPage() {
     setLoading(true)
     setMessage(null)
 
+    // Reset singleton before new auth to ensure clean state
+    resetClient()
+    const freshClient = createClient()
+
     try {
       // Build callback URL with returnTo parameter if present
       let callbackUrl = `${window.location.origin}/auth/callback`
@@ -76,7 +83,7 @@ export default function LoginPage() {
         callbackUrl += `?returnTo=${encodeURIComponent(returnTo)}`
       }
 
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { error } = await freshClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: callbackUrl,

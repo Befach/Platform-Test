@@ -2,7 +2,7 @@
 
 import { LogOut, Settings, User, HelpCircle, KeyboardIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient, resetClient } from '@/lib/supabase/client';
 import { UserAvatar } from './user-avatar';
 import {
   DropdownMenu,
@@ -43,6 +43,7 @@ export function UserProfileDropdown({ user, teamRole = 'member' }: UserProfileDr
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    resetClient(); // Clear singleton immediately after signOut completes
     router.push('/login');
   };
 

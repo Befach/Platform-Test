@@ -35,8 +35,8 @@ export function createClient(): SupabaseClient {
 }
 
 /**
- * Reset the singleton client (useful for testing or logout)
- * Call this when user logs out to ensure a fresh client on next login
+ * Reset the singleton client. Must be called explicitly on logout.
+ * Synchronous and race-free - no callbacks, no deferred operations.
  */
 export function resetClient(): void {
   browserClient = null
