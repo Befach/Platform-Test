@@ -2,16 +2,26 @@ import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  // Sign out from Supabase
-  await supabase.auth.signOut()
+    // Sign out from Supabase
+    const { error } = await supabase.auth.signOut()
 
-  // Redirect to login page
-  return NextResponse.redirect(new URL('/login', request.url))
+    if (error) {
+      console.error('Sign out error:', error)
+      // Still redirect even on error - user intent is to logout
+    }
+
+    // Redirect to login page
+    return NextResponse.redirect(new URL('/login', request.url))
+  } catch (error) {
+    console.error('Sign out failed:', error)
+    // Redirect anyway since user wants to logout
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
 }
 
 export async function POST(request: Request) {
-  // Support POST as well for form submissions
   return GET(request)
 }
