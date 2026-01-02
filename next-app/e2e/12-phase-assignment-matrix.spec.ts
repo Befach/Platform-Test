@@ -288,8 +288,8 @@ async function cleanupPhaseData(teamId: string): Promise<void> {
         .delete()
         .in('workspace_id', workspaceIds);
 
-      // Note: phase_assignment_history is for work items, not user assignments
-      // It's cleaned up when work_items are deleted (CASCADE)
+      // Note: phase_assignment_history tracks WORK ITEM phase transitions (not user phase assignments).
+      // It's auto-cleaned when work_items are deleted via CASCADE foreign key.
     }
   } catch (error) {
     console.error('Error cleaning up phase data:', error);
