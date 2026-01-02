@@ -346,6 +346,8 @@ export const TEST_PATHS = {
   dependencies: (id: string) => `/workspaces/${id}/dependencies`,
   teamMembers: (id: string) => `/workspaces/${id}/team`,
   settings: (id: string) => `/workspaces/${id}/settings`,
+  analytics: (id: string) => `/workspaces/${id}/analytics`,
+  ai: (id: string) => `/workspaces/${id}/ai`,
   // Resources API paths
   resourcesApi: (teamId: string) => `/api/resources?team_id=${teamId}`,
   resourcesSearchApi: (teamId: string, query: string) => `/api/resources/search?team_id=${teamId}&q=${encodeURIComponent(query)}`,
