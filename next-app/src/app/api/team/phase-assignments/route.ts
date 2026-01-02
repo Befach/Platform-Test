@@ -9,6 +9,7 @@ const createPhaseAssignmentSchema = z.object({
   user_id: z.string(),
   phase: z.enum(['design', 'build', 'refine', 'launch']),
   can_edit: z.boolean(),
+  is_lead: z.boolean().optional().default(false),
   notes: z.string().optional()
 })
 
@@ -79,6 +80,7 @@ export async function GET(request: NextRequest) {
         workspace_id,
         phase,
         can_edit,
+        is_lead,
         notes,
         created_at,
         users:users!user_phase_assignments_user_id_fkey(
@@ -147,7 +149,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { workspace_id, user_id, phase, can_edit, notes } = validation.data
+    const { workspace_id, user_id, phase, can_edit, is_lead, notes } = validation.data
 
     // Get workspace and verify team membership
     const { data: workspace, error: workspaceError } = await supabase
@@ -234,6 +236,7 @@ export async function POST(request: NextRequest) {
         user_id,
         phase,
         can_edit,
+        is_lead,
         notes: notes || null
       })
       .select(`
@@ -242,6 +245,7 @@ export async function POST(request: NextRequest) {
         workspace_id,
         phase,
         can_edit,
+        is_lead,
         notes,
         created_at,
         users:users!user_phase_assignments_user_id_fkey(
