@@ -72,17 +72,24 @@ export function reactFlowToBlockSuiteTree(
     nodeMap.set(node.id, node)
   }
 
-  // Track visited nodes to detect cycles
-  const visited = new Set<string>()
+  // Track all processed nodes for orphan detection
+  const processedNodes = new Set<string>()
 
-  // Recursively build tree
-  function buildTree(nodeId: string, depth = 0): BlockSuiteMindmapNodeWithMeta | null {
-    // Prevent infinite loops
-    if (visited.has(nodeId)) {
+  // Recursively build tree with cycle detection per traversal
+  function buildTree(
+    nodeId: string,
+    depth = 0,
+    currentPath = new Set<string>()
+  ): BlockSuiteMindmapNodeWithMeta | null {
+    // Prevent infinite loops (cycle detection within current traversal path)
+    if (currentPath.has(nodeId)) {
       warnings.push(`Circular reference detected at node "${nodeId}"`)
       return null
     }
-    visited.add(nodeId)
+
+    // Track this node in current path and mark as processed
+    const pathWithCurrent = new Set(currentPath).add(nodeId)
+    processedNodes.add(nodeId)
 
     // Prevent too deep trees (safety limit)
     if (depth > 20) {
@@ -100,7 +107,7 @@ export function reactFlowToBlockSuiteTree(
     const childIds = childrenMap.get(nodeId) || []
 
     for (const childId of childIds) {
-      const childTree = buildTree(childId, depth + 1)
+      const childTree = buildTree(childId, depth + 1, pathWithCurrent)
       if (childTree) {
         children.push(childTree)
       }
@@ -136,8 +143,8 @@ export function reactFlowToBlockSuiteTree(
   if (rootNodes.length > 1 && tree) {
     const additionalRoots: BlockSuiteMindmapNodeWithMeta[] = []
     for (let i = 1; i < rootNodes.length; i++) {
-      // Reset visited for each additional root
-      const additionalTree = buildTree(rootNodes[i].id)
+      // Each additional root starts with a fresh path for cycle detection
+      const additionalTree = buildTree(rootNodes[i].id, 0, new Set<string>())
       if (additionalTree) {
         additionalRoots.push(additionalTree)
       }
@@ -149,7 +156,7 @@ export function reactFlowToBlockSuiteTree(
 
   // Find any truly orphaned nodes (not connected at all)
   for (const node of nodes) {
-    if (!visited.has(node.id)) {
+    if (!processedNodes.has(node.id)) {
       orphanedNodes.push(node.id)
       warnings.push(`Node "${node.title}" (${node.id}) is not connected to the tree`)
     }

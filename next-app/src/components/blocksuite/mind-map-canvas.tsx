@@ -24,6 +24,58 @@ function clearContainer(container: HTMLElement): void {
 }
 
 /**
+ * Extract tree structure from a BlockSuite mindmap element
+ * Returns null if extraction fails
+ */
+function extractMindmapTree(
+  surface: unknown,
+  mindmapId: string
+): BlockSuiteMindmapNode | null {
+  try {
+    const surfaceWithElements = surface as {
+      getElementById?: (id: string) => {
+        tree?: { element?: { text?: string }; children?: unknown[] }
+        children?: BlockSuiteMindmapNode
+      } | null
+    }
+
+    if (!surfaceWithElements.getElementById) {
+      return null
+    }
+
+    const mindmapElement = surfaceWithElements.getElementById(mindmapId)
+    if (!mindmapElement) {
+      return null
+    }
+
+    // Try to access the tree structure - BlockSuite stores it in different ways
+    // depending on the version
+    if (mindmapElement.children) {
+      return mindmapElement.children as BlockSuiteMindmapNode
+    }
+
+    if (mindmapElement.tree?.element?.text) {
+      // Convert BlockSuite internal format to our format
+      const convertNode = (node: {
+        element?: { text?: string }
+        children?: unknown[]
+      }): BlockSuiteMindmapNode => ({
+        text: node.element?.text || 'Untitled',
+        children: node.children?.map((child) =>
+          convertNode(child as { element?: { text?: string }; children?: unknown[] })
+        ),
+      })
+      return convertNode(mindmapElement.tree)
+    }
+
+    return null
+  } catch (e) {
+    console.warn('Failed to extract mindmap tree:', e)
+    return null
+  }
+}
+
+/**
  * BlockSuite MindMap Canvas Component
  *
  * A React wrapper for BlockSuite's native mindmap functionality.
@@ -220,7 +272,21 @@ export function MindMapCanvas({
           if (docWithSlots.slots?.historyUpdated) {
             disposable = docWithSlots.slots.historyUpdated.on(() => {
               if (onTreeChange && mounted) {
-                // For now, pass the original tree since extracting is complex
+                // Try to extract the actual current tree from BlockSuite
+                const surface = doc.getBlockById(surfaceId)
+                const mindmapId = mindmapIdRef.current
+
+                if (surface && mindmapId) {
+                  const extractedTree = extractMindmapTree(surface, mindmapId)
+                  if (extractedTree) {
+                    onTreeChange(extractedTree)
+                    return
+                  }
+                }
+
+                // Fallback to original tree if extraction fails
+                // This ensures consumers still get notified of changes
+                console.warn('Could not extract updated tree, using original')
                 onTreeChange(treeToRender)
               }
             })
