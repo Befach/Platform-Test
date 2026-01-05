@@ -72,10 +72,20 @@ export function reactFlowToBlockSuiteTree(
     nodeMap.set(node.id, node)
   }
 
-  // Track all processed nodes for orphan detection
-  // NOTE: processedNodes is intentionally global across all roots.
-  // Each node should only appear once in the final combined tree.
-  // Orphan detection needs to track ALL processed nodes, not per-root.
+  // Track all processed nodes for orphan detection and deduplication.
+  //
+  // DESIGN DECISION: processedNodes is intentionally GLOBAL across all roots.
+  // This is correct because:
+  // 1. ReactFlow node IDs are globally unique within a canvas
+  // 2. Each node should appear exactly ONCE in the final BlockSuite tree
+  // 3. When multiple roots share child branches (e.g., through edges), we want
+  //    the node to appear under the FIRST root that processes it, not duplicated
+  // 4. Orphan detection needs to track ALL processed nodes to identify truly
+  //    disconnected nodes (not just unprocessed within one root's subtree)
+  //
+  // If roots were meant to be completely independent trees (allowing duplicates),
+  // we would reset this set for each root. But BlockSuite expects a single
+  // combined tree, so deduplication is the correct behavior.
   const processedNodes = new Set<string>()
 
   // Recursively build tree with cycle detection per traversal

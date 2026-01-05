@@ -263,7 +263,13 @@ export function MindMapCanvas({
                 attempts++
                 setTimeout(tryAddMindmap, POLL_INTERVAL_MS)
               } else {
+                // Surface initialization failed after max attempts (500ms total)
+                // This can happen on slow devices or if BlockSuite has issues loading.
+                // Show user feedback instead of silently failing.
                 console.warn('Surface not ready after max attempts, mindmap not created')
+                if (mounted) {
+                  setError('Mind map surface failed to initialize. Please try refreshing the page.')
+                }
               }
             } catch (e) {
               console.warn('Failed to add mindmap element:', e)
