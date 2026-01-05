@@ -1,16 +1,16 @@
 {
-  "labels": [],
+  "labels": ["needs-review", "security", "breaking-change"],
   "comment": "",
   "fixWithAI": true,
   "hideFooter": false,
-  "strictness": 2,
+  "strictness": 3,
   "statusCheck": true,
-  "commentTypes": ["syntax", "logic", "style"],
-  "instructions": "",
+  "commentTypes": ["syntax", "logic", "style", "security", "performance"],
+  "instructions": "Product Lifecycle Management Platform - Week 7/12 (95% complete). Tech: Next.js 16 + TypeScript + Supabase + shadcn/ui. CRITICAL RULES: 1) IDs = Date.now().toString() (NEVER UUID), 2) All queries MUST filter by team_id, 3) team_id TEXT NOT NULL (NULL breaks RLS), 4) No 'any' type, 5) shadcn/ui only (no custom CSS), 6) RLS on all tables, 7) API routes check auth + team membership, 8) Zod for validation. TWO-LAYER ARCHITECTURE: Workspace (aggregation) → Work Items (phase IS status). Type-specific phases: Feature (design→build→refine→launch), Bug (triage→investigating→fixing→verified), Concept (ideation→research→validated|rejected).",
   "disabledLabels": [],
   "excludeAuthors": [],
-  "ignoreKeywords": "",
-  "ignorePatterns": "greptile.json",
+  "ignoreKeywords": "WIP,wip,draft",
+  "ignorePatterns": "greptile.json\n*.lock\n*.log\nnode_modules/**\n.next/**\nsupabase/.temp/**\ncoverage/**\ndist/**\nbuild/**",
   "includeAuthors": [],
   "summarySection": {
     "included": true,
@@ -18,14 +18,14 @@
     "defaultOpen": true
   },
   "excludeBranches": [],
-  "fileChangeLimit": 100,
+  "fileChangeLimit": 300,
   "includeBranches": [],
   "includeKeywords": "",
   "triggerOnUpdates": true,
   "updateSummaryOnly": false,
   "issuesTableSection": {
     "included": true,
-    "collapsible": true,
+    "collapsible": false,
     "defaultOpen": true
   },
   "statusCommentsEnabled": true,
@@ -37,12 +37,110 @@
   "sequenceDiagramSection": {
     "included": true,
     "collapsible": true,
-    "defaultOpen": true
+    "defaultOpen": false
   },
-  "shouldUpdateDescription": false,
+  "shouldUpdateDescription": true,
   "customContext": {
-    "other": [{ "scope": [], "content": "" }],
-    "rules": [{ "scope": [], "rule": "" }],
-    "files": [{ "scope": [], "path": "", "description": "" }]
+    "other": [
+      {
+        "scope": ["next-app/src/**"],
+        "content": "Multi-tenant app with Supabase RLS. team_id filtering REQUIRED on all queries. IDs are timestamp-based (Date.now().toString()), NEVER UUID. Two-layer architecture: Workspace shows phase DISTRIBUTION, Work Items have individual phases. Phase IS the status for work items (no separate status field)."
+      },
+      {
+        "scope": ["next-app/src/lib/ai/**", "next-app/src/app/api/ai/**"],
+        "content": "AI uses capability-based model routing via OpenRouter. Primary models: Strategic Reasoning=GLM 4.7, Agentic Tool Use=GLM 4.7, Coding=MiniMax M2.1, Visual Reasoning=Gemini 3 Flash, Large Context=Grok 4.1 Fast, Default Chat=Kimi K2. AVOID Claude Sonnet (too costly). Tool categories: research (no approval), creation/modification/deletion (requires approval)."
+      },
+      {
+        "scope": ["**/*"],
+        "content": "Project status: Week 7/12 (95% complete). Modules complete: Foundation, Multi-Tenancy, Mind Mapping (XYFlow), Team Management, Work Items UI, Analytics, AI Assistant, Workspace Modes, Strategy Alignment, Knowledge Base, Review & Feedback. Pending: Timeline Visualization, Project Execution, Collaboration, Billing/Testing."
+      }
+    ],
+    "rules": [
+      {
+        "scope": ["**/*.ts", "**/*.tsx"],
+        "rule": "TypeScript strict mode. No 'any' type. Use interfaces for data structures. Union types for enums (e.g., 'design' | 'build' | 'refine' | 'launch'). Explicit return types on functions."
+      },
+      {
+        "scope": ["next-app/src/app/api/**/*.ts"],
+        "rule": "API routes must: 1) Check auth with supabase.auth.getUser(), 2) Get team membership from team_members, 3) Filter ALL queries by team_id, 4) Use Zod schemas for validation, 5) Return {data, success: true} or {error, success: false}. HTTP codes: 200/201/204 success, 400 validation, 401 unauth, 403 forbidden, 404 not found, 500 error."
+      },
+      {
+        "scope": ["next-app/src/components/**/*.tsx"],
+        "rule": "Use shadcn/ui components only. NO custom CSS files. Tailwind utility classes for styling. Server Components by default, 'use client' only for interactive components. Lucide React for icons. Mobile-first responsive design."
+      },
+      {
+        "scope": ["supabase/migrations/**/*.sql"],
+        "rule": "All tables must have: id TEXT PRIMARY KEY (timestamp-based), team_id TEXT NOT NULL (CRITICAL - NULL breaks RLS!), created_at/updated_at TIMESTAMPTZ. Enable RLS with team-based policies. Create index on team_id. Migration naming: YYYYMMDDHHMMSS_[action]_[table].sql."
+      },
+      {
+        "scope": ["next-app/src/lib/supabase/**"],
+        "rule": "Always filter queries by team_id. Handle errors explicitly, return empty arrays [] instead of null. Log errors with context for debugging."
+      },
+      {
+        "scope": ["next-app/e2e/**/*.ts"],
+        "rule": "Use data-testid for selectors. Each test must be independent. Use await expect() instead of waitForTimeout(). Cover: auth flows, CRUD operations, RLS enforcement, type-aware phase transitions, form validation."
+      },
+      {
+        "scope": ["next-app/src/**/work-item*/**"],
+        "rule": "Work item types have different phases: Feature/Enhancement (design→build→refine→launch), Bug (triage→investigating→fixing→verified), Concept (ideation→research→validated|rejected). Phase IS the status - no separate status field. Timeline items have separate status for task execution."
+      }
+    ],
+    "files": [
+      {
+        "scope": ["CLAUDE.md"],
+        "path": "CLAUDE.md",
+        "description": "Master project guidelines. Contains architecture guardrails, tech stack (Next.js 16 + Supabase + shadcn/ui), AI model routing, slash commands, coding standards, and weekly progression tracking. CANONICAL REFERENCE for all decisions."
+      },
+      {
+        "scope": [".cursorrules"],
+        "path": ".cursorrules",
+        "description": "Cursor AI rules. Contains two-layer architecture (Workspace→Work Items), type-specific phase workflows, coding standards, security checklist, and critical reminders. Synced with CLAUDE.md."
+      },
+      {
+        "scope": [".claude/rules/**"],
+        "path": ".claude/rules/",
+        "description": "Modular coding standards: coding-standards.md (TypeScript, React, multi-tenancy), database-patterns.md (Supabase, RLS, migrations), api-design.md (REST conventions), security-checklist.md (OWASP), naming-conventions.md, testing-standards.md (Playwright), git-workflow.md, ai-patterns.md."
+      },
+      {
+        "scope": ["docs/ARCHITECTURE_CONSOLIDATION.md"],
+        "path": "docs/ARCHITECTURE_CONSOLIDATION.md",
+        "description": "CANONICAL source of truth for all architecture decisions. Contains two-layer system (Workspace aggregation, Work Items with phases), type-specific workflows, strategy alignment, and core entities."
+      },
+      {
+        "scope": ["docs/implementation/**"],
+        "path": "docs/implementation/",
+        "description": "Week-by-week implementation guide. README.md is main entry point. week-X-Y.md files contain completed work with 5-question validation. database-schema.md has schema reference."
+      },
+      {
+        "scope": ["docs/planning/**"],
+        "path": "docs/planning/",
+        "description": "Project management docs. PROGRESS.md has weekly tracker. NEXT_STEPS.md has immediate priorities. MASTER_IMPLEMENTATION_ROADMAP.md has full dependency graph."
+      },
+      {
+        "scope": ["docs/reference/**"],
+        "path": "docs/reference/",
+        "description": "Technical references. API_REFERENCE.md (20+ routes), ARCHITECTURE.md (Mermaid diagrams), CODE_PATTERNS.md (examples), CHANGELOG.md (migrations), PHASE_PERMISSIONS_GUIDE.md."
+      },
+      {
+        "scope": ["next-app/src/lib/supabase/**"],
+        "path": "next-app/src/lib/supabase/",
+        "description": "Supabase client utilities. createClient() for server, createBrowserClient() for client. All queries must filter by team_id. types.ts has generated database types."
+      },
+      {
+        "scope": ["next-app/src/app/api/**"],
+        "path": "next-app/src/app/api/",
+        "description": "Next.js API routes. Must check auth, validate team membership, use Zod schemas. Response format: {data, success} or {error, success: false}. See docs/reference/API_REFERENCE.md."
+      },
+      {
+        "scope": ["next-app/src/lib/ai/**"],
+        "path": "next-app/src/lib/ai/",
+        "description": "AI integration layer. models-config.ts has capability-based routing. tool-registry.tsx has tool definitions. Approval workflow for creation/modification/deletion tools."
+      },
+      {
+        "scope": ["supabase/migrations/**"],
+        "path": "supabase/migrations/",
+        "description": "Database migrations. Every table needs: id TEXT PRIMARY KEY, team_id TEXT NOT NULL, RLS enabled, team-based policies, index on team_id. Apply with: npx supabase db push."
+      }
+    ]
   }
 }
