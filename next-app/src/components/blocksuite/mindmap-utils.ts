@@ -73,6 +73,9 @@ export function reactFlowToBlockSuiteTree(
   }
 
   // Track all processed nodes for orphan detection
+  // NOTE: processedNodes is intentionally global across all roots.
+  // Each node should only appear once in the final combined tree.
+  // Orphan detection needs to track ALL processed nodes, not per-root.
   const processedNodes = new Set<string>()
 
   // Recursively build tree with cycle detection per traversal

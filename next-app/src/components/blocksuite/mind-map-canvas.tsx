@@ -116,7 +116,9 @@ export function MindMapCanvas({
   style = 4 as BlockSuiteMindmapStyle, // Default: FOUR
   layout = 2 as BlockSuiteLayoutType, // Default: BALANCE
   onTreeChange,
-  onNodeSelect: _onNodeSelect,  // Prefixed with _ to indicate intentionally unused for now
+  // TODO: Implement node selection using BlockSuite's surface element click events.
+  // Will require: surface.slots.elementSelected or similar API, mapping element ID to node data.
+  onNodeSelect: _onNodeSelect,
   readOnly = false,
   className,
 }: MindMapCanvasProps) {
@@ -225,17 +227,20 @@ export function MindMapCanvas({
           containerRef.current.appendChild(editor as Node)
           editorRef.current = editor
 
-          // Wait for editor to be ready, then add mindmap
-          // Using setTimeout to ensure the surface block is fully initialized
-          setTimeout(() => {
+          // Poll for surface readiness instead of fixed timeout
+          // This is more robust than setTimeout as surface initialization time varies
+          const MAX_ATTEMPTS = 10
+          const POLL_INTERVAL_MS = 50
+          let attempts = 0
+
+          const tryAddMindmap = () => {
             if (!mounted || !surfaceId) return
 
             try {
-              // Get surface block for adding mindmap
               const surface = doc.getBlockById(surfaceId)
 
               if (surface && 'addElement' in surface) {
-                // Add mindmap element to the surface
+                // Surface is ready - add mindmap element
                 const surfaceBlock = surface as {
                   addElement: (props: {
                     type: string
@@ -249,17 +254,25 @@ export function MindMapCanvas({
                   type: 'mindmap',
                   children: treeToRender,
                   style: style,
-                  // Note: layoutType might need to be set via a different API
+                  layoutType: layout, // 0=RIGHT, 1=LEFT, 2=BALANCE
                 })
 
                 mindmapIdRef.current = mindmapId
                 console.log('MindMap created with ID:', mindmapId)
+              } else if (attempts < MAX_ATTEMPTS) {
+                // Surface not ready yet, retry
+                attempts++
+                setTimeout(tryAddMindmap, POLL_INTERVAL_MS)
+              } else {
+                console.warn('Surface not ready after max attempts, mindmap not created')
               }
             } catch (e) {
               console.warn('Failed to add mindmap element:', e)
               // This is non-fatal - the editor still works
             }
-          }, 100)
+          }
+
+          tryAddMindmap()
 
           // Set up change listener
           const docWithSlots = doc as Doc & {
@@ -284,9 +297,10 @@ export function MindMapCanvas({
                   }
                 }
 
-                // Fallback to original tree if extraction fails
-                // This ensures consumers still get notified of changes
-                console.warn('Could not extract updated tree, using original')
+                // Known limitation: When BlockSuite tree extraction fails, we cannot
+                // retrieve the actual modified tree. Fallback notifies consumers that
+                // a change occurred, but tree data may be stale.
+                console.warn('Tree extraction failed - returning original tree. Actual changes may differ.')
                 onTreeChange(treeToRender)
               }
             })
