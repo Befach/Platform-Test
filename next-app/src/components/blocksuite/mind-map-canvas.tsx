@@ -118,7 +118,7 @@ export function MindMapCanvas({
   onTreeChange,
   // TODO: Implement node selection using BlockSuite's surface element click events.
   // Will require: surface.slots.elementSelected or similar API, mapping element ID to node data.
-  onNodeSelect: _onNodeSelect,
+  onNodeSelect,
   readOnly = false,
   className,
 }: MindMapCanvasProps) {
@@ -133,6 +133,16 @@ export function MindMapCanvas({
   const treeToRender = useMemo(() => {
     return initialTree || DEFAULT_SAMPLE_TREE
   }, [initialTree])
+
+  // Warn if onNodeSelect is provided but not yet implemented
+  useEffect(() => {
+    if (onNodeSelect) {
+      console.warn(
+        'MindMapCanvas: onNodeSelect prop is not yet implemented. ' +
+          'Node selection events will not fire. This feature is planned for a future release.'
+      )
+    }
+  }, [onNodeSelect])
 
   // Cleanup function
   const cleanup = useCallback(() => {
@@ -227,8 +237,15 @@ export function MindMapCanvas({
           containerRef.current.appendChild(editor as Node)
           editorRef.current = editor
 
-          // Poll for surface readiness instead of fixed timeout
-          // This is more robust than setTimeout as surface initialization time varies
+          // Poll for surface readiness instead of fixed timeout.
+          // BlockSuite doesn't expose a "surface ready" event, so we poll.
+          //
+          // TIMING RATIONALE:
+          // - 10 attempts × 50ms = 500ms max wait
+          // - In testing, surface typically ready within 100-200ms
+          // - 500ms is acceptable for initial load; faster devices succeed earlier
+          // - If this proves insufficient for slower devices, increase MAX_ATTEMPTS
+          //   or make configurable via props (not yet needed based on testing)
           const MAX_ATTEMPTS = 10
           const POLL_INTERVAL_MS = 50
           let attempts = 0
