@@ -117,16 +117,18 @@ export async function GET(
       return NextResponse.json({ error: 'Mind map not found' }, { status: 404 })
     }
 
-    // Get node/edge counts for reference
+    // Get node/edge counts for reference with team_id filtering
     const [nodesResult, edgesResult] = await Promise.all([
       supabase
         .from('mind_map_nodes')
         .select('id', { count: 'exact', head: true })
-        .eq('mind_map_id', mindMapId),
+        .eq('mind_map_id', mindMapId)
+        .eq('team_id', mindMap.team_id),
       supabase
         .from('mind_map_edges')
         .select('id', { count: 'exact', head: true })
-        .eq('mind_map_id', mindMapId),
+        .eq('mind_map_id', mindMapId)
+        .eq('team_id', mindMap.team_id),
     ])
 
     return NextResponse.json({
@@ -236,16 +238,18 @@ export async function POST(
       )
     }
 
-    // Get nodes and edges
+    // Get nodes and edges with team_id filtering for multi-tenancy security
     const [nodesResult, edgesResult] = await Promise.all([
       supabase
         .from('mind_map_nodes')
         .select('*')
-        .eq('mind_map_id', mindMapId),
+        .eq('mind_map_id', mindMapId)
+        .eq('team_id', mindMap.team_id),
       supabase
         .from('mind_map_edges')
         .select('*')
-        .eq('mind_map_id', mindMapId),
+        .eq('mind_map_id', mindMapId)
+        .eq('team_id', mindMap.team_id),
     ])
 
     if (nodesResult.error) {
@@ -317,6 +321,11 @@ export async function POST(
 
       if (updateError) {
         sanitizeDbError(updateError)
+        // Rollback status to 'failed' so migration can be retried (not stuck at 'in_progress')
+        await supabase
+          .from('mind_maps')
+          .update({ migration_status: 'failed' })
+          .eq('id', mindMapId)
         return NextResponse.json(
           { error: 'Migration completed but failed to save results' },
           { status: 500 }

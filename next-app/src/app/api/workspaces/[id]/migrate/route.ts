@@ -268,16 +268,18 @@ export async function POST(
 
     // Process each map
     for (const map of pendingMaps.slice(0, options.batchSize)) {
-      // Get nodes and edges for this map
+      // Get nodes and edges for this map with team_id filtering for multi-tenancy security
       const [nodesResult, edgesResult] = await Promise.all([
         supabase
           .from('mind_map_nodes')
           .select('*')
-          .eq('mind_map_id', map.id),
+          .eq('mind_map_id', map.id)
+          .eq('team_id', workspace.team_id),
         supabase
           .from('mind_map_edges')
           .select('*')
-          .eq('mind_map_id', map.id),
+          .eq('mind_map_id', map.id)
+          .eq('team_id', workspace.team_id),
       ])
 
       if (nodesResult.error || edgesResult.error) {
@@ -352,6 +354,11 @@ export async function POST(
 
         if (updateError) {
           sanitizeDbError(updateError)
+          // Rollback status to 'failed' so migration can be retried (not stuck at 'in_progress')
+          await supabase
+            .from('mind_maps')
+            .update({ migration_status: 'failed' })
+            .eq('id', map.id)
           result.status = 'failed'
           result.error = 'Failed to save migration results'
         }
@@ -393,8 +400,8 @@ export async function POST(
     // Create batch result
     const batchResult = createBatchResult(results, startedAt)
 
-    // hasMore is true if we fetched more records than we processed (we fetched fetchLimit + 1)
-    const hasMore = pendingMaps.length > options.batchSize
+    // hasMore is true if we fetched more records than fetchLimit (we fetched fetchLimit + 1)
+    const hasMore = pendingMaps.length > fetchLimit
 
     return NextResponse.json({
       success: batchResult.failed === 0,
@@ -402,7 +409,7 @@ export async function POST(
       result: batchResult,
       hasMore,
       // remainingCount is approximate - at least this many remain if hasMore is true
-      remainingCount: hasMore ? pendingMaps.length - options.batchSize : 0,
+      remainingCount: hasMore ? pendingMaps.length - fetchLimit : 0,
     })
   } catch (error: unknown) {
     console.error('Error in POST /api/workspaces/[id]/migrate:', error)
