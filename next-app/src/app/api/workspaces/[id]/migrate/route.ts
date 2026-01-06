@@ -353,22 +353,34 @@ export async function POST(
         }
       } else if (!options.dryRun && result.status === 'failed') {
         // Mark as failed in database
-        await supabase
+        const { error: failedError } = await supabase
           .from('mind_maps')
           .update({
             migration_status: 'failed',
             migration_warnings: result.warnings.slice(0, migrationOpts.maxWarningsPerMap),
           })
           .eq('id', map.id)
+
+        if (failedError) {
+          sanitizeDbError(failedError)
+          // Log but continue - the migration already failed, just couldn't persist status
+          console.warn(`Failed to persist failed status for map ${map.id}`)
+        }
       } else if (!options.dryRun && result.status === 'skipped') {
         // Mark as skipped in database
-        await supabase
+        const { error: skippedError } = await supabase
           .from('mind_maps')
           .update({
             migration_status: 'skipped',
             migration_warnings: result.warnings.slice(0, migrationOpts.maxWarningsPerMap),
           })
           .eq('id', map.id)
+
+        if (skippedError) {
+          sanitizeDbError(skippedError)
+          // Log but continue - the migration was skipped, just couldn't persist status
+          console.warn(`Failed to persist skipped status for map ${map.id}`)
+        }
       }
 
       results.push(result)
