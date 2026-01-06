@@ -294,6 +294,7 @@ export async function POST(
         .from('mind_maps')
         .update({ migration_status: 'in_progress' })
         .eq('id', mindMapId)
+        .eq('team_id', mindMap.team_id)
 
       if (progressError) {
         sanitizeDbError(progressError)
@@ -318,6 +319,7 @@ export async function POST(
           migrated_at: new Date().toISOString(),
         })
         .eq('id', mindMapId)
+        .eq('team_id', mindMap.team_id)
 
       if (updateError) {
         sanitizeDbError(updateError)
@@ -326,6 +328,7 @@ export async function POST(
           .from('mind_maps')
           .update({ migration_status: 'failed' })
           .eq('id', mindMapId)
+          .eq('team_id', mindMap.team_id)
         return NextResponse.json(
           { error: 'Migration completed but failed to save results' },
           { status: 500 }
@@ -340,6 +343,7 @@ export async function POST(
           migration_warnings: result.warnings.slice(0, migrationOpts.maxWarningsPerMap),
         })
         .eq('id', mindMapId)
+        .eq('team_id', mindMap.team_id)
 
       if (failedError) {
         sanitizeDbError(failedError)
@@ -355,6 +359,7 @@ export async function POST(
           migration_warnings: result.warnings.slice(0, migrationOpts.maxWarningsPerMap),
         })
         .eq('id', mindMapId)
+        .eq('team_id', mindMap.team_id)
 
       if (skippedError) {
         sanitizeDbError(skippedError)

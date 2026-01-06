@@ -238,17 +238,18 @@ export async function POST(
     // Get mind maps to migrate - explicit team_id filtering + RLS
     // If force=true, include all maps including already migrated ones
     // Otherwise, only get pending/failed/null status maps
+    // Note: .in() doesn't match NULL, so we use .or() to handle null values
     // Fetch one extra to detect if there are more records for pagination
     const fetchLimit = options.limit || options.batchSize
-    const statusFilter = options.force
-      ? ['pending', 'failed', 'success', 'warning', 'skipped', null]
-      : ['pending', 'failed', null]
+    const statusOrFilter = options.force
+      ? 'migration_status.in.(pending,failed,success,warning,skipped),migration_status.is.null'
+      : 'migration_status.in.(pending,failed),migration_status.is.null'
     const { data: pendingMaps, error: mapsError } = await supabase
       .from('mind_maps')
       .select('id')
       .eq('workspace_id', workspaceId)
       .eq('team_id', workspace.team_id)
-      .in('migration_status', statusFilter)
+      .or(statusOrFilter)
       .limit(fetchLimit + 1)
 
     if (mapsError) {
@@ -332,6 +333,7 @@ export async function POST(
           .from('mind_maps')
           .update({ migration_status: 'in_progress' })
           .eq('id', map.id)
+          .eq('team_id', workspace.team_id)
 
         if (progressError) {
           sanitizeDbError(progressError)
@@ -356,6 +358,7 @@ export async function POST(
             migrated_at: new Date().toISOString(),
           })
           .eq('id', map.id)
+          .eq('team_id', workspace.team_id)
 
         if (updateError) {
           sanitizeDbError(updateError)
@@ -364,6 +367,7 @@ export async function POST(
             .from('mind_maps')
             .update({ migration_status: 'failed' })
             .eq('id', map.id)
+            .eq('team_id', workspace.team_id)
           result.status = 'failed'
           result.error = 'Failed to save migration results'
         }
@@ -376,6 +380,7 @@ export async function POST(
             migration_warnings: result.warnings.slice(0, migrationOpts.maxWarningsPerMap),
           })
           .eq('id', map.id)
+          .eq('team_id', workspace.team_id)
 
         if (failedError) {
           sanitizeDbError(failedError)
@@ -391,6 +396,7 @@ export async function POST(
             migration_warnings: result.warnings.slice(0, migrationOpts.maxWarningsPerMap),
           })
           .eq('id', map.id)
+          .eq('team_id', workspace.team_id)
 
         if (skippedError) {
           sanitizeDbError(skippedError)
