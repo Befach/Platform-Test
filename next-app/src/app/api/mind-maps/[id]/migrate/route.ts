@@ -260,10 +260,18 @@ export async function POST(
     // If not a dry run and migration succeeded, save to database
     if (!options.dryRun && (result.status === 'success' || result.status === 'warning')) {
       // Mark as in_progress first
-      await supabase
+      const { error: progressError } = await supabase
         .from('mind_maps')
         .update({ migration_status: 'in_progress' })
         .eq('id', mindMapId)
+
+      if (progressError) {
+        sanitizeDbError(progressError)
+        return NextResponse.json(
+          { error: 'Failed to start migration' },
+          { status: 500 }
+        )
+      }
 
       // Get the tree for storage
       const tree = getBlockSuiteTree(nodes, edges)
