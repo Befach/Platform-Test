@@ -32,10 +32,11 @@ export type DocumentFileType =
  * Document source type
  */
 export type DocumentSourceType =
-  | 'upload'      // User uploaded file
-  | 'url'         // Imported from URL
-  | 'integration' // Synced from external integration
-  | 'generated'   // AI-generated document
+  | 'upload'            // User uploaded file
+  | 'url'               // Imported from URL
+  | 'integration'       // Synced from external integration
+  | 'generated'         // AI-generated document
+  | 'blocksuite_mindmap' // BlockSuite mind map content (Phase 5)
 
 /**
  * Document processing status

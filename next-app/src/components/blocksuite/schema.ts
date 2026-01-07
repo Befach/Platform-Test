@@ -506,3 +506,111 @@ export function validateYjsUpdatePayload(data: unknown): ValidatedYjsUpdatePaylo
 export function safeValidateYjsUpdatePayload(data: unknown) {
   return YjsUpdatePayloadSchema.safeParse(data)
 }
+
+// ============================================================
+// RAG Layer Schemas (Phase 5: Embedding Integration)
+// ============================================================
+
+/**
+ * Embedding status schema for mind maps
+ */
+export const EmbeddingStatusSchema = z.enum([
+  'pending',
+  'processing',
+  'ready',
+  'error',
+  'skipped',
+])
+
+/**
+ * Node type schema for extracted nodes
+ */
+export const ExtractedNodeTypeSchema = z.enum(['root', 'branch', 'leaf'])
+
+/**
+ * Extraction options schema for API validation
+ */
+export const ExtractionOptionsSchema = z.object({
+  maxDepth: z.number().int().min(0).optional(),
+  includeEmpty: z.boolean().optional().default(false),
+})
+
+/**
+ * Chunk options schema for API validation
+ */
+export const ChunkOptionsSchema = z.object({
+  maxTokensPerChunk: z.number().int().min(50).max(1000).optional().default(300),
+  minChunkSize: z.number().int().min(10).max(200).optional().default(50),
+  includePathContext: z.boolean().optional().default(true),
+  maxPathDepth: z.number().int().min(1).max(10).optional().default(3),
+})
+
+/**
+ * Mind map embedding request schema
+ */
+export const EmbedMindMapRequestSchema = z.object({
+  force: z.boolean().optional().default(false),
+})
+
+/**
+ * Mind map chunk metadata schema
+ */
+export const MindMapChunkMetadataSchema = z.object({
+  mindMapId: z.string().min(1),
+  workspaceId: z.string().optional(),
+  teamId: z.string().optional(),
+  path: z.array(z.string()),
+  nodeType: ExtractedNodeTypeSchema,
+  depth: z.number().int().min(0),
+  source: z.literal('blocksuite_mindmap'),
+})
+
+/**
+ * Inferred types from schemas
+ */
+export type ValidatedExtractionOptions = z.infer<typeof ExtractionOptionsSchema>
+export type ValidatedChunkOptions = z.infer<typeof ChunkOptionsSchema>
+export type ValidatedEmbedMindMapRequest = z.infer<typeof EmbedMindMapRequestSchema>
+export type ValidatedMindMapChunkMetadata = z.infer<typeof MindMapChunkMetadataSchema>
+
+/**
+ * Validate extraction options and throw on error
+ */
+export function validateExtractionOptions(options: unknown): ValidatedExtractionOptions {
+  return ExtractionOptionsSchema.parse(options)
+}
+
+/**
+ * Safe validation for extraction options
+ */
+export function safeValidateExtractionOptions(options: unknown) {
+  return ExtractionOptionsSchema.safeParse(options)
+}
+
+/**
+ * Validate chunk options and throw on error
+ */
+export function validateChunkOptions(options: unknown): ValidatedChunkOptions {
+  return ChunkOptionsSchema.parse(options)
+}
+
+/**
+ * Safe validation for chunk options
+ */
+export function safeValidateChunkOptions(options: unknown) {
+  return ChunkOptionsSchema.safeParse(options)
+}
+
+/**
+ * Validate embed mind map request and throw on error
+ */
+export function validateEmbedMindMapRequest(request: unknown): ValidatedEmbedMindMapRequest {
+  return EmbedMindMapRequestSchema.parse(request)
+}
+
+/**
+ * Safe validation for embed mind map request
+ */
+export function safeValidateEmbedMindMapRequest(request: unknown) {
+  return EmbedMindMapRequestSchema.safeParse(request)
+}
