@@ -17,8 +17,9 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 // =============================================================================
 
 const MINDMAP_EMBED_CONFIG = {
-  defaultBatchLimit: 10, // Default number of mind maps to process per job
-  maxBatchLimit: 50, // Maximum allowed batch limit
+  defaultBatchLimit: 3, // Default number of mind maps to process per job (conservative for serverless)
+  maxBatchLimit: 10, // Maximum allowed batch limit (keep low to avoid timeout)
+  timeoutMs: 50000, // Stop processing if approaching serverless timeout (50s of 60s limit)
 }
 
 /**
@@ -188,7 +189,8 @@ interface MindmapEmbedJobResult {
   processed: number
   failed: number
   skipped: number
-  status: 'completed' | 'failed'
+  remaining: number // Number of mind maps not processed due to timeout
+  status: 'completed' | 'failed' | 'partial' // partial = stopped early due to timeout
   startedAt: string
   completedAt: string
   errors: string[]
@@ -211,13 +213,15 @@ async function runMindmapEmbedJob(
   batchLimit: number = MINDMAP_EMBED_CONFIG.defaultBatchLimit
 ): Promise<MindmapEmbedJobResult> {
   const startedAt = new Date().toISOString()
+  const startTime = Date.now()
   const errors: string[] = []
   let processed = 0
   let failed = 0
   let skipped = 0
+  let remaining = 0
 
   try {
-    // Find mind maps that need embedding
+    // Find mind maps that need embedding (exclude 'processing' to avoid conflicts)
     let query = supabase
       .from('mind_maps')
       .select('id, name')
@@ -244,6 +248,7 @@ async function runMindmapEmbedJob(
         processed: 0,
         failed: 0,
         skipped: 0,
+        remaining: 0,
         status: 'completed',
         startedAt,
         completedAt: new Date().toISOString(),
@@ -253,7 +258,17 @@ async function runMindmapEmbedJob(
 
     // Process each mind map using the embedding service directly
     // This avoids HTTP requests and uses the authenticated Supabase client
-    for (const mindMap of mindMaps) {
+    for (let i = 0; i < mindMaps.length; i++) {
+      const mindMap = mindMaps[i]
+
+      // Timeout detection: stop early if approaching serverless timeout
+      const elapsed = Date.now() - startTime
+      if (elapsed >= MINDMAP_EMBED_CONFIG.timeoutMs) {
+        remaining = mindMaps.length - i
+        console.log(`[MindmapEmbed] Stopping early: ${elapsed}ms elapsed, ${remaining} mind maps remaining`)
+        break
+      }
+
       try {
         // Call embedding service directly with authenticated client
         const result = await embedMindMap(supabase, mindMap.id, { force: false })
@@ -268,13 +283,23 @@ async function runMindmapEmbedJob(
           processed++
         }
 
-        console.log(`[MindmapEmbed] Processed ${mindMap.name}: ${result.chunks || 0} chunks`)
+        console.log(`[MindmapEmbed] Processed ${mindMap.name}: ${result.chunks || 0} chunks (${Date.now() - startTime}ms elapsed)`)
       } catch (error) {
         failed++
         const message = `Failed to embed ${mindMap.name}: ${error instanceof Error ? error.message : String(error)}`
         errors.push(message)
         console.error(`[MindmapEmbed] ${message}`)
       }
+    }
+
+    // Determine final status
+    let status: 'completed' | 'failed' | 'partial'
+    if (remaining > 0) {
+      status = 'partial' // Stopped early due to timeout
+    } else if (failed > 0 && processed === 0) {
+      status = 'failed'
+    } else {
+      status = 'completed'
     }
 
     return {
@@ -284,7 +309,8 @@ async function runMindmapEmbedJob(
       processed,
       failed,
       skipped,
-      status: failed > 0 && processed === 0 ? 'failed' : 'completed',
+      remaining,
+      status,
       startedAt,
       completedAt: new Date().toISOString(),
       errors,
@@ -297,6 +323,7 @@ async function runMindmapEmbedJob(
       processed,
       failed,
       skipped,
+      remaining,
       status: 'failed',
       startedAt,
       completedAt: new Date().toISOString(),

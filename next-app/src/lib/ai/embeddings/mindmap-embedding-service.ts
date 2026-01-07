@@ -100,11 +100,25 @@ export async function embedMindMap(
       }
     }
 
-    // Mark as processing
-    await supabase
+    // Optimistic locking: atomically mark as processing only if not already processing
+    // This prevents concurrent embedding of the same mind map
+    const { data: lockResult, error: lockError } = await supabase
       .from('mind_maps')
       .update({ embedding_status: 'processing' })
       .eq('id', mindMapId)
+      .neq('embedding_status', 'processing') // Only update if NOT already processing
+      .select('id')
+
+    // If no rows updated, another process is already embedding this mind map
+    if (lockError || !lockResult || lockResult.length === 0) {
+      console.log(`[Embed] Mind map ${mindMapId} is already being processed by another request`)
+      return {
+        success: true,
+        chunks: 0,
+        durationMs: Date.now() - startTime,
+        reason: 'unchanged', // Treat as no-op
+      }
+    }
 
     // Extract text from JSONB tree
     const extraction = extractTextFromBlockSuiteTree(tree)

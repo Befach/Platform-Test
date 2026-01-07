@@ -558,7 +558,7 @@ export const EmbedMindMapRequestSchema = z.object({
 export const MindMapChunkMetadataSchema = z.object({
   mindMapId: z.string().min(1),
   workspaceId: z.string().optional(),
-  teamId: z.string().optional(),
+  teamId: z.string().min(1), // Required for multi-tenant safety
   path: z.array(z.string()),
   nodeType: ExtractedNodeTypeSchema,
   depth: z.number().int().min(0),
