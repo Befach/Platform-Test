@@ -22,6 +22,18 @@ const BUCKET = 'blocksuite-yjs'
 // ============================================================================
 // Rate Limiting (In-memory, resets on cold start - acceptable for MVP)
 // ============================================================================
+//
+// TODO: Replace with persistent rate limiting for production scale
+// Current limitation: In-memory store resets on Vercel serverless cold starts,
+// potentially allowing rate limit bypass under heavy load.
+//
+// Recommended solutions (in order of preference):
+// 1. Upstash Redis - serverless-native, per-request pricing, ~$0.20/100K requests
+// 2. Vercel KV - integrated with Vercel, similar pricing
+// 3. Supabase table - no new service but adds DB load per request
+//
+// Trigger: Implement when daily active users > 100 or abuse detected in audit logs
+// ============================================================================
 
 interface RateLimitEntry {
   count: number
