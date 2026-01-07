@@ -1,6 +1,6 @@
 # **WEEK 7: AI Integration, Feedback & Analytics**
 
-**Last Updated:** 2025-12-29
+**Last Updated:** 2026-01-07
 **Status:** 🟢 Complete (100%) - Type-Aware Phase System + Security Sprint Complete
 
 [← Previous: Week 6](week-6-timeline-execution.md) | [Back to Plan](README.md) | [Next: Week 8 →](week-8-billing-testing.md)
@@ -1461,6 +1461,343 @@ Complete security hardening and UI consistency cleanup following the 4-type to 3
 **Related Documentation**:
 - [ARCHITECTURE_CONSOLIDATION.md](../ARCHITECTURE_CONSOLIDATION.md) - Canonical architecture reference
 - [CLAUDE.md](../../CLAUDE.md) - Phase vs Status clarification section
+
+---
+
+### ✅ BlockSuite Phase 1: Foundation Setup (2026-01-05) - PR #43
+
+**What Changed**:
+Established the foundational TypeScript types, Zod validation schemas, and configuration for BlockSuite integration. This phase laid the groundwork for mind map persistence and migration from ReactFlow.
+
+**Why**:
+- BlockSuite v0.18.7 requires specific type definitions for mind map nodes
+- Zod validation ensures data integrity across all persistence operations
+- Foundation types enable type-safe DAG→Tree conversion in Phase 3
+
+**Implementation**:
+
+1. **Core Types** (`components/blocksuite/types.ts`)
+   - `MindMapTreeNode` - Recursive tree structure for BlockSuite
+   - `EditorMode` - Canvas interaction modes (pan/edit/connect)
+   - `BlockType` - Node types (idea/feature/problem/question/solution)
+   - `YjsSnapshot` - Yjs binary state wrapper with sync version
+   - `BlockSuiteConfig` - Editor configuration interface
+
+2. **BlockSuite-Specific Types** (`components/blocksuite/mindmap-types.ts`)
+   - BlockSuite v0.18.7 enum mappings (MindmapStyle, LayoutType, ConnectorMode)
+   - `MigrationStatus` - DAG→Tree migration tracking
+   - `LostEdge` - Tracking for non-tree edges during migration
+   - `MindMapConversionResult` - Migration output interface
+
+3. **Validation Schemas** (`components/blocksuite/schema.ts`)
+   - Dual pattern: `validate*()` (throws) + `safeValidate*()` (returns result)
+   - `MindMapTreeNodeSchema` - Recursive tree validation
+   - `YjsUpdatePayloadSchema` - Real-time broadcast validation
+   - `DocumentCreateSchema`, `DocumentUpdateSchema` - API input validation
+
+**5-Question Validation**:
+| Q | Status | Notes |
+|---|--------|-------|
+| 1. Data Dependencies | ✅ | mind_maps table exists |
+| 2. Integration Points | ✅ | Prepares for BlockSuite editor |
+| 3. Standalone Value | ✅ | Types enable future phases |
+| 4. Schema Finalized | ✅ | Aligned with BlockSuite v0.18.7 |
+| 5. Can Test | ✅ | Type checking validates schemas |
+
+**Result**: ✅ PROCEED - Foundation complete
+
+**Files Created**:
+- `next-app/src/components/blocksuite/types.ts` - Core TypeScript definitions
+- `next-app/src/components/blocksuite/mindmap-types.ts` - BlockSuite-specific types
+- `next-app/src/components/blocksuite/schema.ts` - Zod validation schemas
+
+**Dependencies Created**:
+- ⏳ [Phase 2] Mind Map Canvas component
+- ⏳ [Phase 3] Migration utilities
+
+---
+
+### ✅ BlockSuite Phase 2: Mind Map Canvas (2026-01-06) - PR #45
+
+**What Changed**:
+Complete BlockSuite editor integration with React wrapper, mind map canvas component, SSR-safe exports, and utility functions. This phase delivers the visual editing capabilities.
+
+**Why**:
+- BlockSuite provides native mind map editing with multiple styles and layouts
+- SSR-safe loading prevents hydration mismatches in Next.js
+- DAG→Tree conversion enables migration from existing ReactFlow data
+
+**Implementation**:
+
+1. **BlockSuite Editor** (`components/blocksuite/blocksuite-editor.tsx`)
+   - React wrapper component with SSR handling
+   - DocCollection initialization with proper cleanup
+   - Editor lifecycle management (mount/unmount)
+   - Error boundary integration
+
+2. **Mind Map Canvas** (`components/blocksuite/mind-map-canvas.tsx`)
+   - 4 mind map styles: Classic, Bubble, Box, Wireframe
+   - 3 layout types: Balance, Right, Left
+   - Toolbar integration for style/layout switching
+   - Mode switching: pan, edit, connect
+   - ReactFlow data adapter for backwards compatibility
+
+3. **Utility Functions** (`components/blocksuite/mindmap-utils.ts`)
+   - `convertDAGToTree()` - ReactFlow graph → BlockSuite tree
+   - `cycleDetection()` - Prevents infinite loops during conversion
+   - `findRootNodes()` - Identifies tree roots from flat graph
+   - `buildTreeFromNode()` - Recursive tree construction
+   - `validateTreeStructure()` - Post-conversion validation
+
+4. **SSR-Safe Exports** (`components/blocksuite/index.tsx`)
+   - Dynamic imports with `ssr: false` for all BlockSuite components
+   - Prevents "window is undefined" errors during SSR
+   - Re-exports types for external consumption
+   - Loading skeleton integration
+
+5. **Loading States** (`components/blocksuite/loading-skeleton.tsx`)
+   - Mode-aware loading UI (mindmap vs document)
+   - Shimmer animation for perceived performance
+   - Accessible loading announcements
+
+**5-Question Validation**:
+| Q | Status | Notes |
+|---|--------|-------|
+| 1. Data Dependencies | ✅ | Phase 1 types available |
+| 2. Integration Points | ✅ | mind_maps table, ReactFlow data |
+| 3. Standalone Value | ✅ | Enables visual mind map editing |
+| 4. Schema Finalized | ✅ | BlockSuite v0.18.7 types |
+| 5. Can Test | ✅ | Visual testing, interaction testing |
+
+**Result**: ✅ PROCEED - Canvas implementation complete
+
+**Files Created**:
+- `next-app/src/components/blocksuite/blocksuite-editor.tsx` (~180 lines)
+- `next-app/src/components/blocksuite/mind-map-canvas.tsx` (~350 lines)
+- `next-app/src/components/blocksuite/mindmap-utils.ts` (~200 lines)
+- `next-app/src/components/blocksuite/index.tsx` - SSR-safe exports
+- `next-app/src/components/blocksuite/loading-skeleton.tsx` (~80 lines)
+
+**Dependencies Satisfied**:
+- ✅ Phase 1 types and schemas
+
+**Dependencies Created**:
+- ⏳ [Phase 3] Migration utilities
+- ⏳ [Phase 4] Persistence layer
+
+---
+
+### ✅ BlockSuite Phase 3: Data Migration (2026-01-06) - PR #48
+
+**What Changed**:
+Migration infrastructure for converting existing ReactFlow mind maps to BlockSuite format. Includes DAG→Tree conversion with lost edge tracking, migration status columns, and database schema updates.
+
+**Why**:
+- Existing mind maps use ReactFlow's flat node/edge structure
+- BlockSuite requires nested tree structure for mind maps
+- Not all DAG edges can become tree edges (multi-parent nodes)
+- Migration status tracking enables feature flags and rollback
+
+**Architecture - DAG to Tree Conversion**:
+```
+ReactFlow DAG:                    BlockSuite Tree:
+┌─────┐                           ┌─────┐
+│  A  │                           │  A  │
+└──┬──┘                           └──┬──┘
+   │                                 │
+┌──┴──┐                           ┌──┴──┐
+│  B  │◄──┐                       │  B  │
+└──┬──┘   │                       └──┬──┘
+   │      │    ═══════════►          │
+┌──┴──┐   │   (lost edge: C→B)    ┌──┴──┐
+│  C  │───┘                       │  C  │
+└─────┘                           └─────┘
+```
+
+**Implementation**:
+
+1. **Migration Utilities** (`components/blocksuite/migration-utils.ts`)
+   - `migrateMindMap()` - Full migration orchestration
+   - `convertReactFlowToTree()` - DAG→Tree conversion
+   - `trackLostEdges()` - Records edges that can't become tree edges
+   - `validateMigration()` - Post-migration integrity checks
+   - `rollbackMigration()` - Migration reversal support
+   - Default `dryRun: true` for safety
+
+2. **Database Migration** (`20260106100000_add_blocksuite_migration_columns.sql`)
+   - `blocksuite_tree JSONB` - Nested tree structure storage
+   - `blocksuite_size_bytes INTEGER` - Size monitoring for TOAST
+   - `migration_status TEXT` - 'pending' | 'migrated' | 'failed'
+   - `migration_error TEXT` - Error details for failed migrations
+   - `lost_edges JSONB` - Non-tree edges for user awareness
+   - Indexes on migration_status for query performance
+
+3. **Migration Status Tracking**:
+   | Status | Description |
+   |--------|-------------|
+   | `pending` | Not yet migrated (default) |
+   | `migrated` | Successfully converted to BlockSuite |
+   | `failed` | Migration attempted but failed |
+
+4. **Lost Edge Handling**:
+   - Detects multi-parent nodes during conversion
+   - Records lost edges with source, target, reason
+   - Displays notification to users about lost connections
+   - Preserves original ReactFlow data for reference
+
+**5-Question Validation**:
+| Q | Status | Notes |
+|---|--------|-------|
+| 1. Data Dependencies | ✅ | mind_maps table, Phase 1-2 complete |
+| 2. Integration Points | ✅ | ReactFlow data, BlockSuite editor |
+| 3. Standalone Value | ✅ | Enables migration of existing data |
+| 4. Schema Finalized | ✅ | Migration columns added |
+| 5. Can Test | ✅ | Unit tests for conversion logic |
+
+**Result**: ✅ PROCEED - Migration infrastructure complete
+
+**Files Created**:
+- `next-app/src/components/blocksuite/migration-utils.ts` (~280 lines)
+- `supabase/migrations/20260106100000_add_blocksuite_migration_columns.sql`
+
+**Files Modified**:
+- `next-app/src/components/blocksuite/mindmap-types.ts` - Added MigrationStatus, LostEdge
+- `next-app/src/components/blocksuite/schema.ts` - Added migration validation schemas
+
+**Dependencies Satisfied**:
+- ✅ Phase 1 Foundation types
+- ✅ Phase 2 Canvas components
+
+**Dependencies Created**:
+- ⏳ [Phase 4] Supabase persistence layer
+- ⏳ [Week 8] Migration E2E tests
+
+---
+
+### ✅ BlockSuite Phase 4: Supabase Persistence (2026-01-07)
+
+**What Changed**:
+Complete implementation of BlockSuite persistence layer with Yjs CRDT for real-time collaborative editing and Supabase-based storage. This phase establishes the hybrid storage architecture for mind map document persistence.
+
+**Why**:
+- Real-time collaboration requires CRDT (Yjs) for conflict-free concurrent editing
+- PostgreSQL unsuitable for Yjs binary state (TOAST kicks in at 2KB, causes 8KB WAL writes per edit)
+- Supabase Storage provides scalable S3-compatible backend without additional services
+- HybridProvider pattern enables immediate broadcasts + debounced persistence
+
+**Architecture**:
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        CLIENT                                    │
+│  BlockSuite Editor ←→ Yjs Doc ←→ HybridProvider                 │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+           ┌──────────────────┼──────────────────┐
+           ▼                  ▼                  ▼
+┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│ Supabase        │  │ Supabase        │  │ Supabase        │
+│ Realtime        │  │ Storage         │  │ PostgreSQL      │
+│ • Broadcasts    │  │ • Yjs binary    │  │ • Metadata      │
+│ • Presence      │  │ • Snapshots     │  │ • Permissions   │
+└─────────────────┘  └─────────────────┘  └─────────────────┘
+```
+
+**Implementation**:
+
+1. **Storage Client** (`components/blocksuite/storage-client.ts`)
+   - Native Supabase Storage API (NO external AWS SDK)
+   - `saveYjsState()`, `loadYjsState()`, `deleteYjsState()`, `existsYjsState()`
+   - Path format: `{team_id}/{doc_id}.yjs`
+
+2. **Hybrid Provider** (`components/blocksuite/hybrid-provider.ts`)
+   - Supabase Realtime broadcasts (immediate for real-time sync)
+   - Supabase Storage persistence (debounced 2000ms)
+   - beforeunload/visibilitychange saves via sendBeacon
+   - Base64 chunking for large Yjs updates (>65KB)
+   - syncVersion atomicity (only increment after metadata success)
+   - Document/team ID validation on construction
+
+3. **React Hooks** (`components/blocksuite/use-blocksuite-sync.ts`)
+   - `useBlockSuiteSync()` - Sync integration with loading/connection status
+   - `useBlockSuiteDocument()` - Document record creation/lookup
+   - Supabase client memoization (prevents effect re-runs)
+   - Unsaved changes polling (1s interval)
+
+4. **API Routes**
+   - `GET/PATCH/DELETE /api/blocksuite/documents/[id]` - Metadata CRUD (120 req/min)
+   - `GET/PUT/POST /api/blocksuite/documents/[id]/state` - Yjs binary state (60 uploads/min)
+   - POST endpoint for sendBeacon compatibility
+
+5. **Database Migrations**
+   - `20260107110000_create_blocksuite_documents.sql` - Metadata table with RLS
+   - `20260107110001_create_blocksuite_storage_bucket.sql` - Storage bucket + policies
+
+**Security Features**:
+| Feature | Implementation |
+|---------|----------------|
+| **Rate Limiting** | In-memory, 60 uploads/min for state, 120 req/min for CRUD |
+| **Path Traversal Protection** | sanitizeId(), isValidId(), RLS regex `'^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+\.yjs$'` |
+| **Document ID Validation** | Regex validation at API and provider level |
+| **Input Validation** | Zod schemas for document updates |
+| **Team Isolation** | RLS policies + explicit team_id filtering in queries |
+| **Audit Logging** | JSON logs for rate limits, large uploads, orphaned files |
+| **Size Limits** | 10MB max state upload, monitoring for >100KB uploads |
+
+**Bug Fixes Applied** (from Greptile code review):
+- ✅ Metadata update verification: Added `.select('id')` to verify rows actually updated
+- ✅ Supabase client memoization: Wrapped `createClient()` in `useMemo()` to prevent effect re-runs
+- ✅ syncVersion atomicity: Only increment after metadata update succeeds
+- ✅ Base64 chunking: Process in 32KB chunks for large Yjs updates (avoid 65K argument limit)
+- ✅ Orphan file logging: Audit log when cleanup fails after metadata error
+- ✅ Migration COMMENT fix: Removed COMMENT on storage.objects (not permitted)
+
+**5-Question Validation**:
+| Q | Status | Notes |
+|---|--------|-------|
+| 1. Data Dependencies | ✅ | Yjs installed, Supabase Storage available |
+| 2. Integration Points | ✅ | BlockSuite editor, Supabase Realtime |
+| 3. Standalone Value | ✅ | Enables real-time collaborative mind mapping |
+| 4. Schema Finalized | ✅ | Migrations applied, types generated |
+| 5. Can Test | ✅ | Multi-tab sync, persistence across refreshes |
+
+**Result**: ✅ PROCEED - Full implementation complete
+
+**Progress**: Knowledge Base: 90% → 95%
+
+**Dependencies Satisfied**:
+- ✅ Yjs package (`yjs@^13.6.28`)
+- ✅ Supabase Storage bucket
+- ✅ Supabase Realtime infrastructure
+
+**Dependencies Created**:
+- ⏳ [Phase 5] RAG integration for mind map content
+- ⏳ [Phase 5] Presence indicators (cursor positions, avatars)
+- ⏳ [Week 8] E2E testing for collaborative editing
+
+**Files Created**:
+- `next-app/src/components/blocksuite/storage-client.ts` (~150 lines)
+- `next-app/src/components/blocksuite/hybrid-provider.ts` (~420 lines)
+- `next-app/src/components/blocksuite/persistence-types.ts` (~120 lines)
+- `next-app/src/components/blocksuite/use-blocksuite-sync.ts` (~260 lines)
+- `next-app/src/components/blocksuite/schema.ts` - Zod validation schemas
+- `next-app/src/app/api/blocksuite/documents/[id]/route.ts` (~370 lines)
+- `next-app/src/app/api/blocksuite/documents/[id]/state/route.ts` (~380 lines)
+- `supabase/migrations/20260107110000_create_blocksuite_documents.sql`
+- `supabase/migrations/20260107110001_create_blocksuite_storage_bucket.sql`
+
+**Files Modified**:
+- `next-app/src/components/blocksuite/index.tsx` - Added persistence exports
+
+**Technical Notes**:
+- Storage path: `blocksuite-yjs/{team_id}/{doc_id}.yjs`
+- Default debounce: 2000ms for storage saves
+- Realtime channel: `blocksuite-{documentId}`
+- Binary encoding: Base64 for Realtime broadcasts
+- Rate limit window: 60 seconds, resets on cold start (MVP acceptable)
+
+**Related Documentation**:
+- Plan: `C:\Users\harsh\.claude\plans\squishy-jumping-swing.md`
+- [ARCHITECTURE_CONSOLIDATION.md](../ARCHITECTURE_CONSOLIDATION.md) - Platform architecture
 
 ---
 

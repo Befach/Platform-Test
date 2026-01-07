@@ -1,6 +1,6 @@
 # 📜 CHANGELOG
 
-**Last Updated**: 2025-12-29
+**Last Updated**: 2026-01-07
 **Project**: Product Lifecycle Management Platform
 **Format**: Based on [Keep a Changelog](https://keepachangelog.com/)
 
@@ -10,7 +10,107 @@ All notable changes, migrations, and feature implementations are documented in t
 
 ## [Unreleased]
 
+### Added
+
+#### BlockSuite Phase 1: Foundation Setup (2026-01-05) - PR #43
+Core TypeScript types and Zod validation schemas for BlockSuite integration.
+
+**Files Created**:
+- `components/blocksuite/types.ts` - Core types (MindMapTreeNode, EditorMode, BlockType, YjsSnapshot)
+- `components/blocksuite/mindmap-types.ts` - BlockSuite v0.18.7 types (MindmapStyle, LayoutType, MigrationStatus)
+- `components/blocksuite/schema.ts` - Zod schemas with dual pattern (validate*/safeValidate*)
+
+**Technical Details**:
+- Aligned with BlockSuite v0.18.7 API
+- Recursive tree validation with MindMapTreeNodeSchema
+- Type-safe DAG→Tree conversion types
+
+#### BlockSuite Phase 2: Mind Map Canvas (2026-01-06) - PR #45
+Complete BlockSuite editor integration with React wrapper and mind map canvas.
+
+**Files Created**:
+- `components/blocksuite/blocksuite-editor.tsx` - React wrapper with DocCollection
+- `components/blocksuite/mind-map-canvas.tsx` - 4 styles, 3 layouts, mode switching
+- `components/blocksuite/mindmap-utils.ts` - DAG→Tree conversion utilities
+- `components/blocksuite/index.tsx` - SSR-safe exports (dynamic imports, ssr: false)
+- `components/blocksuite/loading-skeleton.tsx` - Mode-aware loading UI
+
+**Features**:
+- 4 mind map styles: Classic, Bubble, Box, Wireframe
+- 3 layout types: Balance, Right, Left
+- SSR-safe loading (prevents "window is undefined" errors)
+- ReactFlow data adapter for backwards compatibility
+
 ### Database
+
+#### BlockSuite Phase 3: Data Migration (2026-01-06) - PR #48
+Database schema additions for BlockSuite migration tracking.
+
+**Migration**: `20260106100000_add_blocksuite_migration_columns.sql`
+- Adds `blocksuite_tree JSONB` - Nested tree structure storage
+- Adds `blocksuite_size_bytes INTEGER` - Size monitoring for TOAST awareness
+- Adds `migration_status TEXT` - 'pending' | 'migrated' | 'failed'
+- Adds `migration_error TEXT` - Error details for failed migrations
+- Adds `lost_edges JSONB` - Non-tree edges tracking for user awareness
+- Creates index on `migration_status` for query performance
+
+**Migration Utilities** (`components/blocksuite/migration-utils.ts`):
+- `migrateMindMap()` - Full migration orchestration
+- `convertReactFlowToTree()` - DAG→Tree conversion with cycle detection
+- `trackLostEdges()` - Records edges that can't become tree edges
+- Default `dryRun: true` for safety
+
+**Why Lost Edge Tracking**:
+- ReactFlow uses DAG (directed acyclic graph) - nodes can have multiple parents
+- BlockSuite uses tree structure - nodes can only have one parent
+- Lost edges are tracked and displayed to users for awareness
+
+#### BlockSuite Phase 4: Supabase Persistence (2026-01-07)
+Complete persistence layer for BlockSuite documents using Yjs CRDT and Supabase Storage.
+
+**Migration 1**: `20260107110000_create_blocksuite_documents.sql`
+- Creates `blocksuite_documents` table for document metadata (NOT Yjs state)
+- Fields: id, team_id, workspace_id, mind_map_id, storage_path, storage_size_bytes, document_type, title, last_sync_at, sync_version, active_editors
+- RLS policy: `blocksuite_documents_team_access` - team members only
+- Indexes: team_id, workspace_id, mind_map_id, storage_size_bytes (>100KB monitoring)
+
+**Migration 2**: `20260107110001_create_blocksuite_storage_bucket.sql`
+- Creates `blocksuite-yjs` private storage bucket
+- RLS policy with path traversal protection:
+  - Rejects `..` sequences and encoded variants
+  - Regex validation: `'^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+\.yjs$'`
+  - Team isolation via `storage.foldername(name)[1]` check
+
+**Storage Path Format**: `{team_id}/{doc_id}.yjs`
+
+**Why Supabase Storage (not PostgreSQL)**:
+- PostgreSQL TOAST kicks in at 2KB, causes 8KB WAL writes per edit
+- Unsuitable for real-time collaborative editing workloads
+- Supabase Storage uses S3-compatible backend (no TOAST issues)
+
+### API
+
+#### BlockSuite Document API Routes (2026-01-07)
+New API routes for BlockSuite document persistence.
+
+**Metadata CRUD** (`/api/blocksuite/documents/[id]`):
+- `GET` - Load document metadata
+- `PATCH` - Update document metadata (title, document_type)
+- `DELETE` - Delete document (metadata + storage object)
+- Rate limit: 120 req/min/user
+
+**Yjs State** (`/api/blocksuite/documents/[id]/state`):
+- `GET` - Load Yjs binary state from Supabase Storage
+- `PUT` - Save Yjs binary state to Supabase Storage
+- `POST` - Alternative for sendBeacon (page unload saves)
+- Rate limit: 60 uploads/min/user
+- Size limit: 10MB max
+
+**Security Features**:
+- Document ID validation (alphanumeric + hyphens/underscores only)
+- Team membership verification via explicit query
+- Audit logging for rate limits, large uploads (>100KB), orphaned files
+- Rollback on metadata update failure (prevents orphaned storage files)
 
 #### Architecture Enforcement: Phase-Only Status for Work Items (2025-12-29)
 Restored architecture enforcement migration to ensure work_items table has no separate `status` column.
