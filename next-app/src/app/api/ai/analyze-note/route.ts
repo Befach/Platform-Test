@@ -15,7 +15,7 @@ import { aiModels, getModelFromConfig } from '@/lib/ai/ai-sdk-client'
 import { SuggestedWorkItemSchema, type SuggestedWorkItem } from '@/lib/ai/schemas'
 import { getModelByKey } from '@/lib/ai/models'
 
-export const maxDuration = 30 // Allow up to 30s for AI responses
+export const maxDuration = 300 // Match vercel.json for AI routes
 
 interface AnalyzeNoteRequest {
   noteContent: string

@@ -43,7 +43,7 @@ import '@/lib/ai/tools/analysis-tools'
 import '@/lib/ai/tools/optimization-tools'
 import '@/lib/ai/tools/strategy-tools'
 
-export const maxDuration = 60 // Allow up to 60 seconds for tool execution
+export const maxDuration = 300 // Match vercel.json for AI routes
 
 export async function POST(request: Request) {
   try {

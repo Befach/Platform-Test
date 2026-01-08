@@ -53,7 +53,7 @@ const ApproveRequestSchema = z.union([
   }),
 ])
 
-export const maxDuration = 120 // Batch approvals may take longer
+export const maxDuration = 300 // Match vercel.json for AI routes
 
 export async function POST(request: Request) {
   try {

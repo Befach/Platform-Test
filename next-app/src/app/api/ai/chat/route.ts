@@ -18,7 +18,7 @@ import { callOpenRouter, streamOpenRouter, type ChatMessage } from '@/lib/ai/ope
 import { ParallelAI, type ParallelChatMessage } from '@/lib/ai/parallel-ai'
 import { getModelByKey } from '@/lib/ai/models'
 
-export const maxDuration = 60 // Allow up to 60s for AI responses
+export const maxDuration = 300 // Match vercel.json for AI routes
 
 interface ChatRequest {
   messages: ChatMessage[]

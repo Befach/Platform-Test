@@ -22,6 +22,8 @@ import { streamText, convertToModelMessages, type UIMessage } from 'ai'
 import { createClient } from '@/lib/supabase/server'
 import { parallelAITools, parallelAIQuickTools } from '@/lib/ai/tools/parallel-ai-tools'
 import { chatAgenticTools } from '@/lib/ai/tools/chat-agentic-tools'
+import { optimizationTools } from '@/lib/ai/tools/optimization-tools'
+import { strategyTools } from '@/lib/ai/tools/strategy-tools'
 import { toolRegistry } from '@/lib/ai/tools/tool-registry'
 import { routeRequest, formatRoutingLog, type SessionState } from '@/lib/ai/session-router'
 import { getDefaultModel, isDevMode } from '@/lib/ai/models-config'
@@ -197,7 +199,7 @@ Use the workspace ID "${workspaceContext.workspaceId}" and team ID "${workspaceC
 }
 
 /**
- * Combine Parallel AI tools with Chat Agentic tools
+ * Combine Parallel AI tools with Chat Agentic tools + Optimization + Strategy
  */
 function getUnifiedTools(quickMode: boolean = false) {
   const researchTools = quickMode ? parallelAIQuickTools : parallelAITools
@@ -205,6 +207,8 @@ function getUnifiedTools(quickMode: boolean = false) {
   return {
     ...researchTools,
     ...chatAgenticTools,
+    ...optimizationTools,
+    ...strategyTools,
   }
 }
 
@@ -576,8 +580,10 @@ export async function POST(request: Request) {
           console.log(`[Unified Chat] Usage: ${usage.inputTokens} in, ${usage.outputTokens} out, ${duration}ms`)
 
           // Log slow requests for monitoring (>60s threshold)
+          // Use routingDecision.model.modelId (not analysisResult) because the router
+          // may switch models due to context overflow or capability requirements
           logSlowRequest(
-            analysisResult.selectedModel.modelId,
+            routingDecision.model.modelId,
             duration,
             { promptTokens: usage.inputTokens, completionTokens: usage.outputTokens },
             workspaceContext?.workspaceId || 'unknown'
