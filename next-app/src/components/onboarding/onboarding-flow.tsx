@@ -98,6 +98,7 @@ export function OnboardingFlow({ user }: OnboardingFlowProps) {
         name: workspaceName,
         description: workspaceDescription || null,
         mode: 'development', // Default workspace mode
+        mode_changed_at: new Date().toISOString(), // Match create-workspace-dialog behavior
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })

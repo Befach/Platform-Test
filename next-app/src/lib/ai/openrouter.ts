@@ -565,7 +565,8 @@ export async function callWithRetry<T>(
  * Example: "abc123xyz" -> "abc1...(9)"
  */
 export function redactId(id: string): string {
-  if (!id || id.length <= 4) return '***'
+  if (!id) return '***'
+  if (id.length <= 4) return id // Show short IDs fully
   return `${id.substring(0, 4)}...(${id.length})`
 }
 

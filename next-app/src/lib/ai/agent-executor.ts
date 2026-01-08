@@ -66,6 +66,8 @@ function getToolExecutor(tool: AgenticTool, toolName: string): ExecutableTool['e
   // Runtime check for execute function (exists on AI SDK tools)
   const toolWithExecute = tool as unknown as ExecutableTool
   if (typeof toolWithExecute.execute !== 'function') {
+    // This should never happen if tools are properly registered
+    console.error(`[AgentExecutor] Tool ${toolName} missing execute function - this indicates a registration bug`)
     throw new Error(`Tool ${toolName} does not have an execute function`)
   }
   return toolWithExecute.execute.bind(toolWithExecute)
