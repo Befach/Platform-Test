@@ -271,7 +271,7 @@ export const MODEL_REGISTRY: ModelConfig[] = [
     supportsTools: true,
     supportsReasoning: true,
     isSlowModel: false,
-    priority: { vision: 99, tools: 2, reasoning: 1, default: 2 }, // Best for reasoning, tied 2nd for tools with Kimi K2 (Claude Haiku is #1)
+    priority: { vision: 99, tools: 2, reasoning: 1, default: 2 }, // Best for reasoning (priority 1), tools priority 2 (tied with Kimi K2, after Claude Haiku's priority 1)
     role: "chat",
   },
 
@@ -525,8 +525,10 @@ export function getBestModelForCapability(
   capability: keyof RoutingPriority,
 ): ModelConfig {
   const chatModels = getChatModels();
-  return chatModels.reduce((best, current) =>
-    current.priority[capability] < best.priority[capability] ? current : best,
+  return chatModels.reduce(
+    (best, current) =>
+      current.priority[capability] < best.priority[capability] ? current : best,
+    chatModels[0],
   );
 }
 

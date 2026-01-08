@@ -637,7 +637,7 @@ export class AgentExecutor {
             purpose: params.purpose as string | null,
             priority: params.priority as string | null,
             tags: params.tags as string[] | null,
-            phase: (params.phase as string) || getDefaultPhaseForType(params.type as WorkItemType),
+            phase: (params.phase as string) || getDefaultPhaseForType((params.type as WorkItemType) || 'feature'),
             created_by: context.userId,
           })
           .select()
