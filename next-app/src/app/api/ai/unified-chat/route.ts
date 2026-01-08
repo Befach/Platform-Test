@@ -43,41 +43,6 @@ import {
 import { buildContext, buildSystemPrompt as buildContextSystemPrompt } from '@/lib/ai/context-builder'
 import { createTaskPlan } from '@/lib/ai/task-planner'
 import { logSlowRequest } from '@/lib/ai/openrouter'
-import fs from 'fs/promises'
-
-const DEBUG_ENDPOINT = 'http://127.0.0.1:7242/ingest/ebdf2fd5-9696-479e-b2f1-d72537069b93'
-const DEBUG_LOG_PATH = 'c:\\Users\\harsh\\Downloads\\Platform Test\\.cursor\\debug.log'
-
-async function sendDebug(payload: {
-  sessionId?: string
-  runId?: string
-  hypothesisId?: string
-  location: string
-  message: string
-  data?: Record<string, unknown>
-  timestamp?: number
-}) {
-  const body = {
-    sessionId: 'debug-session',
-    runId: 'pre-fix2',
-    timestamp: Date.now(),
-    ...payload,
-  }
-
-  try {
-    await fetch(DEBUG_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-  } catch (_err) {
-    try {
-      await fs.appendFile(DEBUG_LOG_PATH, `${JSON.stringify(body)}\n`)
-    } catch {
-      // swallow secondary errors
-    }
-  }
-}
 
 // Import tool files to trigger registration (side-effects)
 import '@/lib/ai/tools/creation-tools'
@@ -240,19 +205,6 @@ function getUnifiedTools(quickMode: boolean = false) {
  */
 export async function POST(request: Request) {
   try {
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H14',
-      location: 'api/ai/unified-chat:entry',
-      message: 'Unified chat POST entry',
-      data: {
-        hasCookieHeader: request.headers.has('cookie'),
-        hasTeamHeader: request.headers.has('x-team-id'),
-        hasWorkspaceHeader: request.headers.has('x-workspace-id'),
-      },
-    })
-    // #endregion
-
     const supabase = await createClient()
 
     // Check authentication
@@ -260,15 +212,6 @@ export async function POST(request: Request) {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser()
-
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H14',
-      location: 'api/ai/unified-chat:auth',
-      message: 'Auth check result',
-      data: { hasUser: !!user, hasAuthError: !!authError, userId: user?.id },
-    })
-    // #endregion
 
     if (authError || !user) {
       return new Response('Unauthorized', { status: 401 })
@@ -281,7 +224,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const {
       messages,
-      model: modelInput,
+      model: _modelInput, // Accepted in API but routing uses analysisResult.selectedModel
       mode = 'chat',
       quickMode = false,
       systemPrompt: customSystemPrompt,
@@ -320,24 +263,6 @@ export async function POST(request: Request) {
       ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
       .map(p => p.text)
       .join('\n') || ''
-
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H15',
-      location: 'api/ai/unified-chat:request-body',
-      message: 'Parsed chat request',
-      data: {
-        messagesCount: messages?.length ?? 0,
-        modelInput,
-        mode,
-        quickMode,
-        fileCount: files.length,
-        workspaceId: workspaceContext?.workspaceId,
-        teamId: workspaceContext?.teamId,
-        isDevMode: userIsDevMode,
-      },
-    })
-    // #endregion
 
     // Debug: Log received messages
     console.log('[Unified Chat] Received messages:', messages.length, 'files:', files.length)
@@ -522,23 +447,6 @@ export async function POST(request: Request) {
     // Log routing decision
     console.log(formatRoutingLog(routingDecision))
 
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H15',
-      location: 'api/ai/unified-chat:routing',
-      message: 'Routing decision',
-      data: {
-        analyzedModel: analysisResult.selectedModel.key,
-        routingReason: analysisResult.routingReason,
-        model: analysisResult.selectedModel.modelId, // Use modelId from our analysis
-        compactedMessages: routingDecision.messages.length,
-        hasImages: analysisResult.hasImages,
-        needsTools: analysisResult.needsTools,
-        needsDeepReasoning: analysisResult.needsDeepReasoning,
-      },
-    })
-    // #endregion
-
     // ─────────────────────────────────────────────────────────────────────────
     // SYSTEM PROMPT CONSTRUCTION
     // ─────────────────────────────────────────────────────────────────────────
@@ -634,15 +542,6 @@ export async function POST(request: Request) {
 
     return response
   } catch (error) {
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H15',
-      location: 'api/ai/unified-chat:error',
-      message: 'Unified chat exception',
-      data: { error: error instanceof Error ? error.message : 'unknown' },
-    })
-    // #endregion
-
     console.error('[Unified Chat] Error:', error)
     return new Response(
       JSON.stringify({
