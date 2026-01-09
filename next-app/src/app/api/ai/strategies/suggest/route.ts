@@ -21,7 +21,7 @@ import {
   type AlignmentSuggestionAI,
 } from '@/lib/ai/schemas'
 
-export const maxDuration = 60 // Allow up to 60s for complex analysis
+export const maxDuration = 300 // Match vercel.json for AI routes
 
 /**
  * System prompt for alignment analysis

@@ -1,6 +1,6 @@
 # 📜 CHANGELOG
 
-**Last Updated**: 2026-01-07
+**Last Updated**: 2026-01-08
 **Project**: Product Lifecycle Management Platform
 **Format**: Based on [Keep a Changelog](https://keepachangelog.com/)
 
@@ -87,6 +87,97 @@ Complete persistence layer for BlockSuite documents using Yjs CRDT and Supabase 
 - PostgreSQL TOAST kicks in at 2KB, causes 8KB WAL writes per edit
 - Unsuitable for real-time collaborative editing workloads
 - Supabase Storage uses S3-compatible backend (no TOAST issues)
+
+#### BlockSuite Phase 5: RAG Layer Integration (2026-01-07) - PR #51
+Complete RAG layer enabling semantic search across mind map content.
+
+**Migration**: `20260107150000_add_mindmap_embedding_columns.sql`
+- Adds `embedding_status` - 'pending' | 'processing' | 'ready' | 'error' | 'skipped'
+- Adds `embedding_error`, `last_embedded_at`, `embedding_version`, `chunk_count`
+- Adds `last_embedded_hash TEXT` - SHA-256 for change detection
+- Adds `source_type` column to document_chunks ('document' | 'blocksuite_mindmap' | 'url' | 'upload')
+- Adds `mind_map_id TEXT` foreign key to document_chunks
+- Creates performance indexes
+
+**Core Service** (`lib/ai/embeddings/mindmap-embedding-service.ts`):
+- `embedMindMap()` - Shared service for API routes and background jobs
+- OpenAI `text-embedding-3-large` @ 1536 dimensions
+- Batched API calls (50 chunks max per request)
+- Exponential backoff retry (3 attempts: 1s, 2s, 4s)
+- SHA-256 hash change detection
+- Optimistic locking for concurrent protection
+
+**Text Extraction & Chunking** (`components/blocksuite/`):
+- `text-extractor.ts` - Recursive tree walking with path context
+- `mindmap-chunker.ts` - Path-preserving 300-token subtree chunks
+- `rag-types.ts` - TypeScript interfaces
+
+**API Routes**:
+- `POST /api/mind-maps/[id]/embed` - Generate embeddings
+- `GET /api/mind-maps/[id]/embed` - Check embedding status
+- Background job integration via compression route
+
+#### Phase 6: AI Integration - Model Routing & Tool Wiring (2026-01-08)
+Multi-model orchestration, capability-based routing, and production-ready streaming reliability.
+
+**Files Created**:
+- `lib/ai/fallback-chain.ts` - Capability-based model fallback chains
+- `components/ai/rag-context-badge.tsx` - RAG source count indicator
+- `components/ai/source-citations.tsx` - Clickable source citations component
+
+**Files Modified**:
+- `lib/ai/models-config.ts` - Added 3 new models + MODEL_ROUTING config
+- `lib/ai/ai-sdk-client.ts` - Added model exports, updated recommendedModels
+- `lib/ai/agent-executor.ts` - Wired 10 missing optimization/strategy tools
+- `lib/ai/openrouter.ts` - Added reliability utilities (timeout, retry, monitoring)
+- `vercel.json` - Added 300s timeout for AI routes
+
+**New Models** (AI Architecture Phase 2):
+- GLM 4.7 (`z-ai/glm-4.7`) - Best strategic reasoning + agentic, top HLE/GPQA scores
+- MiniMax M2.1 (`minimax/minimax-m2.1`) - Best coding benchmarks
+- Gemini 3 Flash (`google/gemini-3-flash-preview`) - Upgraded vision, 1M context
+
+**MODEL_ROUTING Config**:
+- `strategic_reasoning`: GLM 4.7 -> DeepSeek V3.2 -> Gemini 3 Flash
+- `agentic_tool_use`: GLM 4.7 -> Gemini 3 Flash -> MiniMax M2.1
+- `coding`: MiniMax M2.1 -> GLM 4.7 -> Kimi K2
+- `visual_reasoning`: Gemini 3 Flash -> Grok 4 Fast -> Gemini 2.5 Flash
+- `large_context`: Grok 4 Fast -> Gemini 3 Flash -> Kimi K2
+- `default`: Kimi K2 -> GLM 4.7 -> MiniMax M2.1
+
+**Tools Wired** (AI Architecture Phase 1):
+- Optimization: `prioritizeFeatures`, `balanceWorkload`, `identifyRisks`, `suggestTimeline`, `deduplicateItems`
+- Strategy: `alignToStrategy`, `suggestOKRs`, `competitiveAnalysis`, `roadmapGenerator`, `impactAssessment`
+
+**5-Layer Streaming Reliability Stack**:
+- Layer 1: Vercel Fluid Compute (dashboard setting)
+- Layer 2: vercel.json 300s timeout for `app/api/ai/**/*.ts`
+- Layer 3: `streamWithTimeout()` - 280s AbortController
+- Layer 4: `callWithRetry()` - Exponential backoff for 429 errors
+- Layer 5: `logSlowRequest()` - Monitoring for requests >60s
+
+**Code Quality Fixes** (Greptile Review):
+- Single-quote consistency in `agent-executor.ts` imports
+- Exported `redactId()` from `openrouter.ts` for reuse
+- Fixed GLM 4.7 priority comment accuracy (tools priority 2, not 1)
+- Added `workspaceId` to sdk-chat request type
+- Type-safe `ExecutableTool` interface in `agent-loop.ts` (replaces `as any`)
+- Added clarifying comment for MODEL_ROUTING vs priority distinction
+
+**Security Fix**:
+- Removed hardcoded debug code from `unified-chat/route.ts`:
+  - `DEBUG_ENDPOINT` (localhost:7242)
+  - `DEBUG_LOG_PATH` (Windows path)
+  - `sendDebug()` function with hardcoded session IDs
+  - All 5 `sendDebug()` calls throughout the route
+
+**Commits**:
+- `e9c550f` - feat: integrate reliability utilities and fallback chain
+- `5842f51` - fix: resolve modelId correctly for logging in sdk-chat
+- `f904c7d` - feat: add optimization/strategy tools to unified-chat
+- `64731b5` - fix: Greptile review round 2
+- `27fbfb7` - fix: type-safe tool execution, MODEL_ROUTING comments
+- `db84d78` - fix: remove hardcoded debug code from unified-chat
 
 ### API
 

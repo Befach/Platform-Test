@@ -18,8 +18,10 @@ import { createClient } from '@/lib/supabase/server'
 import { openrouter, aiModels, getModelFromConfig } from '@/lib/ai/ai-sdk-client'
 import { parallelAITools, parallelAIQuickTools } from '@/lib/ai/tools/parallel-ai-tools'
 import { getModelByKey } from '@/lib/ai/models'
+import { logSlowRequest } from '@/lib/ai/openrouter'
 
-export const maxDuration = 60 // Allow up to 60s for AI responses
+// Match vercel.json functions config for app/api/ai/**/*.ts
+export const maxDuration = 300
 
 /**
  * System prompt for the AI assistant
@@ -82,6 +84,7 @@ export async function POST(request: Request) {
       quickMode?: boolean
       systemPrompt?: string
       workspaceContext?: {
+        workspaceId?: string
         workspaceName?: string
         workspacePhase?: string
         currentWorkItems?: Array<{ name: string; status: string }>
@@ -94,15 +97,18 @@ export async function POST(request: Request) {
 
     // Determine which model to use
     let aiModel: LanguageModel = aiModels.claudeHaiku // Default
+    let resolvedModelId = 'anthropic/claude-haiku-4.5:nitro' // Default model ID for logging
 
     if (modelInput) {
       // Check if it's a model key from our config (e.g., 'claude-haiku-45')
       const configModel = getModelByKey(modelInput)
       if (configModel) {
         aiModel = getModelFromConfig(configModel.id)
+        resolvedModelId = configModel.id // Use the actual OpenRouter model ID
       } else {
         // Assume it's a direct OpenRouter model ID
         aiModel = openrouter(modelInput)
+        resolvedModelId = modelInput // Already a model ID
       }
     }
 
@@ -138,12 +144,28 @@ export async function POST(request: Request) {
         : parallelAITools
       : undefined
 
+    // Track request duration for slow request monitoring
+    const streamStartTime = Date.now()
+
     // Stream the response using AI SDK
     const result = streamText({
       model: aiModel,
       system: fullSystemPrompt,
       messages: convertToCoreMessages(messages),
       tools,
+      onFinish({ usage }) {
+        const duration = Date.now() - streamStartTime
+        if (usage) {
+          console.log(`[AI SDK Chat] Usage: ${usage.inputTokens} in, ${usage.outputTokens} out, ${duration}ms`)
+          // Log slow requests for monitoring (>60s threshold)
+          logSlowRequest(
+            resolvedModelId,
+            duration,
+            { promptTokens: usage.inputTokens, completionTokens: usage.outputTokens },
+            workspaceContext?.workspaceId || 'sdk-chat-route'
+          )
+        }
+      },
       // Optional: Handle tool execution errors gracefully
       onStepFinish({ toolCalls }) {
         // Log tool usage for debugging (can be removed in production)

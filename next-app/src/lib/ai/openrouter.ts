@@ -479,3 +479,126 @@ Only include dependencies with confidence >= 0.6. Be conservative - it's better 
   // Filter by confidence threshold
   return result.object.dependencies.filter((dep) => dep.confidence >= 0.6)
 }
+
+// =============================================================================
+// RELIABILITY UTILITIES (5-Layer Stack)
+// =============================================================================
+
+/**
+ * Request-level timeout wrapper (280s < 300s Vercel limit)
+ * Layer 3 of reliability stack - prevents hanging requests
+ *
+ * Uses 280s timeout to leave 20s buffer before Vercel's 300s hard limit.
+ * This ensures we can return a graceful response even on timeout.
+ *
+ * @example
+ * ```typescript
+ * const result = await streamWithTimeout(
+ *   (signal) => streamText({ model, prompt, abortSignal: signal }),
+ *   280_000
+ * )
+ * ```
+ */
+export async function streamWithTimeout<T>(
+  streamFn: (signal: AbortSignal) => Promise<T>,
+  timeoutMs: number = 280_000
+): Promise<T> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
+
+  try {
+    return await streamFn(controller.signal)
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error(`Request timed out after ${timeoutMs}ms`)
+    }
+    throw error
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
+/**
+ * Retry logic with exponential backoff for rate limits (429 errors)
+ *
+ * Default: 3 retries with 1s, 2s, 4s delays
+ * Only retries on rate limit (429) errors, not other failures.
+ *
+ * @example
+ * ```typescript
+ * const result = await callWithRetry(() => generateText({ model, prompt }))
+ * ```
+ */
+export async function callWithRetry<T>(
+  fn: () => Promise<T>,
+  options: { maxRetries?: number; baseDelay?: number } = {}
+): Promise<T> {
+  const { maxRetries = 3, baseDelay = 1000 } = options
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await fn()
+    } catch (error: unknown) {
+      // Check multiple error formats for rate limiting
+      const isRateLimit =
+        (error as { status?: number }).status === 429 ||
+        (error instanceof Error && error.message?.includes('rate limit')) ||
+        (error instanceof Error && error.message?.includes('429'))
+
+      if (isRateLimit && attempt < maxRetries - 1) {
+        const delay = baseDelay * Math.pow(2, attempt)
+        console.warn(
+          `[AI_RATE_LIMIT] Attempt ${attempt + 1}/${maxRetries} - Retrying in ${delay}ms...`
+        )
+        await new Promise((r) => setTimeout(r, delay))
+        continue
+      }
+      throw error
+    }
+  }
+  throw new Error('Max retries exceeded')
+}
+
+/**
+ * Redact sensitive ID for logging (shows first 4 chars + length)
+ * Prevents full workspace IDs from appearing in logs
+ * Example: "abc123xyz" -> "abc1...(9)"
+ */
+export function redactId(id: string): string {
+  if (!id) return '***'
+  if (id.length <= 4) return id // Show short IDs fully
+  return `${id.substring(0, 4)}...(${id.length})`
+}
+
+/**
+ * Monitoring for slow requests (Layer 6 - Observability)
+ * Logs warning for requests taking longer than 60 seconds.
+ * Workspace ID is redacted for security (only first 4 chars shown).
+ *
+ * @example
+ * ```typescript
+ * const startTime = Date.now()
+ * const result = await streamText({ model, prompt })
+ * logSlowRequest('z-ai/glm-4.7', Date.now() - startTime, result.usage, workspaceId)
+ * ```
+ */
+export function logSlowRequest(
+  modelId: string,
+  duration: number,
+  usage: { promptTokens?: number; completionTokens?: number } | null,
+  workspaceId: string
+): void {
+  if (duration > 60_000) {
+    console.warn(
+      '[AI_SLOW_REQUEST] %s took %dms',
+      modelId,
+      duration,
+      {
+        model: modelId,
+        tokens: usage,
+        workspaceId: redactId(workspaceId), // Redacted for security
+        durationMs: duration,
+      }
+    )
+  }
+}

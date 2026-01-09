@@ -25,10 +25,9 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { toolRegistry, type AgenticTool } from './tools/tool-registry'
-import type {
-  ActionStatus,
-  ActionPreview,
-} from './schemas/agentic-schemas'
+import type { ActionStatus, ActionPreview } from './schemas/agentic-schemas'
+import { getDefaultPhaseForType } from '@/lib/constants/workspace-phases'
+import type { WorkItemType } from '@/lib/constants/workspace-phases'
 
 // ============================================================================
 // IMPORTANT: Import all tool files to trigger registration with toolRegistry
@@ -46,69 +45,103 @@ import './tools/strategy-tools'
 // =============================================================================
 
 /**
+ * Interface for tools that have an execute function
+ * Used for type-safe tool execution without `as any` casts
+ */
+interface ExecutableTool {
+  execute: (
+    params: Record<string, unknown>,
+    context: { toolCallId: string; abortSignal: AbortSignal }
+  ) => Promise<unknown>
+}
+
+/**
+ * Safely execute a tool with runtime validation
+ * Returns the execute function if available, throws if not
+ *
+ * This provides type-safe access to the execute function that exists
+ * on AI SDK tools at runtime but isn't part of the AgenticTool type.
+ */
+function getToolExecutor(tool: AgenticTool, toolName: string): ExecutableTool['execute'] {
+  // Runtime check for execute function (exists on AI SDK tools)
+  const toolWithExecute = tool as unknown as ExecutableTool
+  if (typeof toolWithExecute.execute !== 'function') {
+    // This should never happen if tools are properly registered
+    console.error(`[AgentExecutor] Tool ${toolName} missing execute function - this indicates a registration bug`)
+    throw new Error(`Tool ${toolName} does not have an execute function`)
+  }
+  return toolWithExecute.execute.bind(toolWithExecute)
+}
+
+/**
  * Context for tool execution
  */
 export interface ExecutionContext {
-  teamId: string
-  workspaceId: string
-  userId: string
-  sessionId: string
-  actionId?: string
+  teamId: string;
+  workspaceId: string;
+  userId: string;
+  sessionId: string;
+  actionId?: string;
 }
 
 /**
  * Preview result from a tool
  */
 export interface PreviewResult {
-  toolName: string
-  displayName: string
-  category: string
-  requiresApproval: boolean
-  isReversible: boolean
+  toolName: string;
+  displayName: string;
+  category: string;
+  requiresApproval: boolean;
+  isReversible: boolean;
   preview: {
-    requiresApproval: boolean
-    preview: ActionPreview
-    toolCallId: string
-  }
+    requiresApproval: boolean;
+    preview: ActionPreview;
+    toolCallId: string;
+  };
 }
 
 /**
  * Result of executing or approving an action
  */
 export interface AgentExecutionResult {
-  success: boolean
-  actionId: string
-  status: ActionStatus
-  result?: unknown
-  error?: string
-  duration?: number
+  success: boolean;
+  actionId: string;
+  status: ActionStatus;
+  result?: unknown;
+  error?: string;
+  duration?: number;
 }
 
 /**
  * Action record from database
  */
 interface ActionRecord {
-  id: string
-  team_id: string
-  workspace_id: string
-  user_id: string
-  session_id: string
-  tool_name: string
-  tool_category: string
-  action_type: string
-  input_params: Record<string, unknown>
-  output_result: Record<string, unknown> | null
-  affected_items: Array<{ id: string; type: string; name?: string; change: string }> | null
-  rollback_data: Record<string, unknown> | null
-  is_reversible: boolean
-  status: ActionStatus
-  error_message: string | null
-  execution_started_at: string | null
-  execution_completed_at: string | null
-  execution_duration_ms: number | null
-  created_at: string
-  approved_at: string | null
-  approved_by: string | null
+  id: string;
+  team_id: string;
+  workspace_id: string;
+  user_id: string;
+  session_id: string;
+  tool_name: string;
+  tool_category: string;
+  action_type: string;
+  input_params: Record<string, unknown>;
+  output_result: Record<string, unknown> | null;
+  affected_items: Array<{
+    id: string;
+    type: string;
+    name?: string;
+    change: string;
+  }> | null;
+  rollback_data: Record<string, unknown> | null;
+  is_reversible: boolean;
+  status: ActionStatus;
+  error_message: string | null;
+  execution_started_at: string | null;
+  execution_completed_at: string | null;
+  execution_duration_ms: number | null;
+  created_at: string;
+  approved_at: string | null;
+  approved_by: string | null;
 }
 
 // =============================================================================
@@ -149,26 +182,22 @@ export class AgentExecutor {
   async preview(
     toolName: string,
     params: Record<string, unknown>,
-    context: ExecutionContext
+    context: ExecutionContext,
   ): Promise<PreviewResult> {
-    const tool = toolRegistry.get(toolName)
+    const tool = toolRegistry.get(toolName);
     if (!tool) {
-      throw new Error(`Tool not found: ${toolName}`)
+      throw new Error(`Tool not found: ${toolName}`);
     }
 
-    const actionId = context.actionId || Date.now().toString()
+    const actionId = context.actionId || Date.now().toString();
 
     // Execute tool to get preview (no DB changes in tools)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const toolWithExecute = tool as any
-    if (typeof toolWithExecute.execute !== 'function') {
-      throw new Error(`Tool ${toolName} does not have an execute function`)
-    }
-
-    const result = await toolWithExecute.execute(params, {
+    // Type-safe execution with runtime validation
+    const executePreview = getToolExecutor(tool, toolName);
+    const result = await executePreview(params, {
       toolCallId: actionId,
       abortSignal: new AbortController().signal,
-    })
+    });
 
     return {
       toolName,
@@ -176,8 +205,8 @@ export class AgentExecutor {
       category: tool.metadata.category,
       requiresApproval: tool.metadata.requiresApproval,
       isReversible: tool.metadata.isReversible,
-      preview: result as PreviewResult['preview'],
-    }
+      preview: result as PreviewResult["preview"],
+    };
   }
 
   // ===========================================================================
@@ -200,16 +229,16 @@ export class AgentExecutor {
   async execute(
     toolName: string,
     params: Record<string, unknown>,
-    context: ExecutionContext
+    context: ExecutionContext,
   ): Promise<AgentExecutionResult> {
-    const supabase = await createClient()
-    const tool = toolRegistry.get(toolName)
+    const supabase = await createClient();
+    const tool = toolRegistry.get(toolName);
 
     if (!tool) {
-      throw new Error(`Tool not found: ${toolName}`)
+      throw new Error(`Tool not found: ${toolName}`);
     }
 
-    const actionId = context.actionId || Date.now().toString()
+    const actionId = context.actionId || Date.now().toString();
 
     try {
       // If tool requires approval, create pending record
@@ -218,9 +247,52 @@ export class AgentExecutor {
         const preview = await this.preview(toolName, params, {
           ...context,
           actionId,
-        })
+        });
 
-        const { error: insertError } = await supabase.from('ai_action_history').insert({
+        const { error: insertError } = await supabase
+          .from("ai_action_history")
+          .insert({
+            id: actionId,
+            team_id: context.teamId,
+            workspace_id: context.workspaceId,
+            user_id: context.userId,
+            session_id: context.sessionId,
+            tool_name: toolName,
+            tool_category: tool.metadata.category,
+            action_type: tool.metadata.actionType,
+            input_params: params,
+            affected_items: preview.preview.preview.affectedItems || [],
+            is_reversible: tool.metadata.isReversible,
+            status: "pending",
+          });
+
+        if (insertError) {
+          throw new Error(
+            `Failed to create pending action: ${insertError.message}`,
+          );
+        }
+
+        return {
+          success: true,
+          actionId,
+          status: "pending",
+        };
+      }
+
+      // Execute directly for non-approval tools
+      const startTime = Date.now();
+      const result = await this.executeToolAction(
+        toolName,
+        params,
+        context,
+        tool,
+      );
+      const duration = Date.now() - startTime;
+
+      // Record completed action
+      const { error: insertError } = await supabase
+        .from("ai_action_history")
+        .insert({
           id: actionId,
           team_id: context.teamId,
           workspace_id: context.workspaceId,
@@ -230,65 +302,34 @@ export class AgentExecutor {
           tool_category: tool.metadata.category,
           action_type: tool.metadata.actionType,
           input_params: params,
-          affected_items: preview.preview.preview.affectedItems || [],
+          output_result: result.result || null,
+          affected_items: result.affectedItems || [],
+          rollback_data: result.rollbackData || null,
           is_reversible: tool.metadata.isReversible,
-          status: 'pending',
-        })
-
-        if (insertError) {
-          throw new Error(`Failed to create pending action: ${insertError.message}`)
-        }
-
-        return {
-          success: true,
-          actionId,
-          status: 'pending',
-        }
-      }
-
-      // Execute directly for non-approval tools
-      const startTime = Date.now()
-      const result = await this.executeToolAction(toolName, params, context, tool)
-      const duration = Date.now() - startTime
-
-      // Record completed action
-      const { error: insertError } = await supabase.from('ai_action_history').insert({
-        id: actionId,
-        team_id: context.teamId,
-        workspace_id: context.workspaceId,
-        user_id: context.userId,
-        session_id: context.sessionId,
-        tool_name: toolName,
-        tool_category: tool.metadata.category,
-        action_type: tool.metadata.actionType,
-        input_params: params,
-        output_result: result.result || null,
-        affected_items: result.affectedItems || [],
-        rollback_data: result.rollbackData || null,
-        is_reversible: tool.metadata.isReversible,
-        status: 'completed',
-        execution_started_at: new Date(startTime).toISOString(),
-        execution_completed_at: new Date().toISOString(),
-        execution_duration_ms: duration,
-      })
+          status: "completed",
+          execution_started_at: new Date(startTime).toISOString(),
+          execution_completed_at: new Date().toISOString(),
+          execution_duration_ms: duration,
+        });
 
       if (insertError) {
-        console.error('[AgentExecutor] Failed to record action:', insertError)
+        console.error("[AgentExecutor] Failed to record action:", insertError);
       }
 
       return {
         success: true,
         actionId,
-        status: 'completed',
+        status: "completed",
         result: result.result,
         duration,
-      }
+      };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
 
       // Record failed action (ignore insert errors to avoid nested failures)
       try {
-        await supabase.from('ai_action_history').insert({
+        await supabase.from("ai_action_history").insert({
           id: actionId,
           team_id: context.teamId,
           workspace_id: context.workspaceId,
@@ -299,9 +340,9 @@ export class AgentExecutor {
           action_type: tool.metadata.actionType,
           input_params: params,
           is_reversible: false,
-          status: 'failed',
+          status: "failed",
           error_message: errorMessage,
-        })
+        });
       } catch {
         // Silently fail recording to avoid nested failures
       }
@@ -309,9 +350,9 @@ export class AgentExecutor {
       return {
         success: false,
         actionId,
-        status: 'failed',
+        status: "failed",
         error: errorMessage,
-      }
+      };
     }
   }
 
@@ -328,53 +369,56 @@ export class AgentExecutor {
    * 3. Runs the actual tool action
    * 4. Updates status to 'completed' or 'failed'
    */
-  async approve(actionId: string, userId: string): Promise<AgentExecutionResult> {
-    const supabase = await createClient()
+  async approve(
+    actionId: string,
+    userId: string,
+  ): Promise<AgentExecutionResult> {
+    const supabase = await createClient();
 
     // Get pending action
-    const { data: action, error: fetchError } = await supabase
-      .from('ai_action_history')
-      .select('*')
-      .eq('id', actionId)
-      .eq('status', 'pending')
-      .single() as { data: ActionRecord | null; error: Error | null }
+    const { data: action, error: fetchError } = (await supabase
+      .from("ai_action_history")
+      .select("*")
+      .eq("id", actionId)
+      .eq("status", "pending")
+      .single()) as { data: ActionRecord | null; error: Error | null };
 
     if (fetchError || !action) {
-      throw new Error('Action not found or already processed')
+      throw new Error("Action not found or already processed");
     }
 
     // Update to executing
     const { error: updateError } = await supabase
-      .from('ai_action_history')
+      .from("ai_action_history")
       .update({
-        status: 'executing',
+        status: "executing",
         approved_at: new Date().toISOString(),
         approved_by: userId,
         execution_started_at: new Date().toISOString(),
       })
-      .eq('id', actionId)
+      .eq("id", actionId);
 
     if (updateError) {
-      throw new Error(`Failed to approve action: ${updateError.message}`)
+      throw new Error(`Failed to approve action: ${updateError.message}`);
     }
 
-    const tool = toolRegistry.get(action.tool_name)
+    const tool = toolRegistry.get(action.tool_name);
     if (!tool) {
       // Mark as failed
       await supabase
-        .from('ai_action_history')
+        .from("ai_action_history")
         .update({
-          status: 'failed',
+          status: "failed",
           error_message: `Tool not found: ${action.tool_name}`,
         })
-        .eq('id', actionId)
+        .eq("id", actionId);
 
-      throw new Error(`Tool not found: ${action.tool_name}`)
+      throw new Error(`Tool not found: ${action.tool_name}`);
     }
 
     try {
       // Execute the actual tool action
-      const startTime = Date.now()
+      const startTime = Date.now();
       const result = await this.executeToolAction(
         action.tool_name,
         action.input_params,
@@ -385,48 +429,49 @@ export class AgentExecutor {
           sessionId: action.session_id,
           actionId,
         },
-        tool
-      )
-      const duration = Date.now() - startTime
+        tool,
+      );
+      const duration = Date.now() - startTime;
 
       // Update with result
       await supabase
-        .from('ai_action_history')
+        .from("ai_action_history")
         .update({
-          status: 'completed',
+          status: "completed",
           output_result: result.result || null,
           affected_items: result.affectedItems || action.affected_items,
           rollback_data: result.rollbackData || null,
           execution_completed_at: new Date().toISOString(),
           execution_duration_ms: duration,
         })
-        .eq('id', actionId)
+        .eq("id", actionId);
 
       return {
         success: true,
         actionId,
-        status: 'completed',
+        status: "completed",
         result: result.result,
         duration,
-      }
+      };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
 
       await supabase
-        .from('ai_action_history')
+        .from("ai_action_history")
         .update({
-          status: 'failed',
+          status: "failed",
           error_message: errorMessage,
           execution_completed_at: new Date().toISOString(),
         })
-        .eq('id', actionId)
+        .eq("id", actionId);
 
       return {
         success: false,
         actionId,
-        status: 'failed',
+        status: "failed",
         error: errorMessage,
-      }
+      };
     }
   }
 
@@ -438,15 +483,15 @@ export class AgentExecutor {
    * Cancel a pending action
    */
   async cancel(actionId: string): Promise<boolean> {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
     const { error } = await supabase
-      .from('ai_action_history')
-      .update({ status: 'cancelled' })
-      .eq('id', actionId)
-      .eq('status', 'pending')
+      .from("ai_action_history")
+      .update({ status: "cancelled" })
+      .eq("id", actionId)
+      .eq("status", "pending");
 
-    return !error
+    return !error;
   }
 
   // ===========================================================================
@@ -459,44 +504,47 @@ export class AgentExecutor {
    * Only works for reversible actions that have rollback_data stored.
    * Creates appropriate reverse operations based on action type.
    */
-  async rollback(actionId: string, _context: ExecutionContext): Promise<boolean> {
-    const supabase = await createClient()
+  async rollback(
+    actionId: string,
+    _context: ExecutionContext,
+  ): Promise<boolean> {
+    const supabase = await createClient();
 
     // Get action
-    const { data: action, error: fetchError } = await supabase
-      .from('ai_action_history')
-      .select('*')
-      .eq('id', actionId)
-      .eq('status', 'completed')
-      .single() as { data: ActionRecord | null; error: Error | null }
+    const { data: action, error: fetchError } = (await supabase
+      .from("ai_action_history")
+      .select("*")
+      .eq("id", actionId)
+      .eq("status", "completed")
+      .single()) as { data: ActionRecord | null; error: Error | null };
 
     if (fetchError || !action) {
-      console.error('[AgentExecutor] Action not found for rollback:', actionId)
-      return false
+      console.error("[AgentExecutor] Action not found for rollback:", actionId);
+      return false;
     }
 
     if (!action.is_reversible) {
-      console.error('[AgentExecutor] Action is not reversible:', actionId)
-      return false
+      console.error("[AgentExecutor] Action is not reversible:", actionId);
+      return false;
     }
 
     try {
       // Execute rollback based on action type
-      await this.executeRollback(action)
+      await this.executeRollback(action);
 
       // Update status
       await supabase
-        .from('ai_action_history')
+        .from("ai_action_history")
         .update({
-          status: 'rolled_back',
+          status: "rolled_back",
           rolled_back_at: new Date().toISOString(),
         })
-        .eq('id', actionId)
+        .eq("id", actionId);
 
-      return true
+      return true;
     } catch (error) {
-      console.error('[AgentExecutor] Rollback failed:', error)
-      return false
+      console.error("[AgentExecutor] Rollback failed:", error);
+      return false;
     }
   }
 
@@ -507,43 +555,46 @@ export class AgentExecutor {
   /**
    * Approve multiple actions at once
    */
-  async approveAll(actionIds: string[], userId: string): Promise<{
-    approved: string[]
-    failed: Array<{ id: string; error: string }>
+  async approveAll(
+    actionIds: string[],
+    userId: string,
+  ): Promise<{
+    approved: string[];
+    failed: Array<{ id: string; error: string }>;
   }> {
     const results = {
       approved: [] as string[],
       failed: [] as Array<{ id: string; error: string }>,
-    }
+    };
 
     for (const actionId of actionIds) {
       try {
-        await this.approve(actionId, userId)
-        results.approved.push(actionId)
+        await this.approve(actionId, userId);
+        results.approved.push(actionId);
       } catch (error) {
         results.failed.push({
           id: actionId,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        })
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
       }
     }
 
-    return results
+    return results;
   }
 
   /**
    * Cancel multiple pending actions
    */
   async cancelAll(actionIds: string[]): Promise<number> {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
     const { count, error } = await supabase
-      .from('ai_action_history')
-      .update({ status: 'cancelled' })
-      .in('id', actionIds)
-      .eq('status', 'pending')
+      .from("ai_action_history")
+      .update({ status: "cancelled" })
+      .in("id", actionIds)
+      .eq("status", "pending");
 
-    return error ? 0 : (count || 0)
+    return error ? 0 : count || 0;
   }
 
   // ===========================================================================
@@ -560,20 +611,25 @@ export class AgentExecutor {
     toolName: string,
     params: Record<string, unknown>,
     context: ExecutionContext,
-    _tool: AgenticTool
+    _tool: AgenticTool,
   ): Promise<{
-    result?: unknown
-    affectedItems?: Array<{ id: string; type: string; name?: string; change: string }>
-    rollbackData?: Record<string, unknown>
+    result?: unknown;
+    affectedItems?: Array<{
+      id: string;
+      type: string;
+      name?: string;
+      change: string;
+    }>;
+    rollbackData?: Record<string, unknown>;
   }> {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
     switch (toolName) {
       // =========== CREATION TOOLS ===========
-      case 'createWorkItem': {
-        const id = Date.now().toString()
+      case "createWorkItem": {
+        const id = Date.now().toString();
         const { data, error } = await supabase
-          .from('work_items')
+          .from("work_items")
           .insert({
             id,
             team_id: context.teamId,
@@ -583,25 +639,28 @@ export class AgentExecutor {
             purpose: params.purpose as string | null,
             priority: params.priority as string | null,
             tags: params.tags as string[] | null,
-            phase: (params.phase as string) || 'research',
+            phase: (params.phase as string) || getDefaultPhaseForType((params.type as WorkItemType) || 'feature'),
             created_by: context.userId,
           })
           .select()
-          .single()
+          .single();
 
-        if (error) throw new Error(`Failed to create work item: ${error.message}`)
+        if (error)
+          throw new Error(`Failed to create work item: ${error.message}`);
 
         return {
           result: { created: data },
-          affectedItems: [{ id, type: 'work_item', name: data.name, change: 'create' }],
-          rollbackData: { entityId: id, entityType: 'work_item' },
-        }
+          affectedItems: [
+            { id, type: "work_item", name: data.name, change: "create" },
+          ],
+          rollbackData: { entityId: id, entityType: "work_item" },
+        };
       }
 
-      case 'createTask': {
-        const id = Date.now().toString()
+      case "createTask": {
+        const id = Date.now().toString();
         const { data, error } = await supabase
-          .from('product_tasks')
+          .from("product_tasks")
           .insert({
             id,
             team_id: context.teamId,
@@ -612,27 +671,31 @@ export class AgentExecutor {
             priority: params.priority as string | null,
             assignee_id: params.assigneeId as string | null,
             due_date: params.dueDate as string | null,
-            status: 'todo',
+            status: "todo",
           })
           .select()
-          .single()
+          .single();
 
-        if (error) throw new Error(`Failed to create task: ${error.message}`)
+        if (error) throw new Error(`Failed to create task: ${error.message}`);
 
         return {
           result: { created: data },
           affectedItems: [
-            { id, type: 'product_task', name: data.name, change: 'create' },
-            { id: params.workItemId as string, type: 'work_item', change: 'update' },
+            { id, type: "product_task", name: data.name, change: "create" },
+            {
+              id: params.workItemId as string,
+              type: "work_item",
+              change: "update",
+            },
           ],
-          rollbackData: { entityId: id, entityType: 'product_task' },
-        }
+          rollbackData: { entityId: id, entityType: "product_task" },
+        };
       }
 
-      case 'createDependency': {
-        const id = Date.now().toString()
+      case "createDependency": {
+        const id = Date.now().toString();
         const { data, error } = await supabase
-          .from('linked_items')
+          .from("linked_items")
           .insert({
             id,
             team_id: context.teamId,
@@ -644,25 +707,34 @@ export class AgentExecutor {
             strength: (params.strength as number) || 0.7,
           })
           .select()
-          .single()
+          .single();
 
-        if (error) throw new Error(`Failed to create dependency: ${error.message}`)
+        if (error)
+          throw new Error(`Failed to create dependency: ${error.message}`);
 
         return {
           result: { created: data },
           affectedItems: [
-            { id, type: 'linked_item', change: 'create' },
-            { id: params.sourceId as string, type: 'work_item', change: 'update' },
-            { id: params.targetId as string, type: 'work_item', change: 'update' },
+            { id, type: "linked_item", change: "create" },
+            {
+              id: params.sourceId as string,
+              type: "work_item",
+              change: "update",
+            },
+            {
+              id: params.targetId as string,
+              type: "work_item",
+              change: "update",
+            },
           ],
-          rollbackData: { entityId: id, entityType: 'linked_item' },
-        }
+          rollbackData: { entityId: id, entityType: "linked_item" },
+        };
       }
 
-      case 'createTimelineItem': {
-        const id = Date.now().toString()
+      case "createTimelineItem": {
+        const id = Date.now().toString();
         const { data, error } = await supabase
-          .from('timeline_items')
+          .from("timeline_items")
           .insert({
             id,
             team_id: context.teamId,
@@ -674,24 +746,29 @@ export class AgentExecutor {
             priority: (params.priority as number) || 50,
           })
           .select()
-          .single()
+          .single();
 
-        if (error) throw new Error(`Failed to create timeline item: ${error.message}`)
+        if (error)
+          throw new Error(`Failed to create timeline item: ${error.message}`);
 
         return {
           result: { created: data },
           affectedItems: [
-            { id, type: 'timeline_item', name: data.name, change: 'create' },
-            { id: params.workItemId as string, type: 'work_item', change: 'update' },
+            { id, type: "timeline_item", name: data.name, change: "create" },
+            {
+              id: params.workItemId as string,
+              type: "work_item",
+              change: "update",
+            },
           ],
-          rollbackData: { entityId: id, entityType: 'timeline_item' },
-        }
+          rollbackData: { entityId: id, entityType: "timeline_item" },
+        };
       }
 
-      case 'createInsight': {
-        const id = Date.now().toString()
+      case "createInsight": {
+        const id = Date.now().toString();
         const { data, error } = await supabase
-          .from('insights')
+          .from("insights")
           .insert({
             id,
             team_id: context.teamId,
@@ -704,57 +781,96 @@ export class AgentExecutor {
             linked_work_item_id: params.linkedWorkItemId as string | null,
           })
           .select()
-          .single()
+          .single();
 
-        if (error) throw new Error(`Failed to create insight: ${error.message}`)
+        if (error)
+          throw new Error(`Failed to create insight: ${error.message}`);
 
-        const affectedItems: Array<{ id: string; type: string; name?: string; change: string }> = [
-          { id, type: 'insight', name: data.title, change: 'create' },
-        ]
+        const affectedItems: Array<{
+          id: string;
+          type: string;
+          name?: string;
+          change: string;
+        }> = [{ id, type: "insight", name: data.title, change: "create" }];
 
         if (params.linkedWorkItemId) {
           affectedItems.push({
             id: params.linkedWorkItemId as string,
-            type: 'work_item',
-            change: 'update',
-          })
+            type: "work_item",
+            change: "update",
+          });
         }
 
         return {
           result: { created: data },
           affectedItems,
-          rollbackData: { entityId: id, entityType: 'insight' },
-        }
+          rollbackData: { entityId: id, entityType: "insight" },
+        };
       }
 
       // =========== ANALYSIS TOOLS ===========
       // Analysis tools return results directly without DB changes
-      case 'analyzeFeedback':
-      case 'suggestDependencies':
-      case 'findGaps':
-      case 'summarizeWorkItem':
-      case 'extractRequirements': {
+      case "analyzeFeedback":
+      case "suggestDependencies":
+      case "findGaps":
+      case "summarizeWorkItem":
+      case "extractRequirements": {
         // Analysis tools execute through their own execute function
-        // This just returns the preview-like result
-        const analysisTool = toolRegistry.get(toolName)
-        if (!analysisTool) throw new Error(`Tool not found: ${toolName}`)
+        const analysisTool = toolRegistry.get(toolName);
+        if (!analysisTool) throw new Error(`Tool not found: ${toolName}`);
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const analysisToolWithExecute = analysisTool as any
-        if (typeof analysisToolWithExecute.execute !== 'function') {
-          throw new Error(`Tool ${toolName} does not have an execute function`)
-        }
-
-        const result = await analysisToolWithExecute.execute(params, {
+        // Type-safe execution with runtime validation
+        const executeAnalysis = getToolExecutor(analysisTool, toolName);
+        const result = await executeAnalysis(params, {
           toolCallId: context.actionId || Date.now().toString(),
           abortSignal: new AbortController().signal,
-        })
+        });
 
-        return { result }
+        return { result };
+      }
+
+      // =========== OPTIMIZATION TOOLS ===========
+      // Optimization tools analyze data and return recommendations
+      case "prioritizeFeatures":
+      case "balanceWorkload":
+      case "identifyRisks":
+      case "suggestTimeline":
+      case "deduplicateItems": {
+        const optimizationTool = toolRegistry.get(toolName);
+        if (!optimizationTool) throw new Error(`Tool not found: ${toolName}`);
+
+        // Type-safe execution with runtime validation
+        const executeOptimization = getToolExecutor(optimizationTool, toolName);
+        const result = await executeOptimization(params, {
+          toolCallId: context.actionId || Date.now().toString(),
+          abortSignal: new AbortController().signal,
+        });
+
+        return { result };
+      }
+
+      // =========== STRATEGY TOOLS ===========
+      // Strategy tools provide strategic analysis and recommendations
+      case "alignToStrategy":
+      case "suggestOKRs":
+      case "competitiveAnalysis":
+      case "roadmapGenerator":
+      case "impactAssessment": {
+        const strategyTool = toolRegistry.get(toolName);
+        if (!strategyTool) throw new Error(`Tool not found: ${toolName}`);
+
+        // Type-safe execution with runtime validation
+        const executeStrategy = getToolExecutor(strategyTool, toolName);
+        const result = await executeStrategy(params, {
+          toolCallId: context.actionId || Date.now().toString(),
+          abortSignal: new AbortController().signal,
+        });
+
+        return { result };
       }
 
       default:
-        throw new Error(`Execution not implemented for tool: ${toolName}`)
+        throw new Error(`Execution not implemented for tool: ${toolName}`);
     }
   }
 
@@ -766,43 +882,46 @@ export class AgentExecutor {
    * Execute rollback based on action type and stored rollback data
    */
   private async executeRollback(action: ActionRecord): Promise<void> {
-    const supabase = await createClient()
-    const rollbackData = action.rollback_data
+    const supabase = await createClient();
+    const rollbackData = action.rollback_data;
 
     if (!rollbackData || !rollbackData.entityId || !rollbackData.entityType) {
-      throw new Error('No rollback data available')
+      throw new Error("No rollback data available");
     }
 
-    const entityId = rollbackData.entityId as string
-    const entityType = rollbackData.entityType as string
+    const entityId = rollbackData.entityId as string;
+    const entityType = rollbackData.entityType as string;
 
     // Map entity types to table names
     const tableMap: Record<string, string> = {
-      work_item: 'work_items',
-      product_task: 'product_tasks',
-      linked_item: 'linked_items',
-      timeline_item: 'timeline_items',
-      insight: 'insights',
-    }
+      work_item: "work_items",
+      product_task: "product_tasks",
+      linked_item: "linked_items",
+      timeline_item: "timeline_items",
+      insight: "insights",
+    };
 
-    const tableName = tableMap[entityType]
+    const tableName = tableMap[entityType];
     if (!tableName) {
-      throw new Error(`Unknown entity type for rollback: ${entityType}`)
+      throw new Error(`Unknown entity type for rollback: ${entityType}`);
     }
 
     // For create actions, delete the created entity
-    if (action.action_type === 'create') {
-      const { error } = await supabase.from(tableName).delete().eq('id', entityId)
-      if (error) throw new Error(`Rollback failed: ${error.message}`)
+    if (action.action_type === "create") {
+      const { error } = await supabase
+        .from(tableName)
+        .delete()
+        .eq("id", entityId);
+      if (error) throw new Error(`Rollback failed: ${error.message}`);
     }
 
     // For update actions, restore previous data
-    if (action.action_type === 'update' && rollbackData.previousData) {
+    if (action.action_type === "update" && rollbackData.previousData) {
       const { error } = await supabase
         .from(tableName)
         .update(rollbackData.previousData as Record<string, unknown>)
-        .eq('id', entityId)
-      if (error) throw new Error(`Rollback failed: ${error.message}`)
+        .eq("id", entityId);
+      if (error) throw new Error(`Rollback failed: ${error.message}`);
     }
 
     // Delete actions cannot be rolled back (would need to recreate)
@@ -834,4 +953,4 @@ export class AgentExecutor {
  * const rolledBack = await agentExecutor.rollback(actionId, context)
  * ```
  */
-export const agentExecutor = new AgentExecutor()
+export const agentExecutor = new AgentExecutor();

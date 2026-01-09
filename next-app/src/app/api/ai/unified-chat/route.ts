@@ -22,6 +22,8 @@ import { streamText, convertToModelMessages, type UIMessage } from 'ai'
 import { createClient } from '@/lib/supabase/server'
 import { parallelAITools, parallelAIQuickTools } from '@/lib/ai/tools/parallel-ai-tools'
 import { chatAgenticTools } from '@/lib/ai/tools/chat-agentic-tools'
+import { optimizationTools } from '@/lib/ai/tools/optimization-tools'
+import { strategyTools } from '@/lib/ai/tools/strategy-tools'
 import { toolRegistry } from '@/lib/ai/tools/tool-registry'
 import { routeRequest, formatRoutingLog, type SessionState } from '@/lib/ai/session-router'
 import { getDefaultModel, isDevMode } from '@/lib/ai/models-config'
@@ -40,41 +42,7 @@ import {
 } from '@/lib/ai/image-analyzer'
 import { buildContext, buildSystemPrompt as buildContextSystemPrompt } from '@/lib/ai/context-builder'
 import { createTaskPlan } from '@/lib/ai/task-planner'
-import fs from 'fs/promises'
-
-const DEBUG_ENDPOINT = 'http://127.0.0.1:7242/ingest/ebdf2fd5-9696-479e-b2f1-d72537069b93'
-const DEBUG_LOG_PATH = 'c:\\Users\\harsh\\Downloads\\Platform Test\\.cursor\\debug.log'
-
-async function sendDebug(payload: {
-  sessionId?: string
-  runId?: string
-  hypothesisId?: string
-  location: string
-  message: string
-  data?: Record<string, unknown>
-  timestamp?: number
-}) {
-  const body = {
-    sessionId: 'debug-session',
-    runId: 'pre-fix2',
-    timestamp: Date.now(),
-    ...payload,
-  }
-
-  try {
-    await fetch(DEBUG_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-  } catch (_err) {
-    try {
-      await fs.appendFile(DEBUG_LOG_PATH, `${JSON.stringify(body)}\n`)
-    } catch {
-      // swallow secondary errors
-    }
-  }
-}
+import { logSlowRequest } from '@/lib/ai/openrouter'
 
 // Import tool files to trigger registration (side-effects)
 import '@/lib/ai/tools/creation-tools'
@@ -82,7 +50,8 @@ import '@/lib/ai/tools/analysis-tools'
 import '@/lib/ai/tools/optimization-tools'
 import '@/lib/ai/tools/strategy-tools'
 
-export const maxDuration = 60
+// Match vercel.json functions config for app/api/ai/**/*.ts
+export const maxDuration = 300
 
 /**
  * Base system prompt for chat-first agentic AI
@@ -195,7 +164,7 @@ Use the workspace ID "${workspaceContext.workspaceId}" and team ID "${workspaceC
 }
 
 /**
- * Combine Parallel AI tools with Chat Agentic tools
+ * Combine Parallel AI tools with Chat Agentic tools + Optimization + Strategy
  */
 function getUnifiedTools(quickMode: boolean = false) {
   const researchTools = quickMode ? parallelAIQuickTools : parallelAITools
@@ -203,6 +172,8 @@ function getUnifiedTools(quickMode: boolean = false) {
   return {
     ...researchTools,
     ...chatAgenticTools,
+    ...optimizationTools,
+    ...strategyTools,
   }
 }
 
@@ -234,19 +205,6 @@ function getUnifiedTools(quickMode: boolean = false) {
  */
 export async function POST(request: Request) {
   try {
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H14',
-      location: 'api/ai/unified-chat:entry',
-      message: 'Unified chat POST entry',
-      data: {
-        hasCookieHeader: request.headers.has('cookie'),
-        hasTeamHeader: request.headers.has('x-team-id'),
-        hasWorkspaceHeader: request.headers.has('x-workspace-id'),
-      },
-    })
-    // #endregion
-
     const supabase = await createClient()
 
     // Check authentication
@@ -254,15 +212,6 @@ export async function POST(request: Request) {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser()
-
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H14',
-      location: 'api/ai/unified-chat:auth',
-      message: 'Auth check result',
-      data: { hasUser: !!user, hasAuthError: !!authError, userId: user?.id },
-    })
-    // #endregion
 
     if (authError || !user) {
       return new Response('Unauthorized', { status: 401 })
@@ -275,7 +224,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const {
       messages,
-      model: modelInput,
+      model: _modelInput, // Accepted in API but routing uses analysisResult.selectedModel
       mode = 'chat',
       quickMode = false,
       systemPrompt: customSystemPrompt,
@@ -314,24 +263,6 @@ export async function POST(request: Request) {
       ?.filter((p): p is { type: 'text'; text: string } => p.type === 'text')
       .map(p => p.text)
       .join('\n') || ''
-
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H15',
-      location: 'api/ai/unified-chat:request-body',
-      message: 'Parsed chat request',
-      data: {
-        messagesCount: messages?.length ?? 0,
-        modelInput,
-        mode,
-        quickMode,
-        fileCount: files.length,
-        workspaceId: workspaceContext?.workspaceId,
-        teamId: workspaceContext?.teamId,
-        isDevMode: userIsDevMode,
-      },
-    })
-    // #endregion
 
     // Debug: Log received messages
     console.log('[Unified Chat] Received messages:', messages.length, 'files:', files.length)
@@ -516,23 +447,6 @@ export async function POST(request: Request) {
     // Log routing decision
     console.log(formatRoutingLog(routingDecision))
 
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H15',
-      location: 'api/ai/unified-chat:routing',
-      message: 'Routing decision',
-      data: {
-        analyzedModel: analysisResult.selectedModel.key,
-        routingReason: analysisResult.routingReason,
-        model: analysisResult.selectedModel.modelId, // Use modelId from our analysis
-        compactedMessages: routingDecision.messages.length,
-        hasImages: analysisResult.hasImages,
-        needsTools: analysisResult.needsTools,
-        needsDeepReasoning: analysisResult.needsDeepReasoning,
-      },
-    })
-    // #endregion
-
     // ─────────────────────────────────────────────────────────────────────────
     // SYSTEM PROMPT CONSTRUCTION
     // ─────────────────────────────────────────────────────────────────────────
@@ -552,8 +466,11 @@ export async function POST(request: Request) {
       : legacyContextPrompt
 
     // ─────────────────────────────────────────────────────────────────────────
-    // STREAM RESPONSE
+    // STREAM RESPONSE (with reliability monitoring)
     // ─────────────────────────────────────────────────────────────────────────
+
+    // Track request duration for slow request monitoring
+    const streamStartTime = Date.now()
 
     // Stream the response using the routed model and messages
     const result = streamText({
@@ -562,11 +479,23 @@ export async function POST(request: Request) {
       messages: routingDecision.messages, // May be compacted
       tools: hasToolUse ? tools : undefined,
       onFinish({ toolCalls, usage }) {
+        const duration = Date.now() - streamStartTime
+
         if (toolCalls && toolCalls.length > 0) {
           console.log('[Unified Chat] Tool calls:', toolCalls.map((t) => t.toolName))
         }
         if (usage) {
-          console.log(`[Unified Chat] Usage: ${usage.inputTokens} in, ${usage.outputTokens} out`)
+          console.log(`[Unified Chat] Usage: ${usage.inputTokens} in, ${usage.outputTokens} out, ${duration}ms`)
+
+          // Log slow requests for monitoring (>60s threshold)
+          // Use routingDecision.model.modelId (not analysisResult) because the router
+          // may switch models due to context overflow or capability requirements
+          logSlowRequest(
+            routingDecision.model.modelId,
+            duration,
+            { promptTokens: usage.inputTokens, completionTokens: usage.outputTokens },
+            workspaceContext?.workspaceId || 'unknown'
+          )
         }
       },
     })
@@ -613,15 +542,6 @@ export async function POST(request: Request) {
 
     return response
   } catch (error) {
-    // #region agent log
-    await sendDebug({
-      hypothesisId: 'H15',
-      location: 'api/ai/unified-chat:error',
-      message: 'Unified chat exception',
-      data: { error: error instanceof Error ? error.message : 'unknown' },
-    })
-    // #endregion
-
     console.error('[Unified Chat] Error:', error)
     return new Response(
       JSON.stringify({
@@ -661,14 +581,16 @@ export async function GET() {
         'kimi-k2': 'Default model - cost-effective, good reasoning',
         'claude-haiku': 'Best for tool use (agentic mode)',
         'deepseek-v3': 'Deep reasoning (shows "Deep thinking..." indicator)',
-        'grok-4': 'Large context (2M tokens)',
-        'gemini-flash': 'Vision only (internal image analyzer)',
+        'grok-4.1': 'Large context (2M tokens), real-time data',
+        'glm-4.7': 'Strategic reasoning + agentic (top HLE/GPQA)',
+        'minimax-m2.1': 'Best for coding tasks',
+        'gemini-3-flash': 'Vision + large context (1M tokens)',
       },
       decisionTree: [
-        '1. Has images? → Gemini analyzes (internal) → chat model responds',
+        '1. Has images? → Gemini 3 Flash analyzes → chat model responds',
         '2. Agentic mode? → Claude Haiku (best for tools)',
         '3. Deep reasoning? → DeepSeek V3.2 (slow)',
-        '4. Large context (>200K)? → Grok 4',
+        '4. Large context (>200K)? → Grok 4.1',
         '5. Default → Kimi K2',
       ],
     },

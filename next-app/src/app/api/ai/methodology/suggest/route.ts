@@ -35,7 +35,7 @@ import {
 import type { WorkspacePhase } from '@/lib/constants/workspace-phases'
 import { getToolById, getCaseStudyById } from '@/lib/design-thinking'
 
-export const maxDuration = 60 // Allow up to 60s for AI analysis
+export const maxDuration = 300 // Match vercel.json for AI routes
 
 /**
  * POST /api/ai/methodology/suggest - Generate AI methodology recommendations

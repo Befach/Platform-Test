@@ -24,7 +24,7 @@ import { createClient } from '@/lib/supabase/server'
 import { agentExecutor } from '@/lib/ai/agent-executor'
 import { RollbackRequestSchema } from '@/lib/ai/schemas/agentic-schemas'
 
-export const maxDuration = 60
+export const maxDuration = 300 // Match vercel.json for AI routes
 
 export async function POST(request: Request) {
   try {

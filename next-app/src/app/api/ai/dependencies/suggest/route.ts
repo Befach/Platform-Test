@@ -25,7 +25,7 @@ import {
 } from '@/lib/ai/schemas'
 import { generateDependencyAnalysisPrompt } from '@/lib/ai/prompts/dependency-suggestion'
 
-export const maxDuration = 60 // Allow up to 60s for complex dependency analysis
+export const maxDuration = 300 // Match vercel.json for AI routes
 
 /**
  * System prompt for dependency analysis

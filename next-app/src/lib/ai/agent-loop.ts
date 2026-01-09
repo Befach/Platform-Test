@@ -29,6 +29,18 @@ import { toolRegistry } from './tools/tool-registry'
 // =============================================================================
 
 /**
+ * Interface for tools that have an execute function
+ * Used for type-safe tool execution without `as any` casts
+ * (Same pattern as agent-executor.ts)
+ */
+interface ExecutableTool {
+  execute: (
+    params: Record<string, unknown>,
+    context: { toolCallId: string; abortSignal: AbortSignal }
+  ) => Promise<unknown>
+}
+
+/**
  * Result of executing a task plan
  */
 export interface ExecutionResult {
@@ -106,10 +118,9 @@ async function executeTool(
       return { success: false, error: `Tool not found: ${toolName}` }
     }
 
-    // Execute the tool
+    // Execute the tool with type-safe pattern (matches agent-executor.ts)
     // Note: Tools return confirmation requests, which we auto-approve in agent loop
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const toolWithExecute = tool as any
+    const toolWithExecute = tool as unknown as ExecutableTool
     if (typeof toolWithExecute.execute !== 'function') {
       return { success: false, error: `Tool ${toolName} does not have an execute function` }
     }
@@ -124,14 +135,21 @@ async function executeTool(
       // In agent loop, we've already approved the plan, so auto-confirm
       console.log(`[AgentLoop] Tool ${toolName} returned confirmation, auto-approving`)
 
+      // Type for confirmation result with optional data and executeConfirmed
+      const confirmationResult = result as {
+        needsConfirmation: boolean
+        data?: unknown
+        executeConfirmed?: () => Promise<unknown>
+      }
+
       // If the tool has an execute function for confirmed actions
-      if ('executeConfirmed' in result && typeof result.executeConfirmed === 'function') {
-        const confirmedResult = await result.executeConfirmed()
+      if (confirmationResult.executeConfirmed) {
+        const confirmedResult = await confirmationResult.executeConfirmed()
         return { success: true, result: confirmedResult }
       }
 
       // Otherwise return the confirmation data as result
-      return { success: true, result: result.data || result }
+      return { success: true, result: confirmationResult.data || result }
     }
 
     return { success: true, result }
