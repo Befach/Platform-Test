@@ -28,11 +28,16 @@ export async function GET(request: NextRequest) {
     // Note: The database trigger (on_auth_user_created) runs asynchronously after auth.users insert
     // On serverless platforms like Vercel, the trigger may not complete before this code runs
     // So we explicitly create the user record if it doesn't exist
-    const { data: userProfile } = await supabase
+    const { data: userProfile, error: profileError } = await supabase
       .from('users')
       .select('id')
       .eq('id', user.id)
       .single()
+
+    // PGRST116 = "no rows found" which is expected for new users
+    if (profileError && profileError.code !== 'PGRST116') {
+      console.error('Failed to query user profile:', profileError)
+    }
 
     if (!userProfile && user.email) {
       // Create user record explicitly (handles trigger race condition)
@@ -51,12 +56,17 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user is a member of any team
-    const { data: teamMember } = await supabase
+    const { data: teamMember, error: teamError } = await supabase
       .from('team_members')
       .select('team_id')
       .eq('user_id', user.id)
       .limit(1)
       .single()
+
+    // PGRST116 = "no rows found" which means user needs onboarding
+    if (teamError && teamError.code !== 'PGRST116') {
+      console.error('Failed to query team membership:', teamError)
+    }
 
     if (!teamMember) {
       // User needs to create/join a team
