@@ -392,8 +392,8 @@ Features:
 
 ## Related Documentation
 
-- [Product Tasks System](./week-5-review-system.md) - Tasks implementation
-- [Existing Board Components](../reference/ARCHITECTURE.md) - Board/Kanban architecture
+- [Product Tasks System](../week-5-review-system.md) - Tasks implementation
+- [Existing Board Components](../../architecture/ARCHITECTURE.md) - Board/Kanban architecture
 - [dnd-kit Usage](https://docs.dndkit.com/) - Drag-drop library docs
 
 ---

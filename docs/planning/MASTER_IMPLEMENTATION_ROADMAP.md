@@ -1494,7 +1494,7 @@ if (acceptanceRate < 0.5) {
 
 ### Implementation Guides
 - [Implementation Plan](../implementation/README.md) - Week-by-week guide
-- [Database Schema](../implementation/database-schema.md) - Current schema reference
+- [Database Schema](../architecture/database-schema.md) - Current schema reference
 
 ### Postponed Features
 - [MIND_MAP_ENHANCEMENTS.md](../postponed/MIND_MAP_ENHANCEMENTS.md) - 23 mind map enhancements (Phase 1-3)
@@ -1507,7 +1507,7 @@ if (acceptanceRate < 0.5) {
 - [cross-team-collaboration.md](../research/core-research/cross-team-collaboration.md) - Team workflow research
 
 ### Technical References
-- [ARCHITECTURE.md](../reference/ARCHITECTURE.md) - System architecture
+- [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) - System architecture
 - [API_REFERENCE.md](../reference/API_REFERENCE.md) - API documentation
 - [CODE_PATTERNS.md](../reference/CODE_PATTERNS.md) - Code standards
 

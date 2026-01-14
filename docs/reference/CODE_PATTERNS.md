@@ -1014,6 +1014,6 @@ export function StrategyView({ context, workItemId }: Props) {
 ---
 
 **See Also**:
-- [Architecture Reference](ARCHITECTURE.md) - Two-layer system, phase system details
+- [Architecture Reference](../architecture/ARCHITECTURE.md) - Two-layer system, phase system details
 - [API Reference](API_REFERENCE.md)
 - [Main Implementation Plan](../implementation/README.md)

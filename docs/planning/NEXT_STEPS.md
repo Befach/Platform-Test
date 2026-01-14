@@ -75,7 +75,7 @@ Work items use type-specific phases:
 - 5-minute setup vs 2-4 hours OAuth config
 - Self-hosted MCP Gateway as fallback
 
-**Reference**: [metorial-integration-decision.md](../research/metorial-integration-decision.md)
+**Reference**: [metorial-integration-decision.md](../research/architecture-decisions/metorial-integration-decision.md)
 
 ---
 

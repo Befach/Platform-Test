@@ -20,7 +20,7 @@ Features that were planned but **strategically deferred** to later phases due to
 
 ## 📄 DOCUMENTS IN THIS FOLDER
 
-### **[WORKSPACE_MODES.md](WORKSPACE_MODES.md)**
+### **[WORKSPACE_MODES.md](../archive/WORKSPACE_MODES.md)** (Archived - Implemented)
 Context-aware workspace modes that adapt UX, AI behavior, and metrics based on product lifecycle stage
 
 **📅 Postponed Date:** December 1, 2025
@@ -209,7 +209,7 @@ All postponed features follow the policy defined in [CLAUDE.md](../../CLAUDE.md#
 ## 📋 HOW TO ADD NEW POSTPONED FEATURES
 
 1. **Create detailed specification file** in this folder: `[FEATURE_NAME].md`
-2. **Add entry to** [docs/implementation/postponed-features.md](../implementation/postponed-features.md)
+2. **Add entry to** [docs/implementation/postponed-features.md](README.md)
 3. **Follow the template** defined in CLAUDE.md
 4. **Set review trigger** (when to revisit the decision)
 5. **Update CHANGELOG.md** with postponement decision
@@ -218,7 +218,7 @@ All postponed features follow the policy defined in [CLAUDE.md](../../CLAUDE.md#
 
 ## 🔗 RELATED DOCUMENTATION
 
-- **[Implementation Plan - Postponed Features](../implementation/postponed-features.md)** - Summary tracking
+- **[Implementation Plan - Postponed Features](README.md)** - Summary tracking
 - **[CLAUDE.md - Postponed Features Policy](../../CLAUDE.md#tracking-postponed-features)** - Policy and template
 - **[Planning Documents](../planning/README.md)** - Current priorities
 - **[NEXT_STEPS.md](../planning/NEXT_STEPS.md)** - Immediate action items

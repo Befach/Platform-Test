@@ -707,7 +707,7 @@ Reconsider these design decisions when:
 - [Linear Architecture](../architecture-decisions/linear-architecture.md) - Entity hierarchy and workflow inspiration
 - [Scope Decisions](../architecture-decisions/scope-decisions.md) - What's in/out of scope (Product/Eng/Design focus)
 - [UX Design Decisions](../architecture-decisions/ux-design-decisions.md) - Templates, menus, alignment patterns
-- [Week 7 Implementation](../../implementation/week-7-ai-analytics.md) - Research & Discovery module (where pillars live)
+- [Week 7 Implementation](../../implementation/week-7/README.md) - Research & Discovery module (where pillars live)
 
 ---
 

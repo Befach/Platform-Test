@@ -450,7 +450,7 @@ Before deploying to production, verify:
 - [Phase Permissions Guide](PHASE_PERMISSIONS_GUIDE.md)
 - [Phase Permissions ERD](PHASE_PERMISSIONS_ERD.md)
 - [API Reference](API_REFERENCE.md#security)
-- [Architecture](ARCHITECTURE.md#security)
+- [Architecture](../architecture/ARCHITECTURE.md#security)
 
 **Code References**:
 - [Permission Middleware](../../next-app/src/lib/middleware/permission-middleware.ts)

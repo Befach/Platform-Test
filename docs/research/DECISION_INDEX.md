@@ -64,7 +64,7 @@ This is the master index for all architectural and UX decisions made during plat
 
 | ID | Decision | Status | Date | Document | Review Trigger |
 |----|----------|--------|------|----------|----------------|
-| FEAT-001 | Workspace Modes (Launch/Development) | 📋 Proposed | 2025-12-01 | [WORKSPACE_MODES.md](../postponed/WORKSPACE_MODES.md) | After timeline architecture |
+| FEAT-001 | Workspace Modes (Launch/Development) | 📋 Proposed | 2025-12-01 | [WORKSPACE_MODES.md](../archive/WORKSPACE_MODES.md) | After timeline architecture |
 | FEAT-002 | Product Strategy Foundation | 📋 Proposed | 2025-12-01 | [PRODUCT_STRATEGY_FOUNDATION.md](../postponed/PRODUCT_STRATEGY_FOUNDATION.md) | After workspace modes |
 | FEAT-003 | Cross-Team Configuration | 📋 Proposed | 2025-12-01 | [CROSS_TEAM_CONFIGURATION.md](../postponed/CROSS_TEAM_CONFIGURATION.md) | After strategy foundation |
 | FEAT-004 | Mind Map Enhancements (AI-powered) | 📋 Proposed | 2025-12-01 | [MIND_MAP_ENHANCEMENTS.md](../postponed/MIND_MAP_ENHANCEMENTS.md) | After AI integration |
@@ -75,8 +75,8 @@ This is the master index for all architectural and UX decisions made during plat
 | ID | Decision | Status | Date | Document | Review Trigger |
 |----|----------|--------|------|----------|----------------|
 | DATA-001 | Date.now().toString() for IDs | ✅ Accepted | 2025-12-01 | [linear-architecture.md](architecture-decisions/linear-architecture.md) | Collision issues or user confusion |
-| DATA-002 | team_id on all tables (multi-tenancy) | ✅ Accepted | 2025-12-01 | [database-schema.md](../implementation/database-schema.md) | Security or isolation issues |
-| DATA-003 | RLS policies on ALL tables | ✅ Accepted | 2025-12-01 | [database-schema.md](../implementation/database-schema.md) | Security audit required |
+| DATA-002 | team_id on all tables (multi-tenancy) | ✅ Accepted | 2025-12-01 | [database-schema.md](../architecture/database-schema.md) | Security or isolation issues |
+| DATA-003 | RLS policies on ALL tables | ✅ Accepted | 2025-12-01 | [database-schema.md](../architecture/database-schema.md) | Security audit required |
 | DATA-004 | Workspace = Project container | ✅ Accepted | 2025-12-01 | [linear-architecture.md](architecture-decisions/linear-architecture.md) | Terminology confusion |
 | DATA-005 | Work Item = Generic top-level item | ✅ Accepted | 2025-12-01 | [linear-architecture.md](architecture-decisions/linear-architecture.md) | Type confusion |
 
@@ -338,15 +338,15 @@ analytics.track('integration_connected', {
 
 ### Implementation Documents
 
-- [Database Schema](../implementation/database-schema.md) - Current schema
+- [Database Schema](../architecture/database-schema.md) - Current schema
 - [API Reference](../reference/API_REFERENCE.md) - All endpoints
-- [Architecture Overview](../reference/ARCHITECTURE.md) - System design
+- [Architecture Overview](../architecture/ARCHITECTURE.md) - System design
 - [Code Patterns](../reference/CODE_PATTERNS.md) - Implementation examples
 
 ### Postponed Features
 
 - [Workspace Timeline Architecture](../postponed/WORKSPACE_TIMELINE_ARCHITECTURE.md) - ADR-005, ADR-006
-- [Workspace Modes](../postponed/WORKSPACE_MODES.md) - FEAT-001
+- [Workspace Modes](../archive/WORKSPACE_MODES.md) - FEAT-001
 - [Product Strategy Foundation](../postponed/PRODUCT_STRATEGY_FOUNDATION.md) - FEAT-002
 - [Cross-Team Configuration](../postponed/CROSS_TEAM_CONFIGURATION.md) - FEAT-003
 

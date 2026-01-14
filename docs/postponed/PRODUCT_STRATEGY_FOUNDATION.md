@@ -926,9 +926,9 @@ export interface WorkItemWithStrategy extends WorkItem {
 
 ## Related Documentation
 
-- [Implementation Plan - Postponed Features](../implementation/postponed-features.md)
-- [Workspace Modes (Postponed)](WORKSPACE_MODES.md) - DEPENDENCY
-- [Week 7: AI Integration](../implementation/week-7-ai-analytics.md) - DEPENDENCY
+- [Implementation Plan - Postponed Features](README.md)
+- [Workspace Modes (Archived)](../archive/WORKSPACE_MODES.md) - Already implemented
+- [Week 7: AI Integration](../implementation/week-7/README.md) - DEPENDENCY
 - [CLAUDE.md - Project Guidelines](../../CLAUDE.md)
 
 ---

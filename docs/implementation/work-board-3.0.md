@@ -393,7 +393,7 @@ Features:
 ## Related Documentation
 
 - [Product Tasks System](./week-5-review-system.md) - Tasks implementation
-- [Existing Board Components](../reference/ARCHITECTURE.md) - Board/Kanban architecture
+- [Existing Board Components](../architecture/ARCHITECTURE.md) - Board/Kanban architecture
 - [dnd-kit Usage](https://docs.dndkit.com/) - Drag-drop library docs
 
 ---
@@ -850,7 +850,7 @@ CREATE TABLE prototype_votes (
 ## Related Documentation
 
 - **Week 6**: [Timeline & Execution](week-6-timeline-execution.md) - Work Item Detail Page
-- **Week 7**: [AI Integration & Analytics](week-7-ai-analytics.md) - Feedback Module, AI features
+- **Week 7**: [AI Integration & Analytics](week-7/README.md) - Feedback Module, AI features
 - **Product Tasks**: [Week 5](week-5-review-system.md) - Tasks implementation
 
 ---

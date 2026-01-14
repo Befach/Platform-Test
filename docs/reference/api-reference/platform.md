@@ -358,12 +358,12 @@ gem install platform-api
 
 ## 📚 ADDITIONAL RESOURCES
 
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and data flows
-- **[database-schema.md](../implementation/database-schema.md)** - Complete database schema
-- **[CLAUDE.md](../../CLAUDE.md)** - Project guidelines and coding standards
+- **[ARCHITECTURE.md](../../architecture/ARCHITECTURE.md)** - System architecture and data flows
+- **[database-schema.md](../../architecture/database-schema.md)** - Complete database schema
+- **[CLAUDE.md](../../../CLAUDE.md)** - Project guidelines and coding standards
 
 ---
 
 **API Version:** 1.2
 **Last Updated:** 2025-12-02
-**Changelog:** See [CHANGELOG.md](CHANGELOG.md)
+**Changelog:** See [CHANGELOG.md](../CHANGELOG.md)

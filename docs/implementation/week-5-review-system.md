@@ -86,7 +86,7 @@
 - Week 8: Billing can track per-user metrics
 
 **Links**:
-- Database Schema: [../reference/ARCHITECTURE.md](../reference/ARCHITECTURE.md#team-tables)
+- Database Schema: [../architecture/ARCHITECTURE.md](../architecture/ARCHITECTURE.md#team-tables)
 - API Reference: [../reference/API_REFERENCE.md](../reference/API_REFERENCE.md#team-management)
 - Original planned feature (postponed): [Review & Feedback Module](#review--feedback-module-postponed)
 

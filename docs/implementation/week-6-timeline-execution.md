@@ -3,7 +3,7 @@
 **Last Updated:** 2025-11-29
 **Status:** 🟡 In Planning
 
-[← Previous: Week 5](week-5-review-system.md) | [Back to Plan](README.md) | [Next: Week 7 →](week-7-ai-analytics.md)
+[← Previous: Week 5](week-5-review-system.md) | [Back to Plan](README.md) | [Next: Week 7 →](week-7/README.md)
 
 ---
 
@@ -208,4 +208,4 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 
 ---
 
-[← Previous: Week 5](week-5-review-system.md) | [Back to Plan](README.md) | [Next: Week 7 →](week-7-ai-analytics.md)
+[← Previous: Week 5](week-5-review-system.md) | [Back to Plan](README.md) | [Next: Week 7 →](week-7/README.md)

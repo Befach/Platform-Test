@@ -46,7 +46,7 @@
 
 #### Workspace-Level Timelines & Calculated Status
 - **Status**: PLANNING COMPLETE - Postponed for implementation
-- **Detailed Spec**: [WORKSPACE_TIMELINE_ARCHITECTURE.md](../postponed/WORKSPACE_TIMELINE_ARCHITECTURE.md)
+- **Detailed Spec**: [WORKSPACE_TIMELINE_ARCHITECTURE.md](../../postponed/WORKSPACE_TIMELINE_ARCHITECTURE.md)
 - **Estimated Effort**: ~25 hours
 - **Target**: After Week 7 (AI Integration complete)
 
@@ -692,10 +692,10 @@ None yet (project is in initial development phase)
 
 ## References
 
-- [docs/implementation/README.md](../implementation/README.md) - Implementation plan overview
-- [docs/planning/PROGRESS.md](../planning/PROGRESS.md) - Current implementation status
-- [CLAUDE.md](../../CLAUDE.md) - Project guidelines and coding standards
-- [supabase/migrations/](../../supabase/migrations/) - All migration files
+- [docs/implementation/README.md](../../implementation/README.md) - Implementation plan overview
+- [docs/planning/PROGRESS.md](../../planning/PROGRESS.md) - Current implementation status
+- [CLAUDE.md](../../../CLAUDE.md) - Project guidelines and coding standards
+- [supabase/migrations/](../../../supabase/migrations/) - All migration files
 
 ---
 

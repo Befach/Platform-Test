@@ -5704,5 +5704,5 @@ Then follow the [Phase 1 implementation steps](#step-by-step-implementation).
 
 ## References
 
-- **Progress Tracking**: [PROGRESS.md](../../planning/PROGRESS.md)
-- **Architecture**: [ARCHITECTURE_CONSOLIDATION.md](../../ARCHITECTURE_CONSOLIDATION.md)
+- **Progress Tracking**: [PROGRESS.md](../../../planning/PROGRESS.md)
+- **Architecture**: [ARCHITECTURE_CONSOLIDATION.md](../../../ARCHITECTURE_CONSOLIDATION.md)

@@ -227,7 +227,7 @@ npx playwright show-report
 
 - [CODE_PATTERNS.md](CODE_PATTERNS.md) - Coding standards enforced by CI
 - [../implementation/week-8-billing-testing.md](../implementation/week-8-billing-testing.md) - Testing strategy
-- [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture
+- [ARCHITECTURE.md](../architecture/ARCHITECTURE.md) - System architecture
 
 ---
 

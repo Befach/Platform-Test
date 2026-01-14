@@ -61,7 +61,7 @@ This document serves as the **master planning roadmap** for all future features 
 ### LAYER 0.5: PHASE SYSTEM ENHANCEMENT (In Progress) 🔄
 
 **Status**: Architecture Finalized, Implementation Pending (6 sessions)
-**Reference**: [docs/ARCHITECTURE_CONSOLIDATION.md](../ARCHITECTURE_CONSOLIDATION.md)
+**Reference**: [docs/ARCHITECTURE_CONSOLIDATION.md](../../ARCHITECTURE_CONSOLIDATION.md)
 
 **Purpose**: Enhance phase system with validation, readiness prompts, workspace analysis, and Design Thinking integration
 
@@ -563,7 +563,7 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 
 **Total Effort**: ~7 days
 
-**Scope Decision**: Focus on lightweight, native feedback capture. Deep CRM integration is OUT OF SCOPE (see [scope-decisions.md](../research/architecture-decisions/scope-decisions.md)).
+**Scope Decision**: Focus on lightweight, native feedback capture. Deep CRM integration is OUT OF SCOPE (see [scope-decisions.md](../../research/architecture-decisions/scope-decisions.md)).
 
 #### 4.1 Customer Insights Table
 

@@ -176,9 +176,9 @@ L1: Raw Items (Preserved) ─────  Individual decisions, ideas, feedback
 
 ## 🔗 Related Documentation
 
-- **[Week 7: AI Integration](../week-7-ai-analytics.md)** - Foundation this builds on
-- **[PROGRESS.md](../../planning/PROGRESS.md)** - Overall project tracking
-- **[API Reference](../../reference/API_REFERENCE.md)** - Existing AI endpoints
+- **[Week 7: AI Integration](../README.md)** - Foundation this builds on
+- **[PROGRESS.md](../../../planning/PROGRESS.md)** - Overall project tracking
+- **[API Reference](../../../reference/API_REFERENCE.md)** - Existing AI endpoints
 
 ---
 

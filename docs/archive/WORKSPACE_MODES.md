@@ -6,7 +6,7 @@
 **Target**: After Workspace Timeline Architecture
 **Estimated Effort**: ~15 hours
 
-[← Back to Postponed Features](README.md)
+[← Back to Docs Index](../INDEX.md)
 
 ---
 
@@ -801,9 +801,9 @@ interface ModeAnalytics {
 
 ## Related Documentation
 
-- [Workspace Timeline Architecture](WORKSPACE_TIMELINE_ARCHITECTURE.md) - Required dependency
-- [Implementation Plan - Postponed Features](../implementation/postponed-features.md) - Tracking
-- [Week 7: Analytics & AI](../implementation/week-7-ai-analytics.md) - AI Integration
+- [Workspace Timeline Architecture](../postponed/WORKSPACE_TIMELINE_ARCHITECTURE.md) - Required dependency
+- [Postponed Features](../postponed/README.md) - Feature tracking
+- [Week 7: Analytics & AI](../implementation/week-7/README.md) - AI Integration
 - [CLAUDE.md - Project Guidelines](../../CLAUDE.md) - Context
 
 ---
@@ -811,4 +811,4 @@ interface ModeAnalytics {
 **Last Reviewed**: December 1, 2025
 **Next Review**: After Workspace Timeline Architecture implementation
 
-[← Back to Postponed Features](README.md)
+[← Back to Docs Index](../INDEX.md)

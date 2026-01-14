@@ -2523,8 +2523,8 @@ gem install platform-api
 
 ## 📚 ADDITIONAL RESOURCES
 
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and data flows
-- **[database-schema.md](../implementation/database-schema.md)** - Complete database schema
+- **[ARCHITECTURE.md](../architecture/ARCHITECTURE.md)** - System architecture and data flows
+- **[database-schema.md](../architecture/database-schema.md)** - Complete database schema
 - **[CLAUDE.md](../../CLAUDE.md)** - Project guidelines and coding standards
 
 ---

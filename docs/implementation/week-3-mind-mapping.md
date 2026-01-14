@@ -76,7 +76,7 @@ Visual canvas with AI-powered suggestions
 
 **Links**:
 - Phase Constants: [../../next-app/src/lib/constants/workspace-phases.tsx](../../next-app/src/lib/constants/workspace-phases.tsx)
-- Architecture Update: [../reference/ARCHITECTURE.md](../reference/ARCHITECTURE.md#workspace-phase-system)
+- Architecture Update: [../architecture/ARCHITECTURE.md](../architecture/ARCHITECTURE.md#workspace-phase-system)
 
 ---
 
@@ -257,7 +257,7 @@ Visual canvas with AI-powered suggestions
 
 ## Postponed Enhancements
 
-23 mind map enhancements have been postponed to Week 9-10 (post-core platform). See [postponed-features.md](postponed-features.md) for details.
+23 mind map enhancements have been postponed to Week 9-10 (post-core platform). See [../postponed/README.md](../postponed/README.md) for details.
 
 **Postponed features include:**
 - Auto-zoom, focus mode, undo/redo

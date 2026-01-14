@@ -308,5 +308,5 @@ Before marking a feature as postponed, ensure:
 
 **See Also**:
 - [Implementation Timing Checklist](IMPLEMENTATION_TIMING_CHECKLIST.md)
-- [Postponed Features List](../implementation/postponed-features.md)
+- [Postponed Features List](README.md)
 - [Main Implementation Plan](../implementation/README.md)

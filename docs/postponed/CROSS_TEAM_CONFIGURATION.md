@@ -846,7 +846,7 @@ ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', '
 - [Work Board 3.0 Implementation](../implementation/work-board-3.0.md) - Board view architecture
 - [Work Item Detail 8-Tab Structure](../implementation/week-6-timeline-execution.md) - Detail page design
 - [Recommended Agents](../planning/RECOMMENDED_AGENTS.md) - Claude agents for implementation
-- [Postponed Features](../implementation/postponed-features.md) - Summary tracking
+- [Postponed Features](README.md) - Summary tracking
 
 ---
 

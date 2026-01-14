@@ -3,7 +3,7 @@
 **Last Updated:** 2025-11-30
 **Status:** ❌ Not Started
 
-[← Previous: Week 7](week-7-ai-analytics.md) | [Back to Plan](README.md)
+[← Previous: Week 7](week-7/README.md) | [Back to Plan](README.md)
 
 ---
 
@@ -289,4 +289,4 @@ roadmap-platform/
 
 ---
 
-[← Previous: Week 7](week-7-ai-analytics.md) | [Back to Plan](README.md)
+[← Previous: Week 7](week-7/README.md) | [Back to Plan](README.md)

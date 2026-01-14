@@ -381,7 +381,7 @@ Workspace Settings > Timelines
 
 ## Related Documentation
 
-- [Implementation Plan - Postponed Features](../implementation/postponed-features.md)
+- [Implementation Plan - Postponed Features](README.md)
 - [Week 6: Timeline & Execution](../implementation/week-6-timeline-execution.md)
 - [Work Board 3.0](../implementation/work-board-3.0.md)
 - [CLAUDE.md - Project Guidelines](../../CLAUDE.md)

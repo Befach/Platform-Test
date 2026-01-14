@@ -489,7 +489,7 @@ This is not just a UI refresh - this is building a **complete enterprise-grade P
 4. **⚠️ Week 4** - [Feature Planning & Dependencies](week-4-dependencies.md) - 80% (critical path pending)
 5. **✅ Week 5** - [External Review System](week-5-review-system.md) + Team Management - COMPLETED
 6. **❌ Week 6** - [Timeline & Execution](week-6-timeline-execution.md) - NOT STARTED (0%)
-7. **🟡 Week 7** - [AI Integration & Analytics](week-7-ai-analytics.md) - 95% DONE
+7. **🟡 Week 7** - [AI Integration & Analytics](week-7/README.md) - 95% DONE
    - ✅ AI SDK v5, Parallel AI, Chat Panel, Agentic Mode
    - ✅ Workspace Modes, Strategy Alignment, Feedback UI
    - ✅ Analytics Dashboards, Knowledge Base

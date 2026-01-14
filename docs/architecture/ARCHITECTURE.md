@@ -1168,7 +1168,7 @@ graph TD
 ## 🔗 RELATED DOCUMENTATION
 
 - [Implementation Plan](../implementation/README.md) - Detailed implementation timeline
-- [API Reference](API_REFERENCE.md) - API endpoints documentation
+- [API Reference](../reference/API_REFERENCE.md) - API endpoints documentation
 - [Project Guidelines](../../CLAUDE.md) - Project guidelines and coding standards
 - [README](../../README.md) - Project overview and quick start
 
