@@ -109,6 +109,10 @@ export type { BlockSuiteEditorProps } from './blocksuite-editor'
 export type { MindMapCanvasProps } from './mindmap-types'
 export { LoadingSkeleton } from './loading-skeleton'
 
+// Re-export toolbar component
+export { MindmapToolbar } from './mindmap-toolbar'
+export type { MindmapToolbarProps } from './mindmap-toolbar'
+
 // Re-export validation schemas
 export {
   BlockSuiteEditorPropsSchema,

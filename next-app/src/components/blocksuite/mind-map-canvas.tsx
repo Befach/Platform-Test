@@ -27,6 +27,17 @@ interface StoreWithSlots {
   };
 }
 
+// Type for BlockSuite selection
+interface BlockSuiteSelection {
+  type: string;
+  elements?: string[];
+}
+
+// Type for selection disposable
+interface Disposable {
+  dispose: () => void;
+}
+
 /**
  * Safely clears all child nodes from a container element
  * This avoids innerHTML which can be an XSS vector
@@ -92,6 +103,43 @@ function extractMindmapTree(
 }
 
 /**
+ * Extract text from a mindmap node element by its ID
+ * Returns null if extraction fails
+ */
+function extractNodeText(surface: unknown, elementId: string): string | null {
+  try {
+    const surfaceWithElements = surface as {
+      getElementById?: (id: string) => {
+        tree?: { element?: { text?: string } };
+        text?: string;
+        xywh?: string;
+      } | null;
+    };
+
+    if (!surfaceWithElements.getElementById) {
+      return null;
+    }
+
+    const element = surfaceWithElements.getElementById(elementId);
+    if (!element) {
+      return null;
+    }
+
+    // Try different ways BlockSuite might store the text
+    if (element.text) {
+      return element.text;
+    }
+    if (element.tree?.element?.text) {
+      return element.tree.element.text;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * BlockSuite MindMap Canvas Component
  *
  * A React wrapper for BlockSuite's native mindmap functionality.
@@ -102,14 +150,12 @@ function extractMindmapTree(
  * - 4 built-in visual styles (1-4)
  * - 3 layout modes (0=RIGHT, 1=LEFT, 2=BALANCE)
  * - Tree change callbacks via onTreeChange
- * - Node selection events (planned, not yet implemented)
+ * - Node selection events via onNodeSelect callback
  *
  * Limitations:
  * - **Layout/style props are immutable after creation**: BlockSuite creates the mindmap
  *   element once with the specified layout and style. To change these properties,
  *   the component must be unmounted and remounted (e.g., by changing the `key` prop).
- * - **onNodeSelect not yet implemented**: Node selection requires BlockSuite surface
- *   element click event integration, which is planned for a future release.
  *
  * @example
  * ```tsx
@@ -142,8 +188,6 @@ export function MindMapCanvas({
   style = 4 as BlockSuiteMindmapStyle, // Default: FOUR
   layout = 2 as BlockSuiteLayoutType, // Default: BALANCE
   onTreeChange,
-  // TODO: Implement node selection using BlockSuite's surface element click events.
-  // Will require: surface.slots.elementSelected or similar API, mapping element ID to node data.
   onNodeSelect,
   readOnly = false,
   className,
@@ -152,29 +196,146 @@ export function MindMapCanvas({
   const editorRef = useRef<unknown>(null);
   const docRef = useRef<Doc | null>(null);
   const mindmapIdRef = useRef<string | null>(null);
-  const hasWarnedAboutNodeSelect = useRef(false);
+  const surfaceIdRef = useRef<string | null>(null);
+  const selectionDisposableRef = useRef<Disposable | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   // Memoize the tree to use - either provided or default
   const treeToRender = useMemo(() => {
     return initialTree || DEFAULT_SAMPLE_TREE;
   }, [initialTree]);
 
-  // Warn ONCE if onNodeSelect is provided but not yet implemented
-  // Using ref to prevent duplicate warnings on re-renders with new callback references
-  useEffect(() => {
-    if (onNodeSelect && !hasWarnedAboutNodeSelect.current) {
-      hasWarnedAboutNodeSelect.current = true;
-      console.warn(
-        "MindMapCanvas: onNodeSelect prop is not yet implemented. " +
-          "Node selection events will not fire. This feature is planned for a future release.",
-      );
-    }
-  }, [onNodeSelect]);
+  // Setup selection listener for the BlockSuite editor
+  const setupSelectionListener = useCallback(
+    (
+      editor: unknown,
+      doc: Doc,
+      surfaceId: string,
+    ): Disposable | null => {
+      try {
+        const editorElement = editor as unknown as {
+          host?: {
+            selection?: {
+              slots?: {
+                changed?: {
+                  on: (
+                    callback: (selections: BlockSuiteSelection[]) => void,
+                  ) => Disposable;
+                };
+              };
+              value?: BlockSuiteSelection[];
+            };
+          };
+        };
+
+        const selection = editorElement.host?.selection;
+        if (selection?.slots?.changed) {
+          const disposable = selection.slots.changed.on(
+            (selections: BlockSuiteSelection[]) => {
+              // Find surface selection (contains mindmap elements)
+              const surfaceSelection = selections.find(
+                (sel) => sel.type === "surface",
+              );
+
+              if (surfaceSelection?.elements?.length) {
+                const elementId = surfaceSelection.elements[0];
+                setSelectedNodeId(elementId);
+
+                // Try to get the text of the selected node
+                if (onNodeSelect) {
+                  const surface = doc.getBlockById(surfaceId);
+                  if (surface) {
+                    const nodeText = extractNodeText(surface, elementId);
+                    onNodeSelect(elementId, nodeText || "Selected Node");
+                  } else {
+                    onNodeSelect(elementId, "Selected Node");
+                  }
+                }
+              } else {
+                setSelectedNodeId(null);
+              }
+            },
+          );
+
+          return disposable;
+        }
+
+        // Fallback: Try alternative selection API patterns
+        const editorWithStd = editor as unknown as {
+          std?: {
+            selection?: {
+              slots?: {
+                changed?: {
+                  on: (
+                    callback: (selections: BlockSuiteSelection[]) => void,
+                  ) => Disposable;
+                };
+              };
+            };
+          };
+        };
+
+        const stdSelection = editorWithStd.std?.selection;
+        if (stdSelection?.slots?.changed) {
+          const disposable = stdSelection.slots.changed.on(
+            (selections: BlockSuiteSelection[]) => {
+              const surfaceSelection = selections.find(
+                (sel) => sel.type === "surface",
+              );
+
+              if (surfaceSelection?.elements?.length) {
+                const elementId = surfaceSelection.elements[0];
+                setSelectedNodeId(elementId);
+
+                if (onNodeSelect) {
+                  const surface = doc.getBlockById(surfaceId);
+                  if (surface) {
+                    const nodeText = extractNodeText(surface, elementId);
+                    onNodeSelect(elementId, nodeText || "Selected Node");
+                  } else {
+                    onNodeSelect(elementId, "Selected Node");
+                  }
+                }
+              } else {
+                setSelectedNodeId(null);
+              }
+            },
+          );
+
+          return disposable;
+        }
+
+        // If no selection API found, log a warning for debugging
+        if (onNodeSelect) {
+          console.warn(
+            "MindMapCanvas: BlockSuite selection API not available. " +
+              "Node selection events may not fire. This could be due to BlockSuite version differences.",
+          );
+        }
+
+        return null;
+      } catch (e) {
+        console.warn("Failed to setup selection listener:", e);
+        return null;
+      }
+    },
+    [onNodeSelect],
+  );
 
   // Cleanup function
   const cleanup = useCallback(() => {
+    // Clean up selection listener
+    if (selectionDisposableRef.current) {
+      try {
+        selectionDisposableRef.current.dispose();
+      } catch (e) {
+        console.warn("Failed to dispose selection listener:", e);
+      }
+      selectionDisposableRef.current = null;
+    }
+
     if (editorRef.current && containerRef.current) {
       try {
         const editor = editorRef.current as { remove?: () => void };
@@ -190,6 +351,8 @@ export function MindMapCanvas({
     }
     docRef.current = null;
     mindmapIdRef.current = null;
+    surfaceIdRef.current = null;
+    setSelectedNodeId(null);
   }, []);
 
   // Initialize editor effect
@@ -292,6 +455,7 @@ export function MindMapCanvas({
                 });
 
                 mindmapIdRef.current = mindmapId;
+                surfaceIdRef.current = surfaceId;
                 return true;
               }
               return false;
@@ -398,6 +562,21 @@ export function MindMapCanvas({
             subscriptions.push(updateSubscription);
           }
 
+          // Set up selection listener for node selection events
+          // This is done after editor is mounted and document is ready
+          // Use setTimeout to ensure editor host is fully initialized
+          setTimeout(() => {
+            if (!mounted || !editorRef.current) return;
+            const disposable = setupSelectionListener(
+              editorRef.current,
+              doc,
+              surfaceId,
+            );
+            if (disposable) {
+              selectionDisposableRef.current = disposable;
+            }
+          }, 100);
+
           setIsLoading(false);
         }
       } catch (e) {
@@ -426,11 +605,13 @@ export function MindMapCanvas({
     layout,
     readOnly,
     onTreeChange,
+    onNodeSelect,
+    setupSelectionListener,
     cleanup,
   ]);
 
-  // Handle node selection (would require more complex setup with BlockSuite events)
-  // For now, this is a placeholder that can be enhanced later
+  // Expose selectedNodeId for parent components that may need it
+  // This is available via the component state and can be observed via onNodeSelect callback
 
   if (error) {
     return (
