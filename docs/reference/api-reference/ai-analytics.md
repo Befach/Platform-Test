@@ -9,9 +9,11 @@
 ## 🤖 AI ASSISTANT API
 
 ### POST `/api/ai/chat`
+
 Send chat message (streaming response)
 
 **Request Body:**
+
 ```json
 {
   "message": "What are the best authentication methods for SaaS apps?",
@@ -21,6 +23,7 @@ Send chat message (streaming response)
 ```
 
 **Response (Server-Sent Events):**
+
 ```
 data: {"type":"start"}
 
@@ -34,9 +37,11 @@ data: {"type":"done"}
 ---
 
 ### POST `/api/ai/suggest`
+
 Get AI suggestions
 
 **Request Body:**
+
 ```json
 {
   "type": "dependencies",
@@ -46,6 +51,7 @@ Get AI suggestions
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "suggestions": [
@@ -63,9 +69,11 @@ Get AI suggestions
 ---
 
 ### POST `/api/ai/tools/:toolName`
+
 Execute AI tool (agentic mode)
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -78,6 +86,7 @@ Execute AI tool (agentic mode)
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "result": {
@@ -98,15 +107,18 @@ Execute AI tool (agentic mode)
 The Strategies module provides OKR/Pillar management with hierarchical structure and AI-powered alignment suggestions.
 
 ### GET `/api/strategies`
+
 List all strategies for a workspace with hierarchy support
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 - `parent_id` (optional): Filter by parent (use "null" for root)
 - `type` (optional): Filter by type (pillar, objective, key_result, initiative)
 
 **Response (200 OK):**
+
 ```json
 {
   "data": [
@@ -141,9 +153,11 @@ List all strategies for a workspace with hierarchy support
 ---
 
 ### POST `/api/strategies`
+
 Create a new strategy
 
 **Request Body:**
+
 ```json
 {
   "team_id": "1736857200000",
@@ -158,6 +172,7 @@ Create a new strategy
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "id": "1736857200100",
@@ -175,9 +190,11 @@ Create a new strategy
 ---
 
 ### GET `/api/strategies/[id]`
+
 Get a single strategy with its children
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "1736857200100",
@@ -197,9 +214,11 @@ Get a single strategy with its children
 ---
 
 ### PUT `/api/strategies/[id]`
+
 Update a strategy
 
 **Request Body:**
+
 ```json
 {
   "title": "Updated Title",
@@ -210,6 +229,7 @@ Update a strategy
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "1736857200100",
@@ -223,9 +243,11 @@ Update a strategy
 ---
 
 ### DELETE `/api/strategies/[id]`
+
 Delete a strategy and all its children (cascade)
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Strategy deleted successfully",
@@ -236,9 +258,11 @@ Delete a strategy and all its children (cascade)
 ---
 
 ### POST `/api/strategies/[id]/reorder`
+
 Reorder a strategy within the hierarchy (drag-drop support)
 
 **Request Body:**
+
 ```json
 {
   "parent_id": "1736857200100",
@@ -249,6 +273,7 @@ Reorder a strategy within the hierarchy (drag-drop support)
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -261,19 +286,23 @@ Reorder a strategy within the hierarchy (drag-drop support)
 ```
 
 **Error Responses:**
+
 - `400 Bad Request`: Invalid move (circular reference, invalid parent)
 - `404 Not Found`: Strategy not found
 
 ---
 
 ### GET `/api/strategies/stats`
+
 Get strategy statistics for a workspace
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "total": 12,
@@ -298,9 +327,11 @@ Get strategy statistics for a workspace
 ---
 
 ### POST `/api/ai/strategies/suggest`
+
 Get AI-powered alignment suggestions for work items
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200001",
@@ -309,6 +340,7 @@ Get AI-powered alignment suggestions for work items
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "suggestions": [
@@ -331,13 +363,16 @@ Get AI-powered alignment suggestions for work items
 The Analytics module provides 4 pre-built dashboards plus a custom dashboard builder (Pro feature).
 
 ### GET `/api/analytics/overview`
+
 Get Feature Overview dashboard data - work item metrics and status breakdowns
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "metrics": {
@@ -376,13 +411,16 @@ Get Feature Overview dashboard data - work item metrics and status breakdowns
 ---
 
 ### GET `/api/analytics/dependencies`
+
 Get Dependency Health dashboard data - dependency graph analysis and bottlenecks
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "metrics": {
@@ -434,13 +472,16 @@ Get Dependency Health dashboard data - dependency graph analysis and bottlenecks
 ---
 
 ### GET `/api/analytics/performance`
+
 Get Team Performance dashboard data - team metrics and productivity analysis
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "metrics": {
@@ -479,13 +520,16 @@ Get Team Performance dashboard data - team metrics and productivity analysis
 ---
 
 ### GET `/api/analytics/alignment`
+
 Get Strategy Alignment dashboard data - OKR/Pillar alignment and progress
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "metrics": {
@@ -535,9 +579,11 @@ Get Strategy Alignment dashboard data - OKR/Pillar alignment and progress
 ---
 
 ### POST `/api/analytics/dashboards`
+
 Create custom dashboard (Pro Feature)
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -561,6 +607,7 @@ Create custom dashboard (Pro Feature)
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "dashboard": {
@@ -573,6 +620,7 @@ Create custom dashboard (Pro Feature)
 ```
 
 **Available Widget IDs:**
+
 | Category | Widget IDs |
 |----------|------------|
 | Metrics | `total-work-items`, `completion-rate`, `blocked-items`, `health-score`, `velocity`, `cycle-time` |
@@ -581,4 +629,3 @@ Create custom dashboard (Pro Feature)
 | Progress | `strategy-progress`, `phase-progress`, `team-workload`, `sprint-progress` |
 
 ---
-

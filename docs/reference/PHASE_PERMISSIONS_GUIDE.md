@@ -5,6 +5,7 @@
 ---
 
 ## Table of Contents
+
 1. [Quick Start](#quick-start)
 2. [TypeScript Types](#typescript-types)
 3. [Common Queries](#common-queries)
@@ -17,12 +18,15 @@
 ## Quick Start
 
 ### Migration Applied ✅
+
 Migration `20250117000001_create_phase_assignments.sql` creates:
+
 - `user_phase_assignments` table
 - `calculate_work_item_phase()` function
 - Updated RLS policies on `work_items` table
 
 ### What Changed?
+
 - **Before**: All team members can create/edit/delete all work items
 - **After**: Members need phase assignments to modify work items (owners/admins bypass)
 - **Unchanged**: All team members can view all work items
@@ -568,6 +572,7 @@ export function CreateWorkItemButton({
 ### ✅ DO
 
 1. **Always check permissions client-side** before showing create/edit/delete UI
+
    ```typescript
    const { hasPermission } = await checkPhasePermission(...);
    if (!hasPermission) {
@@ -576,11 +581,13 @@ export function CreateWorkItemButton({
    ```
 
 2. **Use TypeScript types** for type safety
+
    ```typescript
    phase: WorkspacePhase // NOT phase: string
    ```
 
 3. **Cache phase assignments** to avoid repeated queries
+
    ```typescript
    const assignments = useMemo(() =>
      getUserPhaseAssignments(workspaceId, userId),
@@ -589,6 +596,7 @@ export function CreateWorkItemButton({
    ```
 
 4. **Show clear permission errors** to users
+
    ```tsx
    <Alert variant="destructive">
      You need '{phase}' phase permission to perform this action
@@ -596,6 +604,7 @@ export function CreateWorkItemButton({
    ```
 
 5. **Audit permission changes** in admin UI
+
    ```typescript
    await logPermissionChange({
      action: 'assigned',
@@ -609,6 +618,7 @@ export function CreateWorkItemButton({
 ### ❌ DON'T
 
 1. **Don't bypass RLS** - Server enforces permissions, client only for UX
+
    ```typescript
    // ❌ BAD: Assuming permission check
    await supabase.from('work_items').insert(newItem);
@@ -622,6 +632,7 @@ export function CreateWorkItemButton({
    ```
 
 2. **Don't use string literals** for phases
+
    ```typescript
    // ❌ BAD
    const phase = 'execution';
@@ -631,6 +642,7 @@ export function CreateWorkItemButton({
    ```
 
 3. **Don't forget to handle owner/admin bypass**
+
    ```typescript
    // ❌ BAD: Only checking assignments
    const assignment = await getAssignment(userId, phase);
@@ -641,6 +653,7 @@ export function CreateWorkItemButton({
    ```
 
 4. **Don't assign owners/admins to phases** - They bypass anyway
+
    ```typescript
    // ❌ BAD: Wasted database space
    if (userRole === 'owner') {
@@ -654,6 +667,7 @@ export function CreateWorkItemButton({
    ```
 
 5. **Don't hardcode phase values**
+
    ```typescript
    // ❌ BAD
    if (phase === 'execution' || phase === 'review') { ... }
@@ -670,6 +684,7 @@ export function CreateWorkItemButton({
 ### Problem: User can't create work items
 
 **Diagnosis**:
+
 ```typescript
 const { hasPermission, reason } = await checkPhasePermission(
   workspaceId,
@@ -681,6 +696,7 @@ console.log({ hasPermission, reason, phase, userRole });
 ```
 
 **Solutions**:
+
 - If `reason === 'no_permission'`: Assign user to phase
 - If `userRole === 'member'`: Promote to admin or assign to phase
 - If `phase` is wrong: Check `calculateWorkItemPhase()` logic
@@ -690,6 +706,7 @@ console.log({ hasPermission, reason, phase, userRole });
 ### Problem: Permission check returns false for owner/admin
 
 **Diagnosis**:
+
 ```typescript
 console.log('User role:', userRole);
 console.log('Expected: owner or admin');
@@ -704,6 +721,7 @@ console.log('Expected: owner or admin');
 **Error**: `new row violates row-level security policy`
 
 **Solution**: Verify current user is owner/admin in the team
+
 ```sql
 SELECT role FROM team_members
 WHERE user_id = auth.uid() AND team_id = ?;

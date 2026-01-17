@@ -39,6 +39,7 @@ Established foundational TypeScript types, Zod validation schemas, and configura
    - API input validation
 
 **Files Created:**
+
 - `next-app/src/components/blocksuite/types.ts`
 - `next-app/src/components/blocksuite/mindmap-types.ts`
 - `next-app/src/components/blocksuite/schema.ts`
@@ -75,6 +76,7 @@ Complete BlockSuite editor integration with React wrapper, mind map canvas, SSR-
    - Loading skeleton integration
 
 **Files Created:**
+
 - `next-app/src/components/blocksuite/blocksuite-editor.tsx` (~180 lines)
 - `next-app/src/components/blocksuite/mind-map-canvas.tsx` (~350 lines)
 - `next-app/src/components/blocksuite/mindmap-utils.ts` (~200 lines)
@@ -130,6 +132,7 @@ ReactFlow DAG:                    BlockSuite Tree:
 | `failed` | Migration attempted but failed |
 
 **Files Created:**
+
 - `next-app/src/components/blocksuite/migration-utils.ts` (~280 lines)
 - `supabase/migrations/20260106100000_add_blocksuite_migration_columns.sql`
 
@@ -197,6 +200,7 @@ Complete persistence layer with Yjs CRDT for real-time collaborative editing.
 | Size Limits | 10MB max state upload |
 
 **Files Created:**
+
 - `next-app/src/components/blocksuite/storage-client.ts` (~150 lines)
 - `next-app/src/components/blocksuite/hybrid-provider.ts` (~420 lines)
 - `next-app/src/components/blocksuite/persistence-types.ts` (~120 lines)
@@ -245,6 +249,7 @@ Complete RAG layer for semantic search across BlockSuite mind map content.
    - `mind_map_id` foreign key
 
 **Files Created:**
+
 - `next-app/src/lib/ai/embeddings/mindmap-embedding-service.ts` (~375 lines)
 - `next-app/src/components/blocksuite/text-extractor.ts` (~350 lines)
 - `next-app/src/components/blocksuite/mindmap-chunker.ts` (~180 lines)
@@ -263,6 +268,7 @@ Complete RAG layer for semantic search across BlockSuite mind map content.
 > **Full Plan:** See [AI_TOOL_ARCHITECTURE.md](advanced-ai-system/AI_TOOL_ARCHITECTURE.md)
 
 **What Changed:**
+
 - Added 3 new models: GLM 4.7, MiniMax M2.1, Gemini 3 Flash
 - Created MODEL_ROUTING config with 6 capability-based fallback chains
 - Wired 10 missing optimization/strategy tools
@@ -288,6 +294,7 @@ default:             Kimi K2 → GLM 4.7 → MiniMax M2.1
 ```
 
 **5-Layer Streaming Reliability Stack:**
+
 1. Vercel Fluid Compute - Dashboard setting
 2. vercel.json - `maxDuration: 300`
 3. streamWithTimeout() - 280s AbortController
@@ -295,10 +302,12 @@ default:             Kimi K2 → GLM 4.7 → MiniMax M2.1
 5. logSlowRequest() - Monitoring for >60s
 
 **Tools Wired (10):**
+
 - Optimization: prioritizeFeatures, balanceWorkload, identifyRisks, suggestTimeline, deduplicateItems
 - Strategy: alignToStrategy, suggestOKRs, competitiveAnalysis, roadmapGenerator, impactAssessment
 
 **Files Modified:**
+
 - `next-app/src/lib/ai/models-config.ts` - New models, routing config
 - `next-app/src/lib/ai/ai-sdk-client.ts` - Model exports
 - `next-app/src/lib/ai/agent-executor.ts` - 10 tools wired
@@ -308,6 +317,7 @@ default:             Kimi K2 → GLM 4.7 → MiniMax M2.1
 - `next-app/vercel.json` - AI function timeout config
 
 **Remaining Phases:**
+
 - Phase 3: Consolidate 38 -> 7 generalized tools
 - Phase 4: 4-tier orchestration system
 - Phase 5: Agent memory system

@@ -11,6 +11,7 @@
 ## Overview
 
 **Files to modify**:
+
 - `next-app/src/lib/ai/models-config.ts`
 - `next-app/src/lib/ai/ai-sdk-client.ts`
 
@@ -21,6 +22,7 @@
 ## Problem Statement
 
 The current model registry only has 5 models:
+
 - Kimi K2 Thinking (default)
 - Claude Haiku 4.5 (tools)
 - DeepSeek V3.2 (reasoning)
@@ -28,6 +30,7 @@ The current model registry only has 5 models:
 - Gemini 2.5 Flash (vision)
 
 We need to add 3 new high-performance models and create a routing system with fallback chains:
+
 - **GLM 4.7** - Best for strategic reasoning + agentic tool use
 - **MiniMax M2.1** - Best for coding tasks
 - **Gemini 3 Flash** - Upgraded vision with better reasoning
@@ -517,6 +520,7 @@ next-app/src/lib/ai/fallback-chain.ts (NEW FILE)
 ## Rollback Plan
 
 If issues arise:
+
 ```bash
 git checkout main
 git branch -D feat/model-routing-config

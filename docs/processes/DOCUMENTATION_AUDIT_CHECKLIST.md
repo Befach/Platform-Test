@@ -9,11 +9,13 @@
 ## 📅 AUDIT SCHEDULE
 
 ### Daily (End of Work Session)
+
 - [ ] Update PROGRESS.md with completed tasks
 - [ ] Add CHANGELOG.md entries for new migrations
 - [ ] Update task status in NEXT_STEPS.md
 
 ### Weekly (End of Sprint)
+
 - [ ] Review IMPLEMENTATION_PLAN.md phase status
 - [ ] Update README.md current status section
 - [ ] Sync CLAUDE.md if processes changed
@@ -21,6 +23,7 @@
 - [ ] Check for undocumented decisions
 
 ### Monthly (Before Major Releases)
+
 - [ ] Full documentation audit (use this checklist)
 - [ ] Fix all inconsistencies
 - [ ] Update all "Last Updated" timestamps
@@ -31,14 +34,16 @@
 ## 📝 CORE DOCUMENTATION FILES
 
 ### 1. README.md
+
 **Purpose**: Project overview, quick start, current status
 **Last Reviewed**: 2025-11-14
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Project name correct** ("Product Lifecycle Management Platform")
 - [ ] **Tech stack up-to-date** (Next.js 15, Supabase, etc.)
 - [ ] **Current status accurate** (Week X, Y% complete)
-- [ ] **Live URL working** (https://platform-test-cyan.vercel.app)
+- [ ] **Live URL working** (<https://platform-test-cyan.vercel.app>)
 - [ ] **Installation steps tested**
 - [ ] **MCP count correct** (3 active MCPs)
 - [ ] **Implementation status matches PROGRESS.md**
@@ -48,10 +53,12 @@
 ---
 
 ### 2. CLAUDE.md
+
 **Purpose**: Project guidelines, tech stack, process workflows
 **Last Reviewed**: 2025-01-13
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Tech stack summary matches README.md**
 - [ ] **MCP configuration matches cursor-mcp-config.json**
 - [ ] **Coding standards reflect current practices**
@@ -66,10 +73,12 @@
 ---
 
 ### 3. IMPLEMENTATION_PLAN.md (or docs/implementation/)
+
 **Purpose**: 8-week roadmap, database schema, detailed tasks
 **Last Reviewed**: 2025-01-13
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Database schema matches actual migrations**
 - [ ] **Missing tables documented** (mind_maps, feature_connections, etc.)
 - [ ] **Phase completions marked** (✅ for done, ⏳ for in-progress)
@@ -84,10 +93,12 @@
 ---
 
 ### 4. PROGRESS.md
+
 **Purpose**: Weekly tracker with completion percentages
 **Last Reviewed**: 2025-11-14
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Overall progress percentage accurate**
 - [ ] **Week-by-week completion updated**
 - [ ] **Visual progress bars match percentages**
@@ -102,10 +113,12 @@
 ---
 
 ### 5. CHANGELOG.md
+
 **Purpose**: Migration history, feature tracking, breaking changes
 **Last Reviewed**: 2025-11-14
 
-#### Checklist:
+#### Checklist
+
 - [ ] **All migrations documented**
 - [ ] **Migration dates correct** (no future dates)
 - [ ] **Feature implementations tracked**
@@ -119,10 +132,12 @@
 ---
 
 ### 6. NEXT_STEPS.md
+
 **Purpose**: Immediate actions, priorities, tactical roadmap
 **Last Reviewed**: 2025-11-14
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Immediate actions relevant** (this week)
 - [ ] **Priorities current** (match PROGRESS.md blockers)
 - [ ] **Time estimates reasonable**
@@ -136,10 +151,12 @@
 ---
 
 ### 7. REVISED_TIMELINE.md
+
 **Purpose**: Realistic 12-week timeline, milestones, adjustments
 **Last Reviewed**: 2025-11-14
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Current progress percentage matches PROGRESS.md**
 - [ ] **Visual roadmap bars accurate**
 - [ ] **Weekly breakdown matches actual work**
@@ -153,10 +170,12 @@
 ---
 
 ### 8. RECOMMENDED_AGENTS.md
+
 **Purpose**: Claude agents mapped to implementation phases
 **Last Reviewed**: 2025-01-13
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Agent count matches CLAUDE.md** (15 agents)
 - [ ] **Week-by-week agent recommendations current**
 - [ ] **Agent descriptions accurate**
@@ -168,10 +187,12 @@
 ---
 
 ### 9. MCP_USAGE_GUIDE.md
+
 **Purpose**: MCP usage examples and patterns
 **Last Reviewed**: 2025-11-26
 
-#### Checklist:
+#### Checklist
+
 - [ ] **MCP count correct** (5 active: Supabase, Playwright, Vercel, Parallel Search, Parallel Task)
 - [ ] **Usage examples current**
 - [ ] **Matches cursor-mcp-config.json**
@@ -180,10 +201,12 @@
 ---
 
 ### 10. MIND_MAP_ENHANCEMENTS.md
+
 **Purpose**: Postponed mind map features (23 enhancements)
 **Last Reviewed**: 2025-01-13
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Dependencies tracked with checkboxes**
 - [ ] **Review trigger date set**
 - [ ] **Rationale still valid**
@@ -195,10 +218,12 @@
 ---
 
 ### 11. .cursorrules
+
 **Purpose**: Cursor AI behavior, coding standards, MCP usage
 **Last Reviewed**: 2025-01-13
 
-#### Checklist:
+#### Checklist
+
 - [ ] **Tech stack matches CLAUDE.md**
 - [ ] **Coding standards reflect current practices**
 - [ ] **MCP usage guidelines accurate**
@@ -210,10 +235,12 @@
 ---
 
 ### 12. cursor-mcp-config.json
+
 **Purpose**: Active MCP server configuration
 **Last Reviewed**: 2025-01-13
 
-#### Checklist:
+#### Checklist
+
 - [ ] **MCP count matches docs** (3 active)
 - [ ] **Server configs valid** (Supabase, Playwright, Parallel-search)
 - [ ] **No deprecated MCPs**
@@ -224,13 +251,16 @@
 ## 🔗 CROSS-REFERENCE VALIDATION
 
 ### Tech Stack Consistency
+
 **Check these files mention same tech stack:**
+
 - [ ] README.md
 - [ ] CLAUDE.md
 - [ ] IMPLEMENTATION_PLAN.md
 - [ ] .cursorrules
 
 **Expected Stack**:
+
 - Next.js 15 + TypeScript
 - Supabase (PostgreSQL + Real-time + Auth + RLS)
 - shadcn/ui + Tailwind CSS
@@ -243,13 +273,16 @@
 ---
 
 ### MCP Configuration Consistency
+
 **Check these files have same MCP count (5):**
+
 - [ ] README.md (MCP section)
 - [ ] CLAUDE.md (MCP Servers table)
 - [ ] docs/reference/MCP_USAGE_GUIDE.md
 - [ ] cursor-mcp-config.json (count servers)
 
 **Expected MCPs**:
+
 1. Supabase MCP
 2. Playwright MCP
 3. Parallel-search MCP
@@ -257,7 +290,9 @@
 ---
 
 ### Progress Consistency
+
 **Check these files have same completion percentage:**
+
 - [ ] README.md (line 4, line 378-379)
 - [ ] PROGRESS.md (line 3, line 12)
 - [ ] REVISED_TIMELINE.md (line 4, line 21)
@@ -268,7 +303,9 @@
 ---
 
 ### Database Schema Consistency
+
 **Check these locations document same tables:**
+
 - [ ] IMPLEMENTATION_PLAN.md (Core Tables, Feature Tables, Mind Mapping Tables)
 - [ ] CLAUDE.md (Database Schema section)
 - [ ] README.md (Database Schema section)
@@ -280,7 +317,9 @@
 ---
 
 ### Timeline Consistency
+
 **Check these files align on current week:**
+
 - [ ] README.md (line 4)
 - [ ] PROGRESS.md (line 3)
 - [ ] NEXT_STEPS.md (line 2)
@@ -296,13 +335,16 @@
 ### When to Update Documentation (Always!)
 
 #### Database Schema Changes
+
 **Update Immediately:**
+
 - [ ] IMPLEMENTATION_PLAN.md (schema section)
 - [ ] CHANGELOG.md (new migration entry)
 - [ ] CLAUDE.md (if new patterns emerge)
 - [ ] README.md (if major change)
 
 **Template**:
+
 ```markdown
 ## [0.X.X] - YYYY-MM-DD
 ### Added - Database
@@ -315,7 +357,9 @@
 ---
 
 #### Tech Stack Changes (Package Added/Removed)
+
 **Update Immediately:**
+
 - [ ] README.md (Tech Stack section)
 - [ ] CLAUDE.md (Tech Stack Summary)
 - [ ] IMPLEMENTATION_PLAN.md (if architecture changes)
@@ -324,7 +368,9 @@
 ---
 
 #### Process Changes (New Workflows, MCPs)
+
 **Update Immediately:**
+
 - [ ] CLAUDE.md (Workflows section)
 - [ ] .cursorrules (if coding standards change)
 - [ ] docs/reference/MCP_USAGE_GUIDE.md (if MCP config changes)
@@ -332,7 +378,9 @@
 ---
 
 #### Phase Completions (Week Done)
+
 **Update Immediately:**
+
 - [ ] IMPLEMENTATION_PLAN.md (mark week complete)
 - [ ] PROGRESS.md (update percentages, checkboxes)
 - [ ] README.md (current status)
@@ -342,13 +390,16 @@
 ---
 
 #### Postponed Features (New Deferrals)
+
 **Update Immediately:**
+
 - [ ] Create `[FEATURE_NAME].md` (detailed spec)
 - [ ] Update IMPLEMENTATION_PLAN.md (postponed section)
 - [ ] Update relevant week file (if folder structure)
 - [ ] Add entry to CHANGELOG.md (Deprecated or Postponed section)
 
 **Template** (see CLAUDE.md, line 340-410):
+
 ```markdown
 ### [Feature Name] ([X features] - [Target Phase])
 **Postponed Date**: YYYY-MM-DD
@@ -363,7 +414,9 @@
 ---
 
 #### Architecture Changes (New Modules, APIs)
+
 **Update Immediately:**
+
 - [ ] ARCHITECTURE.md (diagrams)
 - [ ] API_REFERENCE.md (if API changes)
 - [ ] CLAUDE.md (quick reference)
@@ -374,6 +427,7 @@
 ## 📋 FULL AUDIT PROCESS (Monthly)
 
 ### Step 1: Preparation (15 min)
+
 - [ ] Open all core documentation files
 - [ ] Open cursor-mcp-config.json
 - [ ] Open latest migrations in supabase/migrations/
@@ -382,6 +436,7 @@
 ---
 
 ### Step 2: Core Files Review (60 min)
+
 - [ ] README.md - Check all items in checklist above
 - [ ] CLAUDE.md - Check all items in checklist above
 - [ ] IMPLEMENTATION_PLAN.md - Check all items in checklist above
@@ -391,6 +446,7 @@
 ---
 
 ### Step 3: Cross-Reference Validation (30 min)
+
 - [ ] Tech stack consistency (4 files)
 - [ ] MCP configuration consistency (4 files)
 - [ ] Progress consistency (4 files)
@@ -400,6 +456,7 @@
 ---
 
 ### Step 4: Undocumented Decisions (30 min)
+
 - [ ] Review CHANGELOG.md for undocumented decisions
 - [ ] Check git log for untracked changes
 - [ ] Ask team: Any decisions made but not documented?
@@ -408,6 +465,7 @@
 ---
 
 ### Step 5: Fix Inconsistencies (varies)
+
 - [ ] Create list of all inconsistencies found
 - [ ] Prioritize by impact (Critical → Low)
 - [ ] Fix critical inconsistencies immediately
@@ -416,6 +474,7 @@
 ---
 
 ### Step 6: Update Timestamps (10 min)
+
 - [ ] Update "Last Updated" in all modified files
 - [ ] Update "Last Reviewed" dates in this checklist
 - [ ] Commit all documentation changes
@@ -423,6 +482,7 @@
 ---
 
 ### Step 7: Report (15 min)
+
 - [ ] Create audit report (optional, for larger teams)
 - [ ] List all changes made
 - [ ] Note any remaining issues
@@ -433,6 +493,7 @@
 ## 🚨 RED FLAGS (Fix Immediately)
 
 ### Critical Inconsistencies
+
 - [ ] **MCP count mismatch** (e.g., README says 2, config has 3)
 - [ ] **Progress percentage differs by >10%** across files
 - [ ] **Database schema documented but migration missing**
@@ -441,6 +502,7 @@
 - [ ] **Security vulnerabilities documented but not fixed**
 
 ### Warning Signs
+
 - [ ] **Last Updated > 2 weeks ago** on any core file
 - [ ] **No CHANGELOG entry for new migration**
 - [ ] **Postponed feature past review trigger date**
@@ -454,32 +516,38 @@
 ### Grading Criteria
 
 **A+ (95-100%)**:
+
 - All checklists complete
 - Zero inconsistencies
 - All timestamps current (<1 week old)
 - Cross-references valid
 
 **A (90-94%)**:
+
 - 1-2 minor inconsistencies
 - Most timestamps current
 - Cross-references mostly valid
 
 **B (80-89%)**:
+
 - 3-5 minor inconsistencies
 - Some timestamps outdated
 - Some cross-references need fixing
 
 **C (70-79%)**:
+
 - 6-10 inconsistencies
 - Many timestamps outdated
 - Many cross-references invalid
 
 **D (60-69%)**:
+
 - 11-20 inconsistencies
 - Most timestamps outdated
 - Major documentation drift
 
 **F (<60%)**:
+
 - 20+ inconsistencies
 - Documentation unmaintained
 - Critical issues unaddressed
@@ -491,18 +559,21 @@
 ## 🎯 CONTINUOUS IMPROVEMENT
 
 ### Documentation Debt
+
 - Track documentation debt like technical debt
 - Add "Docs Debt" label in GitHub Issues
 - Allocate time each sprint for documentation
 - Don't let documentation fall behind >1 week
 
 ### Automation Opportunities
+
 - [ ] Auto-update timestamps on file save
 - [ ] Pre-commit hook to check documentation consistency
 - [ ] CI/CD check for README.md accuracy
 - [ ] Automated weekly documentation audit report
 
 ### Team Education
+
 - [ ] Share this checklist with team
 - [ ] Train new members on documentation maintenance
 - [ ] Include documentation in definition of done

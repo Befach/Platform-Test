@@ -14,10 +14,12 @@
 All API routes require authentication unless explicitly marked as **[PUBLIC]**.
 
 **Authentication Method:** Supabase Auth (session-based)
+
 - Client-side: Automatic via `@supabase/auth-helpers-nextjs`
 - Server-side: Extract session from request headers
 
 **Headers Required:**
+
 ```http
 Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 ```
@@ -50,9 +52,11 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 ## 🔐 AUTH API
 
 ### POST `/api/auth/signup`
+
 **[PUBLIC]** Create a new user account
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -62,6 +66,7 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "user": {
@@ -80,9 +85,11 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 ---
 
 ### POST `/api/auth/login`
+
 **[PUBLIC]** Sign in existing user
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -91,6 +98,7 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "user": { /* user object */ },
@@ -101,9 +109,11 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 ---
 
 ### POST `/api/auth/logout`
+
 Sign out current user
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Logged out successfully"
@@ -113,9 +123,11 @@ Sign out current user
 ---
 
 ### GET `/api/auth/session`
+
 Get current user session
 
 **Response (200 OK):**
+
 ```json
 {
   "user": {
@@ -134,9 +146,11 @@ Get current user session
 ## 👤 USER API
 
 ### GET `/api/user/profile`
+
 Get current user profile
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "uuid",
@@ -150,9 +164,11 @@ Get current user profile
 ---
 
 ### GET `/api/user/teams`
+
 Get all teams the current user belongs to
 
 **Response (200 OK):**
+
 ```json
 {
   "teams": [
@@ -171,9 +187,11 @@ Get all teams the current user belongs to
 ## 👥 TEAMS API
 
 ### POST `/api/teams`
+
 Create a new team
 
 **Request Body:**
+
 ```json
 {
   "name": "Acme Corp",
@@ -182,6 +200,7 @@ Create a new team
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "team": {
@@ -198,9 +217,11 @@ Create a new team
 ---
 
 ### GET `/api/teams`
+
 List all teams for current user
 
 **Response (200 OK):**
+
 ```json
 {
   "teams": [
@@ -218,9 +239,11 @@ List all teams for current user
 ---
 
 ### GET `/api/teams/:teamId`
+
 Get team details
 
 **Response (200 OK):**
+
 ```json
 {
   "team": {
@@ -247,9 +270,11 @@ Get team details
 ---
 
 ### PATCH `/api/teams/:teamId`
+
 Update team details
 
 **Request Body:**
+
 ```json
 {
   "name": "Acme Corporation"
@@ -257,6 +282,7 @@ Update team details
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "team": { /* updated team object */ }
@@ -266,6 +292,7 @@ Update team details
 ---
 
 ### DELETE `/api/teams/:teamId`
+
 Delete team (owner only)
 
 **Response (204 No Content)**
@@ -273,9 +300,11 @@ Delete team (owner only)
 ---
 
 ### POST `/api/teams/:teamId/members`
+
 Invite team member
 
 **Request Body:**
+
 ```json
 {
   "email": "newmember@example.com",
@@ -284,6 +313,7 @@ Invite team member
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "invitation": {
@@ -298,6 +328,7 @@ Invite team member
 ---
 
 ### DELETE `/api/teams/:teamId/members/:userId`
+
 Remove team member
 
 **Response (204 No Content)**
@@ -307,12 +338,15 @@ Remove team member
 ## 👥 TEAM MEMBERS API
 
 ### GET `/api/team/members`
+
 Get all members of current team
 
 **Query Parameters:**
+
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "members": [
@@ -332,9 +366,11 @@ Get all members of current team
 ---
 
 ### PATCH `/api/team/members/:id`
+
 Update team member role
 
 **Request Body:**
+
 ```json
 {
   "role": "admin"
@@ -342,6 +378,7 @@ Update team member role
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "member": {
@@ -354,9 +391,11 @@ Update team member role
 ---
 
 ### GET `/api/team/invitations`
+
 Get all pending invitations
 
 **Response (200 OK):**
+
 ```json
 {
   "invitations": [
@@ -375,9 +414,11 @@ Get all pending invitations
 ---
 
 ### POST `/api/team/invitations`
+
 Send team invitation with phase assignments
 
 **Request Body:**
+
 ```json
 {
   "email": "newuser@example.com",
@@ -387,6 +428,7 @@ Send team invitation with phase assignments
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "invitation": {
@@ -400,9 +442,11 @@ Send team invitation with phase assignments
 ---
 
 ### POST `/api/team/invitations/accept`
+
 Accept a team invitation
 
 **Request Body:**
+
 ```json
 {
   "token": "invite_token_xxx"
@@ -410,6 +454,7 @@ Accept a team invitation
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -420,9 +465,11 @@ Accept a team invitation
 ---
 
 ### GET `/api/team/phase-assignments`
+
 Get phase assignments for team members
 
 **Response (200 OK):**
+
 ```json
 {
   "assignments": [
@@ -438,9 +485,11 @@ Get phase assignments for team members
 ---
 
 ### POST `/api/team/phase-assignments`
+
 Assign user to phase
 
 **Request Body:**
+
 ```json
 {
   "user_id": "uuid",
@@ -450,6 +499,7 @@ Assign user to phase
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "assignment": {
@@ -465,9 +515,11 @@ Assign user to phase
 ## 🏢 WORKSPACES API
 
 ### POST `/api/workspaces`
+
 Create workspace
 
 **Request Body:**
+
 ```json
 {
   "team_id": "1736857200000",
@@ -479,6 +531,7 @@ Create workspace
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "workspace": {
@@ -495,12 +548,15 @@ Create workspace
 ---
 
 ### GET `/api/workspaces`
+
 List all workspaces for team
 
 **Query Parameters:**
+
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "workspaces": [
@@ -517,9 +573,11 @@ List all workspaces for team
 ---
 
 ### GET `/api/workspaces/:workspaceId`
+
 Get workspace details
 
 **Response (200 OK):**
+
 ```json
 {
   "workspace": {
@@ -536,9 +594,11 @@ Get workspace details
 ---
 
 ### PATCH `/api/workspaces/:workspaceId`
+
 Update workspace
 
 **Request Body:**
+
 ```json
 {
   "phase": "review",
@@ -547,6 +607,7 @@ Update workspace
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "workspace": { /* updated workspace */ }
@@ -556,6 +617,7 @@ Update workspace
 ---
 
 ### DELETE `/api/workspaces/:workspaceId`
+
 Delete workspace
 
 **Response (204 No Content)**
@@ -565,9 +627,11 @@ Delete workspace
 ## 📋 FEATURES API
 
 ### POST `/api/features`
+
 Create feature
 
 **Request Body:**
+
 ```json
 {
   "team_id": "1736857200000",
@@ -587,6 +651,7 @@ Create feature
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "feature": {
@@ -603,14 +668,17 @@ Create feature
 ---
 
 ### GET `/api/features`
+
 List features
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `timeline` (optional): Filter by timeline (MVP, SHORT, LONG)
 - `status` (optional): Filter by status
 
 **Response (200 OK):**
+
 ```json
 {
   "features": [
@@ -628,9 +696,11 @@ List features
 ---
 
 ### GET `/api/features/:featureId`
+
 Get feature details
 
 **Response (200 OK):**
+
 ```json
 {
   "feature": {
@@ -649,9 +719,11 @@ Get feature details
 ---
 
 ### PATCH `/api/features/:featureId`
+
 Update feature
 
 **Request Body:**
+
 ```json
 {
   "purpose": "Updated description",
@@ -660,6 +732,7 @@ Update feature
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "feature": { /* updated feature */ }
@@ -669,6 +742,7 @@ Update feature
 ---
 
 ### DELETE `/api/features/:featureId`
+
 Delete feature
 
 **Response (204 No Content)**
@@ -680,9 +754,11 @@ Delete feature
 Work Items are the primary unit of trackable work (features, bugs, enhancements).
 
 ### GET `/api/work-items`
+
 Get all work items for a workspace
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `type`: Filter by type (concept, feature, bug)
 - `is_enhancement`: Filter for enhancement features (boolean)
@@ -690,6 +766,7 @@ Get all work items for a workspace
 - `phase`: Filter by phase
 
 **Response (200 OK):**
+
 ```json
 {
   "work_items": [
@@ -711,9 +788,11 @@ Get all work items for a workspace
 ---
 
 ### POST `/api/work-items`
+
 Create a new work item
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -726,6 +805,7 @@ Create a new work item
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "work_item": {
@@ -739,9 +819,11 @@ Create a new work item
 ---
 
 ### GET `/api/work-items/:id`
+
 Get work item details
 
 **Response (200 OK):**
+
 ```json
 {
   "work_item": {
@@ -759,9 +841,11 @@ Get work item details
 ---
 
 ### PATCH `/api/work-items/:id`
+
 Update work item
 
 **Request Body:**
+
 ```json
 {
   "name": "Updated Name",
@@ -771,6 +855,7 @@ Update work item
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "work_item": { /* updated */ }
@@ -780,9 +865,11 @@ Update work item
 ---
 
 ### PATCH `/api/work-items/:id/status`
+
 Update work item status only
 
 **Request Body:**
+
 ```json
 {
   "status": "completed"
@@ -790,6 +877,7 @@ Update work item status only
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true
@@ -799,9 +887,11 @@ Update work item status only
 ---
 
 ### GET `/api/work-items/:id/children`
+
 Get child work items (for epics)
 
 **Response (200 OK):**
+
 ```json
 {
   "children": [
@@ -822,12 +912,15 @@ Get child work items (for epics)
 Timeline items represent breakdown of work items into MVP/SHORT/LONG phases.
 
 ### GET `/api/timeline-items`
+
 Get timeline items for a work item
 
 **Query Parameters:**
+
 - `work_item_id` (required): Parent work item ID
 
 **Response (200 OK):**
+
 ```json
 {
   "timeline_items": [
@@ -848,9 +941,11 @@ Get timeline items for a work item
 ---
 
 ### POST `/api/timeline-items`
+
 Create timeline item
 
 **Request Body:**
+
 ```json
 {
   "work_item_id": "1736857200010",
@@ -861,6 +956,7 @@ Create timeline item
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "timeline_item": {
@@ -873,9 +969,11 @@ Create timeline item
 ---
 
 ### PATCH `/api/timeline-items/:id`
+
 Update timeline item
 
 **Request Body:**
+
 ```json
 {
   "status": "in_progress",
@@ -885,6 +983,7 @@ Update timeline item
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "timeline_item": { /* updated */ }
@@ -898,13 +997,16 @@ Update timeline item
 Product tasks are granular execution items under timeline items.
 
 ### GET `/api/product-tasks`
+
 Get tasks for a timeline item
 
 **Query Parameters:**
+
 - `timeline_item_id` (required): Parent timeline item ID
 - `status`: Filter by status
 
 **Response (200 OK):**
+
 ```json
 {
   "tasks": [
@@ -925,9 +1027,11 @@ Get tasks for a timeline item
 ---
 
 ### POST `/api/product-tasks`
+
 Create a new task
 
 **Request Body:**
+
 ```json
 {
   "timeline_item_id": "1736857200020",
@@ -939,6 +1043,7 @@ Create a new task
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "task": {
@@ -951,9 +1056,11 @@ Create a new task
 ---
 
 ### PATCH `/api/product-tasks/:id`
+
 Update task
 
 **Request Body:**
+
 ```json
 {
   "status": "completed",
@@ -962,6 +1069,7 @@ Update task
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "task": { /* updated */ }
@@ -971,12 +1079,15 @@ Update task
 ---
 
 ### GET `/api/product-tasks/stats`
+
 Get task statistics
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 
 **Response (200 OK):**
+
 ```json
 {
   "stats": {
@@ -992,9 +1103,11 @@ Get task statistics
 ---
 
 ### POST `/api/product-tasks/:id/convert`
+
 Convert task to work item
 
 **Response (200 OK):**
+
 ```json
 {
   "work_item": {
@@ -1013,9 +1126,11 @@ Resources are external links, documentation, and inspiration that can be linked 
 Features: full-text search, many-to-many linking, soft-delete with 30-day recycle bin, complete audit trail.
 
 ### GET `/api/resources`
+
 List resources with optional filtering
 
 **Query Parameters:**
+
 - `team_id` (required): Team ID
 - `workspace_id` (optional): Filter by workspace
 - `type` (optional): Filter by type (reference, inspiration, documentation, media, tool)
@@ -1024,6 +1139,7 @@ List resources with optional filtering
 - `offset` (optional, default: 0): Pagination offset
 
 **Response (200 OK):**
+
 ```json
 {
   "data": [
@@ -1044,9 +1160,11 @@ List resources with optional filtering
 ---
 
 ### POST `/api/resources`
+
 Create a new resource
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -1062,6 +1180,7 @@ Create a new resource
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "data": {
@@ -1077,9 +1196,11 @@ Create a new resource
 ---
 
 ### GET `/api/resources/:id`
+
 Get resource details with linked work items
 
 **Response (200 OK):**
+
 ```json
 {
   "data": {
@@ -1104,9 +1225,11 @@ Get resource details with linked work items
 ---
 
 ### PATCH `/api/resources/:id`
+
 Update resource or restore from trash
 
 **Request Body (update):**
+
 ```json
 {
   "title": "Updated Title",
@@ -1115,11 +1238,13 @@ Update resource or restore from trash
 ```
 
 **Request Body (restore - use query param `?action=restore`):**
+
 ```json
 {}
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "data": { /* updated resource */ }
@@ -1129,12 +1254,15 @@ Update resource or restore from trash
 ---
 
 ### DELETE `/api/resources/:id`
+
 Soft delete or permanent delete
 
 **Query Parameters:**
+
 - `permanent` (optional): If `true`, permanently delete (skip trash)
 
 **Response (200 OK - soft delete):**
+
 ```json
 {
   "message": "Resource moved to trash"
@@ -1146,9 +1274,11 @@ Soft delete or permanent delete
 ---
 
 ### GET `/api/resources/search`
+
 Full-text search across resources
 
 **Query Parameters:**
+
 - `team_id` (required): Team ID
 - `q` (required): Search query
 - `workspace_id` (optional): Filter by workspace
@@ -1156,6 +1286,7 @@ Full-text search across resources
 - `limit` (optional, default: 20): Max results
 
 **Response (200 OK):**
+
 ```json
 {
   "data": [
@@ -1174,9 +1305,11 @@ Full-text search across resources
 ---
 
 ### GET `/api/resources/:id/history`
+
 Get audit trail for a resource
 
 **Response (200 OK):**
+
 ```json
 {
   "data": [
@@ -1207,9 +1340,11 @@ Get audit trail for a resource
 ---
 
 ### GET `/api/work-items/:id/resources`
+
 Get resources linked to a work item, organized by tab
 
 **Response (200 OK):**
+
 ```json
 {
   "data": {
@@ -1237,9 +1372,11 @@ Get resources linked to a work item, organized by tab
 ---
 
 ### POST `/api/work-items/:id/resources`
+
 Link a resource to work item or create and link new resource
 
 **Request Body (link existing):**
+
 ```json
 {
   "resource_id": "1736857200100",
@@ -1249,6 +1386,7 @@ Link a resource to work item or create and link new resource
 ```
 
 **Request Body (create and link):**
+
 ```json
 {
   "title": "New Resource",
@@ -1259,6 +1397,7 @@ Link a resource to work item or create and link new resource
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "message": "Resource linked successfully"
@@ -1268,12 +1407,15 @@ Link a resource to work item or create and link new resource
 ---
 
 ### DELETE `/api/work-items/:id/resources`
+
 Unlink a resource from work item
 
 **Query Parameters:**
+
 - `resource_id` (required): Resource ID to unlink
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Resource unlinked successfully"
@@ -1285,9 +1427,11 @@ Unlink a resource from work item
 ## 🧠 MIND MAPS API
 
 ### POST `/api/mind-maps`
+
 Create mind map
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -1300,6 +1444,7 @@ Create mind map
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "mind_map": {
@@ -1314,9 +1459,11 @@ Create mind map
 ---
 
 ### GET `/api/mind-maps/:mindMapId`
+
 Get mind map
 
 **Response (200 OK):**
+
 ```json
 {
   "mind_map": {
@@ -1340,9 +1487,11 @@ Get mind map
 ---
 
 ### PATCH `/api/mind-maps/:mindMapId`
+
 Update mind map canvas
 
 **Request Body:**
+
 ```json
 {
   "canvas_data": {
@@ -1353,6 +1502,7 @@ Update mind map canvas
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "mind_map": { /* updated mind map */ }
@@ -1362,9 +1512,11 @@ Update mind map canvas
 ---
 
 ### POST `/api/mind-maps/:mindMapId/convert-to-features`
+
 Convert mind map nodes to features
 
 **Request Body:**
+
 ```json
 {
   "node_ids": ["node_1", "node_2", "node_3"]
@@ -1372,6 +1524,7 @@ Convert mind map nodes to features
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "features": [
@@ -1390,9 +1543,11 @@ Convert mind map nodes to features
 ## 🔗 DEPENDENCIES API
 
 ### POST `/api/dependencies`
+
 Create dependency link
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -1404,6 +1559,7 @@ Create dependency link
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "dependency": {
@@ -1419,12 +1575,15 @@ Create dependency link
 ---
 
 ### GET `/api/dependencies`
+
 Get dependency graph
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 
 **Response (200 OK):**
+
 ```json
 {
   "nodes": [
@@ -1448,9 +1607,11 @@ Get dependency graph
 ---
 
 ### POST `/api/dependencies/analyze`
+
 Analyze critical path and bottlenecks
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002"
@@ -1458,6 +1619,7 @@ Analyze critical path and bottlenecks
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "critical_path": [
@@ -1481,9 +1643,11 @@ Analyze critical path and bottlenecks
 ## 👥 REVIEW & FEEDBACK API
 
 ### POST `/api/review-links`
+
 Create review link
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -1499,6 +1663,7 @@ Create review link
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "review_link": {
@@ -1514,9 +1679,11 @@ Create review link
 ---
 
 ### GET `/public/review/:token` **[PUBLIC]**
+
 Get review page data
 
 **Response (200 OK):**
+
 ```json
 {
   "workspace": {
@@ -1539,9 +1706,11 @@ Get review page data
 ---
 
 ### POST `/api/feedback` **[PUBLIC]**
+
 Submit feedback
 
 **Request Body:**
+
 ```json
 {
   "review_link_token": "abc123xyz",
@@ -1553,6 +1722,7 @@ Submit feedback
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "feedback": {
@@ -1569,14 +1739,17 @@ Submit feedback
 ---
 
 ### GET `/api/feedback`
+
 List all feedback
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `feature_id` (optional): Filter by feature
 - `status` (optional): Filter by status (new, reviewed, implemented, rejected)
 
 **Response (200 OK):**
+
 ```json
 {
   "feedback": [
@@ -1598,9 +1771,11 @@ List all feedback
 ## 🤖 AI ASSISTANT API
 
 ### POST `/api/ai/chat`
+
 Send chat message (streaming response)
 
 **Request Body:**
+
 ```json
 {
   "message": "What are the best authentication methods for SaaS apps?",
@@ -1610,6 +1785,7 @@ Send chat message (streaming response)
 ```
 
 **Response (Server-Sent Events):**
+
 ```
 data: {"type":"start"}
 
@@ -1623,9 +1799,11 @@ data: {"type":"done"}
 ---
 
 ### POST `/api/ai/suggest`
+
 Get AI suggestions
 
 **Request Body:**
+
 ```json
 {
   "type": "dependencies",
@@ -1635,6 +1813,7 @@ Get AI suggestions
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "suggestions": [
@@ -1652,9 +1831,11 @@ Get AI suggestions
 ---
 
 ### POST `/api/ai/tools/:toolName`
+
 Execute AI tool (agentic mode)
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -1667,6 +1848,7 @@ Execute AI tool (agentic mode)
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "result": {
@@ -1687,15 +1869,18 @@ Execute AI tool (agentic mode)
 The Strategies module provides OKR/Pillar management with hierarchical structure and AI-powered alignment suggestions.
 
 ### GET `/api/strategies`
+
 List all strategies for a workspace with hierarchy support
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 - `parent_id` (optional): Filter by parent (use "null" for root)
 - `type` (optional): Filter by type (pillar, objective, key_result, initiative)
 
 **Response (200 OK):**
+
 ```json
 {
   "data": [
@@ -1730,9 +1915,11 @@ List all strategies for a workspace with hierarchy support
 ---
 
 ### POST `/api/strategies`
+
 Create a new strategy
 
 **Request Body:**
+
 ```json
 {
   "team_id": "1736857200000",
@@ -1747,6 +1934,7 @@ Create a new strategy
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "id": "1736857200100",
@@ -1764,9 +1952,11 @@ Create a new strategy
 ---
 
 ### GET `/api/strategies/[id]`
+
 Get a single strategy with its children
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "1736857200100",
@@ -1786,9 +1976,11 @@ Get a single strategy with its children
 ---
 
 ### PUT `/api/strategies/[id]`
+
 Update a strategy
 
 **Request Body:**
+
 ```json
 {
   "title": "Updated Title",
@@ -1799,6 +1991,7 @@ Update a strategy
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "1736857200100",
@@ -1812,9 +2005,11 @@ Update a strategy
 ---
 
 ### DELETE `/api/strategies/[id]`
+
 Delete a strategy and all its children (cascade)
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Strategy deleted successfully",
@@ -1825,9 +2020,11 @@ Delete a strategy and all its children (cascade)
 ---
 
 ### POST `/api/strategies/[id]/reorder`
+
 Reorder a strategy within the hierarchy (drag-drop support)
 
 **Request Body:**
+
 ```json
 {
   "parent_id": "1736857200100",
@@ -1838,6 +2035,7 @@ Reorder a strategy within the hierarchy (drag-drop support)
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -1850,19 +2048,23 @@ Reorder a strategy within the hierarchy (drag-drop support)
 ```
 
 **Error Responses:**
+
 - `400 Bad Request`: Invalid move (circular reference, invalid parent)
 - `404 Not Found`: Strategy not found
 
 ---
 
 ### GET `/api/strategies/stats`
+
 Get strategy statistics for a workspace
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "total": 12,
@@ -1887,9 +2089,11 @@ Get strategy statistics for a workspace
 ---
 
 ### POST `/api/ai/strategies/suggest`
+
 Get AI-powered alignment suggestions for work items
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200001",
@@ -1898,6 +2102,7 @@ Get AI-powered alignment suggestions for work items
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "suggestions": [
@@ -1920,13 +2125,16 @@ Get AI-powered alignment suggestions for work items
 The Analytics module provides 4 pre-built dashboards plus a custom dashboard builder (Pro feature).
 
 ### GET `/api/analytics/overview`
+
 Get Feature Overview dashboard data - work item metrics and status breakdowns
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "metrics": {
@@ -1965,13 +2173,16 @@ Get Feature Overview dashboard data - work item metrics and status breakdowns
 ---
 
 ### GET `/api/analytics/dependencies`
+
 Get Dependency Health dashboard data - dependency graph analysis and bottlenecks
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "metrics": {
@@ -2023,13 +2234,16 @@ Get Dependency Health dashboard data - dependency graph analysis and bottlenecks
 ---
 
 ### GET `/api/analytics/performance`
+
 Get Team Performance dashboard data - team metrics and productivity analysis
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "metrics": {
@@ -2068,13 +2282,16 @@ Get Team Performance dashboard data - team metrics and productivity analysis
 ---
 
 ### GET `/api/analytics/alignment`
+
 Get Strategy Alignment dashboard data - OKR/Pillar alignment and progress
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "metrics": {
@@ -2124,9 +2341,11 @@ Get Strategy Alignment dashboard data - OKR/Pillar alignment and progress
 ---
 
 ### POST `/api/analytics/dashboards`
+
 Create custom dashboard (Pro Feature)
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -2150,6 +2369,7 @@ Create custom dashboard (Pro Feature)
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "dashboard": {
@@ -2162,6 +2382,7 @@ Create custom dashboard (Pro Feature)
 ```
 
 **Available Widget IDs:**
+
 | Category | Widget IDs |
 |----------|------------|
 | Metrics | `total-work-items`, `completion-rate`, `blocked-items`, `health-score`, `velocity`, `cycle-time` |
@@ -2176,15 +2397,18 @@ Create custom dashboard (Pro Feature)
 External integrations via MCP Gateway (270+ integrations).
 
 ### GET `/api/integrations`
+
 List all integrations for the authenticated user's team.
 
 **Query Parameters:**
+
 | Param | Type | Description |
 |-------|------|-------------|
 | `status` | string | Filter by status (`connected`, `expired`, `error`) |
 | `provider` | string | Filter by provider (`github`, `jira`, `slack`, etc.) |
 
 **Response (200 OK):**
+
 ```json
 {
   "integrations": [
@@ -2206,9 +2430,11 @@ List all integrations for the authenticated user's team.
 ---
 
 ### POST `/api/integrations`
+
 Create a new integration and initiate OAuth flow.
 
 **Request Body:**
+
 ```json
 {
   "provider": "github",
@@ -2218,6 +2444,7 @@ Create a new integration and initiate OAuth flow.
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "integration": {
@@ -2235,9 +2462,11 @@ Create a new integration and initiate OAuth flow.
 ---
 
 ### GET `/api/integrations/[id]`
+
 Get details for a specific integration, including sync logs.
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "1701234567890",
@@ -2261,9 +2490,11 @@ Get details for a specific integration, including sync logs.
 ---
 
 ### DELETE `/api/integrations/[id]`
+
 Disconnect and delete an integration.
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Integration deleted"
@@ -2273,9 +2504,11 @@ Disconnect and delete an integration.
 ---
 
 ### POST `/api/integrations/[id]/sync`
+
 Trigger a sync operation for an integration.
 
 **Request Body:**
+
 ```json
 {
   "syncType": "import",
@@ -2286,6 +2519,7 @@ Trigger a sync operation for an integration.
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "syncLogId": "1701234567892",
@@ -2298,9 +2532,11 @@ Trigger a sync operation for an integration.
 ---
 
 ### GET `/api/integrations/oauth/callback`
+
 OAuth callback handler (redirects to settings page with status).
 
 **Query Parameters (from OAuth provider):**
+
 | Param | Type | Description |
 |-------|------|-------------|
 | `code` | string | Authorization code |
@@ -2312,9 +2548,11 @@ OAuth callback handler (redirects to settings page with status).
 ---
 
 ### GET `/api/workspaces/[id]/integrations`
+
 List integrations enabled for a workspace.
 
 **Response (200 OK):**
+
 ```json
 {
   "integrations": [
@@ -2335,9 +2573,11 @@ List integrations enabled for a workspace.
 ---
 
 ### POST `/api/workspaces/[id]/integrations`
+
 Enable an integration for a workspace.
 
 **Request Body:**
+
 ```json
 {
   "integrationId": "1701234567890",
@@ -2347,6 +2587,7 @@ Enable an integration for a workspace.
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "message": "Integration enabled for workspace",
@@ -2372,17 +2613,20 @@ Enable an integration for a workspace.
 ## 🔔 WEBHOOKS
 
 ### POST `/api/webhooks/stripe`
+
 Stripe webhook handler
 
 **[PUBLIC - Verified with Stripe signature]**
 
 **Events Handled:**
+
 - `customer.subscription.created`
 - `customer.subscription.updated`
 - `customer.subscription.deleted`
 - `invoice.payment_failed`
 
 **Request Headers:**
+
 ```http
 Stripe-Signature: t=1234567890,v1=abc123...
 ```
@@ -2390,6 +2634,7 @@ Stripe-Signature: t=1234567890,v1=abc123...
 **Request Body:** (Stripe event object)
 
 **Response (200 OK):**
+
 ```json
 {
   "received": true
@@ -2399,16 +2644,19 @@ Stripe-Signature: t=1234567890,v1=abc123...
 ---
 
 ### POST `/api/webhooks/resend`
+
 Email webhook handler (delivery status)
 
 **[PUBLIC - Verified with Resend signature]**
 
 **Events Handled:**
+
 - `email.delivered`
 - `email.bounced`
 - `email.opened`
 
 **Response (200 OK):**
+
 ```json
 {
   "received": true
@@ -2436,6 +2684,7 @@ All error responses follow this format:
 ```
 
 **Common Error Codes:**
+
 - `400` - Bad Request (invalid input)
 - `401` - Unauthorized (not authenticated)
 - `403` - Forbidden (not authorized for this action)
@@ -2452,10 +2701,12 @@ All error responses follow this format:
 List endpoints support pagination:
 
 **Query Parameters:**
+
 - `page` (default: 1): Page number
 - `limit` (default: 20, max: 100): Items per page
 
 **Response:**
+
 ```json
 {
   "data": [ /* items */ ],
@@ -2473,14 +2724,17 @@ List endpoints support pagination:
 ### Rate Limiting
 
 **Free Tier:**
+
 - 100 requests/minute per user
 - 50 AI messages/month per team
 
 **Pro Tier:**
+
 - 500 requests/minute per user
 - 1,000 AI messages/user/month
 
 **Rate Limit Headers:**
+
 ```http
 X-RateLimit-Limit: 500
 X-RateLimit-Remaining: 487
@@ -2492,11 +2746,13 @@ X-RateLimit-Reset: 1736857260
 ## 🔧 SDK & Client Libraries
 
 ### JavaScript/TypeScript
+
 ```bash
 npm install @platform/api-client
 ```
 
 **Usage:**
+
 ```typescript
 import { PlatformClient } from '@platform/api-client';
 
@@ -2510,11 +2766,13 @@ const features = await client.features.list({
 ```
 
 ### Python (Coming Soon)
+
 ```bash
 pip install platform-api
 ```
 
 ### Ruby (Coming Soon)
+
 ```bash
 gem install platform-api
 ```

@@ -43,6 +43,7 @@ This document contains unique findings from Ultra-tier deep research that are no
 | **Complete** | PR merged | Deployed feature | Review → Done |
 
 **Figma → Jira Workflow**:
+
 1. Designer structures files and documents interactions
 2. Dev Mode enables inspection and asset export
 3. Development with real-time feedback
@@ -51,6 +52,7 @@ This document contains unique findings from Ultra-tier deep research that are no
 ### Custom Field Examples by Team
 
 **Engineering Fields**:
+
 ```typescript
 const ENGINEERING_FIELDS = [
   { name: 'issue_type', type: 'select', options: ['Bug', 'Feature', 'Task', 'Spike', 'Tech Debt'] },
@@ -65,6 +67,7 @@ const ENGINEERING_FIELDS = [
 ```
 
 **Design Fields**:
+
 ```typescript
 const DESIGN_FIELDS = [
   { name: 'artifact_type', type: 'select', options: ['Mockup', 'Prototype', 'Component', 'Icon'] },
@@ -79,6 +82,7 @@ const DESIGN_FIELDS = [
 ```
 
 **Sales Fields**:
+
 ```typescript
 const SALES_FIELDS = [
   { name: 'deal_stage', type: 'select', options: ['Prospecting', 'Qualification', 'Proposal', 'Negotiation', 'Closed Won', 'Closed Lost'] },
@@ -93,6 +97,7 @@ const SALES_FIELDS = [
 ```
 
 **Support Fields (ITSM-Aligned)**:
+
 ```typescript
 const SUPPORT_FIELDS = [
   { name: 'ticket_type', type: 'select', options: ['Incident', 'Problem', 'Service Request', 'Change'] },
@@ -113,6 +118,7 @@ const SUPPORT_FIELDS = [
 ### Governance Patterns
 
 **Pattern 1: Default Templates for 80% of Users**
+
 ```
 Most tenants never need custom roles.
 Give them stable defaults and they'll never touch the RBAC admin UI.
@@ -120,6 +126,7 @@ Give them stable defaults and they'll never touch the RBAC admin UI.
 
 **Pattern 2: Permission Bundles**
 Instead of 40 atomic permissions, define bundles:
+
 - `billing:manage`
 - `users:invite`
 - `reports:export`
@@ -133,11 +140,13 @@ This prevents chaotic taxonomy invention.
 ### RBAC Design for Multi-Tenant SaaS
 
 **Three Components**:
+
 1. **Users**: Individuals who interact with the platform
 2. **Roles**: Collections of permissions (Admin, Manager, Contributor)
 3. **Permissions**: Specific actions (Read, Edit, Delete, Invite)
 
 **Enterprise Integration**:
+
 - SSO (Okta, Azure AD, Google)
 - SCIM provisioning
 - Group → Role mapping
@@ -145,12 +154,14 @@ This prevents chaotic taxonomy invention.
 ### Customization vs Over-Customization
 
 **Signs of Over-Customization**:
+
 - High volume of one-off requests
 - Feature fragmentation
 - Maintenance burden exceeding value
 - Inconsistent user experience
 
 **Balanced Approach**:
+
 1. Strong defaults that work for 80%
 2. Template-based customization
 3. Clear boundaries on what's customizable
@@ -163,6 +174,7 @@ This prevents chaotic taxonomy invention.
 ### A/B Testing Considerations
 
 **B2B-Specific Challenges**:
+
 - Smaller sample sizes than B2C
 - Account-level effects (not just user-level)
 - Longer decision cycles
@@ -179,6 +191,7 @@ This prevents chaotic taxonomy invention.
 | **CUPED** | Variance reduction with pre-exposure data | Smaller sample sizes |
 
 **Enterprise Rollout Guardrails**:
+
 - Start with internal teams
 - Expand to beta customers
 - Monitor closely during rollout
@@ -222,12 +235,14 @@ Before implementing changes, measure potential impact:
 ## Summary: Key Takeaways
 
 ### For Integration & Handoffs
+
 1. Use **native integrations** for core tool relationships (Figma ↔ Jira)
 2. Implement **structured handoff phases** with clear triggers and artifacts
 3. Provide **team-specific custom fields** that match workflow needs
 4. Support **iPaaS connectors** for non-technical team flexibility
 
 ### For Team Customization
+
 1. Start with **opinionated defaults** (80% rule)
 2. Offer **template-based customization** to prevent chaos
 3. Use **permission bundles** instead of granular atomic permissions
@@ -235,12 +250,14 @@ Before implementing changes, measure potential impact:
 5. Use **insight aggregation** to inform product decisions
 
 ### For Experimentation
+
 1. Account for **B2B-specific constraints** (small samples, account-level effects)
 2. Use **appropriate methods** (A/B test, DiD, CUPED) based on constraints
 3. Follow **enterprise rollout guardrails** (internal → beta → general)
 4. Maintain **rollback plans** for risk mitigation
 
 ### For Feature Complexity Decisions
+
 1. Apply **multi-factor assessment** (segmentation, frequency, risk, variability)
 2. Use **decision matrix** to determine simplify vs add options
 3. Measure **business impact** (support load, revenue, CAC, satisfaction)
@@ -251,6 +268,7 @@ Before implementing changes, measure potential impact:
 ## Sources
 
 Citations from 20+ sources including:
+
 - Atlassian (Jira Design-Dev Handoff)
 - Figma Blog (Dev Mode)
 - WorkOS RBAC Guide

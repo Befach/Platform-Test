@@ -12,6 +12,7 @@ Parallel Search is ready to use in your Next.js application!
 ## 🔑 Environment Variables
 
 Added to `.env.local`:
+
 ```bash
 PARALLEL_API_KEY=REDACTED_KEY
 ```
@@ -19,18 +20,22 @@ PARALLEL_API_KEY=REDACTED_KEY
 ## 📁 Files Created
 
 ### 1. Search Client Utility
+
 **Location**: `src/lib/parallel/search-client.ts`
 
 Provides two main functions:
+
 - `searchWeb()` - Search across multiple sources (Tavily, Perplexity, Exa, Brave)
 - `extractContent()` - Extract content from specific URLs
 
 ### 2. API Route
+
 **Location**: `src/app/api/search/route.ts`
 
 POST endpoint for web search functionality.
 
 ### 3. Test Script
+
 **Location**: `test-parallel-search.ts`
 
 Test script to verify Parallel Search is working.
@@ -129,6 +134,7 @@ npx tsx test-parallel-search.ts
 ```
 
 Expected output:
+
 - ✅ Loads environment variables from `.env.local`
 - ✅ Searches across multiple sources
 - ✅ Returns 5 relevant results with titles, URLs, and excerpts
@@ -139,11 +145,13 @@ Expected output:
 ### Search Modes
 
 **`one-shot` mode** (default):
+
 - Returns comprehensive results with longer excerpts
 - Best for answering questions from a single response
 - Higher token usage but more detailed
 
 **`agentic` mode**:
+
 - Returns concise, token-efficient results
 - Best for use in an agentic loop (multiple rounds of search)
 - Lower token usage
@@ -203,6 +211,7 @@ const content = await extractContent({
 **Current Status**: Testing & Setup ✅
 
 **Week 7 (Research & Discovery Module)**:
+
 - Integrate into AI chat interface
 - Add web search panel in mind mapping view
 - Create knowledge base with search results

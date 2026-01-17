@@ -378,6 +378,7 @@ npm run test:e2e:ui
 ```
 
 Allows you to:
+
 - Step through tests
 - Pause execution
 - Inspect elements
@@ -391,6 +392,7 @@ npm run test:e2e:debug
 ```
 
 Opens Playwright Inspector with:
+
 - Step through code
 - Set breakpoints
 - Inspect DOM
@@ -408,6 +410,7 @@ Runs tests with visible browser window for visual inspection.
 ### Screenshots and Videos
 
 Screenshots and videos are automatically captured on failure:
+
 - `test-results/` - Failed test artifacts
 - `playwright-report/` - HTML report with traces
 
@@ -630,12 +633,14 @@ await expect(element).toBeVisible({ timeout: 5000 });
 ### Issue: Tests Pass Locally but Fail in CI
 
 **Causes**:
+
 - Different environment variables
 - Time zone differences
 - Network differences
 - Database state
 
 **Solutions**:
+
 ```bash
 # Use same environment
 npm run test:e2e
@@ -650,12 +655,14 @@ CI=true npm run test:e2e
 ### Issue: Tests Are Flaky (Intermittently Fail)
 
 **Causes**:
+
 - Timing issues (element not ready)
 - Network flakiness
 - Concurrent test interference
 - Random ID collisions
 
 **Solutions**:
+
 ```typescript
 // Use proper waits
 await page.waitForLoadState('networkidle');
@@ -677,11 +684,13 @@ test.afterEach(async ({ page }) => {
 ### Issue: Authentication Not Working
 
 **Causes**:
+
 - Auth helper assumes specific page structure
 - Auth method doesn't match implementation
 - Session not persisted
 
 **Solutions**:
+
 ```typescript
 // Check actual login form structure
 await page.goto('/login');
@@ -698,6 +707,7 @@ console.log('Token:', token);
 ### Issue: Selectors Not Finding Elements
 
 **Solutions**:
+
 ```typescript
 // Use debugging
 await page.pause();  // Pause to inspect
@@ -718,6 +728,7 @@ console.log(await page.content());
 ### Issue: Database Operations Failing
 
 **Solutions**:
+
 ```typescript
 // Verify Supabase connection
 const { data, error } = await supabase.from('teams').select('*').limit(1);
@@ -740,6 +751,7 @@ try {
 ### Issue: Timeout Errors
 
 **Solutions**:
+
 ```typescript
 // Increase timeout for slow operations
 await page.waitForURL(/path/, { timeout: 15000 });
@@ -785,11 +797,11 @@ console.log('Is loading:', await page.evaluate(() => document.readyState));
 
 ## Resources
 
-- **Playwright Docs**: https://playwright.dev
-- **Supabase Docs**: https://supabase.com/docs
-- **Best Practices**: https://playwright.dev/docs/best-practices
-- **Debugging**: https://playwright.dev/docs/debug
-- **CI/CD**: https://playwright.dev/docs/ci
+- **Playwright Docs**: <https://playwright.dev>
+- **Supabase Docs**: <https://supabase.com/docs>
+- **Best Practices**: <https://playwright.dev/docs/best-practices>
+- **Debugging**: <https://playwright.dev/docs/debug>
+- **CI/CD**: <https://playwright.dev/docs/ci>
 
 ---
 
@@ -801,4 +813,3 @@ For issues or questions about E2E testing:
 2. Review test file comments
 3. Run tests in UI mode for interactive debugging
 4. Check Playwright documentation
-

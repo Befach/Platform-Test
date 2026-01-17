@@ -9,6 +9,7 @@
 ---
 
 ## Overview
+
 **Files to create**: 7 React components in `next-app/src/components/ai/`
 **Files to modify**: Chat component, orchestration hooks
 **Estimated time**: 1 day
@@ -17,6 +18,7 @@
 ### Problem Statement
 
 Users have no visibility into:
+
 - Why responses take longer sometimes (escalation happening)
 - Model confidence levels
 - When consensus mode is active
@@ -27,6 +29,7 @@ This creates a "black box" experience that can feel slow or unpredictable.
 ### Solution
 
 Implement transparent UX features:
+
 1. **Thinking Status Indicator** - Show escalation progress
 2. **Quality Mode Toggle** - User control over speed/quality
 3. **Confidence Badge** - Show model certainty

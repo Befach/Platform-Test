@@ -1,11 +1,12 @@
-SELECT cron.schedule('purge-deleted-resources-daily', '0 3 * * *',
+SELECT cron.schedule('purge-deleted-resources-daily', '0 3 ** *',
   $$ SELECT purge_deleted_resources(30); $$
 );
 
 -- Cleanup unlinked junction records
-SELECT cron.schedule('purge-unlinked-resources-daily', '0 3 * * *',
+SELECT cron.schedule('purge-unlinked-resources-daily', '0 3 ** *',
   $$ SELECT purge_unlinked_work_item_resources(30); $$
 );
+
 ```
 
 ---
@@ -562,23 +563,28 @@ WITH CHECK (
 ## Database Functions
 
 ### Phase Calculation
+
 - `calculate_work_item_phase(work_item_id, status, owner)` - Returns calculated phase based on state
 
 ### Dependency Analysis
+
 - `get_timeline_dependencies(timeline_item_id)` - Returns blocking/blocked_by/complements/conflicts/extends
 - `get_work_item_dependencies_aggregated(work_item_id)` - Aggregated dependency view
 - `get_conversion_lineage(work_item_id)` - Tracks conversion chain
 
 ### Task Statistics
+
 - `get_workspace_task_stats(workspace_id)` - Task counts by status/type
 - `get_work_item_tasks(work_item_id)` - Tasks with completion percentage
 
 ### Phase Management
+
 - `refresh_phase_workload_cache(workspace_id)` - Updates workload cache
 - `log_phase_change()` - Trigger function for audit trail
 - `get_phase_lead_info(workspace_id, phase)` - Returns phase lead contact
 
 ### Utility
+
 - `update_updated_at_column()` - Generic timestamp trigger
 - `handle_new_user()` - Creates public.users on auth.users insert
 
@@ -589,12 +595,14 @@ WITH CHECK (
 See [CHANGELOG.md](../reference/CHANGELOG.md) for complete migration history.
 
 **Summary:**
+
 - **Total Tables**: 28+
 - **Total Migrations**: 46 (as of 2025-11-26)
 - **RLS Policies**: Applied to all team-scoped tables
 - **Phase System**: Complete with audit trail and access requests
 
 **Key Migration Milestones:**
+
 | Migration | Date | Description |
 |-----------|------|-------------|
 | 20250101000000 | 2025-01-01 | Initial schema (features, timeline_items, linked_items) |

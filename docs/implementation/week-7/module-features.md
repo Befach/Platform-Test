@@ -16,6 +16,7 @@
 **Location:** Left sidebar panel (always accessible)
 
 **Features:**
+
 - Chat interface with message history
 - Web search buttons: **[Deep Research]** (Perplexity Sonar), **[Find Similar]** (Exa semantic)
 - Save responses to Knowledge Base
@@ -24,6 +25,7 @@
 - Attachments (upload images, files)
 
 **Models Used:**
+
 - Primary: Claude Haiku 4.5 (general chat)
 - Research: Perplexity Sonar (web search)
 - Semantic: Exa API (finding similar content)
@@ -33,6 +35,7 @@
 **Location:** Right sidebar panel (toggle on/off)
 
 **Features:**
+
 - Tool Calling Interface - AI uses tools to perform actions
 - Preview Actions - See exactly what AI will do before execution
 - Approval Workflow: AI proposes → User previews → Approve/Deny → Execute
@@ -61,6 +64,7 @@
 **Location:** Throughout UI (context menus, floating buttons)
 
 **Features:**
+
 - "Improve this" buttons - Inline on text fields
 - "Suggest..." actions - Context-aware recommendations
 - Auto-complete - As you type (feature names, descriptions)
@@ -90,24 +94,28 @@
 ### Pre-built Dashboards (4 Standard)
 
 **1. Feature Overview**
+
 - Total features by status (pie chart)
 - Progress over time (line chart)
 - Features by category (bar chart)
 - Completion rate (percentage)
 
 **2. Dependency Health**
+
 - Critical path visualization (network graph)
 - Blocked features (list with reasons)
 - Risk score (gauge: Low/Medium/High)
 - Bottlenecks (features blocking many others)
 
 **3. Team Performance**
+
 - Features completed per member (bar chart)
 - Average completion time (metric card)
 - Workload distribution (heatmap)
 - Velocity trend (line chart)
 
 **4. Success Metrics**
+
 - Expected vs Actual (comparison table)
 - Feature success rate (percentage)
 - User feedback trends (line chart)
@@ -192,6 +200,7 @@ CREATE TABLE team_integrations (
 **Purpose:** Generate visual UI mockups from text prompts
 
 **Features:**
+
 - Text-to-UI Generation - Describe a feature, get React/HTML code
 - Interactive Preview - Sandboxed iframe with basic interactivity
 - Feedback Collection - Share via public link, collect votes and comments

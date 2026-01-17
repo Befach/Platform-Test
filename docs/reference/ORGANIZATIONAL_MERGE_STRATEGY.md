@@ -21,6 +21,7 @@ GitHub provides **two levels** for merge strategy configuration:
 ### What Are Repository Rulesets?
 
 **Repository rulesets** are organization-level rules that can:
+
 - Apply to multiple repositories at once
 - Enforce merge strategies across your organization
 - Override repository-level settings
@@ -112,6 +113,7 @@ Under **Branch protections**, enable:
 **Section**: General → Pull Requests
 
 **Configuration**:
+
 ```
 Pull Request Merges:
 
@@ -131,6 +133,7 @@ Additional options:
 ```
 
 **Result**:
+
 - Only "Squash and merge" button will be visible
 - Merge commits blocked by "Require linear history" (from ruleset)
 - Clean, one-commit-per-feature history
@@ -189,20 +192,23 @@ Additional:
 After configuring both levels:
 
 ### ✅ Organization Ruleset
-- [ ] Navigate to org settings: https://github.com/organizations/Befach-Int/settings/rules
+
+- [ ] Navigate to org settings: <https://github.com/organizations/Befach-Int/settings/rules>
 - [ ] Verify "Require linear history" is enabled
 - [ ] Verify "Block force pushes" is enabled
 - [ ] Verify ruleset applies to `main` branch pattern
 - [ ] Verify ruleset applies to Platform-Test repository
 
 ### ✅ Repository Settings
-- [ ] Navigate to repo settings: https://github.com/Befach-Int/Platform-Test/settings
+
+- [ ] Navigate to repo settings: <https://github.com/Befach-Int/Platform-Test/settings>
 - [ ] Scroll to "Pull Requests" section
 - [ ] Verify only "Allow squash merging" is checked
 - [ ] Verify "Default to squash merging" is selected
 - [ ] Verify "Automatically delete head branches" is checked
 
 ### ✅ Test the Configuration
+
 ```bash
 # Create test PR with multiple commits
 git checkout -b test/merge-strategy
@@ -238,14 +244,16 @@ gh pr create --title "test: verify merge strategy" --body "Testing squash-only"
 
 ## Limitations to Be Aware Of
 
-### What Organization Rulesets CAN Enforce:
+### What Organization Rulesets CAN Enforce
+
 - ✅ Require linear history (blocks merge commits)
 - ✅ Require pull requests
 - ✅ Require status checks
 - ✅ Block force pushes
 - ✅ Require conversation resolution
 
-### What Organization Rulesets CANNOT Enforce:
+### What Organization Rulesets CANNOT Enforce
+
 - ❌ Which merge buttons are available (squash vs rebase)
 - ❌ Auto-delete branches setting
 - ❌ Default merge method
@@ -259,11 +267,13 @@ gh pr create --title "test: verify merge strategy" --body "Testing squash-only"
 If you need stricter control, consider using a GitHub App:
 
 ### Option: Probot Auto-Merge
+
 - **Purpose**: Automatically enforce merge strategies
 - **How**: Bot checks PR and only allows squash merge
 - **Setup**: Requires GitHub App installation
 
 ### Option: Branch Protection Bot
+
 - **Purpose**: Additional checks beyond GitHub's built-in protection
 - **How**: Validates merge method before allowing merge
 - **Setup**: Self-hosted or third-party service
@@ -309,6 +319,7 @@ If you already have a ruleset (since you mentioned creating branch protection at
 ### Step 4: Test the Setup
 
 Create a test PR and verify:
+
 - Only "Squash and merge" button appears
 - Merge creates single commit
 - Branch auto-deletes after merge
@@ -323,6 +334,7 @@ Create a test PR and verify:
 **Solution**: Ensure you're using "Branch rulesets" (not legacy branch protection)
 
 **Check**:
+
 - Organization Settings → Rules → Rulesets (new)
 - NOT: Repository Settings → Branches (legacy)
 
@@ -349,34 +361,39 @@ Create a test PR and verify:
 
 ## Documentation References
 
-- **GitHub Rulesets**: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets
-- **Merge Strategies**: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges
-- **Linear History**: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-linear-history
+- **GitHub Rulesets**: <https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets>
+- **Merge Strategies**: <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges>
+- **Linear History**: <https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-linear-history>
 
 ---
 
 ## Summary: Your Complete Setup
 
 ### ✅ Organization Level (Rulesets)
-**URL**: https://github.com/organizations/Befach-Int/settings/rules
+
+**URL**: <https://github.com/organizations/Befach-Int/settings/rules>
 
 **Key Setting**: ✅ **Require linear history** (blocks merge commits)
 
 **Additional Settings**:
+
 - Require pull request
 - Require status checks (test)
 - Block force pushes
 
 ### ✅ Repository Level (Settings)
-**URL**: https://github.com/Befach-Int/Platform-Test/settings
+
+**URL**: <https://github.com/Befach-Int/Platform-Test/settings>
 
 **Key Setting**: ✅ **Allow squash merging only** (disables other merge methods)
 
 **Additional Settings**:
+
 - Default to squash merging
 - Auto-delete branches
 
 ### 🎯 Result
+
 - Merge commits: **Blocked** (by org ruleset)
 - Rebase merging: **Hidden** (by repo settings)
 - Squash merging: **Only option available**

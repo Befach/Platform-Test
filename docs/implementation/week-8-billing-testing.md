@@ -8,6 +8,7 @@
 ---
 
 ## Goal
+
 Razorpay integration (India-compatible), UI polish, production-ready
 
 > **Note**: Using Razorpay instead of Stripe because Stripe is invite-only in India.
@@ -17,6 +18,7 @@ Razorpay integration (India-compatible), UI polish, production-ready
 ## Tasks
 
 ### Day 1-3: Razorpay Integration
+
 - [ ] Set up Razorpay account (razorpay.com)
   - Select "Individual/Unregistered Business" type
   - Documents needed: PAN card + Aadhaar + Bank account (savings OK)
@@ -24,12 +26,14 @@ Razorpay integration (India-compatible), UI polish, production-ready
   - Verification takes 24-48 hours
 - [ ] Install npm package: `npm install razorpay @types/razorpay`
 - [ ] Configure environment variables:
+
   ```env
   # Start with test keys, switch to live after verification
   RAZORPAY_KEY_ID=rzp_test_xxxxx
   RAZORPAY_KEY_SECRET=xxxxx
   NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_xxxxx
   ```
+
 - [ ] Create subscription plans in Razorpay Dashboard:
   - [ ] Pro plan: ₹3,000/month (recurring)
   - [ ] Additional user: ₹400/month (metered)
@@ -48,6 +52,7 @@ Razorpay integration (India-compatible), UI polish, production-ready
 - [ ] Update `teams.plan` and `subscriptions` table
 
 ### Day 4-5: Feature Gates
+
 - [ ] Implement `canUpgrade()` helper (`lib/utils/billing.ts`)
 - [ ] Check plan before:
   - [ ] Adding 6th team member (Free limit: 5)
@@ -58,6 +63,7 @@ Razorpay integration (India-compatible), UI polish, production-ready
 - [ ] Show upgrade modal when limit reached
 
 ### Day 6-7: Customer Portal
+
 - [ ] Billing settings page: `/app/(dashboard)/settings/billing/page.tsx`
 - [ ] Display current plan (Free/Pro)
 - [ ] Show usage:
@@ -68,6 +74,7 @@ Razorpay integration (India-compatible), UI polish, production-ready
 - [ ] [Manage Subscription] button (Razorpay customer portal)
 
 ### Day 8-10: UI Polish
+
 - [ ] Add loading states (skeletons):
   - [ ] Feature cards
   - [ ] Timeline
@@ -85,6 +92,7 @@ Razorpay integration (India-compatible), UI polish, production-ready
 - [ ] Dark mode toggle (Settings → Appearance)
 
 ### Day 11-12: Testing & QA
+
 - [ ] E2E tests (Playwright):
   - [ ] Auth flow (signup → onboarding → first workspace)
   - [ ] Team creation and invites
@@ -100,6 +108,7 @@ Razorpay integration (India-compatible), UI polish, production-ready
 - [ ] Security audit (dependency check)
 
 ### Day 13-14: Documentation & Launch
+
 - [ ] **User Documentation:**
   - [ ] Getting Started Guide
   - [ ] Feature walkthroughs (10 modules)

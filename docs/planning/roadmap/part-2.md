@@ -1,5 +1,6 @@
 
 **Schema**:
+
 ```sql
 CREATE TABLE product_strategies (
   id TEXT PRIMARY KEY,
@@ -44,6 +45,7 @@ CREATE INDEX idx_strategies_owner ON product_strategies(owner_id);
 ```
 
 **API Endpoints**:
+
 - `GET /api/workspaces/[id]/strategies` - List strategies
 - `POST /api/workspaces/[id]/strategies` - Create strategy
 - `PATCH /api/strategies/[id]` - Update progress
@@ -64,6 +66,7 @@ CREATE INDEX idx_strategies_owner ON product_strategies(owner_id);
 **Blocks**: 5.4 Alignment Dashboard
 
 **Schema**:
+
 ```sql
 ALTER TABLE work_items ADD COLUMN strategy_id TEXT REFERENCES product_strategies(id) ON DELETE SET NULL;
 CREATE INDEX idx_work_items_strategy ON work_items(strategy_id);
@@ -78,12 +81,14 @@ CREATE TABLE work_item_strategies (
 ```
 
 **UI Changes**:
+
 - Add "Strategic Alignment" field to work item form
 - Show strategy badge on work item cards
 - Filter work items by strategy
 - Show unaligned work items warning
 
 **API**:
+
 - `POST /api/work-items/[id]/align-strategy` - Link to strategy
 - `GET /api/work-items/unaligned` - Find unaligned work
 - `GET /api/strategies/[id]/work-items` - Work items for strategy
@@ -101,6 +106,7 @@ CREATE TABLE work_item_strategies (
 **Effort**: 3 days
 
 **AI Logic**:
+
 ```typescript
 // Analyze work item content
 const workItem = {
@@ -123,12 +129,14 @@ const strategies = [
 ```
 
 **Implementation**:
+
 - Use Vercel AI SDK `generateObject()` with Zod schema
 - Context: Work item + Customer insights + Strategies
 - Output: Top 3 suggested strategies with confidence scores
 - User can accept/reject/skip suggestion
 
 **API**:
+
 - `POST /api/work-items/[id]/suggest-alignment` - Get AI suggestions
 
 ---
@@ -165,6 +173,7 @@ const strategies = [
    - "If we ship these 5 features, ARR increases 15%"
 
 **UI Components**:
+
 - `app/(dashboard)/workspaces/[id]/strategy/page.tsx`
 - `components/strategy/strategy-tree.tsx`
 - `components/strategy/alignment-chart.tsx`
@@ -180,6 +189,7 @@ const strategies = [
 **Requires**: Layer 4 (Feedback & Research), Layer 5 (Strategy)
 
 **Integration Levels**:
+
 | Level | Scope | Effort | Priority |
 |-------|-------|--------|----------|
 | **Light** | Link external URLs as references | 1 day | ✅ MVP (already done via Resources) |
@@ -195,12 +205,14 @@ const strategies = [
 **Blocks**: None (optional layer)
 
 **Implementation**:
+
 - OAuth flow for HubSpot/Salesforce
 - Webhook: Deal stage change → Create customer insight
 - API: Fetch roadmap → Display in CRM sidebar
 - Mapping: Deal custom fields → Insight fields
 
 **API Endpoints**:
+
 - `GET /api/integrations/crm/authorize` - OAuth start
 - `POST /api/integrations/crm/webhook` - Receive CRM events
 - `GET /api/integrations/crm/roadmap` - Roadmap data for CRM
@@ -214,12 +226,14 @@ const strategies = [
 **Why**: Support feedback becomes product insights
 
 **Implementation**:
+
 - Webhook: New ticket → Create insight (if feature request)
 - AI classification: Bug vs Feature request
 - Link tickets to work items
 - Auto-update ticket when work item ships
 
 **API Endpoints**:
+
 - `POST /api/integrations/helpdesk/webhook` - Receive ticket events
 - `GET /api/insights/[id]/tickets` - Linked support tickets
 
@@ -244,6 +258,7 @@ Total: 11 days
 ```
 
 **Why This Path**:
+
 - Departments unlock all team-specific features
 - Workflow States enable mode defaults
 - Templates provide onboarding value
@@ -252,6 +267,7 @@ Total: 11 days
 - Dashboard provides executive visibility
 
 **Parallel Tracks** (can build simultaneously):
+
 - 2.1 → 2.2 → 2.3 → 2.4 (Workspace Modes: 5 days)
 - 4.1 → 4.2 → 4.3 → 4.4 (Feedback: 7 days)
 - 5.1 → 5.3 (Strategy + AI: 5 days)
@@ -340,6 +356,7 @@ Total: 11 days
 ```
 
 **Migration Validation Checklist**:
+
 - [ ] All foreign keys resolve correctly
 - [ ] RLS policies applied to all new tables
 - [ ] Indexes created for all foreign keys
@@ -356,11 +373,13 @@ Total: 11 days
 **Duration**: 3 days
 
 **Goals**:
+
 - Enable department-based organization
 - Configure workspace modes
 - Set up team-specific workflows
 
 **Tasks**:
+
 | Task | Effort | Assignee | Blocks |
 |------|--------|----------|--------|
 | 1.1 Departments Table | 1 day | Backend Dev | 1.2, 1.3 |
@@ -368,6 +387,7 @@ Total: 11 days
 | 2.1 Workspace Modes | 1 day | Backend Dev | 2.2 |
 
 **Deliverables**:
+
 - [x] Departments CRUD API
 - [x] Department assignment UI
 - [x] Workspace mode selector
@@ -380,11 +400,13 @@ Total: 11 days
 **Duration**: 5 days
 
 **Goals**:
+
 - Reduce cognitive load with progressive disclosure
 - Accelerate onboarding with templates
 - Improve keyboard-driven workflows
 
 **Tasks**:
+
 | Task | Effort | Assignee | Blocks |
 |------|--------|----------|--------|
 | 2.2 Mode Defaults | 2 days | Backend + Frontend | 3.2 |
@@ -393,6 +415,7 @@ Total: 11 days
 | 3.3 Connection Menu | 3 days | Frontend Dev | 5.2 |
 
 **Deliverables**:
+
 - [x] Template gallery page
 - [x] Apply template wizard
 - [x] Progressive disclosure form components
@@ -405,11 +428,13 @@ Total: 11 days
 **Duration**: 7 days (parallel with Phase B)
 
 **Goals**:
+
 - Capture customer feedback systematically
 - Enable feature voting
 - Link feedback to work items
 
 **Tasks**:
+
 | Task | Effort | Assignee | Blocks |
 |------|--------|----------|--------|
 | 4.1 Customer Insights Table | 2 days | Backend Dev | 4.2, 4.3 |
@@ -419,6 +444,7 @@ Total: 11 days
 | 1.3 Triage Queue (optional) | 1 day | Frontend Dev | None |
 
 **Deliverables**:
+
 - [x] Public feedback page
 - [x] Embeddable widget code
 - [x] Voting system
@@ -432,11 +458,13 @@ Total: 11 days
 **Duration**: 9 days
 
 **Goals**:
+
 - Connect work items to company OKRs
 - AI-powered alignment suggestions
 - Executive visibility dashboard
 
 **Tasks**:
+
 | Task | Effort | Assignee | Blocks |
 |------|--------|----------|--------|
 | 5.1 Product Strategy Table | 2 days | Backend Dev | 5.2, 5.3 |
@@ -445,6 +473,7 @@ Total: 11 days
 | 5.4 Alignment Dashboard | 2 days | Frontend Dev | None |
 
 **Deliverables**:
+
 - [x] OKR hierarchy management
 - [x] Strategy assignment UI
 - [x] AI alignment suggestions
@@ -457,11 +486,13 @@ Total: 11 days
 **Duration**: 15 days (spread over multiple sprints)
 
 **Goals**:
+
 - Connect with CRM tools (HubSpot, Salesforce)
 - Pull support tickets from Zendesk/Intercom
 - Bi-directional sync
 
 **Tasks**:
+
 | Task | Effort | Assignee | Priority |
 |------|--------|----------|----------|
 | CRM OAuth Setup | 2 days | Backend Dev | Medium |
@@ -470,6 +501,7 @@ Total: 11 days
 | Bi-directional Sync | 5 days | Backend Dev | Low |
 
 **Deliverables**:
+
 - [x] OAuth flow for CRM tools
 - [x] Webhook handlers
 - [x] Roadmap API for CRM
@@ -482,6 +514,7 @@ Total: 11 days
 ### Phase A: Team Structure Foundation ✅
 
 **Acceptance Criteria**:
+
 - [ ] Departments can be created, edited, deleted
 - [ ] Work items can be assigned to departments
 - [ ] Department-specific workflow states exist
@@ -489,12 +522,14 @@ Total: 11 days
 - [ ] Mode-specific defaults apply on workspace creation
 
 **Testing Checklist**:
+
 - [ ] Create department → Assign work item → Verify filtering
 - [ ] Change workspace mode → Verify defaults applied
 - [ ] Multi-tenant isolation: Department A cannot see Department B's data
 - [ ] RLS policies enforced on all new tables
 
 **Metrics**:
+
 - API response time: < 200ms for department queries
 - UI load time: < 1s for department selector
 - Database query efficiency: Max 3 queries per page load
@@ -504,6 +539,7 @@ Total: 11 days
 ### Phase B: UX Enhancements ✅
 
 **Acceptance Criteria**:
+
 - [ ] Template gallery loads with 5+ templates
 - [ ] Apply template wizard creates workspace with sample data
 - [ ] Progressive disclosure shows 5 fields by default, 9 on expand
@@ -512,12 +548,14 @@ Total: 11 days
 - [ ] Connection menu supports keyboard navigation
 
 **Testing Checklist**:
+
 - [ ] Apply SaaS Startup template → Verify workspace structure
 - [ ] New user sees 5 fields → Expert user sees all fields
 - [ ] Type "/" → Select work item → Link created
 - [ ] Fuzzy search: Type "auth" → Matches "Authentication Bug"
 
 **Metrics**:
+
 - Template application time: < 3 seconds
 - Connection menu search latency: < 100ms
 - User onboarding time reduction: 50% (from analytics)
@@ -527,6 +565,7 @@ Total: 11 days
 ### Phase C: Customer Feedback System ✅
 
 **Acceptance Criteria**:
+
 - [ ] Public feedback page accepts submissions without login
 - [ ] Feedback widget embeds in external site (iframe)
 - [ ] Insights can be upvoted by email
@@ -535,6 +574,7 @@ Total: 11 days
 - [ ] Triage queue shows pending insights by department
 
 **Testing Checklist**:
+
 - [ ] Submit feedback via public page → Verify in insights table
 - [ ] Embed widget → Submit feedback → Verify received
 - [ ] Upvote insight 3 times → Verify vote_count = 3
@@ -542,6 +582,7 @@ Total: 11 days
 - [ ] Filter insights by department → Verify correct subset
 
 **Metrics**:
+
 - Public feedback page load time: < 2s
 - Widget embed size: < 50KB
 - Duplicate insight detection accuracy: > 80%
@@ -551,6 +592,7 @@ Total: 11 days
 ### Phase D: Strategy Alignment ✅
 
 **Acceptance Criteria**:
+
 - [ ] Product strategies can be created with hierarchy (Pillar → Objective → Key Result)
 - [ ] Work items can be aligned to strategies (1:N or N:M)
 - [ ] AI suggests top 3 strategies for unaligned work items (80%+ confidence)
@@ -559,6 +601,7 @@ Total: 11 days
 - [ ] Unaligned work items highlighted with warning
 
 **Testing Checklist**:
+
 - [ ] Create strategy hierarchy → Verify parent-child relationships
 - [ ] Align work item to strategy → Verify link in database
 - [ ] Request AI suggestion → Verify top 3 strategies returned
@@ -566,6 +609,7 @@ Total: 11 days
 - [ ] Filter work items by strategy → Verify correct subset
 
 **Metrics**:
+
 - AI suggestion accuracy (validated by PM): > 70%
 - AI response time: < 2 seconds
 - Dashboard query performance: < 500ms for 1000 work items
@@ -575,6 +619,7 @@ Total: 11 days
 ### Phase E: Integrations ✅ (OPTIONAL)
 
 **Acceptance Criteria**:
+
 - [ ] OAuth flow completes for HubSpot/Salesforce
 - [ ] CRM webhook receives and processes events
 - [ ] Roadmap API returns data in CRM-compatible format
@@ -582,6 +627,7 @@ Total: 11 days
 - [ ] Linked work item ships → Support ticket auto-updated
 
 **Testing Checklist**:
+
 - [ ] Connect HubSpot account → Verify OAuth token stored
 - [ ] Change deal stage → Verify insight created
 - [ ] Fetch roadmap from CRM → Verify data matches platform
@@ -589,6 +635,7 @@ Total: 11 days
 - [ ] Ship work item → Verify ticket comment added
 
 **Metrics**:
+
 - OAuth success rate: > 95%
 - Webhook processing time: < 1 second
 - Duplicate insight rate: < 10%
@@ -604,12 +651,14 @@ Total: 11 days
 **Impact**: Database migration fails, production downtime
 
 **Mitigation**:
+
 1. **Pre-flight Testing**: Test all migrations on staging database
 2. **Rollback Scripts**: Prepare `DOWN` migration for each change
 3. **Atomic Migrations**: Use transactions, rollback on error
 4. **Dependency Graph**: Document exact migration order in this document
 
 **Rollback Plan**:
+
 ```sql
 -- If Migration 7 fails, rollback Migrations 7, 6, 5, 4
 BEGIN;
@@ -631,12 +680,14 @@ ROLLBACK; -- Or COMMIT if successful
 **Impact**: Development time doubles, loses focus on PM core value
 
 **Mitigation**:
+
 1. **Stick to "Native Basics" Scope**: Feedback capture + voting + linking ONLY
 2. **Integration Over Building**: For advanced CRM features, integrate with HubSpot/Salesforce
 3. **Reference Document**: Link to [scope-decisions.md](../../research/architecture-decisions/scope-decisions.md) when tempted to add CRM features
 4. **Phase Gate Review**: Validate scope at end of Phase C
 
 **Scope Boundary**:
+
 | ✅ IN SCOPE | ❌ OUT OF SCOPE |
 |------------|----------------|
 | Capture feedback | Manage sales pipeline |
@@ -653,12 +704,14 @@ ROLLBACK; -- Or COMMIT if successful
 **Impact**: Over-engineered feature, poor UX
 
 **Mitigation**:
+
 1. **Limit Hierarchy Depth**: Max 3 levels (Pillar → Objective → Key Result)
 2. **AI Suggestions**: Make alignment easy with AI, not complex UI
 3. **Skip Option**: Allow "Unaligned" work items (not everything needs strategy link)
 4. **Pro Feature**: Advanced OKR features behind Pro tier gate
 
 **Complexity Cap**:
+
 ```typescript
 // MAX 3 levels
 type StrategyLevel = 'pillar' | 'objective' | 'key_result'
@@ -678,12 +731,14 @@ if (strategyDepth > 3) {
 **Impact**: Broken features, customer complaints
 
 **Mitigation**:
+
 1. **Graceful Degradation**: If integration fails, show manual link option
 2. **Webhook Retry**: Retry failed webhooks 3 times with exponential backoff
 3. **Error Monitoring**: Sentry alerts on integration failures
 4. **Fallback UI**: "Integration temporarily unavailable" message
 
 **Example**:
+
 ```typescript
 try {
   const insights = await fetchFromZendesk()
@@ -703,12 +758,14 @@ try {
 **Impact**: Feature not adopted, wasted development effort
 
 **Mitigation**:
+
 1. **Confidence Threshold**: Only suggest if confidence > 70%
 2. **User Override**: Always allow manual selection
 3. **Feedback Loop**: Track acceptance rate, improve prompts
 4. **Prompt Engineering**: Provide rich context (work item + insights + strategies)
 
 **Monitoring**:
+
 ```typescript
 // Track AI suggestion acceptance rate
 const acceptanceRate = acceptedSuggestions / totalSuggestions
@@ -724,25 +781,30 @@ if (acceptanceRate < 0.5) {
 ## Related Documentation
 
 ### Planning Documents
+
 - [PROGRESS.md](../PROGRESS.md) - Weekly progress tracking
 - [NEXT_STEPS.md](../NEXT_STEPS.md) - Immediate priorities
 - [RECOMMENDED_AGENTS.md](../RECOMMENDED_AGENTS.md) - Claude agents by phase
 
 ### Implementation Guides
+
 - [Implementation Plan](../../implementation/README.md) - Week-by-week guide
 - [Database Schema](../../architecture/database-schema.md) - Current schema reference
 
 ### Postponed Features
+
 - [MIND_MAP_ENHANCEMENTS.md](../../postponed/MIND_MAP_ENHANCEMENTS.md) - 23 mind map enhancements (Phase 1-3)
 - [WORKSPACE_TIMELINE_ARCHITECTURE.md](../../postponed/WORKSPACE_TIMELINE_ARCHITECTURE.md) - Timeline refactor
 
 ### Research Findings
+
 - [ultra-deep-research-findings.md](../../research/core-research/ultra-deep-research-findings.md) - Market intelligence
 - [scope-decisions.md](../../research/architecture-decisions/scope-decisions.md) - In-scope vs out-of-scope teams
 - [progressive-disclosure-ux.md](../../research/core-research/progressive-disclosure-ux.md) - UX patterns
 - [cross-team-collaboration.md](../../research/core-research/cross-team-collaboration.md) - Team workflow research
 
 ### Technical References
+
 - [ARCHITECTURE.md](../../architecture/ARCHITECTURE.md) - System architecture
 - [API_REFERENCE.md](../../reference/API_REFERENCE.md) - API documentation
 - [CODE_PATTERNS.md](../../reference/CODE_PATTERNS.md) - Code standards
@@ -756,6 +818,7 @@ if (acceptanceRate < 0.5) {
 ---
 
 **Legend**:
+
 - 🔴 CRITICAL BLOCKER - Blocks many other features
 - 🟡 MEDIUM RISK - Requires careful execution
 - ✅ READY - All dependencies satisfied

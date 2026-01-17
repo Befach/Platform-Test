@@ -110,6 +110,7 @@ Use this template when adding postponed features to `docs/postponed/README.md`:
 ### What
 
 23 enhancement features across 3 phases:
+
 - **Phase 1**: Auto-zoom, fit-to-screen, context menus (8 features)
 - **Phase 2**: Dependency visualization, phase indicators (7 features)
 - **Phase 3**: AI integration, smart suggestions (8 features)
@@ -117,6 +118,7 @@ Use this template when adding postponed features to `docs/postponed/README.md`:
 ### Why Postponed
 
 Requires data/APIs from modules not yet built:
+
 - **Week 4**: Dependency graph algorithms (for showing dependencies on canvas)
 - **Week 6**: Timeline data (for phase-based visualization)
 - **Week 7**: AI assistant (for smart node suggestions)
@@ -141,6 +143,7 @@ See [docs/postponed/MIND_MAP_ENHANCEMENTS.md](../postponed/MIND_MAP_ENHANCEMENTS
 ## Postponed vs. Canceled vs. Backlog
 
 **Postponed** (this process):
+
 - ✅ Feature is planned and spec'd
 - ✅ Will definitely be implemented
 - ✅ Waiting for specific dependencies
@@ -148,12 +151,14 @@ See [docs/postponed/MIND_MAP_ENHANCEMENTS.md](../postponed/MIND_MAP_ENHANCEMENTS
 - **Example**: Mind map enhancements waiting for AI module
 
 **Canceled**:
+
 - ❌ Feature is removed from roadmap entirely
 - ❌ Won't be implemented
 - ❌ Document in `docs/reference/CHANGELOG.md` as "Canceled"
 - **Example**: Feature that no longer aligns with product vision
 
 **Backlog**:
+
 - 📋 Feature is planned but not prioritized yet
 - 📋 May or may not be implemented
 - 📋 No specific dependencies or timing
@@ -307,6 +312,7 @@ Before marking a feature as postponed, ensure:
 ---
 
 **See Also**:
+
 - [Implementation Timing Checklist](IMPLEMENTATION_TIMING_CHECKLIST.md)
 - [Postponed Features List](README.md)
 - [Main Implementation Plan](../implementation/README.md)

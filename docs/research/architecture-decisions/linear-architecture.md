@@ -108,6 +108,7 @@ Linear defines these state categories:
 ### Default States (Per Team)
 
 Teams get default states but can customize:
+
 - Backlog
 - Todo
 - In Progress
@@ -157,6 +158,7 @@ Triage provides a staging area for incoming requests that haven't been categoriz
 ### Why Separate from Releases
 
 Linear decouples team cadence (cycles) from product releases:
+
 - Teams can ship continuously
 - Sprint completion ≠ customer release
 - Different teams can have different cycle lengths
@@ -248,11 +250,13 @@ query ProjectIssues($projectId: ID!) {
 **Our Decision**: ADOPT
 
 **Rationale**:
+
 - Clear ownership prevents "orphan" items
 - Team metrics (velocity, burndown) are accurate
 - Forces intentional handoffs between teams
 
 **Implementation**:
+
 ```sql
 ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 -- department_id is required for all work items
@@ -267,6 +271,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 | Multi-team assignment | Can belong to multiple teams | Conflicts in workflow, unclear accountability | Too complex |
 
 **Consequences**:
+
 - Positive: Clear ownership, team velocity accuracy, intentional collaboration
 - Negative: Requires explicit handoffs between teams
 - Risks: Teams may duplicate work items instead of collaborating
@@ -278,6 +283,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 **Our Decision**: ADOPT (already have via workspaces)
 
 **Rationale**:
+
 - Workspace = Project container
 - Work items from different departments can be in same workspace
 
@@ -290,6 +296,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 | No cross-team support | Simple | Can't coordinate | Blocks collaboration |
 
 **Consequences**:
+
 - Positive: Workspace already supports this pattern, no migration needed
 - Negative: None significant
 - Risks: Users may not understand workspace = project equivalence
@@ -301,10 +308,12 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 **Our Decision**: ADOPT (Simplified)
 
 **Rationale**:
+
 - Useful for capturing integrations, quick ideas
 - Prevents work items without proper categorization
 
 **Implementation**:
+
 - Add `status: 'triage'` to work items
 - Triage view filters by this status
 - Actions move item to proper state
@@ -318,6 +327,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 | No triage | Simple | No intake process | Loses quick capture value |
 
 **Consequences**:
+
 - Positive: Supports quick capture, integration intake, stakeholder requests
 - Negative: Less sophisticated than Linear's full triage
 - Risks: May need to expand triage features later
@@ -329,6 +339,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 **Our Decision**: DEFER to Phase 2
 
 **Rationale**:
+
 - Our timeline_items serve similar purpose
 - Can add cycles later without migration impact
 
@@ -341,6 +352,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 | Never add cycles | Simple forever | May need later | Too limiting long-term |
 
 **Consequences**:
+
 - Positive: Focus on core features, can add later without breaking changes
 - Negative: Teams using sprint methodology may miss this
 - Risks: May need to retrofit cycles into existing timeline structure
@@ -352,6 +364,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 **Our Decision**: DEFER to Phase 2
 
 **Rationale**:
+
 - Focus on core work item flow first
 - Our Product Strategy Foundation provides similar strategic layer
 
@@ -364,6 +377,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 | Never add initiatives | Simple | No OKR connection | Too limiting for enterprise |
 
 **Consequences**:
+
 - Positive: Focus on execution features first, strategy foundation provides placeholder
 - Negative: Missing explicit OKR-to-work-item linking
 - Risks: May need to retrofit initiatives into existing workspace structure
@@ -377,6 +391,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 **Our Decision**: Keep timestamp for now, evaluate later
 
 **Rationale**:
+
 - Timestamp works, no collisions
 - Changing ID format requires significant migration
 - Can add display format without changing underlying ID
@@ -391,6 +406,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 | Add display ID layer | Best of both | Added complexity | Can add later if needed |
 
 **Consequences**:
+
 - Positive: No migration needed, stable IDs, no collision risk
 - Negative: Not as user-friendly as TEAM-123 format
 - Risks: Users may request human-readable IDs later (can add as display layer)
@@ -400,6 +416,7 @@ ALTER TABLE work_items ADD COLUMN department_id TEXT REFERENCES departments(id);
 ## Review Triggers
 
 Reconsider these decisions when:
+
 - [ ] User feedback indicates need for human-readable IDs
 - [ ] Teams request sprint/cycle functionality
 - [ ] Strategic planning features become priority

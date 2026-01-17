@@ -14,10 +14,12 @@
 All API routes require authentication unless explicitly marked as **[PUBLIC]**.
 
 **Authentication Method:** Supabase Auth (session-based)
+
 - Client-side: Automatic via `@supabase/auth-helpers-nextjs`
 - Server-side: Extract session from request headers
 
 **Headers Required:**
+
 ```http
 Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 ```
@@ -39,6 +41,7 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 ## Quick Reference
 
 ### Auth & Users (auth-users.md)
+
 - `POST /api/auth/signup` - Create account
 - `POST /api/auth/login` - Sign in
 - `GET /api/users/me` - Get current user
@@ -47,6 +50,7 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 - `POST /api/invitations` - Invite member
 
 ### Workspaces (workspaces.md)
+
 - `GET /api/workspaces` - List workspaces
 - `POST /api/workspaces` - Create workspace
 - `GET /api/work-items` - List work items
@@ -55,6 +59,7 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 - `GET /api/product-tasks` - List tasks
 
 ### Knowledge (knowledge.md)
+
 - `GET /api/resources` - List resources
 - `GET /api/mind-maps` - List mind maps
 - `POST /api/mind-maps` - Create mind map
@@ -62,12 +67,14 @@ Cookie: sb-access-token=<token>; sb-refresh-token=<refresh-token>
 - `GET /api/feedback` - List feedback
 
 ### AI & Analytics (ai-analytics.md)
+
 - `POST /api/ai/sdk-chat` - AI chat (streaming)
 - `POST /api/ai/agent` - Agentic mode
 - `GET /api/strategies` - List strategies
 - `GET /api/analytics/overview` - Dashboard data
 
 ### Platform (platform.md)
+
 - `POST /api/mcp/oauth` - MCP OAuth flow
 - `GET /api/mcp/connections` - List connections
 - `POST /api/webhooks` - Create webhook

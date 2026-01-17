@@ -146,12 +146,14 @@ See [module-features.md](module-features.md#ai-visual-prototypes-module) for ful
 > For detailed AI architecture plans, see [AI_TOOL_ARCHITECTURE.md](advanced-ai-system/AI_TOOL_ARCHITECTURE.md).
 
 **Phase 1-2 Complete (2026-01-08)**:
+
 - Added 3 new models: GLM 4.7, MiniMax M2.1, Gemini 3 Flash
 - MODEL_ROUTING config with 6 capability-based fallback chains
 - Wired 10 missing optimization/strategy tools
 - 5-layer streaming reliability stack
 
 **Remaining Phases**:
+
 - Phase 3: Consolidate 38 -> 7 generalized tools
 - Phase 4: 4-tier orchestration system
 - Phase 5: Agent memory system

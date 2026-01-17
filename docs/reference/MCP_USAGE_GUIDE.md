@@ -31,6 +31,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ### Example Prompts
 
 **Database Migrations**:
+
 ```
 "Create migration for mind_maps table with team_id and RLS policies"
 "Add indexes to features table for team_id and workspace_id"
@@ -38,18 +39,21 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ```
 
 **Real-time Subscriptions**:
+
 ```
 "Set up Supabase Realtime subscriptions for workspace changes"
 "Create real-time listener for features table filtered by team_id"
 ```
 
 **TypeScript Generation**:
+
 ```
 "Generate TypeScript types from current schema"
 "Update TypeScript types after adding mind_maps table"
 ```
 
 **Query Optimization**:
+
 ```
 "Optimize the query for loading features with timeline_items"
 "Add composite index for (team_id, workspace_id, created_at)"
@@ -59,6 +63,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ### Advanced Usage
 
 **Complex Migration with Functions**:
+
 ```
 "Create migration that:
 1. Adds 'status' column to features table
@@ -68,6 +73,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ```
 
 **Performance Analysis**:
+
 ```
 "Analyze the performance of queries in the features module"
 "Suggest indexes for improving dashboard load times"
@@ -89,6 +95,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ### Example Prompts
 
 **E2E Test Creation**:
+
 ```
 "Create Playwright tests for authentication and onboarding flow"
 "Generate E2E tests for the review system with public links"
@@ -96,6 +103,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ```
 
 **Interactive Testing**:
+
 ```
 "Test the mind map canvas drag-and-drop functionality"
 "Test real-time collaboration features with multiple users"
@@ -103,6 +111,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ```
 
 **Visual Testing**:
+
 ```
 "Capture screenshots of all dashboard pages for documentation"
 "Take screenshots of mobile responsive layouts"
@@ -111,6 +120,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ### Advanced Usage
 
 **Complete Flow Testing**:
+
 ```
 "Create E2E test for complete user journey:
 1. Sign up with magic link
@@ -122,6 +132,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ```
 
 **CI/CD Integration**:
+
 ```
 "Set up Playwright tests to run in GitHub Actions on every PR"
 "Configure parallel test execution for faster CI/CD"
@@ -144,6 +155,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ### Example Prompts
 
 **Best Practices Research**:
+
 ```
 "Search for best practices in product roadmap management"
 "Find latest UX patterns for mind mapping interfaces"
@@ -151,6 +163,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ```
 
 **Competitive Analysis**:
+
 ```
 "Find competitive analysis on similar SaaS platforms"
 "Research pricing strategies for PLM tools"
@@ -158,6 +171,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ```
 
 **Technical Research**:
+
 ```
 "Research latest trends in AI-powered product planning tools"
 "Gather information on mind mapping UX patterns"
@@ -165,6 +179,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ```
 
 **Knowledge Base Building**:
+
 ```
 "Search for comprehensive guides on ReactFlow best practices"
 "Find technical documentation on Supabase real-time features"
@@ -174,6 +189,7 @@ The project uses **5 active MCP servers** for enhanced development capabilities:
 ### Advanced Usage
 
 **Multi-Source Comparison**:
+
 ```
 "Search across Tavily, Perplexity, and Exa for:
 - Current state of AI-powered product management
@@ -183,6 +199,7 @@ Synthesize findings into a competitive analysis report"
 ```
 
 **Trend Analysis**:
+
 ```
 "Track trends in product management SaaS over the past year:
 - Popular features being added
@@ -207,12 +224,14 @@ Identify opportunities for differentiation"
 ### Example Prompts
 
 **Parallel Execution**:
+
 ```
 "Orchestrate database migration, frontend build, and deployment in parallel"
 "Run unit tests, E2E tests, and linting in parallel"
 ```
 
 **Complex Workflows**:
+
 ```
 "Automate the workflow for feature creation, testing, and deployment"
 "Set up multi-step task pipeline for code review and testing"
@@ -220,6 +239,7 @@ Identify opportunities for differentiation"
 ```
 
 **CI/CD Automation**:
+
 ```
 "Create automation pipeline that:
 1. Runs migrations on staging
@@ -232,6 +252,7 @@ Identify opportunities for differentiation"
 ### Advanced Usage
 
 **Multi-Agent Coordination**:
+
 ```
 "Orchestrate parallel tasks with dependencies:
 1. Agent A: Create migration file
@@ -242,6 +263,7 @@ Identify opportunities for differentiation"
 ```
 
 **Automated Refactoring**:
+
 ```
 "Coordinate refactoring across multiple files:
 - Update all feature references to work_items
@@ -267,12 +289,14 @@ Identify opportunities for differentiation"
 ### Example Prompts
 
 **Deployment**:
+
 ```
 "Deploy to production and verify environment variables"
 "Create preview deployment for feature branch"
 ```
 
 **Monitoring**:
+
 ```
 "Check build logs for the latest deployment"
 "Monitor performance metrics for production deployment"
@@ -280,6 +304,7 @@ Identify opportunities for differentiation"
 ```
 
 **Configuration**:
+
 ```
 "Set up custom domain with SSL"
 "Update environment variables for production"
@@ -289,6 +314,7 @@ Identify opportunities for differentiation"
 ### Advanced Usage
 
 **Deployment Pipeline**:
+
 ```
 "Set up automated deployment pipeline:
 1. Deploy to staging on push to develop
@@ -299,6 +325,7 @@ Identify opportunities for differentiation"
 ```
 
 **Performance Optimization**:
+
 ```
 "Analyze production deployment metrics:
 - Build time trends
@@ -315,12 +342,14 @@ Suggest optimizations"
 ### 1. When to Use MCPs vs. Direct Commands
 
 **Use MCP when**:
+
 - ✅ Complex operations requiring context (migrations, complex queries)
 - ✅ Multi-step workflows (test creation, deployment pipelines)
 - ✅ Operations requiring domain expertise (search strategies, test patterns)
 - ✅ Integration with external services (Supabase, Vercel, search engines)
 
 **Use direct commands when**:
+
 - ✅ Simple file operations (read, write, edit)
 - ✅ Basic git commands (status, commit, push)
 - ✅ Simple npm commands (install, run dev)
@@ -455,6 +484,7 @@ To reduce token usage:
 5. **Vercel MCP**: Deployment, monitoring, performance optimization
 
 **Remember**: MCPs are tools that work best when:
+
 - Prompts are specific and contextual
 - Operations are complex enough to benefit from automation
 - Multiple MCPs are combined for comprehensive workflows
@@ -462,4 +492,5 @@ To reduce token usage:
 ---
 
 **See Also**:
+
 - [Main Implementation Plan](../implementation/README.md)

@@ -17,6 +17,7 @@ Most product management tools focus on WHAT you're building and WHEN it ships bu
 ## Context
 
 The product management tool landscape is fragmented:
+
 - **Productboard** excels at customer research and prioritization but lacks execution depth
 - **Linear** provides fast execution but is engineering-focused without strategic context
 - **Jira** handles execution at scale but buries strategy under implementation details
@@ -30,12 +31,14 @@ The product management tool landscape is fragmented:
 ### Productboard: Research & Prioritization
 
 **Strengths**:
+
 - Customer research portals
 - Feedback aggregation and voting
 - Prioritization frameworks (RICE, Value vs. Effort)
 - Roadmap sharing (timeline, now-next-later)
 
 **Weaknesses**:
+
 - Weak execution tracking
 - No built-in task management
 - Limited engineering integration
@@ -48,6 +51,7 @@ The product management tool landscape is fragmented:
 ### Linear: Fast Execution
 
 **Strengths**:
+
 - Blazing fast UI/UX
 - Engineering-first workflows
 - Department-based work organization
@@ -55,6 +59,7 @@ The product management tool landscape is fragmented:
 - GraphQL API
 
 **Weaknesses**:
+
 - No customer feedback collection
 - Minimal strategic planning features
 - Limited stakeholder review workflows
@@ -67,12 +72,14 @@ The product management tool landscape is fragmented:
 ### Jira: Enterprise Execution
 
 **Strengths**:
+
 - Massive customization
 - Enterprise scale (10,000+ users)
 - Extensive integrations
 - Advanced reporting
 
 **Weaknesses**:
+
 - Slow, complex interface
 - Strategy buried in custom fields
 - High configuration overhead
@@ -180,12 +187,14 @@ Our platform supports the full cycle from idea to impact:
 **Key Stat**: Companies with clear OKR-to-work-item links ship **40% more strategically aligned features** compared to those without explicit connections.
 
 **Why It Matters**:
+
 - Prevents feature creep
 - Improves team focus
 - Accelerates prioritization decisions
 - Aligns cross-functional teams
 
 **Current State in PM Tools**:
+
 | Tool | OKR Support | Implementation |
 |------|-------------|----------------|
 | Productboard | Yes | Custom fields + objectives board |
@@ -200,12 +209,14 @@ Our platform supports the full cycle from idea to impact:
 **Key Stat**: Without explicit alignment mechanisms, **60% of shipped features don't directly support stated company goals**.
 
 **Causes**:
+
 1. **Disconnected Planning**: Strategy lives in slides, execution in tools
 2. **Lack of Traceability**: Can't trace work item → strategic goal
 3. **Silent Drift**: Teams optimize locally without seeing global misalignment
 4. **Metrics Mismatch**: Measure velocity, not strategic progress
 
 **Solution Patterns**:
+
 | Problem | Traditional Approach | Our Approach |
 |---------|---------------------|--------------|
 | Strategy in slides | Quarterly planning docs | Phase-based strategy pillars (always visible) |
@@ -220,11 +231,13 @@ Our platform supports the full cycle from idea to impact:
 **Key Stat**: Teams with clear strategic pillars make prioritization decisions **3x faster** than those without.
 
 **Why**:
+
 - Fewer debates about "should we build this?"
 - Clear scoring criteria (pillar fit + impact)
 - Leadership alignment on pillars reduces escalations
 
 **Decision Framework**:
+
 ```
 PRIORITIZATION DECISION TREE
 
@@ -257,12 +270,14 @@ PRIORITIZATION DECISION TREE
 **Key Stat**: Strategy-documented teams onboard new Product Managers **50% faster** than those without.
 
 **What New PMs Need**:
+
 1. **What are we building?** (work items)
 2. **Why are we building it?** (strategic pillars)
 3. **Who decides priority?** (alignment scoring)
 4. **How do we measure success?** (pillar-based metrics)
 
 **Time to Productivity**:
+
 | Approach | Time to First Meaningful Contribution |
 |----------|--------------------------------------|
 | No strategy docs | 6-8 weeks |
@@ -381,6 +396,7 @@ AI suggestions include confidence scores based on:
 | **Team Context** | 20% | Current team priorities and focus areas |
 
 **Threshold Rules**:
+
 - **≥ 80%**: Auto-suggest (high confidence)
 - **60-79%**: Suggest with "Consider this..." phrasing
 - **< 60%**: Don't suggest (low confidence, avoid noise)
@@ -401,6 +417,7 @@ interface WorkItemPillarLink {
 ```
 
 **UI Pattern**:
+
 ```
 Strategic Alignment:
   [Primary]   🎯 User Experience
@@ -419,6 +436,7 @@ Our platform is designed for teams who are:
 **Persona**: Early-stage startups, innovation teams
 
 **Needs**:
+
 - Capture ideas quickly (mind mapping)
 - Validate with research (AI chat, web search)
 - Build initial roadmap (work items, timeline)
@@ -427,6 +445,7 @@ Our platform is designed for teams who are:
 **Phase Focus**: Ideation → Research → Roadmapping
 
 **Pain Points We Solve**:
+
 - Ideas scattered across tools (Notion, Slack, docs)
 - No clear prioritization framework
 - Switching between research and planning tools
@@ -436,6 +455,7 @@ Our platform is designed for teams who are:
 **Persona**: Product teams at Series A-C companies
 
 **Needs**:
+
 - Coordinate cross-functional teams (Product, Eng, Design)
 - Manage dependencies (linked items, critical path)
 - Gather stakeholder feedback (review module)
@@ -444,6 +464,7 @@ Our platform is designed for teams who are:
 **Phase Focus**: Planning → Execution → Review → Shipping
 
 **Pain Points We Solve**:
+
 - Misalignment between teams (Engineering builds wrong thing)
 - Dependency tracking in spreadsheets or Jira comments
 - Feedback scattered across email, Slack, meetings
@@ -453,6 +474,7 @@ Our platform is designed for teams who are:
 **Persona**: Growth-stage companies (Series C+), enterprise
 
 **Needs**:
+
 - Measure strategic progress (pillar-based analytics)
 - Optimize based on feedback (feedback loop → ideation)
 - Maintain alignment at scale (strategy always visible)
@@ -461,6 +483,7 @@ Our platform is designed for teams who are:
 **Phase Focus**: Shipping → Feedback Loop → Analytics → Ideation
 
 **Pain Points We Solve**:
+
 - Can't connect shipped features to business outcomes
 - Strategy drift (teams optimize locally)
 - Leadership lacks visibility into strategic progress
@@ -615,6 +638,7 @@ CREATE TABLE team_strategy_config (
 ```
 
 **Legend**:
+
 - `[UX] 87%` = Primary pillar badge + alignment confidence
 - `[No Pillar]` with ⚠ = Warning if enforcement enabled
 - Percentage hidden if enforcement = 'off'
@@ -714,6 +738,7 @@ Reconsider these design decisions when:
 ## Sources
 
 ### Primary Research
+
 - GitLab Product Management Survey (2023)
 - Productboard Strategy Alignment Research (2024)
 - Harvard Business Review: "Why Strategy Execution Unravels" (2023)
@@ -721,12 +746,14 @@ Reconsider these design decisions when:
 - Product Coalition Research: PM Onboarding (2024)
 
 ### Product Analysis
+
 - Productboard documentation (Objectives, Priorities)
 - Linear documentation (Initiatives, Projects)
 - Jira documentation (Strategy fields, OKRs)
 - Asana Goals & Portfolio features
 
 ### Strategic Frameworks
+
 - OKR implementation best practices (Google, Intel)
 - RICE prioritization framework (Intercom)
 - Value vs. Effort matrix (ProductPlan)

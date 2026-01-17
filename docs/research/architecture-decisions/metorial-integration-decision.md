@@ -11,6 +11,7 @@
 **RECOMMENDATION**: Migrate to Metorial as primary integration method in Week 11-12, keep self-hosted MCP Gateway as advanced fallback.
 
 **Why**: For an open-source self-hosted application, Metorial provides dramatically better user experience:
+
 - **Setup**: 5 minutes vs 2-4 hours per user
 - **Integrations**: 600+ vs 6 providers
 - **User Experience**: Non-technical friendly vs technical users only
@@ -79,16 +80,19 @@ Connect 600+ integrations with 3 clicks each ✨
 ### For Users (Self-Hosting Your App)
 
 **Scenario 1: Small User (Light Usage)**
+
 - Metorial Free Tier: **$0/month**
 - Self-Hosted MCP: $10-20/month + 2-4 hours setup
 - **Winner**: Metorial saves $120-240/year + time
 
 **Scenario 2: Medium User (Moderate Usage)**
+
 - Metorial Paid: ~$50-100/month
 - Self-Hosted MCP: $10-20/month + setup + maintenance
 - **Winner**: Depends on usage, but Metorial better for time savings
 
 **Scenario 3: Heavy User (High Usage)**
+
 - Metorial Paid: $200+/month
 - Self-Hosted MCP: $10-20/month + ongoing maintenance
 - **Winner**: Self-hosted cheaper, but requires technical expertise
@@ -98,10 +102,12 @@ Connect 600+ integrations with 3 clicks each ✨
 ### For You (Development Cost)
 
 **Current Path**:
+
 - 200+ integrations × 1-2 weeks each = **IMPOSSIBLE** for solo dev
 - Ongoing maintenance for 6-10 integrations = high burden
 
 **Metorial Path**:
+
 - 600+ integrations × 0 time = **FREE**
 - Zero maintenance = sustainable
 - 2-3 days to integrate SDK vs months to build integrations
@@ -111,37 +117,45 @@ Connect 600+ integrations with 3 clicks each ✨
 ## 📅 Implementation Timeline
 
 ### Current: Week 7-8
+
 ✅ **NO CHANGES** - Continue with current implementation
+
 - Finish core platform features
 - Get to stable release first
 
 ### Future: Week 11-12 (Testing & Billing Phase)
+
 🔄 **Add Metorial as Primary Integration Method** (3-4 days)
 
 **Day 1 AM**: Research & setup (2-3 hours)
+
 - Verify Metorial free tier limits
 - Install Metorial SDK: `npm install metorial @metorial/ai-sdk`
 - Create environment variable template
 
 **Day 1 PM - Day 2**: Code implementation (8-10 hours)
+
 - Create `metorial-adapter.ts` (Metorial SDK wrapper)
 - Create `integration-factory.ts` (Mode selection: metorial/self-hosted/hybrid)
 - Update integration API routes to use factory pattern
 - Add integration status component to UI
 
 **Day 2 PM**: Documentation (3-4 hours)
+
 - Update MCP_USAGE_GUIDE.md with both options
 - Create SELF_HOSTED_MCP_GATEWAY.md for advanced users
 - Update README.md with integration setup
 - Create migration guide
 
 **Day 3**: Testing (6-8 hours)
+
 - Test Metorial mode (GitHub, Slack, Jira)
 - Test self-hosted mode (existing providers)
 - Test hybrid mode (routing logic)
 - Test error cases (invalid API key, network failures)
 
 **Day 4**: Deployment & monitoring (2-3 hours)
+
 - Deploy to production
 - Monitor error logs
 - Track usage metrics
@@ -155,12 +169,14 @@ Connect 600+ integrations with 3 clicks each ✨
 ### Environment Configuration
 
 **Option A: Metorial (Recommended)**
+
 ```bash
 # .env.local
 METORIAL_API_KEY=your-key-here
 ```
 
 **Option B: Self-Hosted (Advanced)**
+
 ```bash
 # .env.local
 INTEGRATION_MODE=self-hosted
@@ -171,6 +187,7 @@ GITHUB_CLIENT_SECRET=xxx
 ```
 
 **Option C: Hybrid (Best of Both)**
+
 ```bash
 # .env.local
 METORIAL_API_KEY=your-key-here
@@ -181,6 +198,7 @@ SELF_HOSTED_PROVIDERS=github,jira  # Use self-hosted for these
 ### Code Changes
 
 **Files to Create** (8 new files):
+
 1. `next-app/src/lib/ai/mcp/metorial-adapter.ts` - Metorial SDK wrapper
 2. `next-app/src/lib/ai/mcp/integration-factory.ts` - Mode selection logic
 3. `next-app/src/components/integrations/integration-status.tsx` - UI component
@@ -191,6 +209,7 @@ SELF_HOSTED_PROVIDERS=github,jira  # Use self-hosted for these
 8. `docs/migration/METORIAL_MIGRATION.md` - Migration guide
 
 **Files to Modify** (6 existing files):
+
 1. `next-app/package.json` - Add Metorial SDK dependency
 2. `next-app/.env.example` - Add integration mode config
 3. `next-app/src/lib/ai/mcp/index.ts` - Update exports
@@ -199,6 +218,7 @@ SELF_HOSTED_PROVIDERS=github,jira  # Use self-hosted for these
 6. `README.md` - Quick start with integration setup
 
 **Files to Keep** (for fallback):
+
 - `next-app/src/lib/ai/mcp/gateway-client.ts` - Your MCP client
 - `docker/mcp-gateway/gateway.js` - Gateway implementation
 - All existing MCP Gateway infrastructure
@@ -237,6 +257,7 @@ See: [Self-Hosted Guide](docs/reference/SELF_HOSTED_MCP_GATEWAY.md)
 **Concern**: Depending on Metorial (YC startup)
 
 **Mitigation**:
+
 1. ✅ Keep self-hosted MCP Gateway code (fallback option)
 2. ✅ Use standard MCP protocol (portable)
 3. ✅ Document both approaches in docs
@@ -244,6 +265,7 @@ See: [Self-Hosted Guide](docs/reference/SELF_HOSTED_MCP_GATEWAY.md)
 5. ✅ Metorial is open source (can self-host if needed)
 
 **Rollback Plan**:
+
 - Remove `METORIAL_API_KEY` from `.env.local`
 - Set `INTEGRATION_MODE=self-hosted`
 - Restart MCP Gateway: `docker-compose up`
@@ -270,17 +292,20 @@ See: [Self-Hosted Guide](docs/reference/SELF_HOSTED_MCP_GATEWAY.md)
 ### Why This Makes Sense
 
 **Your Situation**:
+
 - Solo developer (no team)
 - Open-source self-hosted app
 - Users need 6-10 integrations out of 200-300 possible
 - Users vary in technical skill level
 
 **Current Path Pain**:
+
 - Build 200+ integrations alone = **IMPOSSIBLE**
 - Users configure OAuth = 2-4 hours, high failure rate
 - Maintenance burden = **UNSUSTAINABLE**
 
 **Metorial Solution**:
+
 - 600+ integrations ready = **SOLVED**
 - Users sign up + API key = **5 MINUTES**
 - Zero maintenance = **SUSTAINABLE**
@@ -307,6 +332,7 @@ Use this to feel confident about the decision:
 ## 📚 References
 
 ### Full Analysis
+
 - **Location**: `C:\Users\harsh\.claude\plans\kind-mapping-quasar.md`
 - **Size**: 2,135 lines
 - **Contents**:
@@ -317,11 +343,13 @@ Use this to feel confident about the decision:
   - Migration guides and testing strategy
 
 ### External Resources
-- **Metorial**: https://metorial.com/
-- **Metorial Docs**: https://docs.metorial.com/
-- **MCP Protocol**: https://modelcontextprotocol.io/
+
+- **Metorial**: <https://metorial.com/>
+- **Metorial Docs**: <https://docs.metorial.com/>
+- **MCP Protocol**: <https://modelcontextprotocol.io/>
 
 ### Project Documentation
+
 - `docs/reference/MCP_USAGE_GUIDE.md` - Current MCP usage (to be updated)
 - `docs/implementation/week-7/README.md` - Current week (MCP Gateway built)
 - `docs/implementation/week-11-12-metorial-integration.md` - Future implementation (to be created)
@@ -331,20 +359,26 @@ Use this to feel confident about the decision:
 ## 🎬 Next Steps
 
 ### Immediate (Now)
+
 ✅ **NO ACTION** - This is a strategic decision document only
+
 - Continue with Week 7-8 current work
 - Focus on completing core platform features
 - Get to stable release
 
 ### Near Future (Week 11-12)
+
 🔄 **Implement Metorial Integration** (3-4 days)
+
 - Follow implementation plan in full analysis document
 - Add Metorial as primary integration method
 - Keep self-hosted MCP Gateway as advanced fallback
 - Update all documentation
 
 ### Communication to Users
+
 📝 **README.md Update** (when implemented):
+
 ```markdown
 ## 🔌 Integrations
 

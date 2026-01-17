@@ -63,6 +63,7 @@ BUG:
 ### 2.2 Phase Definitions by Type
 
 **Feature Phases** (includes enhancements via is_enhancement flag):
+
 | Phase | Description | Focus Area |
 |-------|-------------|------------|
 | **design** | Research, ideation, problem definition | Empathy, user needs, scope planning |
@@ -71,6 +72,7 @@ BUG:
 | **launch** | Shipped, deployed, done | Release, retrospective, metrics |
 
 **Concept Phases**:
+
 | Phase | Description | Focus Area |
 |-------|-------------|------------|
 | **ideation** | Initial idea capture | Brainstorming, exploration |
@@ -79,6 +81,7 @@ BUG:
 | **rejected** | Concept rejected (TERMINAL) | Not viable, lessons learned |
 
 **Bug Phases**:
+
 | Phase | Description | Focus Area |
 |-------|-------------|------------|
 | **triage** | Initial assessment | Severity, priority, assignment |
@@ -89,6 +92,7 @@ BUG:
 ### 2.3 Terminal Phases
 
 Some phases are **terminal** - they cannot progress further:
+
 - `validated` / `rejected` for concepts
 - `verified` for bugs
 - `launch` for features/enhancements
@@ -124,6 +128,7 @@ Some phases are **terminal** - they cannot progress further:
 ### 2.7 Phase Transition Requirements
 
 **Feature/Enhancement Transitions**:
+
 | From → To | Required Fields | Rationale |
 |-----------|-----------------|-----------|
 | design → build | `purpose` filled, 1+ timeline items OR scope defined | Ready to build |
@@ -131,6 +136,7 @@ Some phases are **terminal** - they cannot progress further:
 | refine → launch | Feedback addressed, review approved (if enabled) | Ready to ship |
 
 **Concept Transitions**:
+
 | From → To | Required Fields | Rationale |
 |-----------|-----------------|-----------|
 | ideation → research | `purpose` filled, hypothesis defined | Ready to validate |
@@ -138,6 +144,7 @@ Some phases are **terminal** - they cannot progress further:
 | research → rejected | Research complete, not viable | Concept rejected |
 
 **Bug Transitions**:
+
 | From → To | Required Fields | Rationale |
 |-----------|-----------------|-----------|
 | triage → investigating | Priority set, assigned | Ready to investigate |
@@ -178,6 +185,7 @@ Some phases are **terminal** - they cannot progress further:
 ### 4.1 What Design Thinking IS
 
 Design Thinking is a **human-centered, iterative methodology** for HOW to implement ideas:
+
 - NOT lifecycle stages
 - NOT a replacement for phases
 - GUIDES the approach at each phase
@@ -232,12 +240,14 @@ ORGANIZATION STRATEGY (Pillars - Team-wide)
 ### 5.3 Different Displays by Context
 
 **Organization Level**:
+
 - Full strategy tree
 - High-level metrics
 - User stories, case studies
 - Team-wide alignment
 
 **Work Item Level**:
+
 - Derived/aligned strategies only
 - Alignment strength (weak/medium/strong)
 - Specific requirements for this item
@@ -277,6 +287,7 @@ Original Feature (v1)
 ### 6.3 Version Chain API
 
 **GET /api/work-items/[id]/versions**
+
 ```typescript
 {
   versions: WorkItemVersion[],
@@ -286,6 +297,7 @@ Original Feature (v1)
 ```
 
 **POST /api/work-items/[id]/enhance**
+
 ```typescript
 // Request
 {
@@ -311,6 +323,7 @@ Concept (validated) → Feature (v1)
 ```
 
 **UI Flow**:
+
 1. Concept reaches `validated` phase
 2. Promotion dialog appears
 3. User can:
@@ -331,6 +344,7 @@ Concept (validated) → Feature (v1)
 ### 7.1 Detached Review System
 
 Review is **optional and detached** from phases:
+
 - Can be enabled/disabled per work item
 - Required before certain phase transitions (when enabled)
 - Applies to bugs (fixing → verified) and features (refine → launch)
@@ -366,6 +380,7 @@ Review is **optional and detached** from phases:
 ### 7.5 Phase Blocking
 
 When `review_enabled = true`:
+
 - **Bugs**: Cannot move from `fixing` to `verified` without approval
 - **Features**: Cannot move from `refine` to `launch` without approval
 - UI shows blocking message with review status
@@ -373,6 +388,7 @@ When `review_enabled = true`:
 ### 7.6 Review API
 
 **POST /api/work-items/[id]/review**
+
 ```typescript
 // Request
 {
@@ -428,13 +444,16 @@ interface WorkspaceAnalysis {
 ### 9.2 Three Field Groups (Progressive Disclosure)
 
 **Group 1: Basic** (Always visible)
+
 - name, purpose, type, tags
 
 **Group 2: Planning** (Design+, some fields LOCKED from Build+)
+
 - target_release, acceptance_criteria, business_value, customer_impact
 - strategic_alignment, estimated_hours, priority, stakeholders
 
 **Group 3: Execution** (Build+)
+
 - actual_start_date, actual_end_date, actual_hours
 - progress_percent, blockers
 
@@ -473,6 +492,7 @@ interface WorkspaceAnalysis {
 ## 12. IMPLEMENTATION SESSIONS
 
 ### Session 1: Fix Phase Bugs ✅ COMPLETE (2025-12-13)
+
 - ✅ Fixed calculation logic overlap
 - ✅ Migrated from 5-phase to 4-phase system
 - ✅ Added transition validation (isValidPhaseTransition)
@@ -480,18 +500,21 @@ interface WorkspaceAnalysis {
 - ✅ Applied database migration
 
 ### Session 2: Phase Upgrade Prompts ✅ COMPLETE (2025-12-16)
+
 - ✅ Created readiness calculator (`calculatePhaseReadiness`)
 - ✅ Built phase upgrade banner UI (`PhaseUpgradeBanner`)
 - ✅ Added guiding questions system (`GuidingQuestionsTooltip`)
 - ✅ Implemented `usePhaseReadiness` hook
 
 ### Session 3: Type-Specific UI Components ✅ COMPLETE (2025-12-18)
+
 - ✅ Updated `PhaseContextBadge` with type awareness
 - ✅ Created `ConceptPromotionDialog` for validated concepts
 - ✅ Created `BugReviewToggle` for review mode
 - ✅ Updated `WorkItemDetailHeader` with type-aware config
 
 ### Session 4: Versioning System ✅ COMPLETE (2025-12-19)
+
 - ✅ Created `VersionHistory` component
 - ✅ Implemented `useWorkItemVersions` hook
 - ✅ Created `/api/work-items/[id]/enhance` endpoint
@@ -499,6 +522,7 @@ interface WorkspaceAnalysis {
 - ✅ Added Versions tab to work item detail
 
 ### Session 5: Review Process ✅ COMPLETE (2025-12-19)
+
 - ✅ Created `review-process.ts` configuration
 - ✅ Built `ReviewStatus` component
 - ✅ Created `/api/work-items/[id]/review` endpoint
@@ -506,6 +530,7 @@ interface WorkspaceAnalysis {
 - ✅ Integrated feedback conversion with phase selector
 
 ### Session 6: Polish & Testing ✅ COMPLETE (2025-12-20)
+
 - ✅ Updated `workspace-card.tsx` with type-aware distribution
 - ✅ Created `TypeAwarePhaseDistribution` component
 - ✅ Created E2E tests: `type-phases.spec.ts`
@@ -514,6 +539,7 @@ interface WorkspaceAnalysis {
 - ✅ Updated documentation (ARCHITECTURE_CONSOLIDATION.md)
 
 ### Security Sprint ✅ COMPLETE (2025-12-28)
+
 - ✅ 67 CodeQL security vulnerabilities resolved
 - ✅ 316 ESLint/TypeScript issues fixed
 - ✅ Next.js upgraded to 16.1.1

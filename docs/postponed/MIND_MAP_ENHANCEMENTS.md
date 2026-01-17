@@ -14,6 +14,7 @@ This document outlines tldraw-inspired enhancements to our existing ReactFlow-ba
 ### Why ReactFlow (Not tldraw)?
 
 After comprehensive analysis:
+
 - **ReactFlow**: MIT license, purpose-built for node graphs, already integrated
 - **tldraw**: Proprietary license (watermark required), designed for freehand drawing
 - **Decision**: Keep ReactFlow, cherry-pick best tldraw features
@@ -26,6 +27,7 @@ After comprehensive analysis:
 ## Current Mind Map Status
 
 ### ✅ Completed Features (Week 3)
+
 - ReactFlow canvas integration
 - 5 node types: idea, problem, solution, feature, question
 - Custom node styling per type
@@ -39,6 +41,7 @@ After comprehensive analysis:
 - React Query caching with optimistic updates
 
 ### 🎯 Deferred Enhancements (To Be Implemented Later)
+
 This document contains 23 additional features across 3 implementation phases.
 
 ---
@@ -81,6 +84,7 @@ High-impact, low-effort features that significantly improve user experience.
 **Implementation**:
 
 **File**: `next-app/src/lib/hooks/use-keyboard-shortcuts.ts` (NEW)
+
 ```typescript
 import { useEffect } from 'react'
 
@@ -121,6 +125,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-canvas.tsx`
+
 ```typescript
 import { useKeyboardShortcuts } from '@/lib/hooks/use-keyboard-shortcuts'
 
@@ -153,6 +158,7 @@ useKeyboardShortcuts(shortcuts)
 **Implementation**:
 
 **File**: `next-app/src/components/mind-map/keyboard-shortcuts-dialog.tsx` (NEW)
+
 ```typescript
 import {
   Dialog,
@@ -254,6 +260,7 @@ export function KeyboardShortcutsDialog() {
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-toolbar.tsx`
+
 ```typescript
 import { KeyboardShortcutsDialog } from './keyboard-shortcuts-dialog'
 
@@ -268,15 +275,19 @@ import { KeyboardShortcutsDialog } from './keyboard-shortcuts-dialog'
 **Goal**: Quick access to common node actions via right-click.
 
 **Menu Items**:
+
 - Edit (open edit dialog)
 - Duplicate
 - Change Type (submenu with 5 node types)
 - Delete
+
 - ---
+
 - Copy
 - Paste (if clipboard has nodes)
 
 **Dependencies**: Install shadcn/ui ContextMenu
+
 ```bash
 npx shadcn-ui@latest add context-menu
 ```
@@ -284,6 +295,7 @@ npx shadcn-ui@latest add context-menu
 **Implementation**:
 
 **File**: `next-app/src/components/mind-map/node-context-menu.tsx` (NEW)
+
 ```typescript
 import {
   ContextMenu,
@@ -365,6 +377,7 @@ export function NodeContextMenu({
 ```
 
 **Update**: `next-app/src/components/mind-map/node-types/base-node.tsx`
+
 ```typescript
 import { NodeContextMenu } from '../node-context-menu'
 
@@ -389,6 +402,7 @@ import { NodeContextMenu } from '../node-context-menu'
 **Goal**: Copy nodes and paste them with 50px offset, maintaining connections.
 
 **Features**:
+
 - Ctrl+C to copy selected nodes
 - Ctrl+V to paste nodes at 50px offset from originals
 - Maintain edges between pasted nodes
@@ -397,6 +411,7 @@ import { NodeContextMenu } from '../node-context-menu'
 **Implementation**:
 
 **File**: `next-app/src/lib/hooks/use-clipboard.ts` (NEW)
+
 ```typescript
 import { useState } from 'react'
 import { Node, Edge } from '@xyflow/react'
@@ -480,6 +495,7 @@ export function useClipboard() {
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-canvas.tsx`
+
 ```typescript
 import { useClipboard } from '@/lib/hooks/use-clipboard'
 
@@ -514,6 +530,7 @@ const { copy, paste, hasClipboard } = useClipboard()
 **Implementation**: ReactFlow already supports this with `selectionMode` prop.
 
 **Update**: `next-app/src/components/mind-map/mind-map-canvas.tsx`
+
 ```typescript
 import { SelectionMode } from '@xyflow/react'
 
@@ -529,6 +546,7 @@ import { SelectionMode } from '@xyflow/react'
 ```
 
 **User Experience**:
+
 - Click and drag to draw selection area
 - All nodes partially/fully inside area are selected
 - Hold Shift to add/remove from selection
@@ -540,6 +558,7 @@ import { SelectionMode } from '@xyflow/react'
 **Goal**: Track canvas changes and allow undo/redo with Ctrl+Z/Y.
 
 **Dependencies**: Install @xyflow/history
+
 ```bash
 npm install @xyflow/history
 ```
@@ -547,6 +566,7 @@ npm install @xyflow/history
 **Implementation**:
 
 **File**: `next-app/src/lib/hooks/use-mind-map-history.ts` (NEW)
+
 ```typescript
 import { useUndoRedo } from '@xyflow/history'
 
@@ -567,6 +587,7 @@ export function useMindMapHistory() {
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-canvas.tsx`
+
 ```typescript
 import { useMindMapHistory } from '@/lib/hooks/use-mind-map-history'
 
@@ -590,6 +611,7 @@ const { undo, redo, canUndo, canRedo } = useMindMapHistory()
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-toolbar.tsx`
+
 ```typescript
 import { Undo, Redo } from 'lucide-react'
 
@@ -619,6 +641,7 @@ import { Undo, Redo } from 'lucide-react'
 **Goal**: Enable/disable snapping nodes to grid for precise alignment.
 
 **Features**:
+
 - Toggle grid snapping with Ctrl+G
 - 20px snap distance
 - Visual grid overlay when enabled
@@ -626,6 +649,7 @@ import { Undo, Redo } from 'lucide-react'
 **Implementation**:
 
 **Update**: `next-app/src/components/mind-map/mind-map-canvas.tsx`
+
 ```typescript
 const [snapToGrid, setSnapToGrid] = useState(false)
 
@@ -650,6 +674,7 @@ const [snapToGrid, setSnapToGrid] = useState(false)
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-toolbar.tsx`
+
 ```typescript
 import { Grid } from 'lucide-react'
 
@@ -674,6 +699,7 @@ Features for advanced users and larger teams.
 **Goal**: Export canvas as vector SVG (scalable, smaller file size).
 
 **Dependencies**: Install html-to-image
+
 ```bash
 npm install html-to-image
 ```
@@ -681,6 +707,7 @@ npm install html-to-image
 **Implementation**:
 
 **File**: `next-app/src/lib/utils/export-canvas.ts` (NEW)
+
 ```typescript
 import { toPng, toSvg } from 'html-to-image'
 
@@ -725,6 +752,7 @@ export async function exportCanvasToSVG(
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-toolbar.tsx`
+
 ```typescript
 import { exportCanvasToPNG, exportCanvasToSVG } from '@/lib/utils/export-canvas'
 import { FileImage, FileType } from 'lucide-react'
@@ -757,6 +785,7 @@ import { FileImage, FileType } from 'lucide-react'
 **Goal**: Align selected nodes (left, center, right, top, middle, bottom) and distribute evenly.
 
 **Features**:
+
 - Align left/center/right
 - Align top/middle/bottom
 - Distribute horizontally/vertically
@@ -765,6 +794,7 @@ import { FileImage, FileType } from 'lucide-react'
 **Implementation**:
 
 **File**: `next-app/src/lib/utils/node-alignment.ts` (NEW)
+
 ```typescript
 import { Node } from '@xyflow/react'
 
@@ -887,6 +917,7 @@ export function distributeNodes(
 ```
 
 **File**: `next-app/src/components/mind-map/alignment-toolbar.tsx` (NEW)
+
 ```typescript
 import { Button } from '@/components/ui/button'
 import {
@@ -1001,6 +1032,7 @@ export function AlignmentToolbar({
 **Implementation**:
 
 **Update**: `next-app/src/components/mind-map/mind-map-canvas.tsx`
+
 ```typescript
 import { MiniMap } from '@xyflow/react'
 
@@ -1052,6 +1084,7 @@ const nodeColor = (node: Node) => {
 **Implementation**:
 
 **File**: `next-app/src/components/mind-map/node-search.tsx` (NEW)
+
 ```typescript
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -1116,6 +1149,7 @@ export function NodeSearch({
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-canvas.tsx`
+
 ```typescript
 import { NodeSearch } from './node-search'
 
@@ -1168,11 +1202,13 @@ const highlightedNodes = filteredNodes.map(node => ({
 **Goal**: Automatically organize nodes with hierarchical layout algorithms.
 
 **Dependencies**: Install elkjs
+
 ```bash
 npm install elkjs
 ```
 
 **Algorithms to Support**:
+
 1. **Hierarchical** (top-to-bottom, left-to-right)
 2. **Force-Directed** (organic, balanced)
 3. **Radial** (circular, hub-and-spoke)
@@ -1187,11 +1223,13 @@ npm install elkjs
 **Goal**: Follow other users' viewports in real-time collaboration.
 
 **Features**:
+
 - Show colored rectangles for each user's viewport
 - Click to jump to user's view
 - Show user avatar and name
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE mind_map_viewports (
   id TEXT PRIMARY KEY,
@@ -1211,11 +1249,13 @@ CREATE TABLE mind_map_viewports (
 **Goal**: Show other users' cursors in real-time.
 
 **Features**:
+
 - Colored cursor with user name
 - Smooth interpolation
 - Fade out after inactivity
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE mind_map_cursors (
   id TEXT PRIMARY KEY,
@@ -1239,6 +1279,7 @@ Premium features for enterprise and power users.
 **Goal**: Label connections between nodes with relationship types.
 
 **Relationship Types**:
+
 - **depends-on** (requires completion)
 - **relates-to** (related but independent)
 - **causes** (causal relationship)
@@ -1248,12 +1289,14 @@ Premium features for enterprise and power users.
 **Implementation**:
 
 **Update Database Schema**:
+
 ```sql
 ALTER TABLE mind_map_edges ADD COLUMN label TEXT;
 ALTER TABLE mind_map_edges ADD COLUMN edge_type TEXT DEFAULT 'relates-to';
 ```
 
 **Update**: `next-app/src/components/mind-map/mind-map-canvas.tsx`
+
 ```tsx
 import { EdgeLabelRenderer } from '@xyflow/react'
 
@@ -1291,6 +1334,7 @@ const edgeTypes = {
 **Goal**: Full-screen mode with focus on one node at a time, navigation controls.
 
 **Features**:
+
 - Enter presentation mode (fullscreen)
 - Navigate between nodes (Next/Previous)
 - Zoom focus on current node
@@ -1305,6 +1349,7 @@ const edgeTypes = {
 **Goal**: Save canvas snapshots, restore previous versions, compare changes.
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE mind_map_snapshots (
   id TEXT PRIMARY KEY,
@@ -1325,6 +1370,7 @@ CREATE TABLE mind_map_snapshots (
 **Goal**: Save custom node configurations as reusable templates.
 
 **Templates to Include**:
+
 - User Story template (As a [role], I want [feature], so that [benefit])
 - SWOT Analysis (Strengths, Weaknesses, Opportunities, Threats)
 - Design Sprint (Understand, Diverge, Decide, Prototype, Test)
@@ -1339,6 +1385,7 @@ CREATE TABLE mind_map_snapshots (
 **Goal**: Add comments to nodes, threaded discussions, @ mentions.
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE mind_map_comments (
   id TEXT PRIMARY KEY,
@@ -1418,11 +1465,13 @@ import { NodeResizer } from '@xyflow/react'
 **Goal**: Save custom zoom levels and viewport positions.
 
 **Presets**:
+
 - Overview (zoom out to see all)
 - Focus (zoom to selected node)
 - Custom (save current view)
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE mind_map_views (
   id TEXT PRIMARY KEY,
@@ -1441,6 +1490,7 @@ CREATE TABLE mind_map_views (
 **Goal**: Convert mind map to structured Markdown document.
 
 **Output Format**:
+
 ```markdown
 # Mind Map: Product Roadmap
 
@@ -1537,12 +1587,14 @@ These features require Pro subscription:
 ## Testing Strategy
 
 ### Unit Tests (Jest)
+
 - `use-keyboard-shortcuts.ts` - Test shortcut matching
 - `use-clipboard.ts` - Test copy/paste with ID mapping
 - `node-alignment.ts` - Test alignment calculations
 - `export-canvas.ts` - Test export functions
 
 ### E2E Tests (Playwright)
+
 - Test keyboard shortcuts (press 1-5 to add nodes)
 - Test context menu (right-click → Edit/Duplicate/Delete)
 - Test copy/paste (Ctrl+C/V)
@@ -1560,13 +1612,15 @@ All features are **additive** - no breaking changes to existing mind map functio
 ### Database Migrations Required
 
 1. **Edge Labels** (Phase 3, Feature #15):
+
 ```sql
 -- Add label and edge_type columns
 ALTER TABLE mind_map_edges ADD COLUMN label TEXT;
 ALTER TABLE mind_map_edges ADD COLUMN edge_type TEXT DEFAULT 'relates-to';
 ```
 
-2. **Snapshots** (Phase 3, Feature #17):
+1. **Snapshots** (Phase 3, Feature #17):
+
 ```sql
 -- Create snapshots table
 CREATE TABLE mind_map_snapshots (
@@ -1579,7 +1633,8 @@ CREATE TABLE mind_map_snapshots (
 );
 ```
 
-3. **Comments** (Phase 3, Feature #19):
+1. **Comments** (Phase 3, Feature #19):
+
 ```sql
 -- Create comments table
 CREATE TABLE mind_map_comments (
@@ -1593,7 +1648,8 @@ CREATE TABLE mind_map_comments (
 );
 ```
 
-4. **Saved Views** (Phase 3, Feature #22):
+1. **Saved Views** (Phase 3, Feature #22):
+
 ```sql
 -- Create views table
 CREATE TABLE mind_map_views (
@@ -1611,17 +1667,20 @@ CREATE TABLE mind_map_views (
 ## Performance Considerations
 
 ### Large Canvas Optimization
+
 - Virtualize nodes (only render visible nodes)
 - Debounce auto-save to 2 seconds
 - Lazy load node images
 - Use React.memo for node components
 
 ### Real-time Collaboration Optimization
+
 - Throttle cursor position updates to 50ms
 - Batch viewport updates
 - Use Supabase Realtime filters for team_id
 
 ### Export Optimization
+
 - Use Web Workers for large canvas exports
 - Compress SVG output
 - Limit export resolution to 4K max
@@ -1631,6 +1690,7 @@ CREATE TABLE mind_map_views (
 ## User Feedback Collection
 
 After Phase 1 implementation, collect user feedback on:
+
 1. Most-used keyboard shortcuts
 2. Desired auto-layout algorithms
 3. Export format preferences

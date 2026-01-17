@@ -24,6 +24,7 @@ This guide documents the GitHub web UI configuration required to complete the pr
    - Click **Add rule** button
 
 2. **Configure Branch Name Pattern**
+
    ```
    Branch name pattern: main
    ```
@@ -33,11 +34,13 @@ This guide documents the GitHub web UI configuration required to complete the pr
    Check these boxes:
 
    #### ✅ Require a pull request before merging
+
    - **Require approvals**: `0` (for solo development, allows self-merge)
    - ✅ **Dismiss stale pull request approvals when new commits are pushed**
    - ❌ **Require review from Code Owners** (leave unchecked)
 
    #### ✅ Require status checks to pass before merging
+
    - ✅ **Require branches to be up to date before merging**
    - **Status checks that are required** (after adding GitHub secrets):
      - Type in search box: `test` (will show after first PR runs)
@@ -46,15 +49,19 @@ This guide documents the GitHub web UI configuration required to complete the pr
    #### ✅ Require conversation resolution before merging
 
    #### ❌ Require signed commits
+
    - Leave unchecked (adds overhead for solo development)
 
    #### ✅ Require linear history
+
    - This enforces squash/rebase only, preventing merge commits
 
    #### ❌ Include administrators
+
    - Leave unchecked to allow emergency bypasses
 
    #### ✅ Restrict who can push to matching branches
+
    - ❌ **Allow force pushes** (leave unchecked)
    - ❌ **Allow deletions** (leave unchecked)
 
@@ -103,25 +110,30 @@ git push --no-verify
 3. **Configure Merge Options**
 
    #### Allow merge commits
+
    - ❌ **Uncheck** this box
    - This disables the "Merge" button on PRs
 
    #### Allow squash merging
+
    - ✅ **Check** this box
    - ✅ **Default to pull request title and commit details**
    - This becomes the ONLY merge option available
 
    #### Allow rebase merging
+
    - ❌ **Uncheck** this box
    - This disables the "Rebase and merge" button on PRs
 
 4. **Enable Additional Options**
 
    #### Always suggest updating pull request branches
+
    - ✅ **Check** this box
    - Shows a helpful "Update branch" button when PR is behind main
 
    #### Automatically delete head branches
+
    - ✅ **Check** this box
    - Auto-deletes feature branches after merge (cleaner repo)
 
@@ -132,6 +144,7 @@ git push --no-verify
 ### Verification
 
 After creating a test PR:
+
 - Only "Squash and merge" button should be visible
 - "Merge" and "Rebase and merge" buttons should be hidden
 - After merging, feature branch should auto-delete
@@ -180,6 +193,7 @@ You need to add **4 secrets** to run Playwright tests in CI/CD:
 3. **Verify All Secrets Added**
 
    After adding all 4, you should see:
+
    ```
    Repository secrets (4)
    - NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -193,6 +207,7 @@ You need to add **4 secrets** to run Playwright tests in CI/CD:
 Before adding `TEST_USER_EMAIL` and `TEST_USER_PASSWORD` secrets:
 
 1. **Create Test User in Supabase**
+
    ```bash
    # Option A: Via Supabase Dashboard
    # - Go to Authentication → Users
@@ -235,6 +250,7 @@ gh pr create --title "Test E2E CI/CD" --body "Testing automated E2E tests"
 ```
 
 If tests fail with "Missing secrets" error:
+
 - Double-check secret names match exactly (case-sensitive)
 - Verify Supabase URL/key are correct
 - Ensure test user exists and is confirmed
@@ -270,6 +286,7 @@ If tests fail with "Missing secrets" error:
 Use this checklist to verify all settings are configured:
 
 ### Branch Protection
+
 - [ ] Branch protection rule created for `main`
 - [ ] "Require a pull request before merging" enabled
 - [ ] "Require status checks to pass" enabled (after first PR)
@@ -278,6 +295,7 @@ Use this checklist to verify all settings are configured:
 - [ ] Force pushes and deletions disabled
 
 ### Merge Strategy
+
 - [ ] Squash merging enabled (only option)
 - [ ] Merge commits disabled
 - [ ] Rebase merging disabled
@@ -285,12 +303,14 @@ Use this checklist to verify all settings are configured:
 - [ ] "Automatically delete head branches" enabled
 
 ### GitHub Secrets (4 total)
+
 - [ ] `NEXT_PUBLIC_SUPABASE_URL` added
 - [ ] `NEXT_PUBLIC_SUPABASE_ANON_KEY` added
 - [ ] `TEST_USER_EMAIL` added
 - [ ] `TEST_USER_PASSWORD` added
 
 ### E2E Tests
+
 - [ ] Test user created in Supabase
 - [ ] Test user assigned to a team
 - [ ] First PR created to trigger workflow
@@ -298,6 +318,7 @@ Use this checklist to verify all settings are configured:
 - [ ] `test` status check added to branch protection
 
 ### Verification
+
 - [ ] Direct push to `main` blocked (tested locally)
 - [ ] Direct push to `main` blocked via `--no-verify` (tested via GitHub)
 - [ ] PR created successfully with template
@@ -314,6 +335,7 @@ Use this checklist to verify all settings are configured:
 **Cause:** Status checks don't appear until they've run at least once.
 
 **Solution:**
+
 1. Create a test PR
 2. Wait for "Playwright E2E Tests" workflow to complete
 3. Return to branch protection settings
@@ -326,6 +348,7 @@ Use this checklist to verify all settings are configured:
 **Cause:** Secrets not configured or named incorrectly.
 
 **Solution:**
+
 1. Go to Settings → Secrets and variables → Actions
 2. Verify all 4 secrets exist
 3. Check secret names match exactly (case-sensitive):
@@ -340,6 +363,7 @@ Use this checklist to verify all settings are configured:
 **Cause:** E2E tests are failing.
 
 **Solution:**
+
 1. Click "Details" link next to failing check
 2. Review test failure logs
 3. Fix the issue locally
@@ -353,6 +377,7 @@ Use this checklist to verify all settings are configured:
 **Expected behavior:** For solo development, 0 approvals required allows self-merge.
 
 If you want stricter controls:
+
 1. Settings → Branches → Edit rule
 2. "Require approvals" → Change to `1`
 3. Note: You'll need to approve your own PRs (extra click)
@@ -364,6 +389,7 @@ If you want stricter controls:
 If you need to bypass these protections (production hotfix):
 
 ### Local Hook Bypass
+
 ```bash
 git push --no-verify
 ```
@@ -371,10 +397,12 @@ git push --no-verify
 ### GitHub Branch Protection Bypass
 
 **Option A:** Use administrator privileges (if configured)
+
 - Settings → Branches → Edit rule → ✅ "Include administrators"
 - WARNING: This disables protection for all admins
 
 **Option B:** Temporarily disable branch protection
+
 1. Settings → Branches → Delete rule for `main`
 2. Make urgent fix and push
 3. Re-create branch protection rule immediately after
@@ -417,6 +445,7 @@ After completing GitHub configuration:
 **Configuration Complete!** 🎉
 
 Your repository now enforces:
+
 - ✅ PR workflow (no direct main pushes)
 - ✅ Automated type checking
 - ✅ Automated linting

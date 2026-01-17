@@ -34,32 +34,34 @@
    - [phase_assignment_history](#phase_assignment_history)
    - [phase_access_requests](#phase_access_requests)
    - [phase_workload_cache](#phase_workload_cache)
-6. [Mind Mapping Tables](#mind-mapping-tables)
+7. [Mind Mapping Tables](#mind-mapping-tables)
    - [mind_maps](#mind_maps)
    - [work_flows](#work_flows)
-7. [Feedback Tables](#feedback-tables)
+8. [Feedback Tables](#feedback-tables)
    - [feedback](#feedback)
-8. [Feature Analysis Tables](#feature-analysis-tables)
+9. [Feature Analysis Tables](#feature-analysis-tables)
    - [feature_connections](#feature_connections)
    - [feature_importance_scores](#feature_importance_scores)
    - [feature_correlations](#feature_correlations)
    - [connection_insights](#connection_insights)
-9. [Supporting Tables](#supporting-tables)
-   - [user_settings](#user_settings)
-   - [execution_steps](#execution_steps)
-   - [feature_resources](#feature_resources)
-   - [inspiration_items](#inspiration_items)
-   - [workflow_stages](#workflow_stages)
-   - [tags](#tags)
-10. [Row-Level Security (RLS) Policies](#row-level-security-rls-policies)
-11. [Database Functions](#database-functions)
-12. [Migration History](#migration-history)
+10. [Supporting Tables](#supporting-tables)
+
+- [user_settings](#user_settings)
+- [execution_steps](#execution_steps)
+- [feature_resources](#feature_resources)
+- [inspiration_items](#inspiration_items)
+- [workflow_stages](#workflow_stages)
+- [tags](#tags)
+1. [Row-Level Security (RLS) Policies](#row-level-security-rls-policies)
+2. [Database Functions](#database-functions)
+3. [Migration History](#migration-history)
 
 ---
 
 ## Multi-Tenant Architecture
 
 **Design Principles:**
+
 - Every table has `team_id` for data isolation
 - Row-Level Security (RLS) enforces access control at database level
 - Use timestamp-based TEXT IDs: `Date.now().toString()` (NOT UUID)
@@ -67,6 +69,7 @@
 - Phase-based permissions control edit access per phase per user
 
 **ID Format:**
+
 ```sql
 -- Correct: Timestamp-based TEXT ID
 id TEXT PRIMARY KEY DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT::TEXT
@@ -97,6 +100,7 @@ CREATE INDEX idx_users_email ON public.users(email);
 ```
 
 **RLS Policies:**
+
 - `Users can view all user profiles` - SELECT: `USING (true)`
 - `Users can update own profile` - UPDATE: `USING (auth.uid() = id)`
 - `Users can insert own profile` - INSERT: `WITH CHECK (auth.uid() = id)`
@@ -123,6 +127,7 @@ CREATE TABLE teams (
 ```
 
 **RLS Policies:**
+
 - `team_members_can_view_their_teams` - SELECT via team_members lookup
 - `owners_can_update_team` - UPDATE for owners only
 - `owners_can_delete_team` - DELETE for owners only
@@ -146,6 +151,7 @@ CREATE TABLE team_members (
 ```
 
 **RLS Policies:**
+
 - `team_members_can_view_team_members` - SELECT via team membership
 - `admins_can_insert_team_members` - INSERT for owner/admin only
 - `admins_can_update_team_members` - UPDATE with self-role-escalation prevention
@@ -317,11 +323,13 @@ CREATE INDEX idx_work_items_is_note ON work_items(is_note) WHERE is_note = true;
 - **previous_phase**: The phase before current one (for rollback context)
 
 **Critical Clarification:**
+
 - Work item `phase` = status (one field, dual purpose)
 - Timeline item has separate `status` field (not_started, in_progress, blocked, completed, on_hold, cancelled)
 - Workspace has NO phase field - only `mode` field and AGGREGATED phase distribution
 
 **RLS Policies:**
+
 - `Team members can view team work items` - SELECT via team membership
 - `Users can create work items in assigned phases` - INSERT with phase permission check
 - `Users can update work items in assigned phases` - UPDATE with phase permission check
@@ -429,6 +437,7 @@ CREATE INDEX idx_product_tasks_work_item_status ON product_tasks(work_item_id, s
 ```
 
 **Helper Functions:**
+
 - `get_workspace_task_stats(workspace_id)` - Returns task statistics
 - `get_work_item_tasks(work_item_id)` - Returns tasks with completion percentage
 
@@ -486,6 +495,7 @@ CREATE INDEX idx_resources_domain ON public.resources(source_domain) WHERE sourc
 ```
 
 **Resource Types:**
+
 | Type | Description |
 |------|-------------|
 | `reference` | General links, bookmarks, URLs |
@@ -529,6 +539,7 @@ CREATE INDEX idx_work_item_resources_unlinked ON public.work_item_resources(is_u
 ```
 
 **Tab Types:**
+
 - `inspiration` - Research phase references, competitor analysis
 - `resource` - General resources for development/execution
 
@@ -561,6 +572,7 @@ CREATE INDEX idx_resource_audit_action ON public.resource_audit_log(action);
 ```
 
 **Audit Actions:**
+
 | Action | Description |
 |--------|-------------|
 | `created` | Resource was created |
@@ -1172,23 +1184,28 @@ WITH CHECK (
 ## Database Functions
 
 ### Phase Calculation
+
 - `calculate_work_item_phase(work_item_id, status, owner)` - Returns calculated phase based on state
 
 ### Dependency Analysis
+
 - `get_timeline_dependencies(timeline_item_id)` - Returns blocking/blocked_by/complements/conflicts/extends
 - `get_work_item_dependencies_aggregated(work_item_id)` - Aggregated dependency view
 - `get_conversion_lineage(work_item_id)` - Tracks conversion chain
 
 ### Task Statistics
+
 - `get_workspace_task_stats(workspace_id)` - Task counts by status/type
 - `get_work_item_tasks(work_item_id)` - Tasks with completion percentage
 
 ### Phase Management
+
 - `refresh_phase_workload_cache(workspace_id)` - Updates workload cache
 - `log_phase_change()` - Trigger function for audit trail
 - `get_phase_lead_info(workspace_id, phase)` - Returns phase lead contact
 
 ### Utility
+
 - `update_updated_at_column()` - Generic timestamp trigger
 - `handle_new_user()` - Creates public.users on auth.users insert
 
@@ -1199,12 +1216,14 @@ WITH CHECK (
 See [CHANGELOG.md](../reference/CHANGELOG.md) for complete migration history.
 
 **Summary:**
+
 - **Total Tables**: 28+
 - **Total Migrations**: 46 (as of 2025-11-26)
 - **RLS Policies**: Applied to all team-scoped tables
 - **Phase System**: Complete with audit trail and access requests
 
 **Key Migration Milestones:**
+
 | Migration | Date | Description |
 |-----------|------|-------------|
 | 20250101000000 | 2025-01-01 | Initial schema (features, timeline_items, linked_items) |

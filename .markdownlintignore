@@ -1,0 +1,7 @@
+docs/planning/PROGRESS.md
+docs/reference/CHANGELOG.md
+node_modules/
+**/node_modules/
+.next/
+dist/
+build/

@@ -38,6 +38,7 @@
 | **Professional Habits** | Builds skills for team collaboration |
 
 **Real-World Impact**:
+
 - **Time Saved**: 10-25 min overhead per feature, saves 2-4 hours debugging production issues
 - **Bugs Prevented**: Self-review catches type errors, missing edge cases, broken links
 - **Confidence**: Main branch always works, deployments are stress-free
@@ -92,6 +93,7 @@
 **Purpose**: Ensure you're building on the latest stable code.
 
 **Commands**:
+
 ```bash
 # Switch to main branch
 git checkout main
@@ -101,6 +103,7 @@ git pull origin main
 ```
 
 **Why It Matters**:
+
 - Prevents merge conflicts later
 - Ensures you're not working on outdated code
 - Synchronizes with any deployments made since last pull
@@ -115,6 +118,7 @@ git pull origin main
 **Purpose**: Isolate your changes from production code.
 
 **Commands**:
+
 ```bash
 # Create and switch to new branch
 git checkout -b feat/new-feature-name
@@ -131,12 +135,14 @@ git checkout -b feat/new-feature-name
 | **Test** | `test/description` | `test/e2e-workspace-crud` |
 
 **Best Practices**:
+
 - ✅ Use descriptive names (not `feat/update` or `fix/bug`)
 - ✅ Keep names under 50 characters
 - ✅ Use kebab-case (hyphens, not underscores)
 - ❌ Don't include issue numbers in branch name (put in PR description)
 
 **Why It Matters**:
+
 - Main branch stays stable while you experiment
 - Easy to see what each branch does
 - Can work on multiple features in parallel (using git worktrees)
@@ -148,6 +154,7 @@ git checkout -b feat/new-feature-name
 **Purpose**: Implement your feature with atomic commits.
 
 **Commands**:
+
 ```bash
 # Make changes to files
 # ... edit code ...
@@ -176,6 +183,7 @@ git commit -m "feat: add validation to profile form"
 ```
 
 **Types**:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation
@@ -184,6 +192,7 @@ git commit -m "feat: add validation to profile form"
 - `chore`: Maintenance (dependency updates, config)
 
 **Good Examples**:
+
 ```
 feat: add dark mode toggle to user settings
 fix: resolve infinite loop in timeline calculation
@@ -194,6 +203,7 @@ chore: update shadcn/ui components to v2.0
 ```
 
 **Bad Examples** (Don't Do This):
+
 ```
 Update files  (too vague)
 fix bug  (not descriptive)
@@ -203,12 +213,14 @@ asdf  (definitely no!)
 ```
 
 **Atomic Commits Best Practice**:
+
 - Each commit = one logical change
 - Commit often (every 30-60 min of work)
 - Makes it easy to revert specific changes
 - Creates clear history
 
 **Why It Matters**:
+
 - Clear commit history helps you understand what changed
 - Easy to revert bad commits
 - Makes code review easier
@@ -221,6 +233,7 @@ asdf  (definitely no!)
 **Purpose**: Backup your work and prepare for PR creation.
 
 **Commands**:
+
 ```bash
 # First push (creates remote branch)
 git push -u origin feat/new-feature-name
@@ -230,11 +243,13 @@ git push
 ```
 
 **The `-u` Flag**:
+
 - Sets upstream tracking
 - Only needed on first push
 - After that, just `git push` works
 
 **Why It Matters**:
+
 - Backs up your work to GitHub (not just local)
 - Required before creating pull request
 - Enables collaboration (others can see your branch)
@@ -246,6 +261,7 @@ git push
 **Purpose**: Document your changes and prepare for review.
 
 **Commands**:
+
 ```bash
 # Using GitHub CLI (recommended)
 gh pr create --title "Add user profile settings" --body "See PR description"
@@ -256,11 +272,13 @@ gh pr create --title "Add user profile settings" --body "See PR description"
 ```
 
 **PR Title Best Practices**:
+
 - ✅ Descriptive and clear: "Add user profile settings page"
 - ✅ Matches commit message format: "feat: add user profile settings"
 - ❌ Vague: "Update code" or "Fix issue"
 
 **PR Description** (see template in next section for details):
+
 - Summary of what changed
 - Why you made this change
 - What testing was done
@@ -268,6 +286,7 @@ gh pr create --title "Add user profile settings" --body "See PR description"
 - Related issues or tickets
 
 **Why It Matters**:
+
 - Creates permanent record of what changed
 - Enables self-review process (next step)
 - Documents decisions for future reference
@@ -289,6 +308,7 @@ gh pr create --title "Add user profile settings" --body "See PR description"
 6. **Re-review** until no issues remain
 
 **Self-Review Checklist** (covered in detail below):
+
 - [ ] Code quality (no console.logs, proper error handling)
 - [ ] Security (no hardcoded secrets, proper auth checks)
 - [ ] Testing (edge cases covered, errors handled)
@@ -306,6 +326,7 @@ gh pr create --title "Add user profile settings" --body "See PR description"
 | No learning from mistakes | Learn by reviewing own code |
 
 **Real Example**:
+
 ```
 ❌ Without review: Merge immediately → Production breaks → 2 hours debugging
 
@@ -322,6 +343,7 @@ gh pr create --title "Add user profile settings" --body "See PR description"
 **Purpose**: Integrate your feature into the production codebase.
 
 **Commands**:
+
 ```bash
 # Using GitHub CLI (squash merge recommended)
 gh pr merge --squash
@@ -339,11 +361,13 @@ gh pr merge --squash
 | **Rebase and Merge** | Linear history preference | Clean, linear history | Rewrites commit history |
 
 **Recommendation for Solo Developers**: Use **Squash and Merge**
+
 - Main branch shows one commit per feature
 - Easy to understand history
 - Easy to revert entire features
 
 **After Merge**:
+
 ```bash
 # Switch back to main
 git checkout main
@@ -359,6 +383,7 @@ git push origin --delete feat/new-feature-name
 ```
 
 **Why It Matters**:
+
 - Keeps main branch clean and organized
 - Makes it easy to see what changed in production
 - Provides clear rollback points if needed
@@ -372,12 +397,13 @@ git push origin --delete feat/new-feature-name
 **Steps**:
 
 1. **Wait for deployment** (Vercel auto-deploys main branch)
-2. **Visit production URL**: https://platform-test-cyan.vercel.app
+2. **Visit production URL**: <https://platform-test-cyan.vercel.app>
 3. **Test the feature** you just deployed
 4. **Check for errors** in browser console
 5. **Verify edge cases** work as expected
 
 **Production Checklist**:
+
 - [ ] Feature visible and functional
 - [ ] No console errors
 - [ ] Mobile responsive (test on phone)
@@ -385,11 +411,13 @@ git push origin --delete feat/new-feature-name
 - [ ] Error handling works (test invalid inputs)
 
 **If Issues Found**:
+
 1. Create new branch: `fix/production-issue`
 2. Fix the issue
 3. Follow steps 3-8 again (quick hotfix)
 
 **Why It Matters**:
+
 - Catches environment-specific issues
 - Ensures deployment succeeded
 - Verifies feature works for real users
@@ -482,6 +510,7 @@ Run database migration: `supabase/migrations/20251223_add_review_system.sql`
 Use this checklist when reviewing your own PR:
 
 ### 1. Code Quality
+
 - [ ] No `console.log()` statements left in code
 - [ ] No commented-out code blocks
 - [ ] Proper error handling (try/catch, error states)
@@ -490,6 +519,7 @@ Use this checklist when reviewing your own PR:
 - [ ] TypeScript strict mode passes (`npx tsc --noEmit`)
 
 ### 2. Security
+
 - [ ] No API keys or secrets in code
 - [ ] No sensitive data in console.log
 - [ ] Authentication checked on protected routes
@@ -498,6 +528,7 @@ Use this checklist when reviewing your own PR:
 - [ ] SQL injection prevented (parameterized queries)
 
 ### 3. Testing
+
 - [ ] Edge cases handled (empty states, null values, errors)
 - [ ] Loading states present (skeleton, spinner)
 - [ ] Error states present (error messages, retry buttons)
@@ -505,6 +536,7 @@ Use this checklist when reviewing your own PR:
 - [ ] Manual testing done on localhost
 
 ### 4. Documentation
+
 - [ ] Complex logic has comments explaining WHY
 - [ ] Public functions have JSDoc comments
 - [ ] README updated if setup process changed
@@ -512,6 +544,7 @@ Use this checklist when reviewing your own PR:
 - [ ] CHANGELOG.md entry added for user-facing changes
 
 ### 5. Performance
+
 - [ ] No unnecessary re-renders (React DevTools profiler checked)
 - [ ] Database queries use indexes (team_id, workspace_id)
 - [ ] Images optimized and lazy-loaded
@@ -519,6 +552,7 @@ Use this checklist when reviewing your own PR:
 - [ ] Bundle size reasonable (check with `npm run build`)
 
 ### 6. User Experience
+
 - [ ] Error messages are user-friendly (not technical)
 - [ ] Success feedback provided (toast messages)
 - [ ] Mobile responsive (test on small screen)
@@ -526,6 +560,7 @@ Use this checklist when reviewing your own PR:
 - [ ] Loading states prevent confusion
 
 **How to Use This Checklist**:
+
 1. Open your PR on GitHub
 2. Go through each item while viewing the diff
 3. Check off items or leave comments on lines that need fixes
@@ -556,12 +591,14 @@ Even solo developers benefit from enforced workflows to prevent accidentally bre
 5. Click "Create"
 
 **What This Does**:
+
 - ✅ Forces you to create PRs (can't push directly to main)
 - ✅ Enables self-review workflow
 - ✅ Allows you to bypass for urgent hotfixes
 - ✅ No blocked deployments (0 approvals required)
 
 **When to Bypass**:
+
 - Critical production bug that needs immediate fix
 - Urgent security patch
 - Configuration change that doesn't need review
@@ -577,22 +614,26 @@ Even solo developers benefit from enforced workflows to prevent accidentally bre
 **Steps**:
 
 1. **Install Husky** (git hook manager):
+
 ```bash
 cd next-app
 npm install --save-dev husky
 ```
 
-2. **Initialize Husky**:
+1. **Initialize Husky**:
+
 ```bash
 npx husky install
 ```
 
-3. **Create pre-push hook**:
+1. **Create pre-push hook**:
+
 ```bash
 npx husky add .husky/pre-push
 ```
 
-4. **Edit `.husky/pre-push` file**:
+1. **Edit `.husky/pre-push` file**:
+
 ```bash
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
@@ -615,12 +656,14 @@ fi
 echo "✅ Pushing to branch: $branch"
 ```
 
-5. **Make hook executable**:
+1. **Make hook executable**:
+
 ```bash
 chmod +x .husky/pre-push
 ```
 
-6. **Commit the hook**:
+1. **Commit the hook**:
+
 ```bash
 git add .husky/pre-push
 git commit -m "chore: add pre-push hook to block main"
@@ -628,12 +671,14 @@ git push
 ```
 
 **What This Does**:
+
 - 🚫 **Completely blocks** direct pushes to main
 - ✅ Forces you to use feature branches
 - ✅ Provides helpful error message with instructions
 - ⚠️ Can bypass with `git push --no-verify` (for emergencies)
 
 **Testing the Hook**:
+
 ```bash
 # Should be blocked
 git checkout main
@@ -772,6 +817,7 @@ Next step: Verify on production (Step 8)
 **Key Insight**: Phase commands handle the tedious parts (branch creation, commits, PR creation) but **YOU still do the critical thinking** (self-review is MANDATORY before `/merge` command will work).
 
 **The Workflow Flow**:
+
 1. `/research-plan` → Creates branch (Step 2)
 2. `/parallel-dev` → Implements code (Step 3)
 3. `/deploy` → **Creates PR and STOPS** (Steps 4-5)
@@ -837,12 +883,14 @@ git worktree remove ../platform-test-bugfix
 ```
 
 **Benefits**:
+
 - ✅ No context switching (keep both branches open)
 - ✅ No stashing or committing half-done work
 - ✅ Work on multiple features in parallel
 - ✅ Different dev servers for each worktree
 
 **When to Use**:
+
 - Urgent hotfixes while working on features
 - Reviewing someone else's PR locally
 - Working on multiple features simultaneously
@@ -853,26 +901,31 @@ git worktree remove ../platform-test-bugfix
 ## Learning Resources
 
 ### Official Documentation
+
 - [Git Branching - Branches in a Nutshell](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell) - Git fundamentals
 - [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow) - Official GitHub workflow
 - [Atlassian Git Tutorials](https://www.atlassian.com/git/tutorials) - Comprehensive git guides
 
 ### Best Practices
+
 - [Conventional Commits](https://www.conventionalcommits.org/) - Commit message standards
 - [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/) - The 7 rules
 - [Git Feature Branch Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) - Detailed explanation
 
 ### Interactive Learning
+
 - [Learn Git Branching](https://learngitbranching.js.org/) - Visual, interactive tutorial
 - [GitHub Skills](https://skills.github.com/) - Hands-on GitHub courses
 - [Git Immersion](http://gitimmersion.com/) - Step-by-step git tutorial
 
 ### Advanced Topics
+
 - [Pro Git Book](https://git-scm.com/book/en/v2) - Free comprehensive book
 - [Git Worktrees Tutorial](https://www.gitkraken.com/learn/git/git-worktree) - Parallel development
 - [Rebase vs Merge](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) - When to use each
 
 ### YouTube Channels
+
 - [Fireship](https://www.youtube.com/c/Fireship) - Git in 100 seconds series
 - [The Net Ninja](https://www.youtube.com/c/TheNetNinja) - Git & GitHub tutorial playlist
 - [Traversy Media](https://www.youtube.com/c/TraversyMedia) - Git crash courses
@@ -897,6 +950,7 @@ git worktree remove ../platform-test-bugfix
 **Professional Thinking**: "I want to write code that works, ship it safely, and sleep well at night."
 
 The workflow overhead (10-25 minutes) is an investment that prevents:
+
 - 🚫 Production bugs that take hours to debug
 - 🚫 Breaking changes that affect users
 - 🚫 Losing work due to bad commits

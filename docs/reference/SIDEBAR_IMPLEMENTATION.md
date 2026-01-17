@@ -14,6 +14,7 @@ The application uses **shadcn/ui Sidebar component** for consistent, collapsible
 ## Component Architecture
 
 ### Key Files
+
 | File | Purpose |
 |------|---------|
 | `src/components/ui/sidebar.tsx` | Core shadcn/ui sidebar (DO NOT modify heavily) |
@@ -22,6 +23,7 @@ The application uses **shadcn/ui Sidebar component** for consistent, collapsible
 | `src/app/(dashboard)/workspaces/[id]/page.tsx` | Integration point |
 
 ### Structure
+
 ```tsx
 <SidebarProvider defaultOpen={cookieValue}>
   <AppSidebar workspaceId={...} workspaceName={...} workspaces={[...]} />
@@ -40,17 +42,20 @@ The application uses **shadcn/ui Sidebar component** for consistent, collapsible
 ## Critical Settings
 
 ### Sidebar Width (`sidebar.tsx`)
+
 ```tsx
 const SIDEBAR_WIDTH = "16rem"        // Expanded
 const SIDEBAR_WIDTH_ICON = "3rem"    // Collapsed (DO NOT change)
 ```
 
 ### Collapsible Mode (`app-sidebar.tsx`)
+
 ```tsx
 <Sidebar collapsible="icon">  // Required for icon-only collapse
 ```
 
 ### State Persistence (`page.tsx`)
+
 ```tsx
 const cookieStore = await cookies()
 const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true'
@@ -63,6 +68,7 @@ const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true'
 **Problem**: Radix UI DropdownMenu generates different IDs server vs client.
 
 **Solution**: Add `suppressHydrationWarning`:
+
 ```tsx
 <Button variant="ghost" suppressHydrationWarning>
   <Avatar>...</Avatar>
@@ -76,6 +82,7 @@ const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true'
 ```
 
 **Applied to**:
+
 - `sidebar.tsx` (SidebarMenuButton ~line 521)
 - `app-top-bar.tsx` (Profile button ~line 56)
 
@@ -84,12 +91,14 @@ const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true'
 ## Animation Rules
 
 ### DO
+
 - ✅ Keep default widths (3rem collapsed, 16rem expanded)
 - ✅ Use `collapsible="icon"` for smooth collapse
 - ✅ Let shadcn/ui handle transitions
 - ✅ Use standard `gap-1` spacing
 
 ### DON'T
+
 - ❌ Change `SIDEBAR_WIDTH_ICON`
 - ❌ Add custom `group-data-[collapsible=icon]/sidebar:gap-*`
 - ❌ Override button sizes in collapsed state
@@ -101,6 +110,7 @@ const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true'
 **Location**: Top-right corner (in `AppTopBar`)
 
 **Z-Index**:
+
 ```tsx
 <DropdownMenuContent className="w-56 z-[100]" align="end">
 ```
@@ -154,4 +164,4 @@ className="group-data-[collapsible=icon]:size-8"
 
 ---
 
-**Reference**: https://ui.shadcn.com/docs/components/sidebar
+**Reference**: <https://ui.shadcn.com/docs/components/sidebar>

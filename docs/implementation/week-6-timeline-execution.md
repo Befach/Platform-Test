@@ -8,6 +8,7 @@
 ---
 
 ## Goal
+
 Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Structure)**
 
 ---
@@ -24,22 +25,27 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 ## Tasks
 
 ### Day 1-3: Timeline Library
+
 - [ ] Choose library (react-big-calendar recommended)
 - [ ] Install:
+
   ```bash
   npm install react-big-calendar date-fns
   ```
+
 - [ ] Create timeline page: `/app/(dashboard)/timeline/page.tsx`
 - [ ] Render features as events (horizontal bars)
 - [ ] Quarter-based view (Q1, Q2, Q3, Q4 columns)
 
 ### Day 4-5: Drag-to-Reschedule
+
 - [ ] Enable drag-and-drop on timeline
 - [ ] Update feature dates when dragged
 - [ ] Show date picker on click (precise dates)
 - [ ] Validate dependencies (warn if violates)
 
 ### Day 6-7: Dependency Arrows
+
 - [ ] Render SVG arrows between dependent features
 - [ ] Calculate arrow paths (start/end coordinates)
 - [ ] Different arrow styles per link type:
@@ -48,6 +54,7 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 - [ ] Hover to highlight path
 
 ### Day 8-9: Swimlanes & Filters
+
 - [ ] Group by:
   - [ ] Team (Backend, Frontend, Mobile)
   - [ ] Status (Not Started, In Progress, Done)
@@ -80,6 +87,7 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 - [ ] Phase-based tab visibility using `calculateWorkItemPhase()`
 
 ### Day 13-14: Real-time Collaboration
+
 - [ ] Supabase Realtime subscriptions
 - [ ] Live cursors on timeline (see teammates)
 - [ ] Presence indicators (green dot = online)
@@ -101,6 +109,7 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 **Technology:** react-big-calendar or vis-timeline
 
 **Features:**
+
 - **Gantt Chart** - Horizontal bars showing feature duration
 - **Quarter-Based View** - Q1, Q2, Q3, Q4 columns (or custom date ranges)
 - **Drag-to-Reschedule** - Change dates visually (drag bar left/right)
@@ -120,6 +129,7 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 - **Export** - PNG, PDF, JSON
 
 **AI Features:**
+
 - **Suggest optimal scheduling** based on dependencies
 - **Detect conflicts** (two features scheduled simultaneously with same person)
 - **Predict completion dates** based on historical velocity
@@ -147,6 +157,7 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 | **AI Copilot** | Context-aware assistant | All phases |
 
 **Tracking Sidebar Features:**
+
 - **Phase Indicator** - Visual progress through Research → Planning → Execution → Review → Complete
 - **Team Assignment** - Assign to specific members or sub-teams
 - **Status Tracking** - Planned → In Progress → On Hold → Completed → Cancelled
@@ -156,6 +167,7 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 - **Tags** - Custom categorization
 
 **Tasks as Universal Module:**
+
 - Tasks can link to: Work Items, Timeline Items, or Module content (Inspiration/Resources/Scope/Feedback)
 - Database: `product_tasks.module_type` + `product_tasks.module_id`
 - Supports checklist-style execution with subtasks
@@ -166,12 +178,14 @@ Gantt chart, team assignment, task tracking, **Work Item Detail Page (8-Tab Stru
 
 **Features:**
 
-#### Real-time Editing:
+#### Real-time Editing
+
 - **Live Cursors** - See where teammates are working (like Figma)
 - **Presence Indicators** - Green dot = online
 - **Instant Updates** - See changes immediately (no refresh)
 
-#### Communication:
+#### Communication
+
 - **Team Chat** - Per-workspace chat room
 - **Activity Feed** - Recent changes log ("Alex edited 'User Auth' 5 min ago")
 - **@Mentions** - Notify specific team members in comments

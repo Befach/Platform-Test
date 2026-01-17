@@ -6,16 +6,19 @@
 **Tech Stack**: TypeScript + Framer Motion + Tailwind CSS + shadcn/ui
 
 #### Known Components
+
 - Action Button (confirmation popup for destructive actions)
 - Motion Dialog (multiple animation variants: Ripple, Zoom)
 
 #### Best For
+
 - Animated modals
 - Confirmation flows
 - Destructive action safeguards
 - Modern interactions
 
 #### Unique Strengths
+
 - Framer Motion animations
 - Fully typed TypeScript
 - Easy shadcn CLI integration
@@ -115,11 +118,13 @@
 **Additions**: Aceternity UI (Canvas Reveal, Background Beams)
 
 **Rationale**:
+
 - Use shadcn/ui for controls (buttons, dialogs, tooltips)
 - Add Aceternity's Canvas Reveal for node hover effects
 - Background Beams for visual polish
 
 **Components Needed**:
+
 - `shadcn/ui`: Button, Dialog, Tooltip, Dropdown Menu, Popover
 - `Aceternity`: Canvas Reveal Effect, Background Beams (optional)
 
@@ -131,11 +136,13 @@
 **Additions**: shadcn/ui (Data Table), Kibo UI (Rich Text Editor)
 
 **Rationale**:
+
 - Origin UI has 59 input variants for custom fields
 - shadcn/ui Data Table for feature list
 - Kibo UI for rich text descriptions
 
 **Components Needed**:
+
 - `Origin UI`: Input (59 variants), Select (51 variants), Date Picker, Textarea
 - `shadcn/ui`: Data Table, Badge, Card
 - `Kibo UI`: Editor (rich text)
@@ -148,11 +155,13 @@
 **Additions**: Aceternity UI (Background Lines for graph visualization)
 
 **Rationale**:
+
 - Custom ReactFlow implementation for graph
 - shadcn/ui for controls and modals
 - Aceternity for visual enhancement
 
 **Components Needed**:
+
 - `shadcn/ui`: Button, Dialog, Dropdown Menu, Badge, Tooltip
 - `Aceternity`: Background Lines, Tracing Beam (optional)
 
@@ -164,11 +173,13 @@
 **Additions**: shadcn/ui, Kokonut UI
 
 **Rationale**:
+
 - Origin UI for extensive form variants (feedback forms)
 - shadcn/ui for core structure
 - Kokonut UI for polished review cards
 
 **Components Needed**:
+
 - `Origin UI`: Input, Textarea, Radio, Checkbox, Rating (if exists)
 - `shadcn/ui`: Card, Avatar, Badge, Toast
 - `Dice UI`: Rating component
@@ -181,11 +192,13 @@
 **Additions**: shadcn/ui
 
 **Rationale**:
+
 - ONLY registry with Gantt chart component
 - Kibo UI also has Calendar, List, Table views
 - shadcn/ui for controls
 
 **Components Needed**:
+
 - `Kibo UI`: Gantt, Calendar, List, Table, Roadmap Block
 - `shadcn/ui`: Dropdown Menu, Button, Dialog, Tabs
 
@@ -197,11 +210,13 @@
 **Additions**: Dice UI, shadcn/ui
 
 **Rationale**:
+
 - Kibo UI has Kanban + all project management views
 - Dice UI for additional Kanban variant
 - shadcn/ui for base components
 
 **Components Needed**:
+
 - `Kibo UI`: Kanban, Avatar Stack, Status, Mini Calendar
 - `Dice UI`: Kanban (alternative), Tags Input
 - `shadcn/ui`: Badge, Card, Dropdown Menu
@@ -214,11 +229,13 @@
 **Additions**: Aceternity UI (cursors)
 
 **Rationale**:
+
 - Kibo UI has Cursor + Avatar Stack + Collaborative Canvas
 - Aceternity UI for Following Pointer effect
 - shadcn/ui for base components
 
 **Components Needed**:
+
 - `Kibo UI`: Cursor, Avatar Stack, Collaborative Canvas Block
 - `Aceternity`: Following Pointer, Pointer Highlight
 - `shadcn/ui`: Tooltip, Popover
@@ -231,11 +248,13 @@
 **Additions**: Kibo UI (dashboard blocks)
 
 **Rationale**:
+
 - shadcn/ui Chart component uses Recharts (10+ chart types)
 - Kibo UI has dashboard blocks and typography
 - Origin UI for custom metric inputs
 
 **Components Needed**:
+
 - `shadcn/ui`: Chart, Card, Badge, Tabs, Select
 - `Kibo UI`: Typography, Pill
 - `Origin UI`: Input, Select (for custom metrics)
@@ -248,11 +267,13 @@
 **Additions**: Magic UI, shadcn/ui
 
 **Rationale**:
+
 - Cult UI has AI agent patterns (Multi-Step, Orchestrator, Routing)
 - Magic UI for animated chat bubbles
 - shadcn/ui for core structure
 
 **Components Needed**:
+
 - `Cult UI`: Agent patterns (3 types), Gemini integration blocks
 - `Magic UI`: Animated List (for chat messages), Typewriter
 - `shadcn/ui`: Textarea, Button, Card, Scroll Area
@@ -265,11 +286,13 @@
 **Additions**: shadcn/ui, Magic UI
 
 **Rationale**:
+
 - Cult UI has web search integration
 - Magic UI for animated search results
 - shadcn/ui for core structure
 
 **Components Needed**:
+
 - `Cult UI`: Multi-Step Tool Pattern (web search)
 - `Magic UI`: Animated List, Marquee
 - `shadcn/ui`: Input, Card, Tabs, Scroll Area, Command Palette
@@ -279,6 +302,7 @@
 ## Installation Priority
 
 ### Week 3 (Mind Mapping)
+
 ```bash
 # shadcn/ui components
 npx shadcn-ui@latest add button dialog tooltip dropdown-menu popover
@@ -289,6 +313,7 @@ npx shadcn-ui@latest add button dialog tooltip dropdown-menu popover
 ```
 
 ### Week 4 (Feature Planning + Dependencies)
+
 ```bash
 # shadcn/ui components
 npx shadcn-ui@latest add data-table badge card tabs select
@@ -304,6 +329,7 @@ npx shadcn-ui@latest add data-table badge card tabs select
 ```
 
 ### Week 5 (Review & Feedback)
+
 ```bash
 # Origin UI
 # - Input, Textarea, Radio, Checkbox
@@ -316,6 +342,7 @@ npx shadcn-ui@latest add card avatar badge toast
 ```
 
 ### Week 6 (Timeline + Execution + Collaboration)
+
 ```bash
 # Kibo UI (CRITICAL for Gantt)
 # - Gantt, Kanban, Calendar, Avatar Stack, Cursor, Roadmap Block
@@ -325,6 +352,7 @@ npx shadcn-ui@latest add dropdown-menu tabs
 ```
 
 ### Week 7 (AI + Analytics + Research)
+
 ```bash
 # Cult UI
 # - AI Agent patterns (all 3)
@@ -387,6 +415,7 @@ START: What are you building?
 ## Context Optimization Strategy
 
 ### Problem
+
 Adding all 14 registries would consume excessive context (20k+ tokens).
 
 ### Solution: Just-in-Time Component Selection
@@ -398,12 +427,14 @@ Adding all 14 registries would consume excessive context (20k+ tokens).
 ### Example: Feature Planning Module
 
 **BAD** (wastes context):
+
 ```
 Ask about: shadcn/ui inputs + Origin UI inputs + HextaUI inputs
 Result: 100+ input variants loaded, 5k+ tokens
 ```
 
 **GOOD** (strategic):
+
 ```
 Use: Origin UI (59 inputs) + shadcn/ui (Data Table only)
 Result: Exactly what's needed, ~2k tokens
@@ -437,20 +468,26 @@ Result: Exactly what's needed, ~2k tokens
 ## FAQ
 
 ### Q: Can I mix components from different registries?
+
 **A**: Yes! All registries are built on shadcn/ui, Radix UI, or Tailwind CSS. They're designed to work together. Just ensure consistent theming.
 
 ### Q: Which registry should I start with?
+
 **A**: Always start with **shadcn/ui** as your base. Add specialty registries only when you need specific components (e.g., Gantt chart from Kibo UI).
 
 ### Q: Are Pro versions worth it?
+
 **A**:
+
 - **Aceternity UI Pro**: Yes, if you need 70+ premium packs + templates
 - **Magic UI Pro**: Yes, for landing page blocks and templates
 - **Kibo UI**: Free tier has all core components
 - **Cult UI**: Templates are worth it for AI apps
 
 ### Q: How do I install components from third-party registries?
+
 **A**: Most are copy-paste (not CLI):
+
 1. Visit registry website
 2. Find component
 3. Copy code
@@ -460,13 +497,17 @@ Result: Exactly what's needed, ~2k tokens
 **Exception**: shadcn/ui uses CLI (`npx shadcn-ui@latest add [component]`)
 
 ### Q: Which registry has the best accessibility?
+
 **A**:
+
 1. **shadcn/ui** (Radix UI foundation, ARIA compliant)
 2. **JollyUI** (React Aria foundation)
 3. **Origin UI** (Base UI foundation)
 
 ### Q: Can I use multiple animation libraries?
+
 **A**: Yes, but be cautious:
+
 - Aceternity UI (Framer Motion)
 - Magic UI (Framer Motion)
 - Animate UI (Framer Motion)
@@ -474,9 +515,11 @@ Result: Exactly what's needed, ~2k tokens
 All use Framer Motion, so they're compatible. Don't mix with other animation libraries (e.g., GSAP, Anime.js).
 
 ### Q: Which registry is best for mobile?
+
 **A**: All registries support responsive design via Tailwind CSS. Origin UI has the most mobile-tested components (600+ variants).
 
 ### Q: Do I need to worry about bundle size?
+
 **A**: Components are copy-pasted into your project, so you only ship what you use. No external dependencies (except Framer Motion for animated registries).
 
 ---
@@ -484,18 +527,21 @@ All use Framer Motion, so they're compatible. Don't mix with other animation lib
 ## Maintenance & Updates
 
 This guide will be updated as:
+
 - New registries emerge
 - Existing registries add components
 - Best practices evolve
 - Project needs change
 
 **Update Triggers**:
+
 - New registry with unique components
 - Major registry version updates
 - Community feedback on missing components
 - Post-implementation lessons learned
 
 **Review Schedule**:
+
 - End of each implementation week
 - When encountering missing components
 - Before starting new modules
@@ -505,25 +551,27 @@ This guide will be updated as:
 ## Additional Resources
 
 ### Registry Websites
-- shadcn/ui: https://ui.shadcn.com
-- Magic UI: https://magicui.design
-- Aceternity UI: https://ui.aceternity.com
-- Origin UI: https://coss.com/origin
-- Kibo UI: https://kibo-ui.com
-- Cult UI: https://cult-ui.com
-- Dice UI: https://www.diceui.com
-- Kokonut UI: https://kokonutui.com
-- JollyUI: https://www.jollyui.dev
-- Animate UI: https://animate-ui.com
-- ReUI: https://reui.io
-- Eldora UI: https://www.eldoraui.site
-- HextaUI: https://hextaui.com
-- Shadix UI: https://shadix-ui.vercel.app
+
+- shadcn/ui: <https://ui.shadcn.com>
+- Magic UI: <https://magicui.design>
+- Aceternity UI: <https://ui.aceternity.com>
+- Origin UI: <https://coss.com/origin>
+- Kibo UI: <https://kibo-ui.com>
+- Cult UI: <https://cult-ui.com>
+- Dice UI: <https://www.diceui.com>
+- Kokonut UI: <https://kokonutui.com>
+- JollyUI: <https://www.jollyui.dev>
+- Animate UI: <https://animate-ui.com>
+- ReUI: <https://reui.io>
+- Eldora UI: <https://www.eldoraui.site>
+- HextaUI: <https://hextaui.com>
+- Shadix UI: <https://shadix-ui.vercel.app>
 
 ### Community Resources
-- Awesome shadcn/ui: https://github.com/birobirobiro/awesome-shadcn-ui
-- shadcn/ui Discord: https://discord.com/invite/shadcn
-- Registry comparisons: https://www.shadcn.io/templates
+
+- Awesome shadcn/ui: <https://github.com/birobirobiro/awesome-shadcn-ui>
+- shadcn/ui Discord: <https://discord.com/invite/shadcn>
+- Registry comparisons: <https://www.shadcn.io/templates>
 
 ---
 

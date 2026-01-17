@@ -5,6 +5,7 @@
 ### Comprehensive Field Analysis (78+ Attributes)
 
 #### **Features Table Core (11 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `id` | TEXT | None | - | System-generated |
@@ -20,6 +21,7 @@
 | `updated_at` | TIMESTAMPTZ | None | - | System-generated |
 
 #### **Status & Health Tracking (3 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `status` | ENUM | **Medium** | P2 | Can infer from progress/blockers |
@@ -27,6 +29,7 @@
 | `health` | ENUM | **High** | P1 | Can calculate from progress + blockers + dates |
 
 #### **Ownership & Accountability (3 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `owner` | TEXT | **Low** | P3 | User assignment preferred |
@@ -34,6 +37,7 @@
 | `stakeholders` | TEXT[] | **Low** | P3 | Can suggest based on category/impact |
 
 #### **Timeline & Dates (5 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `planned_start_date` | DATE | **High** | P1 | Can calculate from dependencies + capacity |
@@ -43,6 +47,7 @@
 | `target_release` | TEXT | **Medium** | P2 | Can suggest based on dates |
 
 #### **Effort & Estimation (4 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `story_points` | NUMERIC | **High** | P1 | Can estimate from complexity + scope |
@@ -51,6 +56,7 @@
 | `effort_confidence` | ENUM | **Medium** | P2 | Can assess based on clarity |
 
 #### **Progress Tracking (3 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `progress_percent` | NUMERIC | **Medium** | P2 | Can calculate from steps/milestones |
@@ -58,6 +64,7 @@
 | `total_steps` | INTEGER | None | - | Calculated from execution_steps |
 
 #### **Business Value (4 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `business_value` | ENUM | **High** | P1 | Can assess from impact + alignment |
@@ -66,24 +73,28 @@
 | `success_metrics` | JSONB | **CRITICAL** | P1 | Define measurable outcomes |
 
 #### **Acceptance & Quality (2 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `acceptance_criteria` | TEXT[] | **CRITICAL** | P1 | Essential for done definition |
 | `definition_of_done` | TEXT[] | **CRITICAL** | P1 | Essential for quality gates |
 
 #### **Blockers (2 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `blockers` | JSONB | **Medium** | P2 | Can detect from context |
 | `is_blocked` | BOOLEAN | None | - | Calculated from blockers |
 
 #### **Categorization (2 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `tags` | TEXT[] | **High** | P1 | Can auto-tag from purpose + content |
 | `category` | TEXT | **High** | P1 | Can classify from purpose |
 
 #### **Workflow Stages (4 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `workflow_stage` | ENUM | None | - | User-controlled progression |
@@ -92,6 +103,7 @@
 | `stage_completion_percent` | NUMERIC | **Medium** | P2 | Can calculate from requirements |
 
 #### **Metadata (3 fields)**
+
 | Field | Type | AI Enhancement Value | Priority | Notes |
 |-------|------|---------------------|----------|-------|
 | `created_by` | TEXT | None | - | System-tracked |
@@ -103,6 +115,7 @@
 ### **Related Tables with AI Enhancement Potential**
 
 #### **Execution Steps Table**
+
 | Field | AI Enhancement Value | Priority |
 |-------|---------------------|----------|
 | `step_description` | **CRITICAL** | P1 |
@@ -113,6 +126,7 @@
 | `validation_criteria` | **High** | P1 |
 
 #### **Feature Resources Table**
+
 | Field | AI Enhancement Value | Priority |
 |-------|---------------------|----------|
 | `resource_type` | **Medium** | P2 |
@@ -122,6 +136,7 @@
 | `cost_estimate` | **Medium** | P2 |
 
 #### **Milestones Table**
+
 | Field | AI Enhancement Value | Priority |
 |-------|---------------------|----------|
 | `name` | **High** | P1 |
@@ -131,6 +146,7 @@
 | `criteria` | **CRITICAL** | P1 |
 
 #### **Risks Table**
+
 | Field | AI Enhancement Value | Priority |
 |-------|---------------------|----------|
 | `description` | **CRITICAL** | P1 |
@@ -140,6 +156,7 @@
 | `category` | **Medium** | P2 |
 
 #### **Prerequisites Table**
+
 | Field | AI Enhancement Value | Priority |
 |-------|---------------------|----------|
 | `prerequisite_text` | **High** | P1 |
@@ -147,6 +164,7 @@
 | `notes` | **Medium** | P2 |
 
 #### **Inspiration Items (JSONB in features)**
+
 | Field | AI Enhancement Value | Priority |
 |-------|---------------------|----------|
 | `title` | **Medium** | P2 |
@@ -159,6 +177,7 @@
 ## AI Enhancement Categorization
 
 ### **Tier 1: CRITICAL - Highest Value (12 fields)**
+
 These fields provide the most value when AI-generated and have high impact on project success:
 
 1. **purpose** - Foundation for all other generations
@@ -175,6 +194,7 @@ These fields provide the most value when AI-generated and have high impact on pr
 12. **ai_generated.rationale** - AI decision transparency
 
 ### **Tier 2: HIGH VALUE (18 fields)**
+
 Significant impact, can save substantial time:
 
 1. **priority** - Calculated from value + deps
@@ -197,6 +217,7 @@ Significant impact, can save substantial time:
 18. **risks.severity** - Risk assessment
 
 ### **Tier 3: MEDIUM VALUE (15 fields)**
+
 Helpful but lower priority:
 
 1. **name** - Can suggest improvements
@@ -216,6 +237,7 @@ Helpful but lower priority:
 15. **inspiration_items.title** - Inspiration naming
 
 ### **Tier 4: LOW VALUE (6 fields)**
+
 Can be AI-assisted but user input preferred:
 
 1. **type** - User preference
@@ -232,6 +254,7 @@ Can be AI-assisted but user input preferred:
 ### **Phase 3.2: Generation System Design**
 
 #### **Batch Operations Architecture**
+
 1. **Field Dependency Graph**
    - Map which fields depend on others
    - Example: `story_points` depends on `execution_steps`
@@ -248,6 +271,7 @@ Can be AI-assisted but user input preferred:
    - Use caching for common patterns
 
 #### **Smart Detection Rules**
+
 - **Empty Critical Fields** → Trigger AI suggestion
 - **Inconsistent Data** → AI validation + correction suggestions
 - **Related Features** → Cross-feature insights
@@ -256,6 +280,7 @@ Can be AI-assisted but user input preferred:
 ### **Phase 3.3: Auto-Population Strategy**
 
 #### **Context-Aware Generation**
+
 ```javascript
 generateFieldValue(field, feature, context) {
     const baseContext = {
@@ -275,7 +300,9 @@ generateFieldValue(field, feature, context) {
 ```
 
 #### **Field-Specific Prompts**
+
 Each field type has optimized prompt templates:
+
 - **acceptance_criteria**: "Given [purpose], generate 3-5 testable acceptance criteria..."
 - **risks**: "Analyze [feature] for technical, business, and schedule risks..."
 - **execution_steps**: "Break down [feature] into 5-8 actionable implementation steps..."
@@ -283,11 +310,13 @@ Each field type has optimized prompt templates:
 ### **Phase 3.4: Cost Management**
 
 #### **Token Budget System**
+
 - **Per-field budget**: Different limits based on field complexity
 - **Per-feature budget**: Cap total AI spend per feature
 - **Per-workspace budget**: Prevent runaway costs
 
 #### **Optimization Strategies**
+
 1. **Progressive Generation**: Generate Tier 1 fields first, ask user approval before Tier 2/3
 2. **Template Reuse**: Cache and reuse patterns for similar features
 3. **Incremental Updates**: Only regenerate changed fields
@@ -296,6 +325,7 @@ Each field type has optimized prompt templates:
 ### **Phase 3.5: UI Controls**
 
 #### **Enhancement Panel Design**
+
 ```
 ┌─────────────────────────────────────────┐
 │ 🤖 AI Enhancement Available             │
@@ -312,6 +342,7 @@ Each field type has optimized prompt templates:
 ```
 
 #### **Inline Field Enhancements**
+
 - **✨ icon** next to empty high-value fields
 - **Hover tooltip**: "AI can generate this"
 - **One-click generation**: Instant fill with review option
@@ -321,6 +352,7 @@ Each field type has optimized prompt templates:
 ## Summary
 
 **Total Audited Attributes**: 78+
+
 - **Tier 1 (Critical)**: 12 fields
 - **Tier 2 (High)**: 18 fields
 - **Tier 3 (Medium)**: 15 fields
@@ -328,6 +360,7 @@ Each field type has optimized prompt templates:
 - **System Fields**: 27 fields (no AI enhancement needed)
 
 **Implementation Priority**:
+
 1. Build generation service with field dependency graph
 2. Implement Tier 1 fields first (highest ROI)
 3. Add cost management and rate limiting

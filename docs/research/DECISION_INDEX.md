@@ -16,6 +16,7 @@ This is the master index for all architectural and UX decisions made during plat
 4. **Quick Reference**: Find related decisions and research documents
 
 **Use this index when**:
+
 - Questioning an existing decision
 - Proposing a new feature or architecture change
 - Onboarding new team members
@@ -227,6 +228,7 @@ FEAT-002 (Product Strategy Foundation)
 ### Monthly Reviews
 
 **First Monday of each month**:
+
 - Check review triggers for all "Accepted" decisions
 - Update metrics for "Implemented" decisions
 - Evaluate "Evaluated" decisions for validation
@@ -234,6 +236,7 @@ FEAT-002 (Product Strategy Foundation)
 ### Quarterly Reviews
 
 **End of each quarter**:
+
 - Comprehensive review of all decisions
 - Validate or supersede based on metrics
 - Update status for outdated decisions
@@ -242,6 +245,7 @@ FEAT-002 (Product Strategy Foundation)
 ### Post-Launch Reviews
 
 **After major feature launches**:
+
 - Measure against success criteria
 - Gather user feedback
 - Update decision status
@@ -254,11 +258,13 @@ FEAT-002 (Product Strategy Foundation)
 ### ADR-001: Team-Scoped Work Items
 
 **Success Criteria**:
+
 - Zero "orphan" work items without team assignment
 - Team metrics (velocity, burndown) are accurate within 5%
 - User feedback confirms clear ownership
 
 **Measurement**:
+
 ```sql
 -- Orphan work items count
 SELECT COUNT(*) FROM work_items WHERE department_id IS NULL;
@@ -270,11 +276,13 @@ SELECT team_id, COUNT(*) FROM work_items GROUP BY team_id;
 ### UX-005: On-Blur Validation
 
 **Success Criteria**:
+
 - Form completion rate ≥ 90%
 - User complaints about validation < 5% of users
 - Time to complete forms ≤ previous baseline
 
 **Measurement**:
+
 ```typescript
 // Track form completion events
 analytics.track('form_completed', {
@@ -287,11 +295,13 @@ analytics.track('form_completed', {
 ### UX-001: Templates + Customization
 
 **Success Criteria**:
+
 - ≥ 80% of teams start with a template
 - ≥ 70% of teams keep default template structure
 - Average setup time ≤ 10 minutes
 
 **Measurement**:
+
 ```typescript
 // Track template usage
 analytics.track('team_created', {
@@ -303,11 +313,13 @@ analytics.track('team_created', {
 ### SCOPE-003: Sales/Support via Integrations
 
 **Success Criteria**:
+
 - ≥ 30% of teams connect external CRM/support tools
 - Integration setup time ≤ 15 minutes
 - User feedback confirms integration meets needs
 
 **Measurement**:
+
 ```typescript
 // Track integration adoption
 analytics.track('integration_connected', {
@@ -323,17 +335,20 @@ analytics.track('integration_connected', {
 ### Research Documents
 
 **Architecture Decisions** → `architecture-decisions/`
+
 - [Linear Architecture Research](architecture-decisions/linear-architecture.md) - Team-scoped patterns
 - [Scope Decisions](architecture-decisions/scope-decisions.md) - In-scope vs out-of-scope teams
 - [UX Design Decisions](architecture-decisions/ux-design-decisions.md) - Templates, menus, alignment
 
 **Core Research** → `core-research/`
+
 - [Progressive Disclosure UX](core-research/progressive-disclosure-ux.md) - 3-level system
 - [Ultra Deep Research Findings](core-research/ultra-deep-research-findings.md) - Comprehensive market intelligence
 - [Cross-Team Collaboration](core-research/cross-team-collaboration.md) - Team views and workflows
 - [Product Strategy Alignment](core-research/product-strategy-alignment.md) - OKR embedding
 
 **Supporting Research** → `supporting-research/`
+
 - [Customization Patterns](supporting-research/customization-patterns.md) - When to add options
 
 ### Implementation Documents

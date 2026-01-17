@@ -43,6 +43,7 @@ This refactor transforms our data model to support **workspace-level timelines**
 ## Why Postponed
 
 Current 8-tab Work Item Detail Page implementation delivers immediate value. Architecture refactor:
+
 - ❌ Would require reworking in-progress components
 - ❌ Needs full platform stabilization first
 - ✅ Can be implemented as non-breaking change (new tables alongside existing)
@@ -87,6 +88,7 @@ Workspace (Project/Product)
 | **Task** | N/A | todo / in_progress / done |
 
 **Important**:
+
 - **Phase** = Internal concept for progressive disclosure (tab visibility)
 - **Status** = What users see and interact with
 
@@ -264,22 +266,26 @@ ADD COLUMN effort_vocabulary TEXT DEFAULT 'simple' CHECK (effort_vocabulary IN (
 ## Migration Strategy
 
 ### Phase 1: Add New Tables (Non-Breaking)
+
 1. Create `timelines` table
 2. Create `work_item_timelines` junction table
 3. Add `effort_size` and `effort_points` to `product_tasks`
 4. Add `effort_vocabulary` to `workspaces`
 
 ### Phase 2: Migrate Existing Data
+
 1. Create default timeline per workspace: "Main Timeline"
 2. Migrate existing `timeline_items` to `work_item_timelines` entries
 3. Keep `timeline_items` table for backward compatibility
 
 ### Phase 3: Update UI
+
 1. Add Timeline management page at workspace level
 2. Update Work Board to show timelines
 3. Update Work Item Detail to use new structure
 
 ### Phase 4: Deprecate Old Structure
+
 1. Add deprecation warnings on old API endpoints
 2. Migrate all clients to new structure
 3. Eventually drop `timeline_items` table
@@ -330,11 +336,13 @@ Workspace Settings > Timelines
 ## Backward Compatibility
 
 ### Keep Working
+
 - Existing `timeline_items` API and components (deprecated)
 - Current work item detail page (until migration)
 - Manual status selection (as override)
 
 ### Deprecation Timeline
+
 - **Phase 1**: New structure alongside old (both work)
 - **Phase 2**: Warnings on old endpoints
 - **Phase 3**: Remove old structure (migration complete)
@@ -366,6 +374,7 @@ Workspace Settings > Timelines
 **Who**: Development team
 
 **Questions to Ask**:
+
 1. Is the 8-tab Work Item Detail Page stable?
 2. Are all current API endpoints working correctly?
 3. Is there user feedback requesting timeline improvements?
@@ -373,6 +382,7 @@ Workspace Settings > Timelines
 5. Would this refactor improve the Gantt/Timeline views significantly?
 
 **Decision Matrix**:
+
 - If "YES" to all 5: ✅ **PROCEED** with implementation
 - If "NO" to question 4: ⏸️ **POSTPONE** further
 - If "NO" to question 5: 🔍 **RE-EVALUATE** priority

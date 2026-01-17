@@ -11,6 +11,7 @@ Deprecated documentation that is no longer actively maintained but preserved for
 ## Why Archived?
 
 Documents are moved here when:
+
 - The feature has been fully implemented and the spec is superseded by actual code
 - The approach was deprecated in favor of a different solution
 - The content is outdated but may have historical value

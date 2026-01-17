@@ -8,6 +8,7 @@
 ## Why This Matters
 
 Implementing features too early causes:
+
 - ❌ Rework when dependencies change
 - ❌ Incomplete features (missing data from other modules)
 - ❌ Poor user experience (gaps in functionality)
@@ -26,11 +27,13 @@ Ask these questions BEFORE starting any implementation:
 **Ask**: Does this feature depend on data, tables, or APIs from other modules?
 
 **Check**:
+
 - [ ] List all required data sources (tables, API endpoints, state)
 - [ ] Verify those sources exist and are stable (no schema changes expected)
 - [ ] If data source doesn't exist: Should we postpone until it's built?
 
 **Example - BAD Timing**:
+
 ```
 Feature: "Show dependencies on mind map canvas"
 Week: 3 (Mind Mapping)
@@ -39,6 +42,7 @@ Decision: ❌ POSTPONE to Week 8+ (after dependency module is stable)
 ```
 
 **Example - GOOD Timing**:
+
 ```
 Feature: "Create dependency graph with ReactFlow"
 Week: 4 (Dependencies)
@@ -53,12 +57,14 @@ Decision: ✅ PROCEED (all data dependencies met)
 **Ask**: Will this feature integrate with other modules' APIs or components?
 
 **Check**:
+
 - [ ] List all modules this will integrate with
 - [ ] Verify those modules' public APIs are defined and stable
 - [ ] Check if breaking changes are expected soon
 - [ ] If APIs aren't stable: Should we wait for interface contracts?
 
 **Example - BAD Timing**:
+
 ```
 Feature: "Convert mind map nodes to features"
 Week: 3 (Mind Mapping)
@@ -67,6 +73,7 @@ Decision: ⚠️ IMPLEMENT BASIC VERSION NOW, enhance later after schema stabili
 ```
 
 **Example - GOOD Timing**:
+
 ```
 Feature: "AI dependency suggestions"
 Week: 4 (Dependencies)
@@ -84,12 +91,14 @@ Decision: ✅ PROCEED (safe integration points)
 **Ask**: Does this feature make sense at this point in the user journey?
 
 **Check**:
+
 - [ ] Are prerequisite features already built?
 - [ ] Can users accomplish a meaningful task with this feature alone?
 - [ ] Will users be confused by missing related features?
 - [ ] Does this create value immediately or only after other features exist?
 
 **Example - BAD Timing**:
+
 ```
 Feature: "Review system (external stakeholder feedback)"
 Week: 2 (Features module still being built)
@@ -101,6 +110,7 @@ Decision: ❌ POSTPONE to Week 5 (after Features + Timeline are complete)
 ```
 
 **Example - GOOD Timing**:
+
 ```
 Feature: "Create and edit work items"
 Week: 2-3 (Features)
@@ -118,12 +128,14 @@ Decision: ✅ PROCEED (good UX timing)
 **Ask**: Does this feature depend on specific database tables/columns?
 
 **Check**:
+
 - [ ] List all required tables and columns
 - [ ] Verify those schemas are finalized (not likely to change)
 - [ ] Check if this feature will require migrations that affect other modules
 - [ ] If schema is unstable: Should we wait for schema to stabilize?
 
 **Example - BAD Timing**:
+
 ```
 Feature: "Add AI model tracking to dependencies"
 Week: 3 (before AI integration planned)
@@ -132,6 +144,7 @@ Decision: ❌ DEFER to Week 4 (implement dependencies first, add AI tracking lat
 ```
 
 **Example - GOOD Timing**:
+
 ```
 Feature: "Create feature_connections table"
 Week: 4 (Dependencies)
@@ -149,12 +162,14 @@ Decision: ✅ PROCEED (safe schema addition)
 **Ask**: Can this feature be fully tested with currently available data?
 
 **Check**:
+
 - [ ] Do we have realistic test data (or can we easily create it)?
 - [ ] Can we test all user flows without other modules?
 - [ ] Should we build test infrastructure first?
 - [ ] Will E2E tests need other modules to be built first?
 
 **Example - BAD Timing**:
+
 ```
 Feature: "E2E tests for complete user flow (signup → create roadmap → invite reviewers)"
 Week: 2 (Features module)
@@ -166,6 +181,7 @@ Decision: ❌ DEFER E2E tests to Week 8 (write unit tests now, integration tests
 ```
 
 **Example - GOOD Timing**:
+
 ```
 Feature: "Unit tests for critical path algorithm"
 Week: 4 (Dependencies)
@@ -250,6 +266,7 @@ Use this checklist BEFORE implementing any feature:
 ### ✅ GOOD Decision: Implement Critical Path Analysis in Week 4
 
 **5-Question Check**:
+
 1. **Data Dependencies**: Only needs `feature_connections` table (created in Week 4) ✅
 2. **Integration**: Algorithm is self-contained, no external APIs ✅
 3. **User Experience**: Shows bottlenecks immediately, provides value ✅
@@ -263,6 +280,7 @@ Use this checklist BEFORE implementing any feature:
 ### ✅ GOOD Decision: Postpone Mind Map Enhancements to Week 8+
 
 **5-Question Check**:
+
 1. **Data Dependencies**: Needs AI integration (Week 7), timeline data (Week 6) ⏳
 2. **Integration**: Depends on dependency graph (Week 4) and AI assistant (Week 7) ⏳
 3. **User Experience**: Basic mind mapping works (Week 3), enhancements can wait ✅
@@ -278,6 +296,7 @@ Use this checklist BEFORE implementing any feature:
 ### ❌ BAD Decision: Implement Review System in Week 2
 
 **5-Question Check**:
+
 1. **Data Dependencies**: No features exist to review yet ❌
 2. **Integration**: Features module still being built ❌
 3. **User Experience**: Confusing - what are users reviewing? ❌
@@ -293,6 +312,7 @@ Use this checklist BEFORE implementing any feature:
 ### ❌ BAD Decision: Show Dependencies on Mind Map Canvas in Week 3
 
 **5-Question Check**:
+
 1. **Data Dependencies**: Dependency graph algorithms don't exist yet (Week 4) ❌
 2. **Integration**: `feature_connections` table doesn't exist yet ❌
 3. **User Experience**: Confusing - users can't create dependencies yet ❌
@@ -308,6 +328,7 @@ Use this checklist BEFORE implementing any feature:
 ## When to Re-Evaluate Postponed Features
 
 **Automatic Triggers**:
+
 1. ✅ All dependency checkboxes are now ✅ (dependencies completed)
 2. 📅 Reached scheduled review milestone (e.g., "End of Week 7")
 3. 👥 User feedback urgently requests this feature
@@ -315,6 +336,7 @@ Use this checklist BEFORE implementing any feature:
 5. 🔄 Related module underwent major refactor, now easier to integrate
 
 **Manual Review Process**:
+
 1. Open `docs/postponed/README.md`
 2. Check all dependency checkboxes: are they ✅?
 3. Re-run 5-question framework with current state
@@ -370,6 +392,7 @@ Continue with next prioritized feature
 ---
 
 **See Also**:
+
 - [Postponed Features Process](POSTPONED_FEATURES_PROCESS.md)
 - [Main Implementation Plan](../implementation/README.md)
 - [Postponed Features List](README.md)

@@ -8,6 +8,7 @@
 ---
 
 ## Goal
+
 Structured feature management, visual dependency graph
 
 ---
@@ -15,6 +16,7 @@ Structured feature management, visual dependency graph
 ## Tasks
 
 ### Day 1-3: Feature Management
+
 - [ ] Dashboard page: `/app/(dashboard)/dashboard/page.tsx`
 - [ ] Feature card component: `components/dashboard/feature-card.tsx`
 - [ ] Feature list (grid layout)
@@ -27,21 +29,26 @@ Structured feature management, visual dependency graph
 - [ ] Category tags (multi-select)
 
 ### Day 4-5: Rich Text Editor
+
 - [ ] Install Tiptap:
+
   ```bash
   npm install @tiptap/react @tiptap/starter-kit
   ```
+
 - [ ] Create editor component: `components/shared/rich-text-editor.tsx`
 - [ ] Add formatting toolbar (bold, italic, lists, headings)
 - [ ] Integrate into feature description field
 
 ### Day 6-7: Custom Fields
+
 - [ ] Custom fields system (extensible metadata)
 - [ ] Field types: Text, Number, Date, Select, Checkbox
 - [ ] Add custom field UI (Settings → Workspace → Custom Fields)
 - [ ] Render custom fields in feature detail
 
 ### Day 8-10: Dependency Graph
+
 - [ ] Install ReactFlow (if not already)
 - [ ] Create dependency graph page: `/app/(dashboard)/dependencies/page.tsx`
 - [ ] Render features as nodes
@@ -54,6 +61,7 @@ Structured feature management, visual dependency graph
 - [ ] Drag to create link (connect nodes)
 
 ### Day 11-12: AI Dependencies
+
 - [ ] "Suggest dependencies" tool
 - [ ] Analyze feature descriptions (semantic similarity)
 - [ ] Propose dependencies (with confidence score)
@@ -61,6 +69,7 @@ Structured feature management, visual dependency graph
 - [ ] Critical path algorithm (longest chain)
 
 ### Day 13-14: Dependency Health
+
 - [ ] Health score calculation (risk assessment)
 - [ ] Circular dependency detection (warn user)
 - [ ] Bottleneck identification (features blocking many)
@@ -75,6 +84,7 @@ Structured feature management, visual dependency graph
 **Purpose:** Structured feature management
 
 **Features:**
+
 - **Feature CRUD** (create, read, update, delete)
 - **Timeline Breakdown:**
   - MVP - Must-have features for launch
@@ -87,6 +97,7 @@ Structured feature management, visual dependency graph
 - **Attachments** (files, images, design mockups)
 
 **AI Assistance:**
+
 - "Suggest USP" (unique selling points)
 - "Estimate difficulty" (based on description)
 - "Improve description" (rewrite for clarity)
@@ -101,20 +112,23 @@ Structured feature management, visual dependency graph
 
 **Features:**
 
-#### Link Types (4 Total):
+#### Link Types (4 Total)
+
 1. **➡️ Dependency** - Feature A must complete before Feature B can start
 2. **🚫 Blocks** - Feature A prevents Feature B from proceeding
 3. **🤝 Complements** - Features A and B work well together (synergy)
 4. **📚 Relates to** - Informational connection (related but no dependency)
 
-#### Core Functionality:
+#### Core Functionality
+
 - **Visual Graph** - Interactive node-edge diagram
 - **Bidirectional Links** - Auto-maintain both directions (A→B means B←A)
 - **Critical Path Analysis** - Highlight longest dependency chain
 - **Dependency Health Score** - Risk assessment (cascading delays)
 - **Circular Dependency Detection** - Warn about impossible schedules
 
-#### AI Features:
+#### AI Features
+
 - **Auto-detect dependencies** from feature descriptions
 - **Suggest optimal execution order** (which features to tackle first)
 - **Predict bottlenecks** (features that block many others)

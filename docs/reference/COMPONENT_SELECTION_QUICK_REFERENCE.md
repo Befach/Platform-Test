@@ -7,7 +7,7 @@
 
 ## 30-Second Selection Guide
 
-### I need a...
+### I need a
 
 **Form component** → Origin UI (59 inputs, 51 selects, 28 date pickers)
 **Table/Data Grid** → shadcn/ui (TanStack) or Dice UI (virtualized)
@@ -51,12 +51,14 @@
 ## By Module (Platform Test Project)
 
 ### Week 3: Mind Mapping
+
 ```
 shadcn/ui: Button, Dialog, Tooltip, Dropdown Menu, Popover
 Aceternity UI: Canvas Reveal (optional), Background Beams (optional)
 ```
 
 ### Week 4: Feature Planning
+
 ```
 Origin UI: Input, Select, Date Picker, Textarea
 shadcn/ui: Data Table, Badge, Card, Tabs
@@ -64,12 +66,14 @@ Kibo UI: Editor (rich text)
 ```
 
 ### Week 4: Dependencies
+
 ```
 shadcn/ui: Button, Dialog, Dropdown Menu, Badge, Tooltip
 Aceternity UI: Background Lines (optional)
 ```
 
 ### Week 5: Review & Feedback
+
 ```
 Origin UI: Input, Textarea, Radio, Checkbox
 Dice UI: Rating
@@ -77,12 +81,14 @@ shadcn/ui: Card, Avatar, Badge, Toast
 ```
 
 ### Week 6: Timeline Visualization
+
 ```
 Kibo UI: Gantt, Calendar, List, Table, Roadmap Block
 shadcn/ui: Dropdown Menu, Button, Dialog, Tabs
 ```
 
 ### Week 6: Project Execution
+
 ```
 Kibo UI: Kanban, Avatar Stack, Status
 Dice UI: Tags Input
@@ -90,6 +96,7 @@ shadcn/ui: Badge, Card, Dropdown Menu
 ```
 
 ### Week 6: Collaboration
+
 ```
 Kibo UI: Cursor, Avatar Stack, Collaborative Canvas Block
 Aceternity UI: Following Pointer (optional)
@@ -97,6 +104,7 @@ shadcn/ui: Tooltip, Popover
 ```
 
 ### Week 7: Analytics & Metrics
+
 ```
 shadcn/ui: Chart, Card, Badge, Tabs, Select
 Kibo UI: Typography, Pill
@@ -104,6 +112,7 @@ Origin UI: Input, Select (custom metrics)
 ```
 
 ### Week 7: AI Assistant
+
 ```
 Cult UI: Agent patterns (3 types), Gemini blocks
 Magic UI: Animated List, Typewriter
@@ -111,6 +120,7 @@ shadcn/ui: Textarea, Button, Card, Scroll Area
 ```
 
 ### Week 7: Research & Discovery
+
 ```
 Cult UI: Multi-Step Tool Pattern
 Magic UI: Animated List, Marquee
@@ -133,11 +143,13 @@ If you can't find a component in the registries:
 ## Installation Cheat Sheet
 
 ### shadcn/ui (CLI)
+
 ```bash
 npx shadcn-ui@latest add button dialog table
 ```
 
 ### All Other Registries (Copy-Paste)
+
 1. Visit registry website
 2. Find component
 3. Copy code
@@ -149,14 +161,17 @@ npx shadcn-ui@latest add button dialog table
 ## Decision Tree (3 Questions)
 
 ### 1. Is it a standard UI element (button, input, dialog)?
+
 **YES** → Use **shadcn/ui**
 **NO** → Continue to Q2
 
 ### 2. Does it need heavy animation or 3D effects?
+
 **YES** → Use **Aceternity UI** or **Magic UI**
 **NO** → Continue to Q3
 
 ### 3. Is it a specialized component (Gantt, Kanban, AI)?
+
 **YES** → Use **Kibo UI** (PM), **Cult UI** (AI), or **Dice UI** (advanced controls)
 **NO** → Use **Origin UI** (forms) or **shadcn/ui** (base)
 
@@ -193,12 +208,12 @@ Aim for **< 3,000 tokens** per module in component selection:
 ## Quick Links
 
 **Full Guide**: [SHADCN_REGISTRY_COMPONENT_GUIDE.md](./SHADCN_REGISTRY_COMPONENT_GUIDE.md)
-**shadcn/ui**: https://ui.shadcn.com
-**Origin UI**: https://coss.com/origin
-**Kibo UI**: https://kibo-ui.com
-**Aceternity UI**: https://ui.aceternity.com
-**Magic UI**: https://magicui.design
-**Cult UI**: https://cult-ui.com
+**shadcn/ui**: <https://ui.shadcn.com>
+**Origin UI**: <https://coss.com/origin>
+**Kibo UI**: <https://kibo-ui.com>
+**Aceternity UI**: <https://ui.aceternity.com>
+**Magic UI**: <https://magicui.design>
+**Cult UI**: <https://cult-ui.com>
 
 ---
 

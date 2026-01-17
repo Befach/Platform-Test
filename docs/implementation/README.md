@@ -1,4 +1,5 @@
 # 🚀 Product Lifecycle Management Platform - IMPLEMENTATION PLAN
+
 **Next.js 15 + TypeScript | 100% Open Source | 12 Weeks (Revised)**
 
 **Version:** 1.4
@@ -13,10 +14,12 @@
 This implementation plan has been split into multiple files for better token efficiency (83% savings when loading specific weeks).
 
 ### 📖 Overview & Architecture
+
 - **[Database Schema](../architecture/database-schema.md)** - Multi-tenant PostgreSQL schema, RLS policies, all tables
 - **[Postponed Features](../postponed/README.md)** - Mind Map enhancements and other deferred features
 
 ### 📅 Weekly Implementation Guides
+
 - **[Week 1-2: Foundation & Multi-Tenancy](week-1-2-foundation.md)** - Next.js setup, auth, teams, workspaces
 - **[Week 3: Mind Mapping](week-3-mind-mapping.md)** - ReactFlow canvas, 5 node types, AI integration, convert to features
 - **[Week 4: Feature Planning & Dependencies](week-4-dependencies.md)** - Feature CRUD, dependency graph, critical path analysis
@@ -27,6 +30,7 @@ This implementation plan has been split into multiple files for better token eff
 - **[Week 8: Billing, Testing & Launch](week-8-billing-testing.md)** - Stripe, E2E tests, documentation, production deployment
 
 ### 🎨 Feature Implementation Guides
+
 - **[Work Board 3.0](work-board-3.0.md)** - **Parts 1-10**: Work Board views, Gantt, filters, **Work Item Detail Page**, **Feedback Module**, **Integrations**, **AI Visual Prototypes**
 
 ---
@@ -34,6 +38,7 @@ This implementation plan has been split into multiple files for better token eff
 ## 🎯 OVERVIEW
 
 ### Mission
+
 Transform single-user roadmap tool into **comprehensive Product Lifecycle Management Platform** where teams can:
 
 1. **Research & Ideate** - AI-powered mind mapping, web search, knowledge base
@@ -44,6 +49,7 @@ Transform single-user roadmap tool into **comprehensive Product Lifecycle Manage
 6. **Measure Success** - Analytics, expected vs actual performance tracking
 
 ### Key Differentiators
+
 - **100% Open Source** (MIT License) - All code on GitHub
 - **Phase-Based Workflow** - Guides teams through product lifecycle
 - **Modular Architecture** - Enable/disable modules per workspace
@@ -52,6 +58,7 @@ Transform single-user roadmap tool into **comprehensive Product Lifecycle Manage
 - **Mind Mapping** - Visual ideation to structured features
 
 ### Revenue Model
+
 - **Open Source Core** - Free forever, self-hostable
 - **Hosted SaaS Service** - Convenience, managed infrastructure
 - **Pricing** - $40/team + $5/user (5 included), 1,000 AI msgs/user/month
@@ -61,14 +68,17 @@ Transform single-user roadmap tool into **comprehensive Product Lifecycle Manage
 ## 💰 PRICING MODEL (FINAL)
 
 ### Free Tier - Perfect for Small Teams
+
 **Cost:** $0/month
 
 **Limits:**
+
 - Up to **5 team members**
 - **50 AI messages/month** (shared across team)
 - **1GB storage**
 
 **Features:**
+
 - ✅ All core modules (Research, Mind Map, Features, Timeline)
 - ✅ Basic AI assistance (Claude Haiku)
 - ✅ Export to CSV/JSON
@@ -78,19 +88,24 @@ Transform single-user roadmap tool into **comprehensive Product Lifecycle Manage
 - ❌ No agentic AI mode
 
 ### Pro Tier - For Growing Teams
+
 **Cost:**
+
 - **$40/month base** (includes 5 users)
 - **+$5/user/month** for additional users
 
 **AI Limits:**
+
 - **1,000 AI messages per user per month**
 - Example: 10-person team = 10,000 total messages/month
 - ~33 messages per user per day
 
 **Storage:**
+
 - **50GB** (attachments, exports, backups)
 
 **Features:**
+
 - ✅ Everything in Free tier
 - ✅ **Unlimited team members** ($5/user beyond 5)
 - ✅ **Real-time collaboration** (live cursors, presence indicators)
@@ -102,13 +117,16 @@ Transform single-user roadmap tool into **comprehensive Product Lifecycle Manage
 - ✅ **API access** (custom integrations)
 
 ### Custom High-End AI Models (Optional Add-on)
+
 **For users wanting premium AI models:**
+
 - User provides **their own API key**
 - Access to: GPT-4o, Claude Opus, Gemini Pro, o1, etc.
 - Usage charged **directly to user's account**
 - We don't subsidize premium model costs
 
 **Settings:**
+
 ```
 Settings → AI → Custom Models
 [ ] Enable custom models (requires API key)
@@ -132,10 +150,12 @@ Default Custom Model: [GPT-4o ▼]
 ### Cost Sustainability Analysis
 
 **Scenario: 100 Teams (30% Pro conversion rate)**
+
 - Free teams: 70 × $0 = $0
 - Pro teams: 30 teams (avg 8 users) = 30 × $55 = **$1,650/month revenue**
 
 **Monthly Costs:**
+
 - Vercel Pro: $20
 - Supabase Pro: $25
 - Stripe fees (3%): ~$50
@@ -147,6 +167,7 @@ Default Custom Model: [GPT-4o ▼]
 **Profit:** $1,650 - $294 = **$1,356/month** ✅
 
 **Scenario: 1,000 Teams (30% Pro)**
+
 - Revenue: 300 × $55 = **$16,500/month**
 - Costs: Vercel $20 + Supabase $599 + Stripe $495 + AI $1,500 + Monitoring $29 = **~$2,643/month**
 - **Profit:** $13,857/month 💰💰💰
@@ -186,6 +207,7 @@ Organization (Team)
 ### Two-Layer Architecture
 
 **WORKSPACE LAYER** - Aggregation view showing distribution across all work items:
+
 ```
 workspace
 ├── mode: development | launch | growth | maintenance
@@ -194,6 +216,7 @@ workspace
 ```
 
 **WORK ITEM LAYER** - Each work item has its own phase (= status):
+
 ```
 work_item
 ├── phase: research | planning | execution | review | complete
@@ -259,6 +282,7 @@ Phase upgrades are based on field completion and readiness:
 **UI:** Banner in work item detail header
 
 Example:
+
 ```
 ⬆️ This work item is 85% ready to move to Execution phase
    Missing: target_release, estimated_hours
@@ -286,6 +310,7 @@ Design Thinking is a **human-centered, iterative methodology** that guides HOW t
 **Purpose:** Detect phase mismatches, suggest upgrades, calculate health score
 
 **Analysis Output:**
+
 ```typescript
 interface WorkspaceAnalysis {
   phaseDistribution: Record<Phase, { count: number, percentage: number }>
@@ -300,67 +325,81 @@ interface WorkspaceAnalysis {
 The Phase System Enhancement is implemented across 6 focused sessions:
 
 #### **Session 1: Fix Phase Bugs**
+
 - Fix calculation logic overlap (lines 167-172 in workspace-phases.tsx)
 - Add phase transition validation
 - Add phase transition timestamps to work_items table
 
 **Files to Modify:**
+
 - `next-app/src/components/workspace/workspace-phases.tsx`
 - `next-app/src/lib/types/work-item-types.ts`
 - `supabase/migrations/[timestamp]_add_phase_transition_timestamps.sql`
 
 #### **Session 2: Phase Upgrade Prompts**
+
 - Create readiness calculator function
 - Build upgrade prompt UI banner component
 - Add guiding questions for each phase
 
 **Files to Create:**
+
 - `next-app/src/lib/phase/phase-readiness.ts`
 - `next-app/src/components/work-items/phase-upgrade-banner.tsx`
 - `next-app/src/lib/phase/guiding-questions.ts`
 
 #### **Session 3: Workspace Analysis**
+
 - Create analyzer service
 - Build health card component
 - Add API endpoint for analysis
 
 **Files to Create:**
+
 - `next-app/src/lib/phase/workspace-analyzer.ts`
 - `next-app/src/components/workspace/workspace-health-card.tsx`
 - `next-app/src/app/api/workspaces/[id]/analyze/route.ts`
 
 #### **Session 4: Design Thinking Integration**
+
 - Add methodology guidance system
 - Include other frameworks (Agile, Lean Startup, JTBD)
 - AI active integration with suggestions
 
 **Files to Create:**
+
 - `next-app/src/lib/methodologies/design-thinking.ts`
 - `next-app/src/lib/methodologies/framework-mapper.ts`
 - `next-app/src/components/ai/methodology-suggestions.tsx`
 
 #### **Session 5: Strategy Customization**
+
 - Add new fields to product_strategies (user_stories, case_studies, user_examples)
 - Create org-level display component with full tree view
 - Create work-item-level display component with alignment view
 
 **Files to Modify:**
+
 - `supabase/migrations/[timestamp]_add_strategy_fields.sql`
 
 **Files to Create:**
+
 - `next-app/src/components/strategies/org-strategy-view.tsx`
 - `next-app/src/components/strategies/work-item-strategy-view.tsx`
 
 #### **Session 6: Polish**
+
 - Feedback to work item conversion
 - Update workspace card with phase distribution
 - E2E testing for phase transitions
 
 **Files to Modify:**
+
 - `next-app/src/components/feedback/feedback-triage.tsx`
 - `next-app/src/components/workspace/workspace-card.tsx`
 
 **Files to Create:**
+
 - `tests/e2e/phase-transitions.spec.ts`
 
 ### Success Criteria Checklist
@@ -382,11 +421,13 @@ The Phase System Enhancement is implemented across 6 focused sessions:
 ### Module System Design
 
 **Modules** are feature groups that can be toggled per workspace:
+
 - Reduces UI clutter (hide what you don't need)
 - Adapts interface to current lifecycle phase
 - Progressive disclosure (complexity when needed)
 
 **Example:**
+
 - During **Research** phase: Enable Mind Map, Research, AI Chat
 - During **Execution** phase: Enable Project Execution, Timeline, Collaboration
 - During **Metrics** phase: Enable Analytics, Success Tracking
@@ -419,6 +460,7 @@ See [week-8-billing-testing.md](week-8-billing-testing.md#project-structure) for
 ## ✅ SUCCESS METRICS
 
 ### Launch Goals (Week 9)
+
 - 🎯 **100 GitHub stars**
 - 🎯 **50 signups** to hosted SaaS
 - 🎯 **10 active teams** using the platform
@@ -426,6 +468,7 @@ See [week-8-billing-testing.md](week-8-billing-testing.md#project-structure) for
 - 🎯 **5 community contributions** (PRs merged)
 
 ### Month 1
+
 - 🎯 **500 GitHub stars**
 - 🎯 **500 signups**
 - 🎯 **100 active teams** (weekly active users)
@@ -435,6 +478,7 @@ See [week-8-billing-testing.md](week-8-billing-testing.md#project-structure) for
 - 🎯 **20 community contributions**
 
 ### Month 3
+
 - 🎯 **2,000 GitHub stars**
 - 🎯 **5,000 signups**
 - 🎯 **1,000 active teams**
@@ -450,6 +494,7 @@ See [week-8-billing-testing.md](week-8-billing-testing.md#project-structure) for
 This is not just a UI refresh - this is building a **complete enterprise-grade Product Lifecycle Management Platform**:
 
 ### **Core Platform:**
+
 ✅ Multi-tenant SaaS (teams, auth, billing)
 ✅ Phase-based workflow (Research → Metrics)
 ✅ 10 modular systems (toggle per workspace)
@@ -462,18 +507,21 @@ This is not just a UI refresh - this is building a **complete enterprise-grade P
 ✅ **100% open source** (MIT License on GitHub)
 
 ### **Business Model:**
+
 ✅ Free tier (5 users, 50 AI msgs/month)
 ✅ Pro tier ($40 + $5/user, 1,000 AI msgs/user/month)
 ✅ Sustainable and profitable (85%+ margin)
 ✅ Scales to 10,000+ teams
 
 ### **Timeline:**
+
 ✅ 12 weeks to production-ready (revised from 8 weeks)
 ✅ Mind mapping prioritized (Week 3)
 ✅ Perfect UX/UI (calculated user flows)
 ✅ Comprehensive documentation (user + dev + self-hosting)
 
 ### **Open Source Strategy:**
+
 ✅ All code on GitHub (MIT)
 ✅ Revenue from hosted service (not features)
 ✅ Community-driven development

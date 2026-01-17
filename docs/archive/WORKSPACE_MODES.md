@@ -44,6 +44,7 @@ This feature introduces **context-aware workspace modes** that adapt the entire 
 ## Why Postponed
 
 This feature provides significant value but requires foundational systems first:
+
 - ❌ Depends on Workspace Timeline Architecture (postponed feature)
 - ❌ Requires AI Integration to adjust personality/recommendations
 - ❌ Needs 8-tab Work Item Detail Page for weighted calculations
@@ -72,12 +73,14 @@ This feature provides significant value but requires foundational systems first:
 **Context**: Building something new from scratch, racing toward first release.
 
 **Characteristics**:
+
 - No existing users or production data
 - Deadline pressure (target launch date)
 - High uncertainty, rapid iteration
 - MVP-focused decision making
 
 **Default Timelines**:
+
 ```
 1. Discovery & Planning (2-4 weeks)
 2. MVP Build (6-12 weeks)
@@ -86,6 +89,7 @@ This feature provides significant value but requires foundational systems first:
 ```
 
 **Phase Emphasis**:
+
 | Phase | Weight | Rationale |
 |-------|--------|-----------|
 | Research | HIGH | Need to validate ideas quickly |
@@ -95,6 +99,7 @@ This feature provides significant value but requires foundational systems first:
 | Shipping | HIGH | Launch is primary goal |
 
 **Work Item Type Weights**:
+
 ```typescript
 {
   concept: 15%,      // Lots of ideas being explored
@@ -106,6 +111,7 @@ This feature provides significant value but requires foundational systems first:
 ```
 
 **Dashboard Metrics (Launch Mode)**:
+
 ```typescript
 const launchDashboard = {
   primary: [
@@ -123,6 +129,7 @@ const launchDashboard = {
 ```
 
 **AI Behavior (Launch Mode)**:
+
 ```typescript
 const launchAIPersonality = {
   bias: 'ship_fast',
@@ -148,12 +155,14 @@ const launchAIPersonality = {
 **Context**: Product already launched, serving real users, continuous iteration.
 
 **Characteristics**:
+
 - Real users with active feedback
 - Production stability matters
 - Data-driven prioritization
 - Release cycle management
 
 **Default Timelines**:
+
 ```
 1. Current Release (2-4 weeks)
 2. Next Release (4-6 weeks)
@@ -162,6 +171,7 @@ const launchAIPersonality = {
 ```
 
 **Phase Emphasis**:
+
 | Phase | Weight | Rationale |
 |-------|--------|-----------|
 | Research | MEDIUM | Validate with real users |
@@ -171,6 +181,7 @@ const launchAIPersonality = {
 | Shipping | MEDIUM | Continuous deployment |
 
 **Work Item Type Weights**:
+
 ```typescript
 {
   concept: 5%,       // Occasional new ideas
@@ -182,6 +193,7 @@ const launchAIPersonality = {
 ```
 
 **Dashboard Metrics (Development Mode)**:
+
 ```typescript
 const developmentDashboard = {
   primary: [
@@ -200,6 +212,7 @@ const developmentDashboard = {
 ```
 
 **AI Behavior (Development Mode)**:
+
 ```typescript
 const developmentAIPersonality = {
   bias: 'user_driven',
@@ -655,28 +668,33 @@ function calculateDevelopmentPriority(workItem: WorkItem) {
 ## Migration Strategy
 
 ### Phase 1: Add Schema (Non-Breaking)
+
 1. Add `mode` column to `workspaces` (default: 'launch')
 2. Create `workspace_mode_history` table
 3. Create `workspace_mode_config` table
 4. Backfill existing workspaces with 'launch' mode
 
 ### Phase 2: Add UI Components
+
 1. Mode indicator badge on Work Board
 2. Mode configuration in Workspace Settings
 3. Mode Switch Wizard modal
 4. Mode history view
 
 ### Phase 3: Adapt Dashboard
+
 1. Create mode-specific widget sets
 2. Auto-switch widgets on mode change
 3. Allow manual widget customization per mode
 
 ### Phase 4: Integrate AI
+
 1. Update AI personality based on mode
 2. Adjust auto-suggestions and prompts
 3. Mode-aware prioritization recommendations
 
 ### Phase 5: User Education
+
 1. In-app tutorial on mode switching
 2. Documentation on when to switch modes
 3. Analytics on mode usage patterns
@@ -705,6 +723,7 @@ function calculateDevelopmentPriority(workItem: WorkItem) {
 ## Testing Strategy
 
 ### Unit Tests
+
 ```typescript
 describe('Workspace Mode System', () => {
   test('Default mode is launch for new workspaces', async () => {
@@ -732,6 +751,7 @@ describe('Workspace Mode System', () => {
 ```
 
 ### E2E Tests
+
 ```typescript
 test('Mode switch wizard flow', async ({ page }) => {
   // Navigate to workspace settings
@@ -758,6 +778,7 @@ test('Mode switch wizard flow', async ({ page }) => {
 ## Metrics to Track
 
 ### Mode Usage Analytics
+
 ```typescript
 interface ModeAnalytics {
   // Distribution
@@ -786,6 +807,7 @@ interface ModeAnalytics {
 **Who**: Product team + Development team
 
 **Questions to Ask**:
+
 1. Is Workspace Timeline Architecture stable and in production?
 2. Is AI Integration (Week 7) complete with personality support?
 3. Is Dashboard module ready for mode-specific widgets?
@@ -793,6 +815,7 @@ interface ModeAnalytics {
 5. Would this feature provide measurable value to users?
 
 **Decision Matrix**:
+
 - If "YES" to all 5: ✅ **PROCEED** with implementation
 - If "NO" to question 1 or 2: ⏸️ **POSTPONE** further (critical dependencies)
 - If "NO" to question 5: 🔍 **RE-EVALUATE** with user research

@@ -66,14 +66,18 @@ We use **4 core AI models** with OpenRouter's **:nitro routing** for 30-50% fast
 ## 🚀 What Changed (Latest Updates)
 
 ### 1. **:nitro Routing for All Models** ⚡
+
 **Why**: Maximize throughput and reduce latency
+
 - **30-50% faster**: Automatic routing to fastest providers
 - **Load balancing**: Distributes requests across high-performance endpoints
 - **Suffix**: All models use `:nitro` (e.g., `anthropic/claude-haiku-4.5:nitro`)
 - **Result**: Real-time dependency suggestions with minimal wait time
 
 ### 2. **Kimi K2 Thinking** 🧠 (NEW)
+
 **Why**: Cheapest model with **deep reasoning traces**
+
 - **Cost**: $0.15/M input, $2.50/M output (cheapest for input)
 - **Reasoning**: Shows step-by-step thinking process
 - **Context**: 256K token window
@@ -81,21 +85,27 @@ We use **4 core AI models** with OpenRouter's **:nitro routing** for 30-50% fast
 - **Use case**: Cost-sensitive teams, complex dependency analysis
 
 ### 3. **Minimax M2** 🤖 (NEW)
+
 **Why**: Optimized for **code generation and agentic workflows**
+
 - **Parameters**: 230B total, 10B activated per token
 - **Specialization**: Coding, tool use, multi-step tasks
 - **Performance**: Strong on SWE-Bench, Terminal-Bench, BrowseComp
 - **Use case**: Dependency analysis requiring code understanding
 
 ### 4. **Parallel.ai Search** 🔍 (Now Tool Layer)
+
 **Why**: Dedicated web search tool instead of standalone model
+
 - **Purpose**: External research, context enrichment
 - **Integration**: Used alongside AI models when needed
 - **Cost**: $0.005/search + $0.001/page (token-efficient)
 - **Use case**: Enriching dependency suggestions with external knowledge
 
 ### 5. **Claude Haiku 4.5 + Grok 4 Fast** ✅ (Kept, Enhanced with :nitro)
+
 **Why**: Best-in-class models, now with throughput optimization
+
 - **Claude Haiku 4.5**: Default model, 73% SWE-bench Verified
 - **Grok 4 Fast**: 2M context, real-time information
 - **Enhancement**: Both now use `:nitro` routing for maximum speed
@@ -148,45 +158,59 @@ OpenRouter will automatically route to other high-quality Moonshot providers ins
 ## 🎯 Recommended Usage by Scenario
 
 ### Scenario 1: Real-Time Suggestions (Speed Critical)
+
 **Use**: `grok-4-fast` (2M context, instant)
+
 ```typescript
 const model = recommendModel('speed') // Returns Grok 4 Fast
 ```
+
 - **Example**: User types feature name → AI suggests dependencies instantly
 - **Latency**: <500ms for 10 suggestions
 - **Benefit**: 2M token context allows analyzing entire project at once
 
 ### Scenario 2: High-Volume Analysis (Cost Critical)
+
 **Use**: `kimi-k2-thinking` ($0.15/M input - cheapest)
+
 ```typescript
 const model = recommendModel('cost') // Returns Kimi K2 Thinking
 ```
+
 - **Example**: Batch analyze 100 features → $0.02 cost
 - **Savings**: 85% cheaper than Claude Haiku
 - **Bonus**: Deep reasoning traces show AI's thinking process
 
 ### Scenario 3: Complex Reasoning (Quality Critical)
+
 **Use**: `claude-haiku-45` (default, 73% SWE-bench)
+
 ```typescript
 const model = getDefaultModel() // Returns Claude Haiku 4.5
 ```
+
 - **Example**: Detect circular dependencies, suggest fixes
 - **Accuracy**: 95%+ confidence on complex patterns
 - **World-class**: Top-rated coding model
 
 ### Scenario 4: Code-Heavy Dependencies (Technical Analysis)
+
 **Use**: `minimax-m2` (specialized for code)
+
 ```typescript
 const model = AI_MODELS['minimax-m2']
 ```
+
 - **Example**: Analyze API dependencies, technical integrations
 - **Strength**: Understands code structure, tool use patterns
 - **Performance**: Strong on SWE-Bench, Terminal-Bench
 
 ### Scenario 5: External Research (Web Search Tool)
+
 **Use**: Parallel Search functions (tool layer)
 
 #### A. Quick Search
+
 ```typescript
 import { parallelSearch } from '@/lib/ai/parallel-search'
 
@@ -194,6 +218,7 @@ const results = await parallelSearch('dependency management best practices', 10)
 ```
 
 #### B. Enrich AI Prompts
+
 ```typescript
 import { enrichPromptWithSearch } from '@/lib/ai/parallel-search'
 
@@ -205,6 +230,7 @@ const enrichedPrompt = await enrichPromptWithSearch(
 ```
 
 #### C. Deep Research (Multi-Query)
+
 ```typescript
 import { deepResearch } from '@/lib/ai/parallel-search'
 
@@ -223,6 +249,7 @@ console.log(research.consolidatedContext) // Cross-referenced insights
 ```
 
 #### D. Deep Research for Dependencies
+
 ```typescript
 import { deepResearchDependencies } from '@/lib/ai/parallel-search'
 
@@ -237,6 +264,7 @@ console.log(insights.bestPractices)
 ```
 
 **Features**:
+
 - ✅ Multi-query search with cross-referencing
 - ✅ Source diversity tracking (unique domains)
 - ✅ Consensus ranking (high-scoring results prioritized)
@@ -298,6 +326,7 @@ const response = await callOpenRouter({
 ### Frontend Model Selector
 
 Users can choose their preferred model via dropdown:
+
 - Shows speed badge (FAST/MEDIUM/SLOW)
 - Shows cost per 1M tokens
 - Shows capabilities (coding, reasoning, search)
@@ -308,19 +337,24 @@ Users can choose their preferred model via dropdown:
 ## 💡 Migration Notes
 
 ### Breaking Changes
+
 None! The API interface remains the same:
+
 - `model_key` parameter still accepts strings like `'claude-haiku-45'`
 - Existing integrations continue to work
 - New models are opt-in (users choose from dropdown)
 
 ### What Users See
+
 - **Model selector** now shows 4 options (Claude Haiku 4.5, Grok 4 Fast, Kimi K2 Thinking, Minimax M2)
 - **Default model** remains Claude Haiku 4.5 (no change in behavior)
 - **Cost estimates** updated to reflect 2025 pricing
 - **Parallel Search** is now a separate tool (not in model selector)
 
 ### Environment Variables
+
 Add to `.env.local`:
+
 ```bash
 OPENROUTER_API_KEY=your_openrouter_key_here
 PARALLEL_SEARCH_API_KEY=your_parallel_key_here # Optional, for web search
@@ -340,6 +374,7 @@ Assuming 10 work items analyzed per request, 2,000 input tokens, 500 output toke
 | Minimax M2 | $1.00 | $0.75 | **$1.75** | **61% cheaper** |
 
 **For high-volume users** (10,000 suggestions/month):
+
 - Claude Haiku 4.5: $45/month (best quality)
 - Grok 4 Fast: $6.50/month ← **Cheapest overall**
 - Kimi K2 Thinking: $15.50/month ← **Cheapest input cost**
@@ -350,6 +385,7 @@ Assuming 10 work items analyzed per request, 2,000 input tokens, 500 output toke
 ## 🔧 Testing Recommendations
 
 ### Unit Tests
+
 ```bash
 # Test all models return valid responses
 npm run test:ai-models
@@ -359,6 +395,7 @@ npm run test:model-selector
 ```
 
 ### Integration Tests
+
 ```bash
 # Test OpenRouter API calls for each model
 npm run test:openrouter
@@ -368,6 +405,7 @@ npm run test:parallel-search
 ```
 
 ### Performance Tests
+
 ```bash
 # Measure response times for each model
 npm run bench:ai-models
@@ -383,15 +421,17 @@ npm run bench:ai-models
 ## 📚 References
 
 ### Research Sources
-1. **OpenRouter Models 2025**: https://openrouter.ai/models
-2. **Grok Code Fast Announcement**: https://www.typingmind.com/guide/openrouter/grok-4-fast
-3. **DeepSeek V3.2 Release**: https://www.teamday.ai/blog/top-ai-models-openrouter-2025
-4. **Parallel Search API Launch**: https://parallel.ai/blog/introducing-parallel-search
+
+1. **OpenRouter Models 2025**: <https://openrouter.ai/models>
+2. **Grok Code Fast Announcement**: <https://www.typingmind.com/guide/openrouter/grok-4-fast>
+3. **DeepSeek V3.2 Release**: <https://www.teamday.ai/blog/top-ai-models-openrouter-2025>
+4. **Parallel Search API Launch**: <https://parallel.ai/blog/introducing-parallel-search>
 
 ### Documentation
-- **OpenRouter Docs**: https://openrouter.ai/docs
-- **Parallel.ai Docs**: https://parallel.ai/docs
-- **Model Comparison**: https://openrouter.ai/models?o=top-weekly
+
+- **OpenRouter Docs**: <https://openrouter.ai/docs>
+- **Parallel.ai Docs**: <https://parallel.ai/docs>
+- **Model Comparison**: <https://openrouter.ai/models?o=top-weekly>
 
 ---
 

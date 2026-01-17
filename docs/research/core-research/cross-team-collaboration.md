@@ -41,6 +41,7 @@ From Harvard Business Review research:
 Most product tools are built for ONE team (usually Engineering).
 
 **Reality**: Product success requires alignment across:
+
 - **Product** - Strategy, prioritization, roadmap
 - **Engineering** - Implementation, technical decisions
 - **Design** - User experience, visual design
@@ -50,6 +51,7 @@ Most product tools are built for ONE team (usually Engineering).
 - **Leadership** - Visibility, reporting, decisions
 
 Each team needs:
+
 - Different **views** of the same data
 - Different **fields** relevant to their work
 - Different **categorizations** for their domain
@@ -125,6 +127,7 @@ WORK ITEM: "OAuth Login"
 ## Team-Specific Field Templates
 
 ### Engineering Fields
+
 ```typescript
 const ENGINEERING_FIELDS = [
   { name: 'technical_domain', type: 'select',
@@ -152,6 +155,7 @@ const ENGINEERING_CATEGORIES = [
 ```
 
 ### Design Fields
+
 ```typescript
 const DESIGN_FIELDS = [
   { name: 'design_type', type: 'select',
@@ -177,6 +181,7 @@ const DESIGN_CATEGORIES = [
 ```
 
 ### Marketing Fields
+
 ```typescript
 const MARKETING_FIELDS = [
   { name: 'campaign', type: 'text' },
@@ -201,6 +206,7 @@ const MARKETING_CATEGORIES = [
 ```
 
 ### Sales Fields
+
 ```typescript
 const SALES_FIELDS = [
   { name: 'positioning', type: 'text' },
@@ -223,6 +229,7 @@ const SALES_CATEGORIES = [
 ```
 
 ### Support Fields
+
 ```typescript
 const SUPPORT_FIELDS = [
   { name: 'documentation_status', type: 'select',
@@ -336,6 +343,7 @@ function suggestCrossTeamWork(feature: WorkItem): CrossTeamSuggestion[] {
 ## Team Views of Same Data
 
 ### Engineering View (Board)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  Engineering Board                           [+ Add Task]       │
@@ -356,6 +364,7 @@ function suggestCrossTeamWork(feature: WorkItem): CrossTeamSuggestion[] {
 ```
 
 ### Marketing View (Campaign Timeline)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  Marketing Campaigns                    [+ Add Campaign]        │
@@ -377,6 +386,7 @@ function suggestCrossTeamWork(feature: WorkItem): CrossTeamSuggestion[] {
 ```
 
 ### Sales View (Feature Availability)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  Sales Enablement                      [Feature Status]         │
@@ -403,6 +413,7 @@ function suggestCrossTeamWork(feature: WorkItem): CrossTeamSuggestion[] {
 ```
 
 ### Support View (Documentation Status)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  Documentation Tracker                    [+ Add Doc]           │
@@ -609,6 +620,7 @@ CREATE INDEX idx_work_item_connections_team ON work_item_connections(team_id);
 ## Implementation Priority
 
 ### Phase 1: Team Configuration
+
 1. Create `team_configurations` table
 2. Build team setup wizard
 3. Create preset templates (Engineering, Design, Marketing, Sales, Support)
@@ -619,6 +631,7 @@ CREATE INDEX idx_work_item_connections_team ON work_item_connections(team_id);
 **Week**: 7
 
 ### Phase 2: Custom Fields
+
 1. Custom field builder UI
 2. Field type implementations (text, select, multi-select, date, url, boolean, rich_text)
 3. Team-specific field visibility
@@ -629,6 +642,7 @@ CREATE INDEX idx_work_item_connections_team ON work_item_connections(team_id);
 **Week**: 7-8
 
 ### Phase 3: Categorization
+
 1. Team-specific categories
 2. Category management UI
 3. Category assignment in work items
@@ -639,6 +653,7 @@ CREATE INDEX idx_work_item_connections_team ON work_item_connections(team_id);
 **Week**: 8
 
 ### Phase 4: Connections
+
 1. Create `work_item_connections` table
 2. Connection type definitions
 3. Connection creation UI
@@ -650,6 +665,7 @@ CREATE INDEX idx_work_item_connections_team ON work_item_connections(team_id);
 **Week**: 8
 
 ### Phase 5: Team Views
+
 1. Team-specific list/board/timeline views
 2. Saved view configurations
 3. Team dashboards

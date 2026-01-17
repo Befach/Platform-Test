@@ -238,6 +238,7 @@ graph LR
 **Critical**: Workspaces do NOT have a single `stage` or `launch_stage` field.
 
 Instead, workspaces show **phase distribution** across all work items:
+
 - "Research: 10, Planning: 15, Execution: 8, Review: 3, Complete: 5"
 
 This is an **aggregation view**, not a single stage value.
@@ -274,12 +275,14 @@ graph TD
 ### Different Displays by Context
 
 **Organization Level**:
+
 - Full strategy tree
 - High-level metrics
 - User stories, case studies
 - Team-wide alignment
 
 **Work Item Level**:
+
 - Derived/aligned strategies only
 - Alignment strength (weak/medium/strong)
 - Specific requirements for this item
@@ -300,6 +303,7 @@ case_studies TEXT[]     -- Reference case studies
 ### What Design Thinking IS
 
 Design Thinking is a **human-centered, iterative methodology** for HOW to implement ideas:
+
 - **NOT** lifecycle stages
 - **NOT** a replacement for phases
 - **GUIDES** the approach at each phase
@@ -396,12 +400,14 @@ graph LR
 ### Data Isolation Model
 
 **Key Principles:**
+
 - Every table has `team_id` column
 - Row-Level Security (RLS) enforces team boundaries
 - JWT token contains user ID, RLS policies check team membership
 - No shared data between teams (zero data leakage)
 
 **RLS Policy Pattern:**
+
 ```sql
 -- Read access: User must be member of the team
 CREATE POLICY "team_members_can_read"
@@ -587,4 +593,5 @@ erDiagram
 ### Table Categories
 
 **Core Tables (Multi-Tenancy):**
+
 - `users` - User accounts (Supabase Auth)

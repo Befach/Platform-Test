@@ -8,6 +8,7 @@
 ---
 
 ## Goal
+
 Visual canvas with AI-powered suggestions
 
 **Progress**: Week 3: 30% → 40%
@@ -21,6 +22,7 @@ Visual canvas with AI-powered suggestions
 ### 1. Workspace Dashboard Redesign (2025-01-15)
 
 **What Changed**:
+
 - Redesigned workspace page with Supabase-inspired sidebar navigation
 - Added multi-phase horizontal progress bar with auto-calculation
 - Implemented research-backed color palette for phases
@@ -28,6 +30,7 @@ Visual canvas with AI-powered suggestions
 - Re-enabled Parallel MCPs (search, task, playwright)
 
 **Why**:
+
 - Grid layout provided poor workflow guidance and didn't scale well
 - Vertical timeline didn't show resource distribution across phases
 - Research showed sidebar navigation scales better for 5+ modules
@@ -49,6 +52,7 @@ Visual canvas with AI-powered suggestions
 **Research Source**: Smashing Magazine's "Psychology of Color in UX (2025)"
 
 **Files Modified**:
+
 - `app/(dashboard)/workspaces/[id]/page.tsx` - Complete layout redesign
 - Created: `components/workspaces/workspace-sidebar.tsx` - Collapsible sidebar navigation
 - Created: `components/workspaces/multi-phase-progress-bar.tsx` - Horizontal progress tracker
@@ -56,6 +60,7 @@ Visual canvas with AI-powered suggestions
 - `cursor-mcp-config.json` - Re-enabled parallel-search, parallel-task, playwright MCPs
 
 **Key Features**:
+
 - ✅ Sidebar navigation with module grouping
 - ✅ Multi-phase progress bar showing distribution
 - ✅ Auto-calculation of phase percentages from work item states
@@ -64,17 +69,20 @@ Visual canvas with AI-powered suggestions
 - ✅ Responsive design (mobile + desktop)
 
 **Dependencies Satisfied**:
+
 - ✅ Work items schema with status fields (Week 2)
 - ✅ Workspace module system (Week 1)
 - ✅ Team subscription plan field (Week 1)
 
 **Future Impact**:
+
 - Week 4: Dependencies module can use phase color system
 - Week 5: Review module can filter by phase
 - Week 6: Timeline can show phase-based swimlanes
 - Week 7: AI insights can analyze phase distribution
 
 **Links**:
+
 - Phase Constants: [../../next-app/src/lib/constants/workspace-phases.tsx](../../next-app/src/lib/constants/workspace-phases.tsx)
 - Architecture Update: [../architecture/ARCHITECTURE.md](../architecture/ARCHITECTURE.md#workspace-phase-system)
 
@@ -86,7 +94,8 @@ Visual canvas with AI-powered suggestions
 
 ### **Technology:** ReactFlow (React-based node graph library)
 
-### Node Types (5 Total):
+### Node Types (5 Total)
+
 1. **💡 Idea Node** - Early-stage concept, free-form
 2. **📋 Feature Node** - Structured feature (can convert from Idea)
 3. **🎯 Epic Node** - Collection of features (high-level)
@@ -98,16 +107,20 @@ Visual canvas with AI-powered suggestions
 ## Tasks
 
 ### Day 1-2: ReactFlow Setup
+
 - [ ] Install ReactFlow:
+
   ```bash
   npm install reactflow
   ```
+
 - [ ] Create mind map page: `/app/(dashboard)/mindmap/page.tsx`
 - [ ] Build canvas component: `components/mindmap/mind-map-canvas.tsx`
 - [ ] Implement basic drag-and-drop
 - [ ] Add zoom/pan controls
 
 ### Day 3-5: Node Types
+
 - [ ] Create 5 custom node components:
   - [ ] `components/mindmap/node-types/idea-node.tsx` (💡)
   - [ ] `components/mindmap/node-types/feature-node.tsx` (📋)
@@ -118,6 +131,7 @@ Visual canvas with AI-powered suggestions
 - [ ] Add inline editing (double-click to edit label)
 
 ### Day 6-8: AI Integration
+
 - [ ] "Generate mind map from text" tool
   - [ ] Modal to paste text
   - [ ] Call Claude Haiku with prompt
@@ -133,8 +147,10 @@ Visual canvas with AI-powered suggestions
   - [ ] Generate 3-5 child nodes
 
 ### Day 9-10: Convert to Features
+
 - [ ] **Critical workflow:** Right-click node → "Convert to Feature"
 - [ ] AI transforms node data → feature object:
+
   ```typescript
   {
     name: node.label,
@@ -145,12 +161,14 @@ Visual canvas with AI-powered suggestions
     ]
   }
   ```
+
 - [ ] Insert into `features` table
 - [ ] Update `mind_map_nodes.converted_to_feature_id`
 - [ ] Show success toast
 - [ ] Link back (feature detail shows mind map origin)
 
 ### Day 11-12: Templates & Polish
+
 - [ ] Create 5 templates:
   - [ ] SaaS Product Roadmap
   - [ ] Mobile App Development
@@ -161,6 +179,7 @@ Visual canvas with AI-powered suggestions
 - [ ] Auto-layout algorithm (organize nodes cleanly)
 
 ### Day 13-14: Real-time & Export
+
 - [ ] Real-time collaboration (Supabase Realtime)
   - [ ] Live cursors (see teammates)
   - [ ] Presence indicators
@@ -175,6 +194,7 @@ Visual canvas with AI-powered suggestions
 ## Core Functionality
 
 ### Canvas Controls
+
 - **Drag-and-drop nodes** - Intuitive positioning
 - **Connect nodes** - Draw relationships (edges)
 - **Auto-layout** - AI organizes messy maps into clean layouts
@@ -214,6 +234,7 @@ Visual canvas with AI-powered suggestions
 ## **Critical Workflow: Convert to Features**
 
 **The Magic Moment:**
+
 1. User creates mind map with ideas
 2. Right-click on node(s) → **"Convert to Feature"**
 3. AI transforms node into structured feature:
@@ -260,6 +281,7 @@ Visual canvas with AI-powered suggestions
 23 mind map enhancements have been postponed to Week 9-10 (post-core platform). See [../postponed/README.md](../postponed/README.md) for details.
 
 **Postponed features include:**
+
 - Auto-zoom, focus mode, undo/redo
 - Version history, comments on nodes
 - Node dependencies on canvas

@@ -362,6 +362,7 @@ WHERE id = '1737158500000';
 ## Index Usage Patterns
 
 ### Query 1: Get user's assignments for workspace
+
 ```sql
 -- Uses: idx_user_phase_permission (user_id, workspace_id, phase, can_edit)
 SELECT * FROM user_phase_assignments
@@ -373,6 +374,7 @@ WHERE user_id = 'user-bob'
 ```
 
 ### Query 2: Get all users for a phase
+
 ```sql
 -- Uses: idx_user_phase_phase + idx_user_phase_workspace
 SELECT * FROM user_phase_assignments
@@ -385,6 +387,7 @@ WHERE workspace_id = '1737158400010'
 ```
 
 ### Query 3: Permission check (RLS policy)
+
 ```sql
 -- Uses: idx_user_phase_permission (composite index)
 SELECT 1 FROM user_phase_assignments
@@ -439,6 +442,7 @@ Storage:
 ## Migration Impact on Existing Data
 
 ### Before Migration
+
 ```sql
 -- All team members can modify all work items
 SELECT COUNT(*) FROM work_items; -- 1,234 work items
@@ -448,6 +452,7 @@ SELECT COUNT(*) FROM work_items; -- 1,234 work items
 ```
 
 ### After Migration
+
 ```sql
 -- Same work items, but now with phase-based restrictions
 SELECT COUNT(*) FROM work_items; -- 1,234 work items (unchanged)
@@ -508,11 +513,13 @@ WHERE tm.role = 'member'
 ### Audit Trail
 
 Every assignment includes:
+
 - `assigned_by`: Who granted the permission
 - `assigned_at`: When permission was granted
 - `notes`: Optional context for why
 
 Query audit log:
+
 ```sql
 SELECT
   upa.phase,

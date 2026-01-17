@@ -11,15 +11,18 @@
 External integrations via MCP Gateway (270+ integrations).
 
 ### GET `/api/integrations`
+
 List all integrations for the authenticated user's team.
 
 **Query Parameters:**
+
 | Param | Type | Description |
 |-------|------|-------------|
 | `status` | string | Filter by status (`connected`, `expired`, `error`) |
 | `provider` | string | Filter by provider (`github`, `jira`, `slack`, etc.) |
 
 **Response (200 OK):**
+
 ```json
 {
   "integrations": [
@@ -41,9 +44,11 @@ List all integrations for the authenticated user's team.
 ---
 
 ### POST `/api/integrations`
+
 Create a new integration and initiate OAuth flow.
 
 **Request Body:**
+
 ```json
 {
   "provider": "github",
@@ -53,6 +58,7 @@ Create a new integration and initiate OAuth flow.
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "integration": {
@@ -70,9 +76,11 @@ Create a new integration and initiate OAuth flow.
 ---
 
 ### GET `/api/integrations/[id]`
+
 Get details for a specific integration, including sync logs.
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "1701234567890",
@@ -96,9 +104,11 @@ Get details for a specific integration, including sync logs.
 ---
 
 ### DELETE `/api/integrations/[id]`
+
 Disconnect and delete an integration.
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Integration deleted"
@@ -108,9 +118,11 @@ Disconnect and delete an integration.
 ---
 
 ### POST `/api/integrations/[id]/sync`
+
 Trigger a sync operation for an integration.
 
 **Request Body:**
+
 ```json
 {
   "syncType": "import",
@@ -121,6 +133,7 @@ Trigger a sync operation for an integration.
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "syncLogId": "1701234567892",
@@ -133,9 +146,11 @@ Trigger a sync operation for an integration.
 ---
 
 ### GET `/api/integrations/oauth/callback`
+
 OAuth callback handler (redirects to settings page with status).
 
 **Query Parameters (from OAuth provider):**
+
 | Param | Type | Description |
 |-------|------|-------------|
 | `code` | string | Authorization code |
@@ -147,9 +162,11 @@ OAuth callback handler (redirects to settings page with status).
 ---
 
 ### GET `/api/workspaces/[id]/integrations`
+
 List integrations enabled for a workspace.
 
 **Response (200 OK):**
+
 ```json
 {
   "integrations": [
@@ -170,9 +187,11 @@ List integrations enabled for a workspace.
 ---
 
 ### POST `/api/workspaces/[id]/integrations`
+
 Enable an integration for a workspace.
 
 **Request Body:**
+
 ```json
 {
   "integrationId": "1701234567890",
@@ -182,6 +201,7 @@ Enable an integration for a workspace.
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "message": "Integration enabled for workspace",
@@ -207,17 +227,20 @@ Enable an integration for a workspace.
 ## 🔔 WEBHOOKS
 
 ### POST `/api/webhooks/stripe`
+
 Stripe webhook handler
 
 **[PUBLIC - Verified with Stripe signature]**
 
 **Events Handled:**
+
 - `customer.subscription.created`
 - `customer.subscription.updated`
 - `customer.subscription.deleted`
 - `invoice.payment_failed`
 
 **Request Headers:**
+
 ```http
 Stripe-Signature: t=1234567890,v1=abc123...
 ```
@@ -225,6 +248,7 @@ Stripe-Signature: t=1234567890,v1=abc123...
 **Request Body:** (Stripe event object)
 
 **Response (200 OK):**
+
 ```json
 {
   "received": true
@@ -234,16 +258,19 @@ Stripe-Signature: t=1234567890,v1=abc123...
 ---
 
 ### POST `/api/webhooks/resend`
+
 Email webhook handler (delivery status)
 
 **[PUBLIC - Verified with Resend signature]**
 
 **Events Handled:**
+
 - `email.delivered`
 - `email.bounced`
 - `email.opened`
 
 **Response (200 OK):**
+
 ```json
 {
   "received": true
@@ -271,6 +298,7 @@ All error responses follow this format:
 ```
 
 **Common Error Codes:**
+
 - `400` - Bad Request (invalid input)
 - `401` - Unauthorized (not authenticated)
 - `403` - Forbidden (not authorized for this action)
@@ -287,10 +315,12 @@ All error responses follow this format:
 List endpoints support pagination:
 
 **Query Parameters:**
+
 - `page` (default: 1): Page number
 - `limit` (default: 20, max: 100): Items per page
 
 **Response:**
+
 ```json
 {
   "data": [ /* items */ ],
@@ -308,14 +338,17 @@ List endpoints support pagination:
 ### Rate Limiting
 
 **Free Tier:**
+
 - 100 requests/minute per user
 - 50 AI messages/month per team
 
 **Pro Tier:**
+
 - 500 requests/minute per user
 - 1,000 AI messages/user/month
 
 **Rate Limit Headers:**
+
 ```http
 X-RateLimit-Limit: 500
 X-RateLimit-Remaining: 487
@@ -327,11 +360,13 @@ X-RateLimit-Reset: 1736857260
 ## 🔧 SDK & Client Libraries
 
 ### JavaScript/TypeScript
+
 ```bash
 npm install @platform/api-client
 ```
 
 **Usage:**
+
 ```typescript
 import { PlatformClient } from '@platform/api-client';
 
@@ -345,11 +380,13 @@ const features = await client.features.list({
 ```
 
 ### Python (Coming Soon)
+
 ```bash
 pip install platform-api
 ```
 
 ### Ruby (Coming Soon)
+
 ```bash
 gem install platform-api
 ```

@@ -11,6 +11,7 @@
 This guide helps you implement the same professional Git workflow across all repositories in the Befach-Int organization.
 
 **What's Already Done (Organization-Level)**:
+
 - ✅ Organization ruleset "flow" is active
 - ✅ Requires PR before merging
 - ✅ Requires linear history (squash-only)
@@ -18,6 +19,7 @@ This guide helps you implement the same professional Git workflow across all rep
 - ✅ Requires status checks
 
 **What You Need to Do (Per Repository)**:
+
 - ⏳ Configure merge button settings (5 minutes)
 - ⏳ Add pre-push hooks (5 minutes)
 - ⏳ Add PR template (2 minutes)
@@ -47,6 +49,7 @@ Your organization already has these protections active on the `main` branch:
 **Location**: `https://github.com/organizations/Befach-Int/settings/rules`
 
 **Active Rules**:
+
 - ✅ **Require pull request before merging** - Cannot push directly to main
 - ✅ **Require linear history** - Only squash/rebase allowed (blocks merge commits)
 - ✅ **Block force pushes** - Prevents history rewriting
@@ -91,6 +94,7 @@ Additional Options:
 **Result**: Only "Squash and merge" button will be available on PRs.
 
 **Why This Matters**:
+
 - Organization ruleset blocks merge commits (enforces linear history)
 - Repository settings hide the wrong buttons (prevents confusion)
 - Branches auto-delete after merge (keeps repo clean)
@@ -184,11 +188,13 @@ echo ""
 ```
 
 **Make executable**:
+
 ```bash
 chmod +x .husky/pre-push
 ```
 
 **Test it**:
+
 ```bash
 # This should fail (blocked by hook)
 git checkout main
@@ -283,6 +289,7 @@ Standardizes PR documentation.
 ```
 
 **Test it**:
+
 ```bash
 # Create test PR and verify template loads
 git checkout -b test/pr-template
@@ -300,18 +307,21 @@ gh pr create --web
 Once configured, use this workflow for all changes:
 
 ### 1. Start Fresh
+
 ```bash
 git checkout main
 git pull origin main
 ```
 
 ### 2. Create Feature Branch
+
 ```bash
 git checkout -b feat/feature-name
 # or: fix/bug-name, docs/update-readme, etc.
 ```
 
 ### 3. Develop with Atomic Commits
+
 ```bash
 # Make changes
 git add .
@@ -323,6 +333,7 @@ git commit -m "test: add auth tests"
 ```
 
 ### 4. Push to Remote
+
 ```bash
 git push -u origin feat/feature-name
 
@@ -333,6 +344,7 @@ git push -u origin feat/feature-name
 ```
 
 ### 5. Create Pull Request
+
 ```bash
 gh pr create --title "feat: add user authentication" --body "..."
 
@@ -341,17 +353,20 @@ gh pr create --title "feat: add user authentication" --body "..."
 ```
 
 ### 6. Self-Review (CRITICAL - 80% of bugs caught here!)
+
 - Review FULL diff on GitHub
 - Check for missed console.logs, debug code
 - Verify error handling, type safety
 - Complete self-review checklist in PR
 
 ### 7. Merge PR
+
 - Click **"Squash and merge"** button (only option)
 - Confirm squash commit message
 - Branch auto-deletes after merge
 
 ### 8. Verify
+
 ```bash
 git checkout main
 git pull origin main
@@ -386,6 +401,7 @@ git log --oneline
 ```
 
 **Examples**:
+
 - `feat: add JWT authentication`
 - `fix: resolve infinite loop in timeline calculation`
 - `docs: update API reference for work items`
@@ -410,6 +426,7 @@ git push --no-verify
 After configuring your repository:
 
 ### GitHub Settings
+
 - [ ] Navigate to `https://github.com/Befach-Int/[YOUR_REPO]/settings`
 - [ ] Scroll to "Pull Requests" section
 - [ ] ✅ Allow squash merging (checked)
@@ -418,16 +435,19 @@ After configuring your repository:
 - [ ] ✅ Automatically delete head branches (checked)
 
 ### Local Setup
+
 - [ ] Install Husky: `npm install --save-dev husky`
 - [ ] Create `.husky/pre-push` hook (see Step 2)
 - [ ] Make executable: `chmod +x .husky/pre-push`
 - [ ] Test: Try pushing to main (should be blocked)
 
 ### PR Template
+
 - [ ] Create `.github/pull_request_template.md` (see Step 3)
 - [ ] Test: Create test PR (template should auto-fill)
 
 ### Functional Tests
+
 - [ ] Test direct push to main → Should be blocked by hook
 - [ ] Test bypass with `--no-verify` → Should be blocked by GitHub
 - [ ] Test TypeScript validation → Type errors should block push
@@ -463,6 +483,7 @@ gh api repos/Befach-Int/[YOUR_REPO]/rulesets
 ## 📚 Additional Resources
 
 ### Organization Settings
+
 - **Rulesets**: `https://github.com/organizations/Befach-Int/settings/rules`
 - **Ruleset Name**: `flow`
 - **Status**: Active
@@ -524,9 +545,10 @@ gh pr create --title "HOTFIX: security patch" --body "..."
 
 ---
 
-## 🎉 You're Done!
+## 🎉 You're Done
 
 Once configured, your repository will have:
+
 - ✅ Professional Git workflow
 - ✅ Automated quality checks
 - ✅ Clean, linear history

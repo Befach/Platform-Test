@@ -106,6 +106,7 @@ Post-Week 7 sprint focused on comprehensive security hardening and CI/CD improve
 ## Dependabot Production Dependencies Fix (2025-12-28)
 
 **What Changed:**
+
 - Fixed Dependabot PR #24 with 27 production dependency updates
 - Resolved breaking changes in major version upgrades
 - Pinned `@ai-sdk/react` to v2 (v3 requires AI SDK 6 which is BETA)
@@ -122,16 +123,19 @@ Post-Week 7 sprint focused on comprehensive security hardening and CI/CD improve
 | `@types/react-grid-layout` | 1.3.6 | - | Removed |
 
 **Why:**
+
 - AI SDK v6 is BETA (announced Dec 2025) - not production-ready
 - react-grid-layout v2 has legacy compatibility layer
 - React 19.2.3 includes security patch (CVE-2025-55182)
 
 **Files Modified:**
+
 - `next-app/package.json` - Pinned versions
 - `next-app/src/components/analytics/widgets/dashboard-builder.tsx` - Legacy import
 - `next-app/package-lock.json` - Regenerated
 
 **PRs:**
+
 - Closed: #24 (original Dependabot PR)
 - Merged: #27 (fix PR with all updates)
 

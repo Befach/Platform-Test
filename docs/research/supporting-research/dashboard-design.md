@@ -25,6 +25,7 @@ Based on UX Collective research:
 | What are the usage patterns? | Interaction design |
 
 **Example for Our Platform**:
+
 ```
 User Goal: Understand project health at a glance
 Business Goal: Reduce time spent in status meetings
@@ -41,6 +42,7 @@ Dashboards should answer questions, not just show numbers.
 | "What metrics are available?" | "What questions need answering?" |
 
 **Example Decisions**:
+
 - "Is my project on track?" → Need: Progress vs. plan comparison
 - "What needs my attention today?" → Need: Blockers, overdue items
 - "How is my team performing?" → Need: Velocity, completion rates
@@ -99,6 +101,7 @@ Surface the right insights at the right time:
 > "Stakeholder feedback early prevents surprise revelations late."
 
 **Feedback Checkpoints**:
+
 1. After defining purpose → "Did we capture your goals?"
 2. After selecting KPIs → "Are these the right metrics?"
 3. Before development → "Does this layout work?"
@@ -109,6 +112,7 @@ Surface the right insights at the right time:
 **Don't Ask**: "Is this dashboard neat?"
 
 **Do Ask**: Task-based questions:
+
 - "Can you tell me if Project X is on track?"
 - "What would you do first after seeing this?"
 - "What information is missing?"
@@ -296,18 +300,21 @@ interface WidgetConfig {
 ## Implementation Recommendations
 
 ### Phase 1: Core Dashboards
+
 - [ ] Implement Executive Summary dashboard
 - [ ] Build PM Operational dashboard
 - [ ] Create Team Workload view
 - [ ] Add Personal Focus dashboard
 
 ### Phase 2: Widget Library
+
 - [ ] Build metric widgets (big number, progress, comparison)
 - [ ] Implement chart widgets (line, bar, donut)
 - [ ] Create list widgets (alerts, activity, upcoming)
 - [ ] Add interactivity (drill-down, filtering)
 
 ### Phase 3: Customization
+
 - [ ] Allow widget rearrangement
 - [ ] Enable saved views
 - [ ] Add custom date ranges

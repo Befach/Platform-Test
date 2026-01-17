@@ -36,34 +36,43 @@
 #### Component Categories
 
 **Forms & Input** (17 components)
+
 - Button, Input, Textarea, Label, Checkbox, Radio Group, Switch, Select, Native Select
 - Combobox, Input OTP, Input Group, Field, Slider, Toggle, Toggle Group, Calendar, Date Picker
 
 **Data Display** (7 components)
+
 - Table, Data Table (TanStack), Card, Badge, Avatar, Skeleton, Empty
 
 **Navigation** (7 components)
+
 - Breadcrumb, Pagination, Navigation Menu, Menubar, Tabs, Sidebar, Button Group
 
 **Overlays & Dialogs** (9 components)
+
 - Dialog, Alert Dialog, Drawer, Sheet, Popover, Hover Card, Context Menu, Dropdown Menu, Tooltip
 
 **Layout** (6 components)
+
 - Separator, Scroll Area, Aspect Ratio, Resizable, Item, Collapsible
 
 **Feedback** (4 components)
+
 - Alert, Toast, Sonner, Spinner, Progress
 
 **Advanced** (5 components)
+
 - Chart (Recharts), Carousel (Embla), Command Palette, Kbd, Typography
 
 #### Best For
+
 - Core application structure
 - Accessible forms and data tables
 - Production-ready components with extensive testing
 - Base layer before adding animated registries
 
 #### Unique Strengths
+
 - Most mature and tested
 - Best accessibility (ARIA compliant)
 - Excellent TypeScript support
@@ -80,36 +89,45 @@
 #### Component Categories
 
 **Text Animations**
+
 - Animated gradient text, Typewriter effect, Text reveal, Flip text, Scroll-based text effects
 
 **Interactive Cards**
+
 - Animated cards, Hover effects, 3D transforms, Magnetic buttons
 
 **Backgrounds & Effects**
+
 - Animated backgrounds, Particles, Gradients, Mesh gradients, Dot patterns, Grid backgrounds
 
 **Hero Sections**
+
 - Animated hero components, Spotlight effects, Marquee, Bento grids
 
 **Data Visualization**
+
 - Animated lists, Number counters, Progress bars with motion
 
 **Layout Components**
+
 - Dock (macOS style), Sidebar, Navbar with animations
 
 #### Best For
+
 - SaaS landing pages
 - Product marketing sites
 - Startup websites
 - Animated portfolios
 
 #### Unique Strengths
+
 - Highest quality animations
 - Framer Motion integration
 - Production-grade performance
 - Copy-paste ready with no dependencies
 
 #### Magic UI Pro Features
+
 - 50+ blocks and templates
 - Complete landing page sections
 - Advanced animation patterns
@@ -126,59 +144,73 @@
 #### Component Categories by Type
 
 **Backgrounds (25+ components)**
+
 - Dotted Glow Background, Background Ripple Effect, Sparkles, Aurora Background
 - Background Beams, Background Boxes, Background Lines, Meteors, Shooting Stars
 - Vortex, Spotlight, Canvas Reveal Effect, SVG Mask Effect, Grid/Dot Backgrounds
 - Wavy Background, Gradient Animation, Google Gemini Effect, Glowing Effect
 
 **Card Components (15+ variants)**
+
 - 3D Card Effect, Evervault Card, Card Stack, Card Hover Effect, Wobble Card
 - Expandable Card, Card Spotlight, Focus Cards, Infinite Moving Cards, Draggable Card
 - Comet Card, Glare Card, Direction Aware Hover, Tooltip Card, Pixelated Canvas
 
 **Text Effects (12 components)**
+
 - Encrypted Text, Layout Text Flip, Colourful Text, Text Generate Effect, Typewriter Effect
 - Flip Words, Text Hover Effect, Container Text Flip, Hero Highlight, Text Reveal Card
 
 **Scroll & Parallax (5 components)**
+
 - Parallax Scroll, Sticky Scroll Reveal, Macbook Scroll, Container Scroll Animation, Hero Parallax
 
 **Navigation (7 components)**
+
 - Floating Navbar, Navbar Menu, Sidebar, Floating Dock (macOS style)
 - Tabs, Resizable Navbar, Sticky Banner
 
 **Buttons (4 components)**
+
 - Tailwind CSS Buttons, Hover Border Gradient, Moving Border, Stateful Button
 
 **Forms & Inputs (3 components)**
+
 - Signup Form, Placeholders And Vanish Input, File Upload
 
 **Layout & Grid (3 components)**
+
 - Layout Grid, Bento Grid, Container Cover
 
 **Data Visualization (4 components)**
+
 - GitHub Globe, World Map, Timeline, Codeblock
 
 **3D Components (2 components)**
+
 - 3D Pin, 3D Marquee
 
 **Specialized (10+ components)**
+
 - Animated Modal, Animated Tooltip, Link Preview, Images Slider, Carousel
 - Apple Cards Carousel, Testimonials, Compare, Following Pointer, Lens
 
 #### Best For
+
 - Premium landing pages
 - Product showcases
 - Storytelling websites
 - High-end SaaS marketing
 
 #### Unique Strengths
+
 - Most advanced 3D effects
 - Highest visual impact
 - Perfect for "wow factor"
 - Used by Google, Microsoft, Cisco employees
 
 #### Aceternity UI Pro
+
 - 70+ premium component packs
 - 8+ complete templates
 - Lifetime updates
@@ -228,12 +260,14 @@
 | **Event Calendar** | 1 | Calendar | Month view, event management |
 
 #### Best For
+
 - Form-heavy applications
 - Admin dashboards
 - Data entry systems
 - E-commerce checkout flows
 
 #### Unique Strengths
+
 - Largest component variety (600+ total)
 - Most input/form variants (59 inputs, 51 selects)
 - Complete coverage for standard UI needs
@@ -250,38 +284,48 @@
 #### Component Categories
 
 **Project Management (6 components)**
+
 - Calendar (grid view), Gantt (timeline), Kanban (board), List, Table, Roadmap (all view types)
 
 **Collaboration (2 components)**
+
 - Avatar Stack (overlapping avatars), Cursor (real-time presence)
 
 **Code (4 components)**
+
 - Code Block (syntax highlighting + copy), Contribution Graph (GitHub-style)
 - Sandbox (component preview), Snippet (tabbed code display)
 
 **Forms (5 components)**
+
 - Choicebox (card-styled radio/checkbox), Combobox (autocomplete)
 - Dropzone (file upload), Mini Calendar (date picker), Tags (multi-label)
 
 **Images (2 components)**
+
 - Image Crop (aspect ratios), Image Zoom (zoom functionality)
 
 **Finance (2 components)**
+
 - Credit Card (payment display), Ticker (finance ticker)
 
 **Social (3 components)**
+
 - Stories (carousel format), Reel (Instagram-style), Video Player (media-chrome)
 
 **Callouts (2 components)**
+
 - Announcement (badge-style), Banner (full-width)
 
 **Other (14+ components)**
+
 - Color Picker (Figma-inspired), Comparison (slider-based), Deck (Tinder cards)
 - Dialog Stack (multi-step wizards), Editor (rich text), Glimpse (URL preview)
 - Marquee (scrolling), Pill (badges), QR Code, Rating (stars)
 - Relative Time (timezone), Spinner, Status (uptime), Theme Switcher, Tree, Typography
 
 #### Pre-composed Blocks
+
 - Codebase (file explorer + viewer)
 - Collaborative Canvas (real-time)
 - Form (event creation)
@@ -290,12 +334,14 @@
 - Roadmap (all views)
 
 #### Best For
+
 - Product roadmap tools
 - Project management apps
 - Developer documentation sites
 - SaaS dashboards with Gantt/Kanban
 
 #### Unique Strengths
+
 - ONLY registry with Gantt chart
 - Real-time collaboration components
 - GitHub-style contribution graph
@@ -311,9 +357,11 @@
 **Tech Stack**: Next.js + Supabase + Tailwind CSS + shadcn/ui
 
 #### Components
+
 - Toolbar Expandable (step-based expandable toolbar)
 
 #### AI-Powered Blocks
+
 1. **Gemini Flash Image Editor** - Generate/edit images with version history
 2. **Agent - Multi-Step Tool Pattern** - Sequential AI with web search + analysis
 3. **Agent - Orchestrator Pattern** - Specialized workers for project management
@@ -322,6 +370,7 @@
 6. **Gemini Flash Image Generator** - Image generation with rate limiting
 
 #### Full-Stack Templates
+
 1. **Logo GPT** - AI logo generation with DALL-E + token currency
 2. **Directory** - Automated directory with AI enrichment + web scraping
 3. **Travel Stash** - PWA for travel planning with offline support
@@ -330,12 +379,14 @@
 6. **Manifest** - Vector embedding for RAG-based AI
 
 #### Best For
+
 - AI chat applications
 - Multi-agent AI systems
 - Full-stack SaaS products
 - AI image generation tools
 
 #### Unique Strengths
+
 - ONLY registry with AI agent patterns
 - Google Gemini + OpenAI + Claude integrations
 - Full-stack authentication templates
@@ -351,6 +402,7 @@
 **Tech Stack**: React Aria + shadcn/ui + Tailwind CSS
 
 #### Available Components
+
 - Payment Method Card (card number, expiration, CVC)
 - Create Account Form (email/password + social login)
 - Date Picker (month/day/year fields)
@@ -359,12 +411,14 @@
 - Blog/Changelog Display (content presentation with titles)
 
 #### Best For
+
 - Accessibility-first applications
 - Form-heavy authentication flows
 - Cookie consent and preference management
 - Blog and content sites
 
 #### Unique Strengths
+
 - React Aria foundation (best accessibility)
 - WAI-ARIA compliant
 - Practical, real-world patterns
@@ -379,6 +433,7 @@
 **Tech Stack**: React + TypeScript + Tailwind CSS + Framer Motion + shadcn CLI
 
 #### Known Components
+
 - Flip Card
 - Management Bar
 - Notification List
@@ -390,12 +445,14 @@
 - User Presence Avatar
 
 #### Best For
+
 - Motion-heavy interfaces
 - Interactive dashboards
 - Animated notifications
 - Playful UX
 
 #### Unique Strengths
+
 - All components animated by default
 - shadcn CLI compatible
 - Open-source and customizable
@@ -423,12 +480,14 @@
 **Special** - Popover, Sonner (toast notifications)
 
 #### Best For
+
 - Clean, professional designs
 - Motion effects without overwhelming
 - shadcn/ui extension
 - Business applications
 
 #### Unique Strengths
+
 - Motion library integration
 - Nested menu support
 - Scrollspy component
@@ -445,29 +504,36 @@
 #### Complete Component List
 
 **Interactive Controls (10 components)**
+
 - Angle Slider, Avatar Group, Checkbox Group, Color Picker, Color Swatch
 - Combobox, Compare Slider, Mask Input, Rating, Tags Input
 
 **Data & Display (8 components)**
+
 - Circular Progress, Data Grid (virtualized), Data Table, Listbox
 - Marquee, QR Code, Relative Time Card, Scroller
 
 **Content Management (8 components)**
+
 - Cropper, Editable, File Upload, Kanban, Mention, Sortable, Stack, Stepper
 
 **UI Elements (2 components)**
+
 - Kbd, Segmented Input
 
 **Utilities (8 utilities)**
+
 - Client Only, Composition, Direction Provider, Hitbox, Portal, Presence, Visually Hidden, Visually Hidden Input
 
 #### Best For
+
 - Data-heavy applications
 - Kanban boards
 - Image/video editing features
 - Advanced form controls
 
 #### Unique Strengths
+
 - Angle slider (unique component)
 - High-performance data grid
 - Cropper with zoom/rotation
@@ -483,18 +549,21 @@
 **Tech Stack**: React + TypeScript + Tailwind CSS + Headless UI + Framer Motion
 
 #### Component Categories
+
 - Animated components (motion effects)
 - Landing page blocks
 - Full templates
 - Dark mode by default on all components
 
 #### Best For
+
 - Landing pages with animations
 - Marketing sites
 - Portfolio sites
 - Startups
 
 #### Unique Strengths
+
 - 150+ components
 - Dark mode built-in
 - Active Discord community
@@ -509,21 +578,25 @@
 **Tech Stack**: React + TypeScript + Tailwind CSS + Radix UI
 
 #### Known Components
+
 - Avatar, Button, Drawer, Separator, Toggle, File Upload
 - Date Picker, Dropdown Menu, Select, Sidebar, Typewriter
 - All standard shadcn/ui components extended
 
 #### Theme Presets
+
 - Default, Retro Blue, Purple, Night Wind, Orbiter, Soft Orange
 - Light & dark modes for each theme
 
 #### Best For
+
 - Extended shadcn/ui needs
 - Multiple theme support
 - Professional design
 - Corporate applications
 
 #### Unique Strengths
+
 - 6 theme presets (most of any registry)
 - OKLCH color space
 - 400+ GitHub stars

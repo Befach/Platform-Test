@@ -46,6 +46,7 @@ Workspace
 ```
 
 **Key Insight**: Tasks exist at 3 levels:
+
 1. **Standalone Tasks** - Workspace-level quick tasks (no parent)
 2. **Work Item Tasks** - Linked to a feature/bug (`work_item_id` set)
 3. **Timeline Tasks** - Linked to MVP/SHORT/LONG (`timeline_item_id` set)
@@ -110,6 +111,7 @@ src/components/work-board/
 ### Phase H.1: Shell & Navigation (Foundation)
 
 **Create WorkBoardShell Component**
+
 ```tsx
 // src/components/work-board/work-board-shell.tsx
 interface WorkBoardShellProps {
@@ -129,6 +131,7 @@ interface WorkBoardShellProps {
 ```
 
 **Create WorkBoardToolbar**
+
 - Search input (searches tasks OR work items based on tab)
 - Status filter (task statuses OR work item statuses)
 - Type filter (task types OR work item types)
@@ -137,11 +140,13 @@ interface WorkBoardShellProps {
 - Column visibility (for table views)
 
 **Tab Navigation**
+
 - Primary: "Tasks" | "Work Items" (styled toggle group)
 - Secondary: Table | Board | Timeline icons
 - Use shadcn/ui Tabs + ToggleGroup components
 
 **Files to Create:**
+
 - `src/components/work-board/work-board-shell.tsx`
 - `src/components/work-board/work-board-toolbar.tsx`
 - `src/components/work-board/work-board-tabs.tsx`
@@ -153,6 +158,7 @@ interface WorkBoardShellProps {
 ### Phase H.2: Tasks Views
 
 **H.2.1 Tasks Table View**
+
 - Columns: Status, Title, Type, Priority, Due Date, Assignee, Parent (work item/timeline)
 - Sortable columns
 - Inline status toggle (click to cycle)
@@ -160,6 +166,7 @@ interface WorkBoardShellProps {
 - Parent badge shows link to work item or timeline item
 
 **H.2.2 Tasks Board View (Kanban)**
+
 ```
 ┌─────────────┬─────────────┬─────────────┐
 │    To Do    │ In Progress │    Done     │
@@ -174,17 +181,20 @@ interface WorkBoardShellProps {
 ```
 
 Features:
+
 - Drag-drop to change status (uses existing dnd-kit)
 - Task cards show: title, type badge, priority icon, parent link, due date
 - Filter by: standalone only, linked only, or all
 - Optional secondary grouping: by Type (research/design/dev/qa/etc.)
 
 **H.2.3 Tasks Timeline View**
+
 - Show tasks with due dates on a timeline
 - X-axis: dates, Y-axis: tasks grouped by status or type
 - Drag to reschedule (updates due_date)
 
 **Files to Create:**
+
 - `src/components/work-board/tasks-view/tasks-table-view.tsx`
 - `src/components/work-board/tasks-view/tasks-board-view.tsx`
 - `src/components/work-board/tasks-view/tasks-timeline-view.tsx`
@@ -194,12 +204,14 @@ Features:
 ### Phase H.3: Work Items Views
 
 **H.3.1 Work Items Table View (Enhanced)**
+
 - Keep current collapsed/expanded modes
 - Add: task count badge per work item
 - Add: inline progress bar (based on timeline item statuses)
 - New column: "Tasks" showing count of linked tasks
 
 **H.3.2 Work Items Board View (NEW - Key Feature)**
+
 ```
 ┌─────────────┬─────────────┬─────────────┬─────────────┐
 │   Planned   │ In Progress │  Completed  │   On Hold   │
@@ -214,16 +226,19 @@ Features:
 ```
 
 Features:
+
 - Columns: planned, in_progress, completed, on_hold
 - Cards show: name, type badge, timeline progress bars, task count, assignee
 - Drag-drop to change status
 - Click card to expand/view details
 
 **H.3.3 Work Items Timeline View**
+
 - Reuse existing Gantt implementation
 - Group by: phase, assignee, priority, or MVP/SHORT/LONG
 
 **Files to Create/Modify:**
+
 - `src/components/work-board/work-items-view/work-items-board-view.tsx` (NEW)
 - `src/components/work-board/work-items-view/work-items-table-view.tsx` (extract from features-table-view)
 - Wire existing `timeline-view.tsx`
@@ -233,25 +248,30 @@ Features:
 ### Phase H.4: Smart Features (3.0 Enhancements)
 
 **H.4.1 Cross-View Intelligence**
+
 - When viewing Tasks, show work item context badge
 - When viewing Work Items, show task aggregation counts
 - Clicking parent link in Tasks view → switches to Work Items and highlights
 
 **H.4.2 Quick Actions**
+
 - "+" button in board columns to create item directly in that status
 - Inline editing in table views (click cell to edit)
 - Keyboard shortcuts: N (new), E (edit), / (search), ? (help)
 
 **H.4.3 Bulk Operations**
+
 - Multi-select with checkboxes
 - Bulk status change, assignee change, delete
 - Reuse existing `bulk-action-bar.tsx` component
 
 **H.4.4 Persistent Preferences**
+
 - Remember: primary tab, view mode, column visibility, sort order
 - localStorage key: `work-board-preferences-{workspaceId}`
 
 **H.4.5 Empty States**
+
 - Custom empty state per view with helpful CTA
 - "No tasks yet - Create your first task" with button
 - "No work items in this status - Drag items here or create new"
@@ -297,6 +317,7 @@ Features:
 ## Implementation Order (Recommended)
 
 ### Week 1: Foundation (H.1)
+
 1. ✅ Create `work-board-shell.tsx` with basic structure
 2. ✅ Create `work-board-toolbar.tsx` with shared filters
 3. ✅ Create tab navigation (Tasks | Work Items)
@@ -305,6 +326,7 @@ Features:
 6. ✅ Test basic navigation works
 
 ### Week 2: Tasks Views (H.2)
+
 1. ✅ `tasks-table-view.tsx` - Table view for tasks
 2. ✅ `tasks-board-view.tsx` - Kanban with drag-drop
 3. ✅ Integrate with existing TaskList/TaskCard components
@@ -312,6 +334,7 @@ Features:
 5. ✅ Test all task views
 
 ### Week 3: Work Items Views (H.3)
+
 1. ✅ `work-items-board-view.tsx` - NEW Kanban for work items
 2. ✅ Enhance work-items-table-view with task counts
 3. ✅ Wire up existing timeline-view.tsx
@@ -319,6 +342,7 @@ Features:
 5. ✅ Test all work item views
 
 ### Week 4: Polish & Advanced Features (H.4)
+
 1. ✅ Cross-view navigation (click parent in tasks → opens work item)
 2. ✅ Keyboard shortcuts
 3. ✅ Persistent preferences
@@ -331,22 +355,26 @@ Features:
 ## Technical Decisions
 
 ### State Management
+
 - Use React Context for shared filter state across views
 - Local component state for view-specific state
 - localStorage for preferences persistence
 
 ### Drag & Drop
+
 - Continue using dnd-kit (already installed: @dnd-kit/core, @dnd-kit/sortable)
 - Reuse existing board-view.tsx patterns
 - Add horizontal drag for timeline rescheduling
 
 ### Performance Considerations
+
 - Virtualize large lists (use react-window if >100 items)
 - Memoize filtered results with useMemo
 - Lazy load non-visible views
 - Debounce search input (300ms)
 
 ### API Considerations
+
 - No new API endpoints needed initially
 - Reuse existing: `/api/product-tasks`, `/api/work-items`
 - Future: Consider `/api/work-items/[id]/task-count` for efficient aggregation
@@ -370,22 +398,28 @@ Features:
 ## Design Decisions Made
 
 ### Q1: Timeline View for Tasks
+
 **Decision**: Tasks without due dates will be hidden in timeline view (filter them out). Only tasks with `due_date` set will appear.
 
 ### Q2: Board Grouping Options
+
 **Decision**: Start with status grouping only. Future iteration can add:
+
 - Task Type grouping (research/design/dev/qa)
 - Assignee swimlanes
 - Priority lanes
 
 ### Q3: Work Item Card Detail Level
+
 **Decision**: Standard detail level:
+
 - Name + type badge
 - Timeline progress bars (MVP/SHORT/LONG)
 - Task count badge
 - Assignee avatar (if assigned)
 
 ### Q4: Quick Task Scope
+
 **Decision**: Quick Task button creates standalone tasks by default. Can optionally link to work item via dropdown in the create dialog (existing functionality).
 
 ---
@@ -439,6 +473,7 @@ Transform the basic Work Item Detail Page into a **comprehensive product lifecyc
 | **AI Copilot** | All | AI assistance throughout the lifecycle |
 
 **Important Distinctions**:
+
 - **Feedback Tab** = Shows feedback items **linked to this work item** (the full Feedback Module has its own page)
 - **Metrics Tab** = Placeholder for now, will be designed after core tabs are complete
 
@@ -475,23 +510,27 @@ Transform the basic Work Item Detail Page into a **comprehensive product lifecyc
 ## Tracking Sidebar Fields
 
 **Core Fields**:
+
 - Phase indicator (auto-calculated from `calculateWorkItemPhase()`)
 - Status dropdown (planned, in_progress, completed, on_hold, cancelled)
 - Priority dropdown (low, medium, high, critical)
 - Health indicator (on_track, at_risk, blocked)
 
 **Assignment & Timing**:
+
 - Owner (assigned_to user select)
 - Target Release (text input)
 - Planned Start/End dates (date pickers)
 
 **Effort Tracking**:
+
 - Story Points (1-13 Fibonacci scale)
 - Estimated Hours
 - Actual Hours (auto-updated from tasks)
 - T-Shirt Size (XS/S/M/L/XL) - optional
 
 **Progress**:
+
 - Progress bar (auto-calculated from Tasks %)
 - Tasks summary: "12/20 completed (60%)"
 
@@ -500,6 +539,7 @@ Transform the basic Work Item Detail Page into a **comprehensive product lifecyc
 ## Phase-Based Progressive Disclosure
 
 Uses existing `calculateWorkItemPhase()` from `workspace-phases.tsx`:
+
 ```
 Research → Planning → Execution → Review → Complete
    🔍         📋          ⚡         💬        ✓
@@ -537,12 +577,14 @@ Work Item
 ```
 
 **Task Grouping Options**:
+
 - All (flat list)
 - By Module (Inspiration/Resources/Scope/Review)
 - By Timeline (MVP/SHORT/LONG)
 - By Assignee
 
 **Database Change Required**:
+
 ```sql
 ALTER TABLE product_tasks
 ADD COLUMN module TEXT CHECK (module IN ('inspiration', 'resources', 'scope', 'feedback', NULL));
@@ -553,22 +595,25 @@ ADD COLUMN module TEXT CHECK (module IN ('inspiration', 'resources', 'scope', 'f
 ## Implementation Sessions
 
 ### Session 1: Tab Structure + Summary + Tasks (~8-10h)
+
 1. Create 8-Tab Structure shell (~2h)
 2. Build Tracking Sidebar component (~2h)
 3. Summary Tab (overview, timeline, dependencies) (~2h)
 4. Tasks Tab (universal tasks with grouping) (~3-4h)
 
 ### Session 2: Scope + Feedback + Phase Progression
-5. Scope Tab (milestones, risks, criteria) (~3-4h)
-6. Feedback Tab (linked feedback) (~2h)
-7. Phase Progression Prompts (~2h)
+
+1. Scope Tab (milestones, risks, criteria) (~3-4h)
+2. Feedback Tab (linked feedback) (~2h)
+3. Phase Progression Prompts (~2h)
 
 ### Session 3: Resources + Inspiration + Polish
-8. Resources Tab (~2h)
-9. Inspiration Tab (~2h)
-10. Soft Guidance System (~2h)
-11. AI Copilot Tab (placeholder) (~1h)
-12. Metrics Tab (Coming Soon) (~0.5h)
+
+1. Resources Tab (~2h)
+2. Inspiration Tab (~2h)
+3. Soft Guidance System (~2h)
+4. AI Copilot Tab (placeholder) (~1h)
+5. Metrics Tab (Coming Soon) (~0.5h)
 
 ---
 
@@ -604,6 +649,7 @@ ADD COLUMN module TEXT CHECK (module IN ('inspiration', 'resources', 'scope', 'f
 A **comprehensive multi-channel feedback collection platform** for gathering user insights at any product lifecycle stage.
 
 **Important**: This is SEPARATE from the Feedback Tab:
+
 - **Feedback Tab** = Shows feedback linked to a specific work item
 - **Feedback Module** = Full platform for surveys, voting, collection
 
@@ -637,24 +683,28 @@ A **comprehensive multi-channel feedback collection platform** for gathering use
 ## Key Features
 
 **Survey Builder** (Built In-House):
+
 - Drag-and-drop question builder
 - MCQ, rating, open-ended, NPS question types
 - Logic branching and skip patterns
 - Custom branding/theming
 
 **Distribution**:
+
 - Schedule campaigns
 - Audience targeting
 - Multi-channel delivery
 - Reminder automation
 
 **Embeddable Widgets**:
+
 - Feature voting widget
 - Quick feedback popup
 - In-app feedback button
 - Public roadmap voting
 
 **Analysis**:
+
 - Response aggregation
 - AI sentiment analysis (OpenRouter)
 - Priority scoring
@@ -775,6 +825,7 @@ ALTER TABLE team_integrations ENABLE ROW LEVEL SECURITY;
 Generate UI mockups with AI from natural language descriptions.
 
 **User Flow**:
+
 1. User describes UI idea in natural language
 2. AI generates React/HTML code via OpenRouter
 3. Preview renders in iframe sandbox
@@ -869,6 +920,7 @@ CREATE TABLE prototype_votes (
 A comprehensive system for collecting public feedback, managing customer insights, and enabling stakeholder voting—all without requiring authentication for external users.
 
 **Key Design Decisions**:
+
 - **Security**: Multi-layer (honeypot + time check + rate limiting), CAPTCHA-ready
 - **Widget**: Enabled by default with easy disable toggle
 - **Voting**: Team-configurable verification (teams choose if email required)
@@ -998,6 +1050,7 @@ CREATE FUNCTION get_workspace_public_settings(workspace_id TEXT) ...
 ## Widget Embed System
 
 ### URL Parameters
+
 ```
 /widget/[workspaceId]?theme=light|dark|auto
                      &primaryColor=#3B82F6
@@ -1005,6 +1058,7 @@ CREATE FUNCTION get_workspace_public_settings(workspace_id TEXT) ...
 ```
 
 ### PostMessage Communication
+
 ```javascript
 // Widget → Parent: Notify success
 window.parent.postMessage({
@@ -1015,6 +1069,7 @@ window.parent.postMessage({
 ```
 
 ### Generated Embed Code
+
 ```html
 <button id="feedback-widget-btn">Feedback</button>
 <script>

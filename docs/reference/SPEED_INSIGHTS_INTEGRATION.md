@@ -20,6 +20,7 @@ Vercel Speed Insights is a tool that helps you measure and improve the performan
 ### Why the Root Layout?
 
 The `SpeedInsights` component was added to the root layout (`src/app/layout.tsx`) because:
+
 - It runs on every page of the application
 - Being in the root layout ensures tracking across all routes
 - It's a non-blocking component that doesn't affect page rendering
@@ -55,6 +56,7 @@ No additional environment variables are required for basic Speed Insights functi
    - Click "Enable" to activate monitoring
 
 2. **Deploy to Vercel**:
+
    ```bash
    vercel deploy
    ```
@@ -81,6 +83,7 @@ if (typeof window !== 'undefined') {
 ## Local Development
 
 Speed Insights will **not** collect data during local development (`npm run dev`). Metrics are only collected when:
+
 - Your application is deployed to Vercel
 - Speed Insights has been enabled in the Vercel Dashboard
 - Real users are visiting your site
@@ -146,6 +149,7 @@ If your application experiences performance issues:
 ## Current Implementation
 
 The Speed Insights component has been integrated into:
+
 - **File**: `src/app/layout.tsx`
 - **Integration Point**: Root layout JSX
 - **Status**: Ready for Vercel deployment

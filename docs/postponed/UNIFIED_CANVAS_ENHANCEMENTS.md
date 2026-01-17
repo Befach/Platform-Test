@@ -17,6 +17,7 @@ The unified canvas system is **production-ready** with core functionality comple
 ### What Was Postponed
 
 **Hierarchical Work Flows** - Multi-level canvas organization system:
+
 - **Flow Nodes**: Collapsible containers representing sub-canvases
 - **Lazy Loading**: Load sub-flow content only when expanded
 - **Breadcrumb Navigation**: Visual path showing current flow hierarchy
@@ -32,6 +33,7 @@ The unified canvas system is **production-ready** with core functionality comple
 ### When to Implement
 
 **Triggers for resuming**:
+
 - ✅ Core canvas tested in production for 2+ weeks
 - ✅ Users request hierarchical organization (3+ requests)
 - ✅ Performance metrics show system handles 100+ nodes well
@@ -48,16 +50,19 @@ The unified canvas system is **production-ready** with core functionality comple
 **Purpose**: Render collapsed sub-flows as special nodes on canvas
 
 **Files to create**:
+
 - `src/components/canvas/nodes/flow-node.tsx` - Collapsible flow container
 - `src/components/canvas/flow-breadcrumbs.tsx` - Navigation path
 
 **Features**:
+
 - Click to expand/collapse sub-flow
 - Show child count and depth indicator
 - Visual differentiation from regular work items
 - Lazy load sub-flow content on expand
 
 **Example UI**:
+
 ```
 ┌─────────────────────────────┐
 │ 📦 Authentication System    │
@@ -74,12 +79,14 @@ The unified canvas system is **production-ready** with core functionality comple
 **Location**: Top of canvas (Panel position="top-center")
 
 **Features**:
+
 - Click any breadcrumb to navigate to that level
 - Show flow names with depth indicators
 - Highlight current flow
 - Collapse long paths (Root > ... > Current)
 
 **Example**:
+
 ```
 Home > Workspace > Authentication > OAuth2 Implementation
 ```
@@ -91,11 +98,13 @@ Home > Workspace > Authentication > OAuth2 Implementation
 **Algorithm**: DBSCAN (Density-Based Spatial Clustering)
 
 **Triggers**:
+
 - Canvas has 50+ nodes
 - Detected cluster has 10+ tightly connected nodes
 - Cluster has clear boundary (few external connections)
 
 **Implementation**:
+
 ```typescript
 // Pseudo-code
 function detectSubFlowCandidates(nodes: Node[], edges: Edge[]) {
@@ -107,6 +116,7 @@ function detectSubFlowCandidates(nodes: Node[], edges: Edge[]) {
 ```
 
 **UI**: Show suggestion banner:
+
 ```
 💡 Suggestion: Group 15 related authentication items into a sub-flow?
 [Create Sub-Flow] [Dismiss]
@@ -117,18 +127,21 @@ function detectSubFlowCandidates(nodes: Node[], edges: Edge[]) {
 **Purpose**: Load sub-flow nodes only when needed
 
 **Strategy**:
+
 1. **Initial load**: Load only root-level nodes
 2. **On expand**: Fetch sub-flow nodes via API
 3. **On collapse**: Keep nodes in memory (cache) but hide from canvas
 4. **Cache invalidation**: Refresh on sub-flow updates
 
 **API Route**:
+
 ```typescript
 // GET /api/flows/[flowId]/nodes
 // Returns: { nodes: WorkItem[], edges: LinkedItem[] }
 ```
 
 **State management**:
+
 ```typescript
 const [flowCache, setFlowCache] = useState<Map<string, { nodes, edges }>>()
 ```
@@ -160,6 +173,7 @@ CREATE TABLE work_flows (
 ```
 
 **Key fields**:
+
 - `parent_flow_id`: Links to parent flow (NULL = root)
 - `depth`: Hierarchy level (0 = root, 1 = sub-flow, etc.)
 - `canvas_position`: Where FlowNode appears on parent canvas
@@ -170,18 +184,21 @@ CREATE TABLE work_flows (
 ## Testing Checklist (Before Implementation)
 
 **Performance Validation**:
+
 - [ ] Current system handles 100+ nodes at 60 FPS
 - [ ] Layout computation completes in <500ms for 100 nodes
 - [ ] No memory leaks after 10 minutes of use
 - [ ] Performance monitor shows stable metrics
 
 **User Validation**:
+
 - [ ] Users successfully create 50+ work items
 - [ ] Users request grouping/organization features
 - [ ] Users understand relationship filtering
 - [ ] No major bugs in core canvas system
 
 **Technical Readiness**:
+
 - [ ] Database migration stable (no rollbacks needed)
 - [ ] Real-time updates working reliably
 - [ ] AI note conversion tested with 10+ examples
@@ -192,16 +209,19 @@ CREATE TABLE work_flows (
 ## Success Metrics (After Implementation)
 
 **Performance**:
+
 - Sub-flow expansion completes in <200ms
 - No FPS drop when loading sub-flows
 - Cache hit rate >80% for frequently accessed flows
 
 **Usage**:
+
 - 30% of users create at least one sub-flow
 - Average sub-flow has 15-25 items
 - Sub-flow navigation used 5+ times per session
 
 **Quality**:
+
 - Auto-detection suggests valid groupings 70%+ of time
 - Users accept auto-detection suggestions 40%+ of time
 - Zero data loss during flow operations
@@ -211,16 +231,19 @@ CREATE TABLE work_flows (
 ## Alternative Approaches (Considered)
 
 ### Approach 1: Tags Instead of Sub-Flows
+
 **Pros**: Simpler, no hierarchy
 **Cons**: Doesn't reduce visual complexity
 **Decision**: Rejected - doesn't solve large canvas problem
 
 ### Approach 2: Multiple Canvases (Separate Workspaces)
+
 **Pros**: No new code needed
 **Cons**: Loses cross-flow relationships
 **Decision**: Rejected - breaks unified view benefit
 
 ### Approach 3: Virtual Folders (Filter-Based)
+
 **Pros**: Flexible, no nesting
 **Cons**: Manual organization, no spatial grouping
 **Decision**: Rejected - doesn't leverage canvas strengths
@@ -241,6 +264,7 @@ CREATE TABLE work_flows (
 **Next Review Date**: After 2 weeks of production use (Est. 2025-02-03)
 
 **Questions to Answer**:
+
 1. Do users actually need hierarchical organization?
 2. What canvas size triggers the need for sub-flows?
 3. Are there simpler alternatives to DBSCAN clustering?

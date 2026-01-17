@@ -8,7 +8,7 @@ Open `@/openspec/AGENTS.md` when request mentions: proposals, specs, breaking ch
 # Project Guidelines
 
 **Project**: Product Lifecycle Management Platform
-**Stack**: Next.js 16.1.1 + TypeScript + Supabase + Vercel
+**Stack**: Next.js 16.1.3 + TypeScript + Supabase + Vercel
 **Status**: Week 7/12 (95% complete)
 **Canonical Architecture**: [docs/ARCHITECTURE_CONSOLIDATION.md](docs/ARCHITECTURE_CONSOLIDATION.md)
 
@@ -336,18 +336,19 @@ Design Thinking guides HOW to work at each phase (NOT lifecycle stages):
 ### Tech Stack
 
 ```
-Framework:    Next.js 16.1.1 + TypeScript (App Router, Server Components)
+Framework:    Next.js 16.1.3 + TypeScript (App Router, Server Components)
 Database:     Supabase (PostgreSQL + Real-time + Auth + RLS)
 UI:           shadcn/ui + Tailwind CSS + Lucide React
-Mind Mapping: XYFlow/ReactFlow (custom nodes, AI-powered)
+Mind Mapping: XYFlow/ReactFlow + BlockSuite 0.19.5 (custom nodes, AI-powered)
 Charts:       Recharts (10+ chart types)
 Testing:      Playwright (E2E, Chromium-only CI)
 Code Review:  Greptile (AI-powered PR reviews)
 Payments:     Stripe (Checkout, Subscriptions, Webhooks)
 Email:        Resend (Invitations, notifications)
-AI:           OpenRouter (multi-model)
+AI:           Vercel AI SDK 6.x + OpenRouter (multi-model)
 State:        Zustand + React Query
 Deployment:   Vercel (Serverless)
+CI/CD:        GitHub Actions + Bun
 ```
 
 ### AI Model Routing

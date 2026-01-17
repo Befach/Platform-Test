@@ -81,12 +81,14 @@
 ### Problem Statement
 
 The `executeToolAction()` switch statement (line 571) only handles:
+
 - 5 creation tools (lines 573-728)
 - 5 analysis tools (lines 732-754)
 - **5 optimization tools - MISSING** (throws error)
 - **5 strategy tools - MISSING** (throws error)
 
 When any of the 10 missing tools are called, they hit `default:` and throw:
+
 ```
 Error: Execution not implemented for tool: prioritizeFeatures
 ```
@@ -96,6 +98,7 @@ Error: Execution not implemented for tool: prioritizeFeatures
 Add 10 new cases using the **same passthrough pattern** as analysis tools (lines 732-754).
 
 The pattern delegates to the tool's existing `execute()` function instead of implementing database operations inline. This is appropriate because:
+
 - Optimization/strategy tools already return structured results
 - They handle their own logic (scoring, analysis, suggestions)
 - We just need to route them through the executor
@@ -321,6 +324,7 @@ Lines 756-758: default: throw Error
 ### Rollback Plan
 
 If issues arise:
+
 ```bash
 git checkout main
 git branch -D feat/wire-missing-tools
@@ -333,7 +337,8 @@ git branch -D feat/wire-missing-tools
 ### Overview
 
 **Branch**: `feat/model-routing-config`
-**Files to modify**: 
+**Files to modify**:
+
 - `next-app/src/lib/ai/models-config.ts`
 - `next-app/src/lib/ai/ai-sdk-client.ts`
 **Estimated time**: 2-3 hours
@@ -342,6 +347,7 @@ git branch -D feat/wire-missing-tools
 ### Problem Statement
 
 The current model registry only has 5 models:
+
 - Kimi K2 Thinking (default)
 - Claude Haiku 4.5 (tools)
 - DeepSeek V3.2 (reasoning)
@@ -349,6 +355,7 @@ The current model registry only has 5 models:
 - Gemini 2.5 Flash (vision)
 
 We need to add 3 new high-performance models and create a routing system with fallback chains:
+
 - **GLM 4.7** - Best for strategic reasoning + agentic tool use
 - **MiniMax M2.1** - Best for coding tasks
 - **Gemini 3 Flash** - Upgraded vision with better reasoning
@@ -896,6 +903,7 @@ next-app/src/lib/ai/fallback-chain.ts (NEW FILE)
 ### Rollback Plan
 
 If issues arise:
+
 ```bash
 git checkout main
 git branch -D feat/model-routing-config
@@ -921,6 +929,7 @@ git branch -D feat/model-routing-config
 ### Problem Statement
 
 Currently there are 38+ specialized tools, each with its own schema and implementation. This causes:
+
 - **Prompt bloat**: All 38 tool definitions must be sent to the model
 - **Selection confusion**: Models often pick wrong tools with similar names
 - **Maintenance burden**: Each tool requires separate code/tests
@@ -1567,6 +1576,7 @@ export default analyzeTool
 #### Step 6: Create Remaining Tools (Optimize, Strategize, Research, Generate, Plan)
 
 Create similar files for each tool following the same pattern:
+
 - `optimize-tool.ts` - prioritize, balance_workload, identify_risks, estimate_timeline, deduplicate
 - `strategize-tool.ts` - align, suggest_okrs, competitive_analysis, generate_roadmap, impact_assessment
 - `research-tool.ts` - web_search, extract_content, deep_research, quick_answer
@@ -1618,11 +1628,13 @@ export type GeneralizedToolName = keyof typeof generalizedTools
 Modify: `next-app/src/lib/ai/tools/tool-registry.ts`
 
 Add at the top of the file:
+
 ```typescript
 import { generalizedTools } from './generalized'
 ```
 
 Add a new function to get generalized tools:
+
 ```typescript
 /**
  * Get generalized tools (7 tools instead of 38+)
@@ -1756,6 +1768,7 @@ Create a generalized tool abstraction that consolidates 38+ specialized tools in
 
 ## Files Added
 ```
+
 next-app/src/lib/ai/tools/generalized/
 ├── types.ts           # Shared types
 ├── entity-tool.ts     # CRUD operations
@@ -1766,6 +1779,7 @@ next-app/src/lib/ai/tools/generalized/
 ├── generate-tool.ts   # Content generation
 ├── plan-tool.ts       # Sprint planning
 └── index.ts           # Exports
+
 ```
 
 ## Test Plan
@@ -1814,6 +1828,7 @@ next-app/src/lib/ai/tools/tool-registry.ts
 ### Rollback Plan
 
 If issues arise:
+
 ```bash
 # Remove feature flag
 unset FEATURE_GENERALIZED_TOOLS
@@ -2057,6 +2072,7 @@ next-app/src/lib/ai/tools/generalized/
 ### Problem Statement
 
 Currently, the platform uses a single model per request with no fallback, escalation, or quality verification. This causes:
+
 - **Single point of failure**: If model is unavailable, request fails
 - **Inconsistent quality**: Some queries need deeper reasoning
 - **No learning**: System doesn't improve from user feedback
@@ -2065,6 +2081,7 @@ Currently, the platform uses a single model per request with no fallback, escala
 ### Solution
 
 Implement a 4-tier orchestration system:
+
 1. **Smart Routing** (80%) - Route to best model per query type
 2. **Confidence Escalation** (15%) - Auto-escalate when uncertain
 3. **Consensus Mode** (5%) - Multi-model synthesis for high-stakes
@@ -3077,6 +3094,7 @@ Implement intelligent multi-model orchestration with automatic escalation and co
 
 ## Files Added
 ```
+
 next-app/src/lib/ai/orchestration/
 ├── types.ts                    # Type definitions
 ├── query-classifier.ts         # Query classification
@@ -3084,6 +3102,7 @@ next-app/src/lib/ai/orchestration/
 ├── consensus-engine.ts         # Multi-model consensus
 ├── weight-learning.ts          # Adaptive learning
 └── index.ts                    # Exports
+
 ```
 
 ## Test Plan
@@ -3122,6 +3141,7 @@ next-app/src/lib/ai/orchestration/
 ### Rollback Plan
 
 If issues arise:
+
 ```bash
 # Feature flag off
 FEATURE_ORCHESTRATION=false
@@ -3330,7 +3350,8 @@ next-app/src/lib/ai/orchestration/
 ### Overview
 
 **Branch**: `feat/agent-memory-system`
-**Files to create**: 
+**Files to create**:
+
 - 5 files in `next-app/src/lib/ai/memory/`
 - 7 files in `next-app/src/components/ai/memory/`
 - 5 API routes in `next-app/src/app/api/ai/memory/`
@@ -3341,6 +3362,7 @@ next-app/src/lib/ai/orchestration/
 ### Problem Statement
 
 AI models have no persistent context about:
+
 - User preferences and working style
 - Project-specific patterns and conventions
 - Previously rejected suggestions (repeats mistakes)
@@ -3351,6 +3373,7 @@ Each conversation starts from zero context, leading to repeated corrections and 
 ### Solution
 
 Implement a persistent memory system with:
+
 - **10k token limit** - Efficient context injection
 - **5 memory categories** - Organized knowledge
 - **Auto-optimization** - Compress when near limit
@@ -4740,6 +4763,7 @@ interface AgentMemoryTable {
 ### Problem Statement
 
 Users have no visibility into:
+
 - Why responses take longer sometimes (escalation happening)
 - Model confidence levels
 - When consensus mode is active
@@ -4750,6 +4774,7 @@ This creates a "black box" experience that can feel slow or unpredictable.
 ### Solution
 
 Implement transparent UX features:
+
 1. **Thinking Status Indicator** - Show escalation progress
 2. **Quality Mode Toggle** - User control over speed/quality
 3. **Confidence Badge** - Show model certainty
@@ -5624,13 +5649,16 @@ Total: ~$0.002 per single-model query
 ## Quick Reference: Files Summary
 
 ### Phase 1 Files
+
 - `next-app/src/lib/ai/agent-executor.ts` - Wire 10 missing tools
 
 ### Phase 2 Files
+
 - `next-app/src/lib/ai/models-config.ts` - Add new models
 - `next-app/src/lib/ai/ai-sdk-client.ts` - Update SDK config
 
 ### Phase 3 Files (Create)
+
 ```
 next-app/src/lib/ai/tools/generalized/
 +-- entity-tool.ts
@@ -5644,6 +5672,7 @@ next-app/src/lib/ai/tools/generalized/
 ```
 
 ### Phase 4 Files (Create)
+
 ```
 next-app/src/lib/ai/orchestration/
 +-- multi-model-orchestrator.ts
@@ -5656,6 +5685,7 @@ next-app/src/lib/ai/orchestration/
 ```
 
 ### Phase 5 Files (Create)
+
 ```
 next-app/src/lib/ai/memory/
 +-- agent-memory.ts
@@ -5675,6 +5705,7 @@ next-app/src/components/ai/memory/
 ```
 
 ### Phase 6 Files (Create)
+
 ```
 next-app/src/components/ai/
 +-- thinking-status-indicator.tsx

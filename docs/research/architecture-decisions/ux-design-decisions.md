@@ -19,12 +19,14 @@ This document captures the UX design philosophy and specific decisions for the P
 ## Context
 
 Building a B2B SaaS platform requires balancing multiple user types:
+
 - New users need guidance without overwhelm
 - Power users need efficiency and customization
 - Different teams need different views of the same data
 - Enterprise customers need configurability without chaos
 
 Research findings (see [ultra-deep-research-findings.md](../core-research/ultra-deep-research-findings.md)):
+
 - 75% of new users churn within first week without effective onboarding
 - 67% of B2B buyers abandon evaluations due to poor UX
 - 90% form completion with on-blur validation vs 68% with on-change
@@ -67,6 +69,7 @@ Offer pre-built team templates (Engineering, Design, Product) as recommended sta
 ### Why This Decision
 
 **Research Backing**:
+
 - BCG: "Build for your ideal customer, not every potential customer"
 - 80% of teams fit into standard patterns
 - Over-customization creates maintenance burden and inconsistent UX
@@ -108,15 +111,18 @@ type TemplateSource =
 ### Consequences
 
 **Positive**:
+
 - Fast onboarding for most users
 - Consistent patterns across organizations
 - Power users not limited
 
 **Negative**:
+
 - More complex settings UI
 - Need to maintain template quality
 
 **Risks**:
+
 - Templates may not fit all industries
 - Mitigation: Allow template customization
 
@@ -131,11 +137,13 @@ Implement hierarchical menu system with hover/click reveal for cross-team connec
 ### Why This Decision
 
 **Problem**: Cross-team dependencies are complex. Users need to:
+
 1. Specify connection type (blocks, relates to, etc.)
 2. Find the target item (potentially across teams)
 3. Understand the relationship direction
 
 **Research Backing**:
+
 - Progressive disclosure reduces cognitive load
 - Familiar pattern (Notion, Linear use similar)
 - Hover preview + click for action is intuitive
@@ -182,11 +190,13 @@ LEVEL 3: Deep Navigation (Click to Enter)
 ### Consequences
 
 **Positive**:
+
 - Reduces cognitive load
 - Scales to large item counts
 - Familiar pattern
 
 **Negative**:
+
 - More complex to implement
 - Touch devices need click-only mode
 
@@ -203,6 +213,7 @@ AI suggests strategic alignment (OKRs, pillars), user has final control. Not blo
 **Problem**: Features often ship without clear strategic connection. But blocking users creates friction.
 
 **Research Backing**:
+
 - "Strategy-connected execution" improves product outcomes
 - Blocking workflows creates workarounds
 - Visibility creates accountability without friction
@@ -219,12 +230,14 @@ AI suggests strategic alignment (OKRs, pillars), user has final control. Not blo
 ### Implementation
 
 **1. AI Suggests (Proactive)**
+
 ```
 💡 "This work item seems related to OKR: Improve Onboarding"
 [Link to OKR]  [Not Related]  [Remind Later]
 ```
 
 **2. Soft Warning (When Missing)**
+
 ```
 ⚠️ No strategic alignment
 This work item isn't connected to any OKR or initiative.
@@ -232,6 +245,7 @@ This work item isn't connected to any OKR or initiative.
 ```
 
 **3. Dashboard Visibility (Accountability)**
+
 ```
 📊 Strategy Alignment Score: 73%
 ✓ 22 work items aligned to OKRs
@@ -240,6 +254,7 @@ This work item isn't connected to any OKR or initiative.
 ```
 
 **4. AI Bulk Suggestions (Periodic)**
+
 ```
 🤖 AI found 5 items that might align with your OKRs:
 • "User onboarding flow" → OKR: Improve Activation
@@ -258,15 +273,18 @@ This work item isn't connected to any OKR or initiative.
 ### Consequences
 
 **Positive**:
+
 - Strategic alignment improves
 - Low friction for users
 - Visibility creates culture change
 
 **Negative**:
+
 - AI suggestions may be wrong
 - Some users ignore soft warnings
 
 **Risks**:
+
 - Gaming the system (linking to any OKR)
 - Mitigation: Alignment quality metrics
 
@@ -275,6 +293,7 @@ This work item isn't connected to any OKR or initiative.
 ## Review Triggers
 
 Reconsider these decisions when:
+
 - [ ] User feedback indicates templates don't fit their industry
 - [ ] Connection complexity becomes a barrier
 - [ ] Strategy alignment is being gamed/ignored

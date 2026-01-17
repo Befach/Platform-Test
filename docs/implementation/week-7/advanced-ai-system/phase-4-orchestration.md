@@ -9,6 +9,7 @@
 ---
 
 ## Overview
+
 **Files to create**: 8 new files in `next-app/src/lib/ai/orchestration/`
 **Files to modify**: Chat API route, AI message handler
 **Estimated time**: 1-2 days
@@ -17,6 +18,7 @@
 ### Problem Statement
 
 Currently, the platform uses a single model per request with no fallback, escalation, or quality verification. This causes:
+
 - **Single point of failure**: If model is unavailable, request fails
 - **Inconsistent quality**: Some queries need deeper reasoning
 - **No learning**: System doesn't improve from user feedback
@@ -25,6 +27,7 @@ Currently, the platform uses a single model per request with no fallback, escala
 ### Solution
 
 Implement a 4-tier orchestration system:
+
 1. **Smart Routing** (80%) - Route to best model per query type
 2. **Confidence Escalation** (15%) - Auto-escalate when uncertain
 3. **Consensus Mode** (5%) - Multi-model synthesis for high-stakes
@@ -1037,6 +1040,7 @@ Implement intelligent multi-model orchestration with automatic escalation and co
 
 ## Files Added
 ```
+
 next-app/src/lib/ai/orchestration/
 ├── types.ts                    # Type definitions
 ├── query-classifier.ts         # Query classification
@@ -1044,6 +1048,7 @@ next-app/src/lib/ai/orchestration/
 ├── consensus-engine.ts         # Multi-model consensus
 ├── weight-learning.ts          # Adaptive learning
 └── index.ts                    # Exports
+
 ```
 
 ## Test Plan
@@ -1082,6 +1087,7 @@ next-app/src/lib/ai/orchestration/
 ### Rollback Plan
 
 If issues arise:
+
 ```bash
 # Feature flag off
 FEATURE_ORCHESTRATION=false
@@ -1284,6 +1290,5 @@ next-app/src/lib/ai/orchestration/
 ```
 
 ---
-
 
 [Back to AI Tool Architecture](README.md) | [Previous: Phase 3](phase-3-generalized-tools.md) | [Next: Phase 5](phase-5-agent-memory.md)

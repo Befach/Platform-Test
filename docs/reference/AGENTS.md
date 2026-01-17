@@ -18,19 +18,22 @@ All AI models are accessed through the **OpenRouter API** - a unified gateway fo
 | **Gemini 3 Flash** | Google | Visual reasoning, multimodal analysis | Vision analysis |
 
 ### Model Routing Features
+
 - `:nitro` suffix for automatic throughput optimization (30-50% faster)
 - 3-deep fallback chains for all capabilities
 - Capability-based routing (not model-name-based)
 
 ### Download/Access
-- **OpenRouter**: https://openrouter.ai/
-- **API Documentation**: https://openrouter.ai/docs
+
+- **OpenRouter**: <https://openrouter.ai/>
+- **API Documentation**: <https://openrouter.ai/docs>
 
 ---
 
 ## 2. AI SDKs & Frameworks
 
 ### Installation
+
 ```bash
 # Core AI SDK
 npm install ai @ai-sdk/react
@@ -46,10 +49,10 @@ npm install @assistant-ui/react @assistant-ui/react-ai-sdk
 
 | Package | Version | Purpose | Documentation |
 |---------|---------|---------|---------------|
-| `ai` | v5.0.104 | Vercel AI SDK core | https://sdk.vercel.ai/docs |
-| `@ai-sdk/react` | v2.0.104 | React hooks for streaming & tool use | https://sdk.vercel.ai/docs |
-| `@openrouter/ai-sdk-provider` | v1.5.4 | OpenRouter provider plugin | https://openrouter.ai/docs |
-| `@assistant-ui/react` | v0.11.53 | UI components for AI assistants | https://www.assistant-ui.com/ |
+| `ai` | v5.0.104 | Vercel AI SDK core | <https://sdk.vercel.ai/docs> |
+| `@ai-sdk/react` | v2.0.104 | React hooks for streaming & tool use | <https://sdk.vercel.ai/docs> |
+| `@openrouter/ai-sdk-provider` | v1.5.4 | OpenRouter provider plugin | <https://openrouter.ai/docs> |
+| `@assistant-ui/react` | v0.11.53 | UI components for AI assistants | <https://www.assistant-ui.com/> |
 
 ---
 
@@ -66,8 +69,8 @@ npm install @supabase/supabase-js @supabase/ssr
 | `@supabase/supabase-js` | v2.89.0 | PostgreSQL client, Auth, Real-time |
 | `@supabase/ssr` | v0.8.0 | Server-side auth handling |
 
-- **Sign up**: https://supabase.com/
-- **Documentation**: https://supabase.com/docs
+- **Sign up**: <https://supabase.com/>
+- **Documentation**: <https://supabase.com/docs>
 
 ---
 
@@ -78,12 +81,13 @@ npm install @supabase/supabase-js @supabase/ssr
 | Parallel.ai Search | Web search, context enrichment, deep research | $0.005/search + $0.001/page |
 
 **Features:**
+
 - `parallelSearch()` - Single query web search
 - `deepResearch()` - Multi-query cross-referencing
 - `deepResearchDependencies()` - Dependency analysis
 
-- **API**: https://parallel.ai/
-- **Documentation**: https://docs.parallel.ai/
+- **API**: <https://parallel.ai/>
+- **Documentation**: <https://docs.parallel.ai/>
 
 ---
 
@@ -97,8 +101,8 @@ npm install zeptomail
 |---------|---------|---------|
 | `zeptomail` | latest | Transactional email (invitations, notifications) |
 
-- **Sign up**: https://www.zoho.com/zeptomail/
-- **Documentation**: https://www.zoho.com/zeptomail/help/
+- **Sign up**: <https://www.zoho.com/zeptomail/>
+- **Documentation**: <https://www.zoho.com/zeptomail/help/>
 
 ---
 
@@ -112,8 +116,8 @@ npm install razorpay
 |---------|---------|---------|
 | `razorpay` | latest | Payment processing, subscriptions |
 
-- **Sign up**: https://razorpay.com/
-- **Documentation**: https://razorpay.com/docs/
+- **Sign up**: <https://razorpay.com/>
+- **Documentation**: <https://razorpay.com/docs/>
 
 ---
 
@@ -127,7 +131,7 @@ npm install @vercel/speed-insights
 |---------|---------|---------|
 | `@vercel/speed-insights` | v1.3.1 | Performance monitoring |
 
-- **Documentation**: https://vercel.com/docs/speed-insights
+- **Documentation**: <https://vercel.com/docs/speed-insights>
 
 ---
 
@@ -140,6 +144,7 @@ Only essential MCP. Other tools use CLI for context efficiency.
 | **Context7 MCP** | Real-time library documentation | `claude mcp add context7 --scope user` |
 
 **CLI-Based (No MCP - More Context Efficient):**
+
 - Supabase → `supabase` CLI
 - Playwright → `npx playwright` CLI
 - GitHub → `gh` CLI
@@ -147,7 +152,7 @@ Only essential MCP. Other tools use CLI for context efficiency.
 - shadcn/ui → `npx shadcn-ui` CLI
 - Filesystem → Built-in tools
 
-- **MCP Documentation**: https://modelcontextprotocol.io/
+- **MCP Documentation**: <https://modelcontextprotocol.io/>
 
 ---
 
@@ -200,6 +205,7 @@ These tools are built into the platform for AI-assisted workflows.
 ## 6. UI & Visualization Libraries
 
 ### Installation
+
 ```bash
 # Mind Mapping & Graphs
 npm install @xyflow/react
@@ -218,17 +224,18 @@ npm install react-markdown react-syntax-highlighter
 
 | Package | Version | Purpose | Documentation |
 |---------|---------|---------|---------------|
-| `@xyflow/react` | v12.10.0 | Mind mapping canvas, dependency graphs | https://reactflow.dev/ |
-| `recharts` | v3.6.0 | Analytics dashboards, charts | https://recharts.org/ |
-| `@blocksuite/affine` | v0.18.7 | Rich content editing | https://blocksuite.io/ |
-| `react-markdown` | v10.1.0 | AI-generated markdown rendering | https://github.com/remarkjs/react-markdown |
-| `react-syntax-highlighter` | v16.1.0 | Code highlighting in AI responses | https://github.com/react-syntax-highlighter/react-syntax-highlighter |
+| `@xyflow/react` | v12.10.0 | Mind mapping canvas, dependency graphs | <https://reactflow.dev/> |
+| `recharts` | v3.6.0 | Analytics dashboards, charts | <https://recharts.org/> |
+| `@blocksuite/affine` | v0.18.7 | Rich content editing | <https://blocksuite.io/> |
+| `react-markdown` | v10.1.0 | AI-generated markdown rendering | <https://github.com/remarkjs/react-markdown> |
+| `react-syntax-highlighter` | v16.1.0 | Code highlighting in AI responses | <https://github.com/react-syntax-highlighter/react-syntax-highlighter> |
 
 ---
 
 ## 7. State Management
 
 ### Installation
+
 ```bash
 npm install zustand @tanstack/react-query react-hook-form
 ```
@@ -237,9 +244,9 @@ npm install zustand @tanstack/react-query react-hook-form
 
 | Package | Version | Purpose | Documentation |
 |---------|---------|---------|---------------|
-| `zustand` | v5.0.8 | Global state management | https://zustand.docs.pmnd.rs/ |
-| `@tanstack/react-query` | v5.90.15 | Server state management | https://tanstack.com/query |
-| `react-hook-form` | v7.69.0 | Form state management | https://react-hook-form.com/ |
+| `zustand` | v5.0.8 | Global state management | <https://zustand.docs.pmnd.rs/> |
+| `@tanstack/react-query` | v5.90.15 | Server state management | <https://tanstack.com/query> |
+| `react-hook-form` | v7.69.0 | Form state management | <https://react-hook-form.com/> |
 
 ---
 
@@ -283,8 +290,8 @@ These are specialized Claude agents recommended for different implementation pha
 |---------|---------|---------------|
 | Greptile | AI-powered code review, PR analysis | `greptile.json` |
 
-- **Sign up**: https://greptile.com/
-- **Documentation**: https://docs.greptile.com/
+- **Sign up**: <https://greptile.com/>
+- **Documentation**: <https://docs.greptile.com/>
 
 ---
 
@@ -355,13 +362,13 @@ PARALLEL_API_KEY=your_parallel_api_key
 
 | Service | Sign Up | Documentation |
 |---------|---------|---------------|
-| OpenRouter | https://openrouter.ai/ | https://openrouter.ai/docs |
-| Supabase | https://supabase.com/ | https://supabase.com/docs |
-| Razorpay | https://razorpay.com/ | https://razorpay.com/docs/ |
-| Zoho ZeptoMail | https://www.zoho.com/zeptomail/ | https://www.zoho.com/zeptomail/help/ |
-| Parallel.ai | https://parallel.ai/ | https://docs.parallel.ai/ |
-| Vercel | https://vercel.com/ | https://vercel.com/docs |
-| Greptile | https://greptile.com/ | https://docs.greptile.com/ |
+| OpenRouter | <https://openrouter.ai/> | <https://openrouter.ai/docs> |
+| Supabase | <https://supabase.com/> | <https://supabase.com/docs> |
+| Razorpay | <https://razorpay.com/> | <https://razorpay.com/docs/> |
+| Zoho ZeptoMail | <https://www.zoho.com/zeptomail/> | <https://www.zoho.com/zeptomail/help/> |
+| Parallel.ai | <https://parallel.ai/> | <https://docs.parallel.ai/> |
+| Vercel | <https://vercel.com/> | <https://vercel.com/docs> |
+| Greptile | <https://greptile.com/> | <https://docs.greptile.com/> |
 
 ---
 
@@ -466,5 +473,5 @@ openspec update        # Refresh agent instructions
 3. `/openspec:apply` → Implement tasks
 4. `/openspec:archive` → Merge & archive
 
-- **OpenSpec**: https://github.com/Fission-AI/OpenSpec
-- **OPSX Workflow**: https://github.com/Fission-AI/OpenSpec/blob/main/docs/experimental-workflow.md
+- **OpenSpec**: <https://github.com/Fission-AI/OpenSpec>
+- **OPSX Workflow**: <https://github.com/Fission-AI/OpenSpec/blob/main/docs/experimental-workflow.md>

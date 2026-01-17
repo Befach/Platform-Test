@@ -12,9 +12,11 @@ Resources are external links, documentation, and inspiration that can be linked 
 Features: full-text search, many-to-many linking, soft-delete with 30-day recycle bin, complete audit trail.
 
 ### GET `/api/resources`
+
 List resources with optional filtering
 
 **Query Parameters:**
+
 - `team_id` (required): Team ID
 - `workspace_id` (optional): Filter by workspace
 - `type` (optional): Filter by type (reference, inspiration, documentation, media, tool)
@@ -23,6 +25,7 @@ List resources with optional filtering
 - `offset` (optional, default: 0): Pagination offset
 
 **Response (200 OK):**
+
 ```json
 {
   "data": [
@@ -43,9 +46,11 @@ List resources with optional filtering
 ---
 
 ### POST `/api/resources`
+
 Create a new resource
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -61,6 +66,7 @@ Create a new resource
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "data": {
@@ -76,9 +82,11 @@ Create a new resource
 ---
 
 ### GET `/api/resources/:id`
+
 Get resource details with linked work items
 
 **Response (200 OK):**
+
 ```json
 {
   "data": {
@@ -103,9 +111,11 @@ Get resource details with linked work items
 ---
 
 ### PATCH `/api/resources/:id`
+
 Update resource or restore from trash
 
 **Request Body (update):**
+
 ```json
 {
   "title": "Updated Title",
@@ -114,11 +124,13 @@ Update resource or restore from trash
 ```
 
 **Request Body (restore - use query param `?action=restore`):**
+
 ```json
 {}
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "data": { /* updated resource */ }
@@ -128,12 +140,15 @@ Update resource or restore from trash
 ---
 
 ### DELETE `/api/resources/:id`
+
 Soft delete or permanent delete
 
 **Query Parameters:**
+
 - `permanent` (optional): If `true`, permanently delete (skip trash)
 
 **Response (200 OK - soft delete):**
+
 ```json
 {
   "message": "Resource moved to trash"
@@ -145,9 +160,11 @@ Soft delete or permanent delete
 ---
 
 ### GET `/api/resources/search`
+
 Full-text search across resources
 
 **Query Parameters:**
+
 - `team_id` (required): Team ID
 - `q` (required): Search query
 - `workspace_id` (optional): Filter by workspace
@@ -155,6 +172,7 @@ Full-text search across resources
 - `limit` (optional, default: 20): Max results
 
 **Response (200 OK):**
+
 ```json
 {
   "data": [
@@ -173,9 +191,11 @@ Full-text search across resources
 ---
 
 ### GET `/api/resources/:id/history`
+
 Get audit trail for a resource
 
 **Response (200 OK):**
+
 ```json
 {
   "data": [
@@ -206,9 +226,11 @@ Get audit trail for a resource
 ---
 
 ### GET `/api/work-items/:id/resources`
+
 Get resources linked to a work item, organized by tab
 
 **Response (200 OK):**
+
 ```json
 {
   "data": {
@@ -236,9 +258,11 @@ Get resources linked to a work item, organized by tab
 ---
 
 ### POST `/api/work-items/:id/resources`
+
 Link a resource to work item or create and link new resource
 
 **Request Body (link existing):**
+
 ```json
 {
   "resource_id": "1736857200100",
@@ -248,6 +272,7 @@ Link a resource to work item or create and link new resource
 ```
 
 **Request Body (create and link):**
+
 ```json
 {
   "title": "New Resource",
@@ -258,6 +283,7 @@ Link a resource to work item or create and link new resource
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "message": "Resource linked successfully"
@@ -267,12 +293,15 @@ Link a resource to work item or create and link new resource
 ---
 
 ### DELETE `/api/work-items/:id/resources`
+
 Unlink a resource from work item
 
 **Query Parameters:**
+
 - `resource_id` (required): Resource ID to unlink
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Resource unlinked successfully"
@@ -284,9 +313,11 @@ Unlink a resource from work item
 ## 🧠 MIND MAPS API
 
 ### POST `/api/mind-maps`
+
 Create mind map
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -299,6 +330,7 @@ Create mind map
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "mind_map": {
@@ -313,9 +345,11 @@ Create mind map
 ---
 
 ### GET `/api/mind-maps/:mindMapId`
+
 Get mind map
 
 **Response (200 OK):**
+
 ```json
 {
   "mind_map": {
@@ -339,9 +373,11 @@ Get mind map
 ---
 
 ### PATCH `/api/mind-maps/:mindMapId`
+
 Update mind map canvas
 
 **Request Body:**
+
 ```json
 {
   "canvas_data": {
@@ -352,6 +388,7 @@ Update mind map canvas
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "mind_map": { /* updated mind map */ }
@@ -361,9 +398,11 @@ Update mind map canvas
 ---
 
 ### POST `/api/mind-maps/:mindMapId/convert-to-features`
+
 Convert mind map nodes to features
 
 **Request Body:**
+
 ```json
 {
   "node_ids": ["node_1", "node_2", "node_3"]
@@ -371,6 +410,7 @@ Convert mind map nodes to features
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "features": [
@@ -389,9 +429,11 @@ Convert mind map nodes to features
 ## 🔗 DEPENDENCIES API
 
 ### POST `/api/dependencies`
+
 Create dependency link
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -403,6 +445,7 @@ Create dependency link
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "dependency": {
@@ -418,12 +461,15 @@ Create dependency link
 ---
 
 ### GET `/api/dependencies`
+
 Get dependency graph
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 
 **Response (200 OK):**
+
 ```json
 {
   "nodes": [
@@ -447,9 +493,11 @@ Get dependency graph
 ---
 
 ### POST `/api/dependencies/analyze`
+
 Analyze critical path and bottlenecks
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002"
@@ -457,6 +505,7 @@ Analyze critical path and bottlenecks
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "critical_path": [
@@ -480,9 +529,11 @@ Analyze critical path and bottlenecks
 ## 👥 REVIEW & FEEDBACK API
 
 ### POST `/api/review-links`
+
 Create review link
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -498,6 +549,7 @@ Create review link
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "review_link": {
@@ -513,9 +565,11 @@ Create review link
 ---
 
 ### GET `/public/review/:token` **[PUBLIC]**
+
 Get review page data
 
 **Response (200 OK):**
+
 ```json
 {
   "workspace": {
@@ -538,9 +592,11 @@ Get review page data
 ---
 
 ### POST `/api/feedback` **[PUBLIC]**
+
 Submit feedback
 
 **Request Body:**
+
 ```json
 {
   "review_link_token": "abc123xyz",
@@ -552,6 +608,7 @@ Submit feedback
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "feedback": {
@@ -568,14 +625,17 @@ Submit feedback
 ---
 
 ### GET `/api/feedback`
+
 List all feedback
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `feature_id` (optional): Filter by feature
 - `status` (optional): Filter by status (new, reviewed, implemented, rejected)
 
 **Response (200 OK):**
+
 ```json
 {
   "feedback": [
@@ -593,4 +653,3 @@ List all feedback
 ```
 
 ---
-

@@ -3,6 +3,7 @@
     unsubscribe();
   };
 }, [teamId, workspaceId]);
+
 ```
 
 **Key Principles**:
@@ -99,6 +100,7 @@ export function ReviewButton({ teamId }: { teamId: string }) {
 ```
 
 **Key Principles**:
+
 - ✅ Check feature access server-side AND client-side
 - ✅ Fail closed (deny access if check fails)
 - ✅ Show upgrade prompts for Pro features
@@ -196,6 +198,7 @@ export const createFeatureTool = {
 ```
 
 **Key Principles**:
+
 - ✅ Use streaming for real-time responses
 - ✅ Handle errors gracefully in streams
 - ✅ Close streams properly
@@ -503,6 +506,7 @@ export function StrategyView({ context, workItemId }: Props) {
 ---
 
 **See Also**:
+
 - [Architecture Reference](ARCHITECTURE.md) - Two-layer system, phase system details
 - [API Reference](API_REFERENCE.md)
 - [Main Implementation Plan](../implementation/README.md)

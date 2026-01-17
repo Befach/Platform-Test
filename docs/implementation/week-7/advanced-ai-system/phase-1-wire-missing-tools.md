@@ -19,12 +19,14 @@
 ## Problem Statement
 
 The `executeToolAction()` switch statement (line 571) only handles:
+
 - 5 creation tools (lines 573-728)
 - 5 analysis tools (lines 732-754)
 - **5 optimization tools - MISSING** (throws error)
 - **5 strategy tools - MISSING** (throws error)
 
 When any of the 10 missing tools are called, they hit `default:` and throw:
+
 ```
 Error: Execution not implemented for tool: prioritizeFeatures
 ```
@@ -36,6 +38,7 @@ Error: Execution not implemented for tool: prioritizeFeatures
 Add 10 new cases using the **same passthrough pattern** as analysis tools (lines 732-754).
 
 The pattern delegates to the tool's existing `execute()` function instead of implementing database operations inline. This is appropriate because:
+
 - Optimization/strategy tools already return structured results
 - They handle their own logic (scoring, analysis, suggestions)
 - We just need to route them through the executor
@@ -273,6 +276,7 @@ Lines 756-758: default: throw Error
 ## Rollback Plan
 
 If issues arise:
+
 ```bash
 git checkout main
 git branch -D feat/wire-missing-tools

@@ -49,6 +49,7 @@ This feature introduces a **strategic foundation layer** that connects every pro
 ## Why Postponed
 
 Strategic alignment is powerful but requires:
+
 - ❌ **Workspace Modes** - Strategy differs by workspace type (product vs project)
 - ❌ **AI Integration** - Auto-alignment and priority scoring need AI APIs
 - ❌ **Work Item Detail Page** - Strategic alignment needs display location
@@ -97,6 +98,7 @@ interface TargetCustomer {
 ```
 
 **Impact Scoring**:
+
 - **Primary Customer**: 5 (highest priority)
 - **Secondary Customer**: 3 (medium priority)
 - **Anti-Persona**: -5 (avoid building for them)
@@ -156,6 +158,7 @@ interface StrategicPillar {
 ```
 
 **Alignment Scoring**:
+
 - **Supports Pillar**: +2 points
 - **Neutral**: 0 points
 - **Conflicts with Pillar**: -2 points
@@ -186,6 +189,7 @@ interface SuccessMetrics {
 ```
 
 **North Star Impact Estimation**:
+
 - Work items estimate expected impact: "+15% signup conversion", "-10% churn"
 
 ---
@@ -279,6 +283,7 @@ function calculatePriorityScore(
 ```
 
 **Priority Tiers**:
+
 - **90-100 points**: Critical (must have)
 - **70-89 points**: High (should have)
 - **50-69 points**: Medium (nice to have)
@@ -322,6 +327,7 @@ interface ResearchQuestion {
 ```
 
 **AI Prompt Template**:
+
 ```
 Given this target customer persona:
 - Name: {{persona_name}}
@@ -489,23 +495,27 @@ CREATE INDEX idx_work_items_strategy_alignment ON work_items USING GIN (strategy
 ## Migration Strategy
 
 ### Phase 1: Add New Tables (Non-Breaking)
+
 1. Create `product_strategies` table
 2. Add `strategy_alignment` column to `work_items` (nullable)
 3. Strategy setup is **optional** - platform works without it
 
 ### Phase 2: Strategy Setup Wizard
+
 1. **Step 1**: Target Customer (primary persona)
 2. **Step 2**: Core Problem & Differentiator
 3. **Step 3**: Strategic Pillars (select from presets or custom)
 4. **Step 4**: North Star Metric
 
 ### Phase 3: Work Item Alignment
+
 1. Add Strategy Alignment card to Work Item Detail Page
 2. Show alignment suggestions based on AI analysis
 3. Calculate priority scores
 4. Sort Work Board by strategic priority
 
 ### Phase 4: Integration with Other Modules
+
 1. Research module: Auto-generate questions
 2. Marketing context: Generate messaging guidelines
 3. Onboarding: Show strategy summary
@@ -522,6 +532,7 @@ CREATE INDEX idx_work_items_strategy_alignment ON work_items USING GIN (strategy
 **4-Step Process**:
 
 #### Step 1: Target Customer
+
 ```
 Who are you building for?
 
@@ -549,6 +560,7 @@ Anti-Personas (who you're NOT building for):
 ```
 
 #### Step 2: Core Problem & Value
+
 ```
 What problem are you solving?
 
@@ -577,6 +589,7 @@ Your Unique Differentiator (required):
 ```
 
 #### Step 3: Strategic Pillars
+
 ```
 What are your core values?
 
@@ -602,6 +615,7 @@ Choose 3-5 pillars that guide your decisions:
 ```
 
 #### Step 4: Success Metrics
+
 ```
 How will you measure success?
 
@@ -656,6 +670,7 @@ Anti-Metrics (what you'll sacrifice):
 **Location**: Workspace > Strategy Dashboard (new page)
 
 **Metrics**:
+
 - % of work items with strategy alignment defined
 - Average customer impact score
 - Strategic pillar coverage (which pillars are most/least supported)
@@ -855,18 +870,21 @@ export interface WorkItemWithStrategy extends WorkItem {
 ## Testing Strategy
 
 ### Unit Tests (Jest)
+
 - `calculatePriorityScore()` - Test priority calculation formula
 - Strategy validation (required fields, valid enums)
 - Customer impact scoring logic
 - Pillar alignment scoring
 
 ### Integration Tests
+
 - Strategy setup wizard flow (4 steps)
 - Work item alignment CRUD operations
 - AI alignment suggestions API
 - Priority recalculation on alignment change
 
 ### E2E Tests (Playwright)
+
 - Complete strategy setup wizard
 - Add strategy alignment to work item
 - Accept AI alignment suggestions
@@ -878,11 +896,13 @@ export interface WorkItemWithStrategy extends WorkItem {
 ## Performance Considerations
 
 ### Caching Strategy
+
 - Cache strategy at workspace level (React Query, 5min stale time)
 - Cache calculated priority scores (recalculate on alignment change only)
 - Debounce AI suggestions API (500ms)
 
 ### Optimization
+
 - Load strategy once per workspace session
 - Lazy load strategy dashboard charts
 - Index `strategy_alignment` JSONB column for filtering
@@ -893,11 +913,13 @@ export interface WorkItemWithStrategy extends WorkItem {
 ## Backward Compatibility
 
 ### Keep Working
+
 - All existing work items (no strategy alignment is fine)
 - Workspaces without strategy (optional feature)
 - Priority still works without alignment (manual sorting)
 
 ### Graceful Degradation
+
 - If strategy not defined: Hide alignment UI
 - If AI unavailable: Manual alignment input only
 - If north star impact unparseable: Show as 0 impact
@@ -911,6 +933,7 @@ export interface WorkItemWithStrategy extends WorkItem {
 **Who**: Product team + development team
 
 **Questions to Ask**:
+
 1. Are workspace modes stable and well-defined?
 2. Is AI Integration working reliably?
 3. Is the Work Item Detail Page finalized?
@@ -918,6 +941,7 @@ export interface WorkItemWithStrategy extends WorkItem {
 5. Is there demand for better prioritization tools?
 
 **Decision Matrix**:
+
 - If "YES" to all 5: ✅ **PROCEED** with implementation
 - If "NO" to question 4 or 5: 🔍 **RUN USER RESEARCH** first
 - If "NO" to question 1-3: ⏸️ **POSTPONE** further
@@ -936,14 +960,17 @@ export interface WorkItemWithStrategy extends WorkItem {
 ## Alternative Approaches Considered
 
 ### Option 1: Simple Tags (Rejected)
+
 - Just add `strategy_tags[]` to work items
 - **Why Rejected**: Too generic, no structured impact scoring
 
 ### Option 2: OKR Integration (Postponed for Later)
+
 - Full OKR system with Key Results tracking
 - **Why Postponed**: Too complex for MVP, consider after Strategy Foundation proven
 
 ### Option 3: External Strategy Link (Rejected)
+
 - Just link to external doc (Notion, Google Docs)
 - **Why Rejected**: No integration, can't auto-generate context
 

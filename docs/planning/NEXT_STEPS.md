@@ -24,6 +24,7 @@
 ## Just Completed (Dec 25-28, 2025)
 
 ### Security Sprint - 12 PRs Merged
+
 - ✅ 67 CodeQL security vulnerabilities fixed
 - ✅ 316 ESLint/TypeScript issues resolved
 - ✅ E2E test stability: ~60% → ~90%
@@ -36,18 +37,21 @@
 ## Immediate Priority: Week 8
 
 ### Billing Integration
+
 - [ ] Stripe Checkout for subscriptions
 - [ ] Customer portal for management
 - [ ] Webhook handlers for events
 - [ ] Feature gates (Free: 5 users, Pro: unlimited)
 
 ### Testing Suite
+
 - [ ] E2E tests for all CRUD operations
 - [ ] Auth flow testing
 - [ ] Team management tests
 - [ ] Work item lifecycle tests
 
 ### Production Readiness
+
 - [ ] Security audit completion
 - [ ] Performance optimization
 - [ ] Error tracking setup
@@ -71,6 +75,7 @@ Work items use type-specific phases:
 ## Future: Week 11-12
 
 ### Metorial Integration (Approved)
+
 - 600+ integrations via Metorial SDK
 - 5-minute setup vs 2-4 hours OAuth config
 - Self-hosted MCP Gateway as fallback

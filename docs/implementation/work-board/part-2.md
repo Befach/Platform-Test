@@ -17,22 +17,25 @@ ADD COLUMN module TEXT CHECK (module IN ('inspiration', 'resources', 'scope', 'f
 ## Implementation Sessions
 
 ### Session 1: Tab Structure + Summary + Tasks (~8-10h)
+
 1. Create 8-Tab Structure shell (~2h)
 2. Build Tracking Sidebar component (~2h)
 3. Summary Tab (overview, timeline, dependencies) (~2h)
 4. Tasks Tab (universal tasks with grouping) (~3-4h)
 
 ### Session 2: Scope + Feedback + Phase Progression
-5. Scope Tab (milestones, risks, criteria) (~3-4h)
-6. Feedback Tab (linked feedback) (~2h)
-7. Phase Progression Prompts (~2h)
+
+1. Scope Tab (milestones, risks, criteria) (~3-4h)
+2. Feedback Tab (linked feedback) (~2h)
+3. Phase Progression Prompts (~2h)
 
 ### Session 3: Resources + Inspiration + Polish
-8. Resources Tab (~2h)
-9. Inspiration Tab (~2h)
-10. Soft Guidance System (~2h)
-11. AI Copilot Tab (placeholder) (~1h)
-12. Metrics Tab (Coming Soon) (~0.5h)
+
+1. Resources Tab (~2h)
+2. Inspiration Tab (~2h)
+3. Soft Guidance System (~2h)
+4. AI Copilot Tab (placeholder) (~1h)
+5. Metrics Tab (Coming Soon) (~0.5h)
 
 ---
 
@@ -68,6 +71,7 @@ ADD COLUMN module TEXT CHECK (module IN ('inspiration', 'resources', 'scope', 'f
 A **comprehensive multi-channel feedback collection platform** for gathering user insights at any product lifecycle stage.
 
 **Important**: This is SEPARATE from the Feedback Tab:
+
 - **Feedback Tab** = Shows feedback linked to a specific work item
 - **Feedback Module** = Full platform for surveys, voting, collection
 
@@ -101,24 +105,28 @@ A **comprehensive multi-channel feedback collection platform** for gathering use
 ## Key Features
 
 **Survey Builder** (Built In-House):
+
 - Drag-and-drop question builder
 - MCQ, rating, open-ended, NPS question types
 - Logic branching and skip patterns
 - Custom branding/theming
 
 **Distribution**:
+
 - Schedule campaigns
 - Audience targeting
 - Multi-channel delivery
 - Reminder automation
 
 **Embeddable Widgets**:
+
 - Feature voting widget
 - Quick feedback popup
 - In-app feedback button
 - Public roadmap voting
 
 **Analysis**:
+
 - Response aggregation
 - AI sentiment analysis (OpenRouter)
 - Priority scoring
@@ -239,6 +247,7 @@ ALTER TABLE team_integrations ENABLE ROW LEVEL SECURITY;
 Generate UI mockups with AI from natural language descriptions.
 
 **User Flow**:
+
 1. User describes UI idea in natural language
 2. AI generates React/HTML code via OpenRouter
 3. Preview renders in iframe sandbox
@@ -333,6 +342,7 @@ CREATE TABLE prototype_votes (
 A comprehensive system for collecting public feedback, managing customer insights, and enabling stakeholder voting—all without requiring authentication for external users.
 
 **Key Design Decisions**:
+
 - **Security**: Multi-layer (honeypot + time check + rate limiting), CAPTCHA-ready
 - **Widget**: Enabled by default with easy disable toggle
 - **Voting**: Team-configurable verification (teams choose if email required)
@@ -462,6 +472,7 @@ CREATE FUNCTION get_workspace_public_settings(workspace_id TEXT) ...
 ## Widget Embed System
 
 ### URL Parameters
+
 ```
 /widget/[workspaceId]?theme=light|dark|auto
                      &primaryColor=#3B82F6
@@ -469,6 +480,7 @@ CREATE FUNCTION get_workspace_public_settings(workspace_id TEXT) ...
 ```
 
 ### PostMessage Communication
+
 ```javascript
 // Widget → Parent: Notify success
 window.parent.postMessage({
@@ -479,6 +491,7 @@ window.parent.postMessage({
 ```
 
 ### Generated Embed Code
+
 ```html
 <button id="feedback-widget-btn">Feedback</button>
 <script>

@@ -17,6 +17,7 @@ This feature enables different teams to have **different contextual views** of t
 ### Key Innovation
 
 **One Work Item, Multiple Team Contexts** - A single feature is simultaneously:
+
 - A **Product Priority** with customer impact scoring
 - An **Engineering Task** with technical complexity and dependencies
 - A **Design Deliverable** with accessibility requirements
@@ -105,11 +106,13 @@ This feature is **strategically valuable but architecturally premature**:
 **Target:** After Week 8 + Product Strategy Foundation complete
 
 **Phased Approach:**
+
 1. **Phase 0** (Weeks 9-10): Departments & Workflow States foundation (~15h)
 2. **Phase 1** (Weeks 11-12): Cross-Team Configuration (~30h, this feature)
 3. **Phase 2** (Week 13): Enterprise rollout & polish (~10h)
 
 **Why this timing:**
+
 - ✅ Core platform stable (all 10 modules working)
 - ✅ Work Item Detail 8-tab structure proven
 - ✅ Work Board 3.0 supports advanced filtering
@@ -607,6 +610,7 @@ Feature: User Authentication
 **Before this feature can be implemented:**
 
 1. **Create Departments Table:**
+
 ```sql
 CREATE TABLE departments (
     id TEXT PRIMARY KEY,
@@ -618,7 +622,8 @@ CREATE TABLE departments (
 );
 ```
 
-2. **Create Workflow States System:**
+1. **Create Workflow States System:**
+
 ```sql
 CREATE TABLE workflow_templates (
     id TEXT PRIMARY KEY,
@@ -637,7 +642,8 @@ CREATE TABLE workflow_states (
 );
 ```
 
-3. **Extend Workspace Modes:**
+1. **Extend Workspace Modes:**
+
 ```sql
 ALTER TABLE workspaces
 ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', 'enterprise'));
@@ -678,6 +684,7 @@ ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', '
 ### E2E Tests (Playwright)
 
 **Test Case 1: Create Engineering Configuration**
+
 1. Navigate to Workspace Settings > Teams > Engineering
 2. Add custom field: "Technical Domain" (select)
 3. Add field options: Frontend, Backend, Database
@@ -685,6 +692,7 @@ ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', '
 5. Verify field appears in Work Item Detail
 
 **Test Case 2: Add Engineering Context to Work Item**
+
 1. Open work item "User Authentication"
 2. Click "Engineering" tab
 3. Set Technical Domain = "Backend"
@@ -692,12 +700,14 @@ ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', '
 5. Save and verify context persists
 
 **Test Case 3: Create Cross-Team Connection**
+
 1. Open work item "Launch Campaign" (Marketing)
 2. Add connection: "marketing_for" → "User Authentication" (Feature)
 3. Verify connection appears in both work items
 4. Check Cross-Team Dashboard shows relationship
 
 **Test Case 4: Team-Specific Board View**
+
 1. Switch to Engineering team view
 2. Board shows Engineering workflow columns
 3. Group by "Technical Domain"
@@ -812,6 +822,7 @@ ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', '
 **Description:** Instead of team-specific tables, use tags like `#engineering`, `#design`
 
 **Rejected Because:**
+
 - ❌ No type safety (tags are strings, not structured data)
 - ❌ Can't enforce field validation
 - ❌ No custom workflows per team
@@ -822,6 +833,7 @@ ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', '
 **Description:** Engineering, Design, Marketing each get their own workspace
 
 **Rejected Because:**
+
 - ❌ Data silos - no cross-team visibility
 - ❌ Duplicate work items across workspaces
 - ❌ No unified alignment dashboard
@@ -832,6 +844,7 @@ ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', '
 **Description:** Copy Linear's model of team-specific views on shared issues
 
 **Partially Adopted:**
+
 - ✅ Keep work items shared (one source of truth)
 - ✅ Enable team-specific fields and workflows
 - ✅ Provide unified and filtered views
@@ -863,6 +876,7 @@ ADD COLUMN mode TEXT DEFAULT 'project' CHECK (mode IN ('project', 'portfolio', '
 | User satisfaction (team alignment) | 4.5/5 stars |
 
 **Validation Questions:**
+
 1. Are teams using team-specific fields instead of generic ones?
 2. Are cross-team connections reducing alignment meetings?
 3. Is the Cross-Team Dashboard actionable?

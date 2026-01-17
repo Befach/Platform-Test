@@ -19,6 +19,7 @@ This document captures the strategic decision to focus on Product, Engineering, 
 ## Context
 
 Product lifecycle management could theoretically include ALL company functions:
+
 - Product (strategy, roadmap, prioritization)
 - Engineering (implementation, technical decisions)
 - Design (UX, visual design, prototypes)
@@ -38,17 +39,20 @@ Product lifecycle management could theoretically include ALL company functions:
 **What**: Build basic feedback collection (forms, submissions, analysis) as native features.
 
 **Why**:
+
 - Essential for product lifecycle management
 - Validates product decisions before execution
 - Differentiates from pure project management tools
 
 **In Scope**:
+
 - Public/private feedback forms
 - Submission storage and management
 - Basic analysis and tagging
 - Connection to work items
 
 **Out of Scope**:
+
 - Advanced help desk features (ticket routing, SLAs)
 - Customer database management
 - Email support integration
@@ -66,6 +70,7 @@ Product lifecycle management could theoretically include ALL company functions:
 | **Design** | Part of the build cycle - design → develop → ship |
 
 **Why This Scope**:
+
 - These teams collaborate on the same work items
 - Shared workflow states and dependencies
 - Direct integration creates most value
@@ -82,6 +87,7 @@ Product lifecycle management could theoretically include ALL company functions:
 | **Support** | Help desk tools (Zendesk, Intercom) own this workflow | Pull feedback/requests into Product Insights |
 
 **Why Not Native**:
+
 - Mature tools exist (10+ years of development)
 - Specialized workflows we can't compete with
 - Integration approach is industry standard
@@ -100,12 +106,14 @@ Trying to serve all functions dilutes focus and creates a "jack of all trades, m
 ### 2. Customization Trap
 
 Sales and Support CRMs have **10+ years of maturity**:
+
 - Salesforce (1999)
 - HubSpot (2006)
 - Zendesk (2007)
 - Intercom (2011)
 
 These tools have:
+
 - Thousands of features
 - Deep integrations
 - Trained user bases
@@ -126,6 +134,7 @@ This is exactly how successful PM tools operate:
 ### 4. Complexity Reduction
 
 Removing Sales/Support as native features:
+
 - Removes ~40% of potential custom field complexity
 - Avoids building duplicate CRM functionality
 - Focuses engineering resources on core value
@@ -159,6 +168,7 @@ Removing Sales/Support as native features:
 ### What Product Team Sees
 
 From integrated support tools:
+
 - "12 enterprise customers requested this"
 - "3 support tickets linked to this bug"
 - "$50k deal blocked pending this feature"
@@ -166,6 +176,7 @@ From integrated support tools:
 ### What Sales/Support Sees (via integration)
 
 From our platform:
+
 - Feature roadmap status
 - Expected delivery timeline
 - Release notes when shipped
@@ -183,6 +194,7 @@ From our platform:
 | **Deep** | Auto-create insights from patterns, bi-directional sync | Future |
 
 **Why Start Light**:
+
 - Delivers value without complex integration engineering
 - Validates integration use cases before heavy investment
 - Users can start linking immediately
@@ -217,6 +229,7 @@ From our platform:
 Cross-team connections still apply but for: **Product ↔ Engineering ↔ Design**
 
 External tool references can be linked to work items as:
+
 - External URL references
 - Customer feedback sources
 - Deal context annotations
@@ -252,6 +265,7 @@ External tool references can be linked to work items as:
 ## Review Triggers
 
 Reconsider this decision when:
+
 - [ ] Users strongly request native Sales/Support features
 - [ ] Integration approach creates significant friction
 - [ ] Market opportunity in underserved Sales/Support segment

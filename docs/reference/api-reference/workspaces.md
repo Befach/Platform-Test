@@ -9,9 +9,11 @@
 ## 🏢 WORKSPACES API
 
 ### POST `/api/workspaces`
+
 Create workspace
 
 **Request Body:**
+
 ```json
 {
   "team_id": "1736857200000",
@@ -23,6 +25,7 @@ Create workspace
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "workspace": {
@@ -39,12 +42,15 @@ Create workspace
 ---
 
 ### GET `/api/workspaces`
+
 List all workspaces for team
 
 **Query Parameters:**
+
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "workspaces": [
@@ -61,9 +67,11 @@ List all workspaces for team
 ---
 
 ### GET `/api/workspaces/:workspaceId`
+
 Get workspace details
 
 **Response (200 OK):**
+
 ```json
 {
   "workspace": {
@@ -80,9 +88,11 @@ Get workspace details
 ---
 
 ### PATCH `/api/workspaces/:workspaceId`
+
 Update workspace
 
 **Request Body:**
+
 ```json
 {
   "phase": "review",
@@ -91,6 +101,7 @@ Update workspace
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "workspace": { /* updated workspace */ }
@@ -100,6 +111,7 @@ Update workspace
 ---
 
 ### DELETE `/api/workspaces/:workspaceId`
+
 Delete workspace
 
 **Response (204 No Content)**
@@ -109,9 +121,11 @@ Delete workspace
 ## 📋 FEATURES API
 
 ### POST `/api/features`
+
 Create feature
 
 **Request Body:**
+
 ```json
 {
   "team_id": "1736857200000",
@@ -131,6 +145,7 @@ Create feature
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "feature": {
@@ -147,14 +162,17 @@ Create feature
 ---
 
 ### GET `/api/features`
+
 List features
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `timeline` (optional): Filter by timeline (MVP, SHORT, LONG)
 - `status` (optional): Filter by status
 
 **Response (200 OK):**
+
 ```json
 {
   "features": [
@@ -172,9 +190,11 @@ List features
 ---
 
 ### GET `/api/features/:featureId`
+
 Get feature details
 
 **Response (200 OK):**
+
 ```json
 {
   "feature": {
@@ -193,9 +213,11 @@ Get feature details
 ---
 
 ### PATCH `/api/features/:featureId`
+
 Update feature
 
 **Request Body:**
+
 ```json
 {
   "purpose": "Updated description",
@@ -204,6 +226,7 @@ Update feature
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "feature": { /* updated feature */ }
@@ -213,6 +236,7 @@ Update feature
 ---
 
 ### DELETE `/api/features/:featureId`
+
 Delete feature
 
 **Response (204 No Content)**
@@ -224,9 +248,11 @@ Delete feature
 Work Items are the primary unit of trackable work (features, bugs, enhancements).
 
 ### GET `/api/work-items`
+
 Get all work items for a workspace
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 - `type`: Filter by type (concept, feature, bug)
 - `is_enhancement`: Filter for enhancement features (boolean)
@@ -234,6 +260,7 @@ Get all work items for a workspace
 - `phase`: Filter by phase
 
 **Response (200 OK):**
+
 ```json
 {
   "work_items": [
@@ -255,9 +282,11 @@ Get all work items for a workspace
 ---
 
 ### POST `/api/work-items`
+
 Create a new work item
 
 **Request Body:**
+
 ```json
 {
   "workspace_id": "1736857200002",
@@ -270,6 +299,7 @@ Create a new work item
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "work_item": {
@@ -283,9 +313,11 @@ Create a new work item
 ---
 
 ### GET `/api/work-items/:id`
+
 Get work item details
 
 **Response (200 OK):**
+
 ```json
 {
   "work_item": {
@@ -303,9 +335,11 @@ Get work item details
 ---
 
 ### PATCH `/api/work-items/:id`
+
 Update work item
 
 **Request Body:**
+
 ```json
 {
   "name": "Updated Name",
@@ -315,6 +349,7 @@ Update work item
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "work_item": { /* updated */ }
@@ -324,9 +359,11 @@ Update work item
 ---
 
 ### PATCH `/api/work-items/:id/status`
+
 Update work item status only
 
 **Request Body:**
+
 ```json
 {
   "status": "completed"
@@ -334,6 +371,7 @@ Update work item status only
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true
@@ -343,9 +381,11 @@ Update work item status only
 ---
 
 ### GET `/api/work-items/:id/children`
+
 Get child work items (for epics)
 
 **Response (200 OK):**
+
 ```json
 {
   "children": [
@@ -366,12 +406,15 @@ Get child work items (for epics)
 Timeline items represent breakdown of work items into MVP/SHORT/LONG phases.
 
 ### GET `/api/timeline-items`
+
 Get timeline items for a work item
 
 **Query Parameters:**
+
 - `work_item_id` (required): Parent work item ID
 
 **Response (200 OK):**
+
 ```json
 {
   "timeline_items": [
@@ -392,9 +435,11 @@ Get timeline items for a work item
 ---
 
 ### POST `/api/timeline-items`
+
 Create timeline item
 
 **Request Body:**
+
 ```json
 {
   "work_item_id": "1736857200010",
@@ -405,6 +450,7 @@ Create timeline item
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "timeline_item": {
@@ -417,9 +463,11 @@ Create timeline item
 ---
 
 ### PATCH `/api/timeline-items/:id`
+
 Update timeline item
 
 **Request Body:**
+
 ```json
 {
   "status": "in_progress",
@@ -429,6 +477,7 @@ Update timeline item
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "timeline_item": { /* updated */ }
@@ -442,13 +491,16 @@ Update timeline item
 Product tasks are granular execution items under timeline items.
 
 ### GET `/api/product-tasks`
+
 Get tasks for a timeline item
 
 **Query Parameters:**
+
 - `timeline_item_id` (required): Parent timeline item ID
 - `status`: Filter by status
 
 **Response (200 OK):**
+
 ```json
 {
   "tasks": [
@@ -469,9 +521,11 @@ Get tasks for a timeline item
 ---
 
 ### POST `/api/product-tasks`
+
 Create a new task
 
 **Request Body:**
+
 ```json
 {
   "timeline_item_id": "1736857200020",
@@ -483,6 +537,7 @@ Create a new task
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "task": {
@@ -495,9 +550,11 @@ Create a new task
 ---
 
 ### PATCH `/api/product-tasks/:id`
+
 Update task
 
 **Request Body:**
+
 ```json
 {
   "status": "completed",
@@ -506,6 +563,7 @@ Update task
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "task": { /* updated */ }
@@ -515,12 +573,15 @@ Update task
 ---
 
 ### GET `/api/product-tasks/stats`
+
 Get task statistics
 
 **Query Parameters:**
+
 - `workspace_id` (required): Workspace ID
 
 **Response (200 OK):**
+
 ```json
 {
   "stats": {
@@ -536,9 +597,11 @@ Get task statistics
 ---
 
 ### POST `/api/product-tasks/:id/convert`
+
 Convert task to work item
 
 **Response (200 OK):**
+
 ```json
 {
   "work_item": {
@@ -550,4 +613,3 @@ Convert task to work item
 ```
 
 ---
-

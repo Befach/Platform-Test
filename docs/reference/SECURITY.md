@@ -46,12 +46,14 @@ Comprehensive security implementation with defense-in-depth architecture across 
 #### Resolution Summary
 
 **Before → After**:
+
 - ❌ 47 security errors → ✅ 0 errors
 - ⚠️ 41 warnings → ⚠️ 1 warning (manual step)
 - 🔓 71 rows exposed → 🔒 All data protected
 - ⚠️ 36 vulnerable functions → ✅ All secured
 
 **Migrations Applied**:
+
 1. `20250115143000_enable_rls_critical_tables.sql` - Enabled RLS on work_items, timeline_items, linked_items
 2. `20250115143100_enable_rls_public_tables.sql` - Created 20 new RLS policies for public tables
 
@@ -65,18 +67,21 @@ Comprehensive security implementation with defense-in-depth architecture across 
 **Location**: `src/components/permissions/permission-guard.tsx`
 
 **Components**:
+
 - `<PhaseEditGuard>` - Hide/disable unauthorized edit actions
 - `<AdminOnlyGuard>` - Restrict admin-only features
 - `<PhaseViewGuard>` - Enforce view permissions (explicit)
 - `<PermissionSwitch>` - Conditional rendering based on permissions
 
 **Features**:
+
 - Multiple fallback modes (hide, disable, message, custom)
 - Tooltip support for disabled states
 - Loading states
 - Clear permission denied messages
 
 **Example**:
+
 ```tsx
 <PhaseEditGuard phase="execution" workspaceId={workspaceId} teamId={teamId}>
   <Button onClick={handleEdit}>Edit Work Item</Button>
@@ -89,6 +94,7 @@ Comprehensive security implementation with defense-in-depth architecture across 
 **Location**: `src/lib/middleware/permission-middleware.ts`
 
 **Functions**:
+
 1. `validatePhasePermission()` - Main validation (throws if denied)
 2. `checkPhasePermission()` - Non-throwing validation
 3. `validateAdminPermission()` - Admin-only actions
@@ -96,10 +102,12 @@ Comprehensive security implementation with defense-in-depth architecture across 
 5. `logPermissionDenial()` - Audit logging
 
 **Custom Errors**:
+
 - `UnauthenticatedError` - 401 (user not logged in)
 - `PermissionDeniedError` - 403 (insufficient permissions)
 
 **Example**:
+
 ```typescript
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   const supabase = await createClient()
@@ -122,6 +130,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 **Location**: Supabase migrations
 
 **Protected Tables** (24 total):
+
 - ✅ `work_items` - Team-scoped with RLS
 - ✅ `timeline_items` - Team-scoped with RLS
 - ✅ `linked_items` - Team-scoped with RLS
@@ -134,6 +143,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 - ✅ All other tables with appropriate RLS
 
 **Policy Pattern**:
+
 ```sql
 -- Enable RLS
 ALTER TABLE work_items ENABLE ROW LEVEL SECURITY;
@@ -180,12 +190,14 @@ FOR UPDATE USING (
 
 **View Access**: All team members can view all work items
 **Edit/Delete Access**:
+
 - **Owners/Admins**: Full access to all phases (bypass restrictions)
 - **Members**: Only edit/delete items in assigned phases with `can_edit: true`
 
 ### Database Schema
 
 **Table**: `user_phase_assignments`
+
 ```sql
 CREATE TABLE user_phase_assignments (
   id TEXT PRIMARY KEY,
@@ -206,6 +218,7 @@ CREATE TABLE user_phase_assignments (
 ### Implementation Files
 
 **Core System** (1,085 lines):
+
 - `src/lib/types/team.ts` (202 lines) - TypeScript types
 - `src/lib/utils/phase-permissions.ts` (359 lines) - Utility functions
 - `src/lib/hooks/use-phase-permissions.ts` (315 lines) - React hooks
@@ -213,10 +226,12 @@ CREATE TABLE user_phase_assignments (
 - `src/hooks/use-is-admin.ts` - Admin check hook
 
 **UI Components**:
+
 - `src/components/permissions/permission-guard.tsx` - Guard components
 - `src/components/permissions/permission-badge.tsx` - Visual indicators
 
 **API Middleware**:
+
 - `src/lib/middleware/permission-middleware.ts` - Authorization layer
 
 ---
@@ -229,12 +244,14 @@ CREATE TABLE user_phase_assignments (
 **Location**: `src/lib/middleware/permission-middleware.ts`
 
 **Logged Events**:
+
 - Permission denials (403 errors)
 - Unauthenticated access attempts (401 errors)
 - Phase transition violations
 - Admin bypass usage
 
 **Log Fields**:
+
 - `user_id` - Who attempted the action
 - `workspace_id` - Target workspace
 - `phase` - Target phase
@@ -247,22 +264,26 @@ CREATE TABLE user_phase_assignments (
 ### Protection Against Common Attacks
 
 **1. IDOR (Insecure Direct Object Reference)**
+
 - ✅ All API routes verify team membership before data access
 - ✅ RLS policies enforce row-level access control
 - ✅ Phase permissions prevent cross-phase unauthorized edits
 
 **2. Privilege Escalation**
+
 - ✅ Cannot change own role
 - ✅ Cannot remove team owner
 - ✅ Cannot assign permissions to workspaces you're not a member of
 - ✅ Admin bypass logic is explicit and audited
 
 **3. Information Leakage**
+
 - ✅ Error messages don't reveal sensitive information
 - ✅ 403 (Forbidden) used instead of 404 to prevent enumeration
 - ✅ No stack traces in production error responses
 
 **4. SQL Injection**
+
 - ✅ All queries use Supabase client (parameterized)
 - ✅ 36 database functions secured
 - ✅ No raw SQL concatenation
@@ -283,7 +304,8 @@ CREATE TABLE user_phase_assignments (
 **Provider**: HaveIBeenPwned.org (11+ billion compromised passwords)
 
 **Steps**:
-1. Navigate to Supabase Dashboard: https://supabase.com/dashboard/project/xobyeusefijdvsqkzxvm
+
+1. Navigate to Supabase Dashboard: <https://supabase.com/dashboard/project/xobyeusefijdvsqkzxvm>
 2. Click **"Authentication"** in left sidebar
 3. Click **"Policies"** or **"Settings"**
 4. Find **"Password Security"** section
@@ -291,6 +313,7 @@ CREATE TABLE user_phase_assignments (
 6. Click **"Save"**
 
 **Benefits**:
+
 - 🔒 Prevents compromised password usage
 - 🛡️ Reduces credential stuffing attacks
 - ✅ Industry best practice
@@ -305,6 +328,7 @@ CREATE TABLE user_phase_assignments (
 **Location**: `tests/unit/permissions.test.ts`
 
 **Test Cases**:
+
 - [ ] `canUserEditPhase()` returns true for admins
 - [ ] `canUserEditPhase()` returns false for members without assignment
 - [ ] `canUserEditPhase()` returns true for members with assignment
@@ -316,6 +340,7 @@ CREATE TABLE user_phase_assignments (
 **Location**: `tests/integration/api-permissions.test.ts`
 
 **Test Cases**:
+
 - [ ] PATCH `/api/work-items/[id]` rejects unauthorized edits (403)
 - [ ] PATCH `/api/work-items/[id]` allows admin edits (200)
 - [ ] PATCH `/api/work-items/[id]` allows member edits in assigned phase (200)
@@ -326,6 +351,7 @@ CREATE TABLE user_phase_assignments (
 **Location**: `tests/e2e/permissions.spec.ts`
 
 **Test Scenarios**:
+
 - [ ] Member logs in, cannot edit unassigned phase work item
 - [ ] Member logs in, can edit assigned phase work item
 - [ ] Admin logs in, can edit all phases
@@ -342,6 +368,7 @@ CREATE TABLE user_phase_assignments (
 **Future Enhancement**: Centralized logging service
 
 **Metrics to Track**:
+
 - Permission denial rate (per user, per workspace)
 - Failed authentication attempts
 - Suspicious activity patterns
@@ -350,6 +377,7 @@ CREATE TABLE user_phase_assignments (
 ### Security Alerts
 
 **Recommended Alerts**:
+
 - 🚨 High permission denial rate (>10% of requests)
 - 🚨 Multiple failed login attempts (>5 in 5 minutes)
 - 🚨 RLS policy bypass attempts
@@ -364,24 +392,28 @@ CREATE TABLE user_phase_assignments (
 Before deploying to production, verify:
 
 **Database Security**:
+
 - [ ] All tables have RLS enabled
 - [ ] All RLS policies tested and verified
 - [ ] Database functions secured against SQL injection
 - [ ] Leaked password protection enabled (manual)
 
 **Application Security**:
+
 - [ ] Permission checks on all API routes
 - [ ] Permission guards on all UI edit actions
 - [ ] Admin bypass logic is audited
 - [ ] Error messages don't leak information
 
 **Testing**:
+
 - [ ] Unit tests for permission utilities (>80% coverage)
 - [ ] Integration tests for API routes (all CRUD operations)
 - [ ] E2E tests for user workflows (all roles)
 - [ ] Security audit completed (automated + manual)
 
 **Monitoring**:
+
 - [ ] Audit logging configured
 - [ ] Security alerts set up
 - [ ] Error tracking configured (Sentry, etc.)
@@ -394,16 +426,19 @@ Before deploying to production, verify:
 ### Incident Severity Levels
 
 **🔴 Critical** (Response: Immediate)
+
 - Data breach or unauthorized access to production data
 - RLS policy bypass discovered
 - Authentication system compromised
 
 **🟡 High** (Response: Within 1 hour)
+
 - Permission denial rate >20%
 - Suspicious activity patterns detected
 - Security vulnerability discovered in dependencies
 
 **🟢 Medium** (Response: Within 24 hours)
+
 - Audit log anomalies
 - Performance degradation from RLS policies
 - User reports of permission issues
@@ -425,18 +460,21 @@ Before deploying to production, verify:
 ### Planned Improvements
 
 **Q1 2025**:
+
 - [ ] Centralized audit logging (dedicated table)
 - [ ] Security monitoring dashboard
 - [ ] Automated security scanning in CI/CD
 - [ ] Comprehensive E2E security tests
 
 **Q2 2025**:
+
 - [ ] Two-factor authentication (2FA)
 - [ ] API rate limiting per user/team
 - [ ] GDPR compliance features (data export, deletion)
 - [ ] Penetration testing by third party
 
 **Q3 2025**:
+
 - [ ] SOC 2 Type II compliance
 - [ ] Advanced threat detection
 - [ ] Security training for team members
@@ -447,17 +485,20 @@ Before deploying to production, verify:
 ## Resources
 
 **Documentation**:
+
 - [Phase Permissions Guide](PHASE_PERMISSIONS_GUIDE.md)
 - [Phase Permissions ERD](PHASE_PERMISSIONS_ERD.md)
 - [API Reference](API_REFERENCE.md#security)
 - [Architecture](../architecture/ARCHITECTURE.md#security)
 
 **Code References**:
+
 - [Permission Middleware](../../next-app/src/lib/middleware/permission-middleware.ts)
 - [Permission Guards](../../next-app/src/components/permissions/permission-guard.tsx)
 - [Phase Permissions Utilities](../../next-app/src/lib/utils/phase-permissions.ts)
 
 **External Resources**:
+
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Supabase RLS Guide](https://supabase.com/docs/guides/auth/row-level-security)
 - [HaveIBeenPwned API](https://haveibeenpwned.com/API/v3)

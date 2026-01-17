@@ -13,22 +13,27 @@ All notable changes, migrations, and feature implementations are documented in t
 ### Added
 
 #### BlockSuite Phase 1: Foundation Setup (2026-01-05) - PR #43
+
 Core TypeScript types and Zod validation schemas for BlockSuite integration.
 
 **Files Created**:
+
 - `components/blocksuite/types.ts` - Core types (MindMapTreeNode, EditorMode, BlockType, YjsSnapshot)
 - `components/blocksuite/mindmap-types.ts` - BlockSuite v0.18.7 types (MindmapStyle, LayoutType, MigrationStatus)
 - `components/blocksuite/schema.ts` - Zod schemas with dual pattern (validate*/safeValidate*)
 
 **Technical Details**:
+
 - Aligned with BlockSuite v0.18.7 API
 - Recursive tree validation with MindMapTreeNodeSchema
 - Type-safe DAG→Tree conversion types
 
 #### BlockSuite Phase 2: Mind Map Canvas (2026-01-06) - PR #45
+
 Complete BlockSuite editor integration with React wrapper and mind map canvas.
 
 **Files Created**:
+
 - `components/blocksuite/blocksuite-editor.tsx` - React wrapper with DocCollection
 - `components/blocksuite/mind-map-canvas.tsx` - 4 styles, 3 layouts, mode switching
 - `components/blocksuite/mindmap-utils.ts` - DAG→Tree conversion utilities
@@ -36,6 +41,7 @@ Complete BlockSuite editor integration with React wrapper and mind map canvas.
 - `components/blocksuite/loading-skeleton.tsx` - Mode-aware loading UI
 
 **Features**:
+
 - 4 mind map styles: Classic, Bubble, Box, Wireframe
 - 3 layout types: Balance, Right, Left
 - SSR-safe loading (prevents "window is undefined" errors)
@@ -44,9 +50,11 @@ Complete BlockSuite editor integration with React wrapper and mind map canvas.
 ### Database
 
 #### BlockSuite Phase 3: Data Migration (2026-01-06) - PR #48
+
 Database schema additions for BlockSuite migration tracking.
 
 **Migration**: `20260106100000_add_blocksuite_migration_columns.sql`
+
 - Adds `blocksuite_tree JSONB` - Nested tree structure storage
 - Adds `blocksuite_size_bytes INTEGER` - Size monitoring for TOAST awareness
 - Adds `migration_status TEXT` - 'pending' | 'migrated' | 'failed'
@@ -55,26 +63,31 @@ Database schema additions for BlockSuite migration tracking.
 - Creates index on `migration_status` for query performance
 
 **Migration Utilities** (`components/blocksuite/migration-utils.ts`):
+
 - `migrateMindMap()` - Full migration orchestration
 - `convertReactFlowToTree()` - DAG→Tree conversion with cycle detection
 - `trackLostEdges()` - Records edges that can't become tree edges
 - Default `dryRun: true` for safety
 
 **Why Lost Edge Tracking**:
+
 - ReactFlow uses DAG (directed acyclic graph) - nodes can have multiple parents
 - BlockSuite uses tree structure - nodes can only have one parent
 - Lost edges are tracked and displayed to users for awareness
 
 #### BlockSuite Phase 4: Supabase Persistence (2026-01-07)
+
 Complete persistence layer for BlockSuite documents using Yjs CRDT and Supabase Storage.
 
 **Migration 1**: `20260107110000_create_blocksuite_documents.sql`
+
 - Creates `blocksuite_documents` table for document metadata (NOT Yjs state)
 - Fields: id, team_id, workspace_id, mind_map_id, storage_path, storage_size_bytes, document_type, title, last_sync_at, sync_version, active_editors
 - RLS policy: `blocksuite_documents_team_access` - team members only
 - Indexes: team_id, workspace_id, mind_map_id, storage_size_bytes (>100KB monitoring)
 
 **Migration 2**: `20260107110001_create_blocksuite_storage_bucket.sql`
+
 - Creates `blocksuite-yjs` private storage bucket
 - RLS policy with path traversal protection:
   - Rejects `..` sequences and encoded variants
@@ -84,14 +97,17 @@ Complete persistence layer for BlockSuite documents using Yjs CRDT and Supabase 
 **Storage Path Format**: `{team_id}/{doc_id}.yjs`
 
 **Why Supabase Storage (not PostgreSQL)**:
+
 - PostgreSQL TOAST kicks in at 2KB, causes 8KB WAL writes per edit
 - Unsuitable for real-time collaborative editing workloads
 - Supabase Storage uses S3-compatible backend (no TOAST issues)
 
 #### BlockSuite Phase 5: RAG Layer Integration (2026-01-07) - PR #51
+
 Complete RAG layer enabling semantic search across mind map content.
 
 **Migration**: `20260107150000_add_mindmap_embedding_columns.sql`
+
 - Adds `embedding_status` - 'pending' | 'processing' | 'ready' | 'error' | 'skipped'
 - Adds `embedding_error`, `last_embedded_at`, `embedding_version`, `chunk_count`
 - Adds `last_embedded_hash TEXT` - SHA-256 for change detection
@@ -100,6 +116,7 @@ Complete RAG layer enabling semantic search across mind map content.
 - Creates performance indexes
 
 **Core Service** (`lib/ai/embeddings/mindmap-embedding-service.ts`):
+
 - `embedMindMap()` - Shared service for API routes and background jobs
 - OpenAI `text-embedding-3-large` @ 1536 dimensions
 - Batched API calls (50 chunks max per request)
@@ -108,24 +125,29 @@ Complete RAG layer enabling semantic search across mind map content.
 - Optimistic locking for concurrent protection
 
 **Text Extraction & Chunking** (`components/blocksuite/`):
+
 - `text-extractor.ts` - Recursive tree walking with path context
 - `mindmap-chunker.ts` - Path-preserving 300-token subtree chunks
 - `rag-types.ts` - TypeScript interfaces
 
 **API Routes**:
+
 - `POST /api/mind-maps/[id]/embed` - Generate embeddings
 - `GET /api/mind-maps/[id]/embed` - Check embedding status
 - Background job integration via compression route
 
 #### Phase 6: AI Integration - Model Routing & Tool Wiring (2026-01-08)
+
 Multi-model orchestration, capability-based routing, and production-ready streaming reliability.
 
 **Files Created**:
+
 - `lib/ai/fallback-chain.ts` - Capability-based model fallback chains
 - `components/ai/rag-context-badge.tsx` - RAG source count indicator
 - `components/ai/source-citations.tsx` - Clickable source citations component
 
 **Files Modified**:
+
 - `lib/ai/models-config.ts` - Added 3 new models + MODEL_ROUTING config
 - `lib/ai/ai-sdk-client.ts` - Added model exports, updated recommendedModels
 - `lib/ai/agent-executor.ts` - Wired 10 missing optimization/strategy tools
@@ -133,11 +155,13 @@ Multi-model orchestration, capability-based routing, and production-ready stream
 - `vercel.json` - Added 300s timeout for AI routes
 
 **New Models** (AI Architecture Phase 2):
+
 - GLM 4.7 (`z-ai/glm-4.7`) - Best strategic reasoning + agentic, top HLE/GPQA scores
 - MiniMax M2.1 (`minimax/minimax-m2.1`) - Best coding benchmarks
 - Gemini 3 Flash (`google/gemini-3-flash-preview`) - Upgraded vision, 1M context
 
 **MODEL_ROUTING Config**:
+
 - `strategic_reasoning`: GLM 4.7 -> DeepSeek V3.2 -> Gemini 3 Flash
 - `agentic_tool_use`: GLM 4.7 -> Gemini 3 Flash -> MiniMax M2.1
 - `coding`: MiniMax M2.1 -> GLM 4.7 -> Kimi K2
@@ -146,10 +170,12 @@ Multi-model orchestration, capability-based routing, and production-ready stream
 - `default`: Kimi K2 -> GLM 4.7 -> MiniMax M2.1
 
 **Tools Wired** (AI Architecture Phase 1):
+
 - Optimization: `prioritizeFeatures`, `balanceWorkload`, `identifyRisks`, `suggestTimeline`, `deduplicateItems`
 - Strategy: `alignToStrategy`, `suggestOKRs`, `competitiveAnalysis`, `roadmapGenerator`, `impactAssessment`
 
 **5-Layer Streaming Reliability Stack**:
+
 - Layer 1: Vercel Fluid Compute (dashboard setting)
 - Layer 2: vercel.json 300s timeout for `app/api/ai/**/*.ts`
 - Layer 3: `streamWithTimeout()` - 280s AbortController
@@ -157,6 +183,7 @@ Multi-model orchestration, capability-based routing, and production-ready stream
 - Layer 5: `logSlowRequest()` - Monitoring for requests >60s
 
 **Code Quality Fixes** (Greptile Review):
+
 - Single-quote consistency in `agent-executor.ts` imports
 - Exported `redactId()` from `openrouter.ts` for reuse
 - Fixed GLM 4.7 priority comment accuracy (tools priority 2, not 1)
@@ -165,6 +192,7 @@ Multi-model orchestration, capability-based routing, and production-ready stream
 - Added clarifying comment for MODEL_ROUTING vs priority distinction
 
 **Security Fix**:
+
 - Removed hardcoded debug code from `unified-chat/route.ts`:
   - `DEBUG_ENDPOINT` (localhost:7242)
   - `DEBUG_LOG_PATH` (Windows path)
@@ -172,6 +200,7 @@ Multi-model orchestration, capability-based routing, and production-ready stream
   - All 5 `sendDebug()` calls throughout the route
 
 **Commits**:
+
 - `e9c550f` - feat: integrate reliability utilities and fallback chain
 - `5842f51` - fix: resolve modelId correctly for logging in sdk-chat
 - `f904c7d` - feat: add optimization/strategy tools to unified-chat
@@ -182,15 +211,18 @@ Multi-model orchestration, capability-based routing, and production-ready stream
 ### API
 
 #### BlockSuite Document API Routes (2026-01-07)
+
 New API routes for BlockSuite document persistence.
 
 **Metadata CRUD** (`/api/blocksuite/documents/[id]`):
+
 - `GET` - Load document metadata
 - `PATCH` - Update document metadata (title, document_type)
 - `DELETE` - Delete document (metadata + storage object)
 - Rate limit: 120 req/min/user
 
 **Yjs State** (`/api/blocksuite/documents/[id]/state`):
+
 - `GET` - Load Yjs binary state from Supabase Storage
 - `PUT` - Save Yjs binary state to Supabase Storage
 - `POST` - Alternative for sendBeacon (page unload saves)
@@ -198,23 +230,27 @@ New API routes for BlockSuite document persistence.
 - Size limit: 10MB max
 
 **Security Features**:
+
 - Document ID validation (alphanumeric + hyphens/underscores only)
 - Team membership verification via explicit query
 - Audit logging for rate limits, large uploads (>100KB), orphaned files
 - Rollback on metadata update failure (prevents orphaned storage files)
 
 #### Architecture Enforcement: Phase-Only Status for Work Items (2025-12-29)
+
 Restored architecture enforcement migration to ensure work_items table has no separate `status` column.
 
 **Migration**: `20251229180000_enforce_phase_only_status.sql`
 
 **Changes**:
+
 - Drops `status` column from `work_items` if it exists
 - Removes orphaned constraints: `features_status_check`, `work_items_status_check`
 - Removes orphaned indexes: `idx_features_status`, `idx_work_items_status`
 - Adds documentation comment to `phase` column
 
 **Architecture Rationale**:
+
 - Per CLAUDE.md: "Work items use `phase` as their status (phase IS the status)"
 - Work items have `phase` field only (lifecycle stage IS the status)
 - Timeline items have separate `status` field for task execution tracking
@@ -226,9 +262,11 @@ Restored architecture enforcement migration to ensure work_items table has no se
 ### Security
 
 #### CodeQL Security Vulnerability Fixes (2025-12-28) - PR #19
+
 Comprehensive security hardening addressing 67 CodeQL vulnerability alerts.
 
 **Critical Security Fixes**:
+
 - **ReDoS Vulnerability**: Replaced vulnerable email regex with bounded HTML5 pattern
 - **HTML Injection**: Implemented DOMPurify (`isomorphic-dompurify`) for secure HTML sanitization
 - **Prototype Pollution**: Added validation for dangerous keys (`__proto__`, `constructor`, `prototype`) and Object.hasOwn checks
@@ -237,23 +275,28 @@ Comprehensive security hardening addressing 67 CodeQL vulnerability alerts.
 - **Archive Cleanup**: Deleted legacy `/archive/vanilla-version/` folder (25+ vulnerability alerts eliminated)
 
 **Configuration**:
+
 - Created `.github/codeql/codeql-config.yml` to ignore auto-generated files (playwright-report, test-results, .next, node_modules)
 
 **Files Modified**: 120+ files across security-focused cleanup
 **Breaking Changes**: None
 
 #### SonarCloud Critical Security Fixes (2025-12-25) - PR #9
+
 Resolved 4 critical/high security and reliability issues identified by SonarCloud.
 
 **Security Fixes**:
+
 - **S2819**: Added target origin to `postMessage()` in widget page (prevents cross-origin message leaks)
 
 **Reliability Fixes**:
+
 - **S2871**: Added numeric compare function to `Array.sort()` in department-presets
 - **S2871**: Added `localeCompare` to string sorts in use-elk-layout
 - **S2871**: Added `localeCompare` to string sorts in cycle-detection
 
 **Configuration**:
+
 - Added `sonar-project.properties` with exclusions for archive/ and playwright-report/
 
 **Files Modified**: 4 files
@@ -261,9 +304,11 @@ Resolved 4 critical/high security and reliability issues identified by SonarClou
 ### Changed
 
 #### ESLint & TypeScript Cleanup (2025-12-26) - PR #11
+
 Comprehensive code quality cleanup resolving 316 ESLint warnings and TypeScript errors across 40+ files.
 
 **ESLint Fixes (200+ warnings)**:
+
 - Escaped unescaped entities in JSX (`"You're"` → `"You&apos;re"`)
 - Removed 50+ unused imports across codebase
 - Prefixed unused parameters with underscore (`_teamId`, `_error`)
@@ -271,6 +316,7 @@ Comprehensive code quality cleanup resolving 316 ESLint warnings and TypeScript 
 - Fixed `no-explicit-any` violations with proper types
 
 **TypeScript Fixes (116 errors)**:
+
 - Added proper type guards for `error: unknown` catch blocks
 - Fixed interface property naming
 - Added missing imports (`useMemo`, `AIModel` type)
@@ -282,9 +328,11 @@ Comprehensive code quality cleanup resolving 316 ESLint warnings and TypeScript 
 **Note**: 93 TypeScript errors remain (Supabase type mismatches - pre-existing, unrelated to this PR)
 
 #### Playwright E2E Test Fixes (2025-12-26) - PR #10
+
 Fixed ~40% of E2E test failures for CI stability.
 
 **Changes**:
+
 - Disabled mobile browser projects (Pixel 5, iPhone 12) in `playwright.config.ts`
 - Disabled Firefox and WebKit browsers in CI (installation issues)
 - Fixed title assertions to accept "Product Lifecycle Platform"
@@ -296,14 +344,17 @@ Fixed ~40% of E2E test failures for CI stability.
 ### Added
 
 #### CI/CD Optimization (2025-12-28)
+
 Comprehensive CI/CD improvements to reduce deployment frequency and improve workflow efficiency.
 
 **Workflow Concurrency**:
+
 - Added concurrency groups to all GitHub workflows (ci.yml, playwright.yml, check-links.yml)
 - Cancels redundant in-progress runs when new commits are pushed
 - Reduces CI resource consumption
 
 **Dependabot Grouping** (`.github/dependabot.yml`):
+
 - Weekly schedule: Mondays 09:00 EST
 - Production dependencies grouped in single PR
 - Development dependencies (@types, eslint, etc.) grouped separately
@@ -311,19 +362,23 @@ Comprehensive CI/CD improvements to reduce deployment frequency and improve work
 - Labels: `dependencies`, `automated`
 
 **Vercel Deploy Optimization** (`vercel.json` ignoreCommand):
+
 - Skip deploys for Dependabot commits
 - Skip deploys for documentation-only changes (docs/, *.md, .github/)
 - ~60% reduction in unnecessary deployments
 
 **Impact**:
+
 - Faster CI feedback loops
 - Cleaner GitHub PR list
 - Reduced Vercel usage costs
 
 #### Greptile AI Code Review Configuration (2025-12-27) - PR #12
+
 Added automated AI-powered code review to all pull requests.
 
 **Configuration** (`greptile.json`):
+
 - `triggerOnUpdates: true` - Reviews every new commit pushed to PR
 - `statusCheck: true` - Creates GitHub status checks
 - `fixWithAI: true` - Provides AI-generated fix suggestions
@@ -333,11 +388,13 @@ Added automated AI-powered code review to all pull requests.
 **Impact**: Automated code review on all future PRs with AI suggestions
 
 #### Dependabot Skip for E2E Tests (2025-12-28) - PR #18
+
 Added workflow condition to skip E2E tests for Dependabot PRs.
 
 **Problem**: Dependabot PRs don't have access to GitHub Actions secrets, causing Playwright tests to fail (missing Supabase credentials).
 
 **Solution**:
+
 - E2E tests skipped for `dependabot[bot]` PRs
 - Type Check & Build validation still runs for all dependency updates
 - Full E2E tests continue for manual PRs and main branch
@@ -347,6 +404,7 @@ Added workflow condition to skip E2E tests for Dependabot PRs.
 ### Dependencies
 
 #### Dependency Updates (2025-12-28) - PRs #13-17
+
 Automated Dependabot updates for security and performance:
 
 | Package | Old Version | New Version | Type |
@@ -362,20 +420,24 @@ Automated Dependabot updates for security and performance:
 ### Changed
 
 #### 3-Type System: Enhancement is Now a Flag (2025-12-23)
+
 Migrated from 4-type to 3-type work item system by converting `enhancement` from a type to a boolean flag on features.
 
 **Architecture Change**:
+
 - **Before**: 4 types (concept, feature, bug, enhancement)
 - **After**: 3 types (concept, feature, bug) + `is_enhancement` flag on features
 - **Rationale**: Enhancement is an attribute of features, not a separate type. Reduces type proliferation while maintaining functionality.
 
 **Database Migration**: `20251223000001_fix_enhancement_architecture_v2.sql`
+
 - ✅ Added `is_enhancement` column (boolean, default false)
 - ✅ Migrated existing enhancement-type items to feature + flag
 - ✅ Updated CHECK constraint to only allow 3 types
 - ✅ Created index on `is_enhancement` for performance
 
 **TypeScript Changes**:
+
 - ✅ Removed `ENHANCEMENT` from `WORK_ITEM_TYPES` constant (9 files updated)
 - ✅ Updated `TYPE_PHASE_MAP` to exclude enhancement (3 files)
 - ✅ Updated form validation schema to 3-type enum
@@ -384,6 +446,7 @@ Migrated from 4-type to 3-type work item system by converting `enhancement` from
 - ✅ All type definitions now consistent across codebase
 
 **UI Changes**:
+
 - ✅ Removed enhancement as selectable type in forms and dialogs
 - ✅ Canvas nodes marked as deprecated (kept for backward compatibility)
 - ✅ Growth mode defaults to feature type (with is_enhancement flag)
@@ -396,9 +459,11 @@ Migrated from 4-type to 3-type work item system by converting `enhancement` from
 **Breaking Change**: Forms/APIs no longer accept `type='enhancement'` - will be rejected by validation. Use `type='feature'` with `is_enhancement=true` instead.
 
 #### Updated .cursorrules to Current Architecture (2025-12-23)
+
 Modernized Cursor AI rules from 347-day-old configuration to reflect current multi-tenant architecture.
 
 **Key Changes**:
+
 - ✅ Updated multi-tenancy model: `user_id = 'default'` → `team_id` (multi-tenant)
 - ✅ Corrected MCP count: 5 MCPs → 3 MCPs (Supabase, shadcn/ui, Context7)
 - ✅ Added type-aware 4-phase system (design→build→refine→launch)
@@ -415,6 +480,7 @@ Modernized Cursor AI rules from 347-day-old configuration to reflect current mul
 ### Fixed
 
 #### Canvas Work Item Status Field (2025-12-23)
+
 Fixed TypeScript error in `unified-canvas.tsx` where code referenced non-existent `status` field on work items.
 
 **Error**: `Property 'status' does not exist on type WorkItem`
@@ -424,26 +490,31 @@ Fixed TypeScript error in `unified-canvas.tsx` where code referenced non-existen
 **Files Modified**: `next-app/src/components/canvas/unified-canvas.tsx:182`
 
 #### Enhancement Architecture Phase 2 - Security & Consistency (2025-12-23)
+
 Complete security hardening and UI consistency cleanup following 4-type to 3-type migration.
 
 **Security Improvements**:
+
 - ✅ **Defense-in-Depth**: Added explicit authentication and team membership checks to enhance API endpoint
 - ✅ **Input Validation**: Replaced manual validation with comprehensive Zod schema
 - ✅ **Proper HTTP Codes**: 401 (unauthorized), 403 (forbidden), 404 (not found), 400 (validation error)
 - ✅ **Explicit Flags**: `is_enhancement` explicitly set in INSERT operations (no reliance on DB defaults)
 
 **UI Consistency**:
+
 - ✅ Removed 'enhancement' from 12 component icon/color mappings
 - ✅ Removed 'enhancement' from form placeholder configurations
 - ✅ Verified canvas deprecation comments for backward compatibility
 - ✅ All UI components now consistently use 3-type system (concept/feature/bug)
 
 **Type Safety**:
+
 - ✅ Added `is_enhancement` validation to form schema (optional boolean, default false)
 - ✅ TypeScript compilation passes with 0 errors
 - ✅ No 'enhancement' references in active code paths (only deprecated legacy nodes)
 
 **Files Modified**:
+
 - API: `next-app/src/app/api/work-items/[id]/enhance/route.ts` (security hardening)
 - Components: 12 files (insight-link-dialog, tool-previews, connection-menu, ai-alignment-suggestions, strategy-detail-sheet, create-work-item-dialog, template-preview, smart-work-item-form, work-items-board-view, nested-work-items-table, filter-context, insight-detail-sheet)
 - Schema: `next-app/src/lib/schemas/work-item-form-schema.ts` (is_enhancement validation)
@@ -453,11 +524,13 @@ Complete security hardening and UI consistency cleanup following 4-type to 3-typ
 ### Added
 
 #### Type-Aware Phase System - Database Columns (2025-12-22)
+
 Database migration adding missing phase tracking, versioning, and review columns to `work_items` table.
 
 **Migration**: `20251222120000_add_missing_phase_columns.sql`
 
 **Schema Changes**:
+
 ```sql
 -- Add phase column (work item lifecycle stage - replaces status)
 ALTER TABLE work_items ADD COLUMN IF NOT EXISTS phase TEXT;
@@ -473,6 +546,7 @@ ALTER TABLE work_items ADD COLUMN IF NOT EXISTS review_status TEXT;
 ```
 
 **New Columns**:
+
 | Column | Type | Default | Description |
 |--------|------|---------|-------------|
 | `phase` | TEXT | (type-based) | Work item lifecycle phase (IS the status field) |
@@ -483,25 +557,30 @@ ALTER TABLE work_items ADD COLUMN IF NOT EXISTS review_status TEXT;
 | `review_status` | TEXT | null | Review state: pending, approved, needs_revision, rejected |
 
 **Type-Specific Phase Constraints**:
+
 - **Feature/Enhancement**: design → build → refine → launch
 - **Concept**: ideation → research → validated | rejected
 - **Bug**: triage → investigating → fixing → verified
 
 **Indexes Created**:
+
 - `idx_work_items_enhances` - Finding all enhancements of a work item
 - `idx_work_items_type_phase` - Type-phase composite queries
 - `idx_work_items_review_status` - Filtering by review status
 
 **Helper Functions**:
+
 - `get_next_version(parent_id TEXT)` - Auto-increment version numbers for enhancement chains
 
 **Files Modified**:
+
 - `next-app/src/lib/supabase/types.ts` - Regenerated TypeScript types from schema
 - `next-app/tests/utils/database.ts` - Fixed `createWorkItemInDatabase` (phase instead of status)
 - `next-app/tests/utils/fixtures.ts` - Updated test fixtures
 - `next-app/e2e/*.spec.ts` - Updated 4 E2E test files to use `phase` field
 
 **Rationale**:
+
 - Previous migrations were marked as applied but columns weren't actually created
 - Work items use `phase` as their status field (timeline items have separate execution status)
 - Enables type-aware phase workflows, versioning chains, and detached review process
@@ -509,11 +588,13 @@ ALTER TABLE work_items ADD COLUMN IF NOT EXISTS review_status TEXT;
 ---
 
 #### Metorial Integration - Strategic Decision (2025-12-23)
+
 Strategic analysis and decision to migrate from self-hosted MCP Gateway to Metorial as primary integration method for Week 11-12 implementation.
 
 **Decision**: Approved - Migrate to Metorial as primary, keep self-hosted as advanced fallback
 
 **Key Insights**:
+
 - **User Experience**: 5 minutes setup vs 2-4 hours OAuth configuration per user
 - **Integration Coverage**: 600+ integrations vs 6 providers (100x increase)
 - **Cost**: Free tier for 90% of users vs $10-20/month infrastructure
@@ -521,14 +602,17 @@ Strategic analysis and decision to migrate from self-hosted MCP Gateway to Metor
 - **Solo Dev Sustainable**: Cannot build/maintain 200-300 integrations alone
 
 **Implementation Timeline**:
+
 - **Now (Week 7-8)**: NO CHANGES - Continue with current work
 - **Week 11-12**: Add Metorial SDK integration (3-4 days)
 
 **Files Created**:
+
 - `docs/research/metorial-integration-decision.md` - Strategic decision summary (key points)
 - `C:\Users\harsh\.claude\plans\kind-mapping-quasar.md` - Full implementation plan (2,135 lines)
 
 **Files to Create** (Week 11-12):
+
 - `next-app/src/lib/ai/mcp/metorial-adapter.ts` - Metorial SDK wrapper
 - `next-app/src/lib/ai/mcp/integration-factory.ts` - Mode selection (metorial/self-hosted/hybrid)
 - `next-app/src/components/integrations/integration-status.tsx` - UI status component
@@ -536,6 +620,7 @@ Strategic analysis and decision to migrate from self-hosted MCP Gateway to Metor
 - `docs/migration/METORIAL_MIGRATION.md` - Migration guide for existing users
 
 **Files to Modify** (Week 11-12):
+
 - `next-app/package.json` - Add Metorial SDK dependency
 - `next-app/.env.example` - Add integration mode configuration
 - `next-app/src/lib/ai/mcp/index.ts` - Update exports
@@ -544,18 +629,21 @@ Strategic analysis and decision to migrate from self-hosted MCP Gateway to Metor
 - `README.md` - Quick start with integration setup
 
 **Files to Keep** (for fallback):
+
 - `next-app/src/lib/ai/mcp/gateway-client.ts` - Self-hosted MCP client
 - `docker/mcp-gateway/gateway.js` - Self-hosted gateway implementation
 - All existing MCP Gateway infrastructure
 
 **Rationale**:
 For an open-source self-hosted application:
+
 - Solo developer cannot build/maintain 200-300 integrations
 - Users need 6-10 integrations out of 200-300 possible (variable requirements)
 - Current approach: Users must configure OAuth apps for each integration (2-4 hours, high failure rate, technical users only)
 - Metorial approach: Users sign up + add API key + connect integrations (5 minutes, non-technical friendly, 600+ integrations)
 
 **Decision Validation** (5-Question Framework):
+
 - ✅ Data Dependencies: Metorial SDK available, documented APIs
 - ✅ Integration Points: Works with existing AI assistant and tools
 - ✅ Standalone Value: Provides immediate value (600+ integrations)
@@ -565,18 +653,21 @@ For an open-source self-hosted application:
 **Result**: ✅ **PROCEED in Week 11-12** - All validation criteria met
 
 **References**:
+
 - **Strategic Decision**: Metorial integration decision (documented in session)
 - **Progress Entry**: [docs/planning/PROGRESS.md](../../planning/PROGRESS.md#metorial-integration---strategic-decision--2025-12-23)
-- **External**: https://metorial.com/ | https://docs.metorial.com/
+- **External**: <https://metorial.com/> | <https://docs.metorial.com/>
 
 ---
 
 ### Fixed
 
 #### Type-Aware Phase System - Critical Fixes (2025-12-23)
+
 Code review cleanup addressing 5 critical security, data integrity, and architecture consistency issues.
 
 **Migration 1: Safety & Security Fixes**
+
 - **File**: `20251222120000_add_missing_phase_columns.sql` (modified)
 - **Changes**:
   - Added `WHERE phase IS NULL` to UPDATE statement (line 30) - protects existing data
@@ -584,6 +675,7 @@ Code review cleanup addressing 5 critical security, data integrity, and architec
   - Added `WHERE team_id = p_team_id` filter - enforces multi-tenancy isolation
 
 **Migration 2: Schema Cleanup**
+
 - **File**: `20251223000000_drop_work_items_status_column.sql` (new)
 - **Changes**:
   - Dropped `work_items.status` column (conflicted with architecture)
@@ -592,6 +684,7 @@ Code review cleanup addressing 5 critical security, data integrity, and architec
   - Logged 5 work items with differing status/phase values before dropping column
 
 **Code Changes**:
+
 ```sql
 -- Migration Safety Fix
 UPDATE work_items
@@ -621,6 +714,7 @@ $$ LANGUAGE plpgsql;
 ```
 
 **Test Fixes** (24 total changes):
+
 - `tests/fixtures/test-data.ts` - Removed `status` property from 5 TEST_WORK_ITEMS, updated phase values
 - `tests/utils/fixtures.ts` - Changed `.status` → `.phase` (2 locations)
 - `e2e/type-phases.spec.ts` - Removed 7 `status:` field inserts from work_items
@@ -628,9 +722,11 @@ $$ LANGUAGE plpgsql;
 - `e2e/versioning.spec.ts` - Removed 8 `status:` field inserts from work_items
 
 **TypeScript Types**:
+
 - `src/lib/supabase/types.ts` - Regenerated, `work_items.status` column removed
 
 **Critical Issues Addressed**:
+
 | Issue | Severity | Impact | Fix |
 |-------|----------|--------|-----|
 | Unsafe UPDATE | 🔴 HIGH | Could overwrite valid phase data | Added WHERE clause |
@@ -640,6 +736,7 @@ $$ LANGUAGE plpgsql;
 | Schema conflict | 🔴 CRITICAL | Architecture violation | Dropped status column |
 
 **Architecture Validation**:
+
 - ✅ **Phase IS Status**: Work items have `phase` only (no separate status)
 - ✅ **Timeline Status**: Timeline items retain separate `status` for execution tracking
 - ✅ **Multi-Tenancy**: All database functions now enforce team_id filtering
@@ -647,6 +744,7 @@ $$ LANGUAGE plpgsql;
 - ✅ **Type Safety**: TypeScript types match actual schema
 
 **Rationale**:
+
 - Code review by `feature-dev:code-reviewer` agent identified critical flaws
 - Schema had conflicting column violating documented "phase IS the status" architecture
 - Multi-tenancy isolation was incomplete, allowing potential cross-team data leakage
@@ -657,11 +755,13 @@ $$ LANGUAGE plpgsql;
 ### Added
 
 #### Strategy Customization Fields (Session 5 - 2025-12-15)
+
 Database migration adding pillar-specific context fields to `product_strategies` table.
 
 **Migration**: `20251214165151_add_strategy_customization_fields.sql`
 
 **Schema Changes**:
+
 ```sql
 ALTER TABLE product_strategies
 ADD COLUMN IF NOT EXISTS user_stories TEXT[] DEFAULT '{}',
@@ -670,6 +770,7 @@ ADD COLUMN IF NOT EXISTS case_studies TEXT[] DEFAULT '{}';
 ```
 
 **New Columns**:
+
 | Column | Type | Default | Description |
 |--------|------|---------|-------------|
 | `user_stories` | TEXT[] | '{}' | User stories relevant to the strategy pillar |
@@ -677,11 +778,13 @@ ADD COLUMN IF NOT EXISTS case_studies TEXT[] DEFAULT '{}';
 | `case_studies` | TEXT[] | '{}' | Case studies demonstrating success |
 
 **Components Created** (`src/components/strategy/`):
+
 - `alignment-strength-indicator.tsx` - Visual indicator for weak/medium/strong alignment
 - `org-level-strategy-display.tsx` - Full organization-level strategy view with tabs
 - `work-item-strategy-alignment.tsx` - Compact work item alignment view
 
 **Files Modified**:
+
 - `src/lib/types/strategy.ts` - Added new fields to `ProductStrategy` interface
 - `src/components/strategy/strategy-form.tsx` - Added pillar-specific fields section
 - `src/lib/supabase/types.ts` - Regenerated with new columns
@@ -689,9 +792,11 @@ ADD COLUMN IF NOT EXISTS case_studies TEXT[] DEFAULT '{}';
 ---
 
 #### Workspace Analysis Service (Session 2 - 2025-12-15)
+
 Complete workspace health scoring and analysis service with dashboard integration.
 
 **API Endpoints** (`src/app/api/workspaces/[id]/analyze/`):
+
 - `GET /api/workspaces/[id]/analyze` - Workspace analysis endpoint
   - Auth: Requires authenticated user with team membership
   - Query params: `staleThreshold` (days), `upgradeThreshold` (0-1)

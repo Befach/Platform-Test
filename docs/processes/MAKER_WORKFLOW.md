@@ -25,11 +25,13 @@ The **MAKER Framework** (Cognizant AI Lab) is integrated into this project for i
 **Purpose**: Break complex tasks into atomic steps using Explore + Plan agents
 
 **Workflow**:
+
 1. **Discovery** - Launch `Explore` agent to find all relevant files
 2. **Planning** - Launch `Plan` agent to design implementation strategy
 3. **Tracking** - Create atomic task list with TodoWrite
 
 **When to Use**:
+
 - Task complexity is unknown
 - Multiple files will be affected
 - Implementation approach is unclear
@@ -49,12 +51,14 @@ The **MAKER Framework** (Cognizant AI Lab) is integrated into this project for i
 | `security-auditor` | OWASP, vulnerabilities, RLS | APPROVE/CONCERNS/REJECT |
 
 **K-threshold Rules**:
+
 - **K = 2**: Minimum approvals needed
 - **N = 3**: Total validators
 - **Threshold**: 66% (2/3) must approve
 - **Tie-breaker**: code-reviewer verdict takes precedence
 
 **When to Use**:
+
 - Changes touching > 3 files
 - Database schema changes (migrations)
 - API contract changes
@@ -85,12 +89,14 @@ The **MAKER Framework** (Cognizant AI Lab) is integrated into this project for i
 | SUGGESTION | PASS - Proceed, note improvements |
 
 **Automatic Red Flags** (Discard & Retry):
+
 - Any agent returns REJECT verdict
 - `debugger` finds unresolved errors
 - `security-auditor` finds HIGH severity vulnerabilities
 - `code-reviewer` returns Critical issues
 
 **Warning Flags** (Review Before Accepting):
+
 - `architect-review` returns CONCERNS
 - `code-reviewer` returns Warnings
 - Touches files outside stated scope

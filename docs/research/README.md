@@ -4,6 +4,7 @@
 **Purpose**: Central index for all research findings, architectural decisions, and UX patterns
 
 Use this hub to:
+
 - Understand **WHY** decisions were made
 - Question or revisit decisions with full context
 - Find research backing for implementation choices
@@ -42,9 +43,11 @@ docs/research/
 ## Quick Navigation
 
 ### 📋 Decision Index
+
 **[DECISION_INDEX.md](DECISION_INDEX.md)** - Master log of all decisions with status, dates, and review triggers
 
 ### 🏗️ Architecture Decisions (ADRs)
+
 | Document | Key Decisions | Status |
 |----------|---------------|--------|
 | [linear-architecture.md](architecture-decisions/linear-architecture.md) | Team-scoped items, Departments, Triage workflow | ✅ Accepted |
@@ -54,6 +57,7 @@ docs/research/
 ### 📊 Research Findings
 
 **Core Research (Comprehensive)** → `core-research/`
+
 | Document | Topic | Key Insight |
 |----------|-------|-------------|
 | [progressive-disclosure-ux.md](core-research/progressive-disclosure-ux.md) | **UX Patterns & CX** | Progressive disclosure, in-app guidance, validation, empty states, industry leader patterns |
@@ -62,6 +66,7 @@ docs/research/
 | [ultra-deep-research-findings.md](core-research/ultra-deep-research-findings.md) | **Advanced Patterns** | Integration handoffs, RBAC governance, B2B experimentation, add vs simplify |
 
 **Supporting Research** → `supporting-research/`
+
 | Document | Topic | Key Insight |
 |----------|-------|-------------|
 | [customization-patterns.md](supporting-research/customization-patterns.md) | Configuration design | 7 cost categories, over-customization risks |
@@ -74,6 +79,7 @@ docs/research/
 ## Key Statistics (Quick Reference)
 
 ### Business Impact
+
 | Statistic | Source | Used In |
 |-----------|--------|---------|
 | **$100** return per $1 UX investment | Forrester Research | Priority justification |
@@ -82,6 +88,7 @@ docs/research/
 | **50%** dev time reduction with design systems | Multiple sources | shadcn/ui choice |
 
 ### User Behavior
+
 | Statistic | Source | Used In |
 |-----------|--------|---------|
 | **52%** adoption improvement (role-based UI) | Enterprise PM study | UX-004 Progressive disclosure |
@@ -90,6 +97,7 @@ docs/research/
 | **25-87%** support ticket reduction (resource centers) | Userpilot | In-app guidance value |
 
 ### Team Collaboration
+
 | Statistic | Source | Used In |
 |-----------|--------|---------|
 | **75%** cross-functional teams dysfunctional | HBR Research | ADR-001 Team structure |
@@ -111,6 +119,7 @@ graph LR
 ```
 
 ### Status Definitions
+
 - **PROPOSED**: Under discussion, alternatives being evaluated
 - **ACCEPTED**: Approved for implementation
 - **IMPLEMENTED**: Decision has been coded/deployed
@@ -123,7 +132,9 @@ graph LR
 ## How to Use This Research
 
 ### For Implementation
+
 **Before coding any feature:**
+
 1. Check relevant research file for proven patterns
 2. Reference statistics when justifying choices
 3. Follow recommended UX patterns (validation, disclosure, etc.)
@@ -132,7 +143,9 @@ graph LR
 **Example**: Implementing role switcher → Read [progressive-disclosure-ux.md](core-research/progressive-disclosure-ux.md)
 
 ### For Decision Review
+
 **When questioning an existing decision:**
+
 1. Find decision in [DECISION_INDEX.md](DECISION_INDEX.md)
 2. Read linked document for full context + alternatives considered
 3. Check "Review Triggers" section
@@ -141,7 +154,9 @@ graph LR
 **Example**: "Why no Slack integration?" → See [scope-decisions.md](architecture-decisions/scope-decisions.md) ADR-002
 
 ### For Adding New Decisions
+
 **When making a new architectural or UX decision:**
+
 1. Create research document with findings (use template below)
 2. Add entry to [DECISION_INDEX.md](DECISION_INDEX.md)
 3. Cross-link from this README
@@ -150,7 +165,9 @@ graph LR
 **Template**: See "Decision Records Format" below
 
 ### For Challenging Assumptions
+
 **If you think a decision is wrong:**
+
 1. Read the original research + rationale
 2. Identify what changed (new data, tech, user feedback)
 3. Propose alternative with supporting research
@@ -163,6 +180,7 @@ graph LR
 ## Research Categories
 
 ### 1. User Experience Patterns
+
 **Primary File**: [progressive-disclosure-ux.md](core-research/progressive-disclosure-ux.md) *(consolidated)*
 
 - Progressive disclosure (3 levels: Basic → Intermediate → Advanced)
@@ -173,6 +191,7 @@ graph LR
 - Industry leader analysis (Linear, Notion, Figma, Productboard, Asana)
 
 ### 2. Cross-Team Collaboration
+
 **Primary File**: [cross-team-collaboration.md](core-research/cross-team-collaboration.md) *(consolidated)*
 **Architecture**: [linear-architecture.md](architecture-decisions/linear-architecture.md)
 
@@ -185,6 +204,7 @@ graph LR
 - Database schema for team configurations
 
 ### 3. Product Configuration
+
 **Files**: [customization-patterns.md](supporting-research/customization-patterns.md), [flexibility-vs-simplicity.md](supporting-research/flexibility-vs-simplicity.md)
 
 - Customization trap and 7 cost categories
@@ -193,6 +213,7 @@ graph LR
 - Template + customization approach
 
 ### 4. Dashboard & Analytics
+
 **Files**: [dashboard-design.md](supporting-research/dashboard-design.md)
 
 - Dashboard types by user role (Exec vs PM vs Dev)
@@ -201,6 +222,7 @@ graph LR
 - Layout and flow optimization
 
 ### 5. Onboarding & Workflows
+
 **Files**: [onboarding-workflows.md](supporting-research/onboarding-workflows.md)
 
 - Team handoff best practices
@@ -209,6 +231,7 @@ graph LR
 - Onboarding checklist patterns
 
 ### 6. Product Strategy
+
 **Primary File**: [product-strategy-alignment.md](core-research/product-strategy-alignment.md) *(comprehensive)*
 
 - PM tool landscape analysis (Productboard, Linear, Jira positioning)
@@ -219,6 +242,7 @@ graph LR
 - Strategic pillars data model and UI patterns
 
 ### 7. Advanced Patterns (Unique Findings)
+
 **File**: [ultra-deep-research-findings.md](core-research/ultra-deep-research-findings.md) *(trimmed to unique content)*
 
 - Integration & cross-team handoffs (Design → Engineering workflow)
@@ -233,6 +257,7 @@ graph LR
 All architectural and UX decisions are documented as **ADRs (Architectural Decision Records)** with this structure:
 
 ### Required Sections
+
 | Section | Purpose | Example |
 |---------|---------|---------|
 | **Context** | What situation prompted this decision? | "Users confused by unified task list mixing team types" |
@@ -243,6 +268,7 @@ All architectural and UX decisions are documented as **ADRs (Architectural Decis
 | **Review Triggers** | When should we reconsider? | "If >30% users disable departments OR competitor launches better solution" |
 
 ### Optional Sections
+
 - **Implementation Notes**: How to code this decision
 - **Metrics to Track**: KPIs that validate/invalidate decision
 - **Related Decisions**: Cross-links to dependent ADRs
@@ -269,11 +295,13 @@ The following **Parallel AI Ultra-tier** research tasks were completed with comp
 ## Related Documentation
 
 ### Planning & Implementation
+
 - **[docs/planning/MASTER_IMPLEMENTATION_ROADMAP.md](../planning/MASTER_IMPLEMENTATION_ROADMAP.md)** - Sequencing and dependencies
 - **[docs/implementation/README.md](../implementation/README.md)** - Week-by-week progress
 - **[docs/planning/PROGRESS.md](../planning/PROGRESS.md)** - Current status tracker
 
 ### Postponed Features
+
 - **[docs/postponed/README.md](../postponed/README.md)** - Features waiting for implementation
 - Many postponed features reference research from this directory
 
@@ -282,7 +310,9 @@ The following **Parallel AI Ultra-tier** research tasks were completed with comp
 ## Contributing New Research
 
 ### When to Add Research
+
 Add new research documents when:
+
 1. Making architectural decisions (ADR)
 2. Evaluating UX patterns with competitive analysis
 3. Choosing between technology alternatives
@@ -290,6 +320,7 @@ Add new research documents when:
 5. Learning from post-mortems or incidents
 
 ### Research Document Template
+
 ```markdown
 # [Topic] Research
 
@@ -315,6 +346,7 @@ Add new research documents when:
 ```
 
 ### After Adding Research
+
 1. Update [DECISION_INDEX.md](DECISION_INDEX.md) if it's a decision
 2. Add row to relevant table in this README
 3. Cross-link from related docs (implementation weeks, postponed features)

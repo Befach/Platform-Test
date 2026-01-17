@@ -19,6 +19,7 @@
 ### Problem Statement
 
 Currently there are 38+ specialized tools, each with its own schema and implementation. This causes:
+
 - **Prompt bloat**: All 38 tool definitions must be sent to the model
 - **Selection confusion**: Models often pick wrong tools with similar names
 - **Maintenance burden**: Each tool requires separate code/tests
@@ -665,6 +666,7 @@ export default analyzeTool
 #### Step 6: Create Remaining Tools (Optimize, Strategize, Research, Generate, Plan)
 
 Create similar files for each tool following the same pattern:
+
 - `optimize-tool.ts` - prioritize, balance_workload, identify_risks, estimate_timeline, deduplicate
 - `strategize-tool.ts` - align, suggest_okrs, competitive_analysis, generate_roadmap, impact_assessment
 - `research-tool.ts` - web_search, extract_content, deep_research, quick_answer
@@ -716,11 +718,13 @@ export type GeneralizedToolName = keyof typeof generalizedTools
 Modify: `next-app/src/lib/ai/tools/tool-registry.ts`
 
 Add at the top of the file:
+
 ```typescript
 import { generalizedTools } from './generalized'
 ```
 
 Add a new function to get generalized tools:
+
 ```typescript
 /**
  * Get generalized tools (7 tools instead of 38+)
@@ -854,6 +858,7 @@ Create a generalized tool abstraction that consolidates 38+ specialized tools in
 
 ## Files Added
 ```
+
 next-app/src/lib/ai/tools/generalized/
 ├── types.ts           # Shared types
 ├── entity-tool.ts     # CRUD operations
@@ -864,6 +869,7 @@ next-app/src/lib/ai/tools/generalized/
 ├── generate-tool.ts   # Content generation
 ├── plan-tool.ts       # Sprint planning
 └── index.ts           # Exports
+
 ```
 
 ## Test Plan
@@ -912,6 +918,7 @@ next-app/src/lib/ai/tools/tool-registry.ts
 ### Rollback Plan
 
 If issues arise:
+
 ```bash
 # Remove feature flag
 unset FEATURE_GENERALIZED_TOOLS

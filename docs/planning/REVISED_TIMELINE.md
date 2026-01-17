@@ -13,12 +13,14 @@
 ### Velocity Analysis
 
 **Original 8-Week Plan**:
+
 - Total Tasks: 131
 - Required Velocity: ~16 tasks/week
 - Reality: Only ~14 tasks/week achieved
 - Result: **Not achievable**
 
 **Revised 12-Week Plan**:
+
 - Total Tasks: 131 (same scope)
 - Required Velocity: ~11 tasks/week
 - Current Velocity: ~14 tasks/week
@@ -60,6 +62,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: Next.js setup, authentication, database schema
 
 #### ✅ Completed
+
 - [x] Next.js 15 + TypeScript project initialization
 - [x] Supabase integration (SSR-compatible client)
 - [x] Database schema (24 migrations, 20+ tables)
@@ -68,6 +71,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 - [x] React Query setup for server state
 
 #### ⏳ Remaining (Target: Week 5)
+
 - [ ] **RLS policies verification** (CRITICAL - security risk)
 - [ ] Team switching UI
 - [ ] Team settings page
@@ -83,12 +87,14 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: ReactFlow canvas, AI-powered ideation
 
 #### ✅ Completed
+
 - [x] Database tables (mind_maps, mind_map_nodes, mind_map_edges)
 - [x] API routes (CRUD operations)
 - [x] List view UI
 - [x] React Query hooks
 
 #### ⏳ Remaining (Target: Week 5)
+
 - [ ] **ReactFlow canvas verification/implementation**
 - [ ] Custom node components (5 types)
 - [ ] Node drag & drop
@@ -97,6 +103,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 - [ ] Save/load canvas state
 
 #### 📋 Deferred to Post-Week 5 (Lower Priority)
+
 - AI integration for node suggestions (Week 6)
 - Template system (Week 5)
 - Export/import (Week 5)
@@ -111,11 +118,13 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: Feature dashboard, dependency visualization
 
 #### ✅ Completed
+
 - [x] Database schema (feature_connections, correlations, importance_scores)
 - [x] Dependencies API routes
 - [x] Analyze endpoint (critical path)
 
 #### ⏳ Remaining (Target: Week 5)
+
 - [ ] **Feature dashboard UI** (list, create, edit, delete)
 - [ ] **ReactFlow dependency graph**
 - [ ] 4 link types (dependency, blocks, complements, relates)
@@ -123,6 +132,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 - [ ] Bidirectional relationships UI
 
 #### 📋 Deferred to Week 10
+
 - AI dependency suggestions (requires AI integration from Week 6)
 - Custom fields (lower priority)
 
@@ -134,6 +144,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: Complete Week 1-4 work, polish, test
 
 #### Tasks
+
 - [ ] **Complete Week 1-2 Remaining Tasks** (3 days)
   - RLS policies verification
   - Team switching and settings
@@ -173,6 +184,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: OpenRouter integration, AI chat, agentic mode
 
 #### Phase 1: Foundation (Days 1-3)
+
 - [ ] **OpenRouter API Client** (1 day)
   - Set up API wrapper
   - Implement streaming support
@@ -186,6 +198,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Context injection (workspace data)
 
 #### Phase 2: Agentic Mode (Days 4-7)
+
 - [ ] **Tool Calling Infrastructure** (1 day)
   - Tool definition format
   - Tool execution engine
@@ -201,6 +214,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Tool 7-10: Additional tools
 
 #### Phase 3: Tracking & Limits (Day 8)
+
 - [ ] **AI Usage Tracking**
   - Track messages per user/month
   - Track tokens used
@@ -218,6 +232,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: Stripe integration, revenue stream
 
 #### Phase 1: Stripe Checkout (Days 1-3)
+
 - [ ] **Checkout Flow** (2 days)
   - Create checkout session API route
   - Redirect to Stripe Checkout
@@ -230,6 +245,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Update teams.plan and subscriptions table
 
 #### Phase 2: Feature Gates (Days 4-5)
+
 - [ ] **Pro Tier Checks** (2 days)
   - Check plan before Pro feature access
   - Upgrade modal for Free users
@@ -237,6 +253,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Feature gate middleware
 
 #### Phase 3: Customer Portal (Days 6-7)
+
 - [ ] **Subscription Management** (2 days)
   - Link to Stripe Customer Portal
   - Invoice history
@@ -244,6 +261,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Cancel subscription
 
 #### Phase 4: Testing (Day 8)
+
 - [ ] **Stripe Test Mode** (1 day)
   - Test checkout flow
   - Test webhook events
@@ -261,6 +279,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: External stakeholder feedback
 
 #### Phase 1: Database & API (Days 1-2)
+
 - [ ] **Tables** (1 day)
   - Create review_links table
   - Create feedback table
@@ -272,6 +291,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Manage feedback
 
 #### Phase 2: Public Review (Days 3-5)
+
 - [ ] **Public Review Page** (3 days)
   - `/public/review/[token]` route
   - Display features in read-only mode
@@ -279,6 +299,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Thank you page
 
 #### Phase 3: Invite & Email (Days 6-7)
+
 - [ ] **Email Invitations** (2 days)
   - Resend integration
   - Email templates
@@ -286,6 +307,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Track invitation status
 
 #### Phase 4: Feedback Management (Day 8)
+
 - [ ] **Feedback Inbox** (1 day)
   - List all feedback
   - Filter by status
@@ -303,6 +325,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: Gantt chart, project execution tracking
 
 #### Phase 1: Gantt Chart (Days 1-4)
+
 - [ ] **Library Selection** (1 day)
   - Evaluate react-big-calendar or custom solution
   - Set up dependencies
@@ -314,6 +337,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Drag-to-reschedule
 
 #### Phase 2: Project Execution (Days 5-7)
+
 - [ ] **Team Assignment** (2 days)
   - Assign team members to features
   - Task breakdown within features
@@ -325,6 +349,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Burndown chart
 
 #### Phase 3: Collaboration (Day 8)
+
 - [ ] **Activity Feed** (1 day)
   - Recent changes
   - Team member activity
@@ -343,6 +368,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: Data visualization, performance metrics
 
 #### Phase 1: Pre-built Dashboards (Days 1-4)
+
 - [ ] **Dashboard 1: Features Overview** (1 day)
   - Total features
   - By timeline (MVP/SHORT/LONG)
@@ -367,6 +393,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Cost tracking
 
 #### Phase 2: Custom Dashboard Builder (Pro Tier) (Days 5-7)
+
 - [ ] **Widget Library** (2 days)
   - 10+ chart types (Recharts)
   - Data source selection
@@ -378,6 +405,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Save layout
 
 #### Phase 3: Research & Discovery (Day 8)
+
 - [ ] **Web Search Integration** (1 day)
   - Perplexity integration (via Parallel-search MCP)
   - Exa semantic search
@@ -395,6 +423,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: Quality assurance, security, performance
 
 #### Phase 1: E2E Testing (Days 1-4)
+
 - [ ] **Playwright Tests** (4 days)
   - Test 1: Authentication flow
   - Test 2: Mind mapping (create, edit, delete)
@@ -406,6 +435,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Test 8-20: Additional critical flows
 
 #### Phase 2: Unit Testing (Days 5-6)
+
 - [ ] **Jest Tests** (2 days)
   - React component tests
   - API route tests
@@ -413,6 +443,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Coverage > 70%
 
 #### Phase 3: Security Audit (Days 7-8)
+
 - [ ] **Security Review** (2 days)
   - Verify RLS policies (all tables)
   - JWT validation check
@@ -432,6 +463,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Focus**: Final touches, documentation, deployment
 
 #### Phase 1: Polish (Days 1-3)
+
 - [ ] **UI/UX Polish** (2 days)
   - Mobile responsiveness
   - Accessibility (WCAG 2.1 AA)
@@ -446,6 +478,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - CDN setup
 
 #### Phase 2: Documentation (Days 4-6)
+
 - [ ] **User Documentation** (2 days)
   - Getting started guide
   - Feature tutorials
@@ -459,6 +492,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
   - Self-hosting guide
 
 #### Phase 3: Launch Prep (Days 7-8)
+
 - [ ] **Production Deployment** (1 day)
   - Environment variables checklist
   - Database backups
@@ -499,16 +533,19 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 ### Priorities
 
 **Fast-Tracked (Higher Priority)**:
+
 - ✅ AI Integration (Week 7 → Week 6) - Core differentiator
 - ✅ Billing (Week 8 → Week 7) - Revenue stream
 
 **Delayed (Lower Priority)**:
+
 - Review System (Week 5 → Week 8) - Nice-to-have, not critical for MVP
 - Timeline (Week 6 → Week 9) - Can launch without this
 
 ### Scope Reductions
 
 **Postponed to v1.1**:
+
 - Real-time collaboration (Pro tier feature)
 - Mind map enhancements (23 features - see MIND_MAP_ENHANCEMENTS.md)
 - Advanced analytics (some custom dashboard features)
@@ -518,6 +555,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 ## 📊 SUCCESS METRICS BY MILESTONE
 
 ### Milestone 1: Foundation Complete (End of Week 5)
+
 - [ ] 100% completion of Weeks 1-4
 - [ ] All database tables created
 - [ ] RLS policies verified
@@ -527,6 +565,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 - [ ] 20+ E2E tests passing
 
 ### Milestone 2: AI & Billing Complete (End of Week 7)
+
 - [ ] AI chat panel working
 - [ ] Agentic mode (10+ tools)
 - [ ] Stripe checkout working
@@ -535,6 +574,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 - [ ] 35+ E2E tests passing
 
 ### Milestone 3: Core Features Complete (End of Week 10)
+
 - [ ] Review system working
 - [ ] Timeline visualization working
 - [ ] Analytics dashboards working
@@ -542,6 +582,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 - [ ] 50+ E2E tests passing
 
 ### Milestone 4: Launch Ready (End of Week 12)
+
 - [ ] Security audit passed
 - [ ] Performance optimized
 - [ ] Documentation complete
@@ -554,28 +595,36 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 ## 🚨 RISK MITIGATION
 
 ### Risk 1: Timeline Slippage Again
+
 **Mitigation**:
+
 - Weekly progress reviews
 - Bi-weekly sprint retrospectives
 - Adjust scope if needed (cut non-essential features)
 - Buffer built into Week 5 and Week 12
 
 ### Risk 2: AI Integration Complexity
+
 **Mitigation**:
+
 - Start with simple chat panel (no tools)
 - Add tools incrementally
 - Use proven libraries (OpenRouter SDK)
 - Thorough testing of each tool
 
 ### Risk 3: Security Vulnerabilities
+
 **Mitigation**:
+
 - RLS policy verification in Week 5
 - Security audit in Week 11
 - OWASP top 10 review
 - Penetration testing
 
 ### Risk 4: Stripe Integration Issues
+
 **Mitigation**:
+
 - Use Stripe test mode extensively
 - Follow Stripe best practices
 - Webhook retry logic
@@ -586,7 +635,9 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 ## 🎯 KEY DECISION POINTS
 
 ### Week 5 Review (2025-02-22)
+
 **Questions**:
+
 - Is Weeks 1-4 work complete?
 - Any blockers for AI integration?
 - Should we cut Review System to hit Week 8?
@@ -596,7 +647,9 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 ---
 
 ### Week 7 Review (2025-03-22)
+
 **Questions**:
+
 - Is AI working reliably?
 - Is billing fully tested?
 - Are we on track for launch?
@@ -606,7 +659,9 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 ---
 
 ### Week 10 Review (2025-04-19)
+
 **Questions**:
+
 - Are all core features working?
 - Is testing coverage adequate?
 - Any critical bugs?
@@ -616,7 +671,9 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 ---
 
 ### Week 12 Review (2025-05-17)
+
 **Questions**:
+
 - Is launch checklist complete?
 - Is documentation ready?
 - Any last-minute issues?
@@ -630,6 +687,7 @@ Week 12:   Polish, Docs & Launch Prep         [░░░░░░░░░░░
 **Target Launch**: **2025-05-31** (Week 12)
 **Launch Type**: Public launch (v1.0)
 **Post-Launch**:
+
 - Week 13-16: Bug fixes, user feedback
 - Week 17+: v1.1 features (real-time collaboration, mind map enhancements)
 

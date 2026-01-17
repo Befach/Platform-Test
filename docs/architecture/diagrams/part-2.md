@@ -4,17 +4,20 @@
 - `workspaces` - Projects
 
 **Feature Tables:**
+
 - `features` - Top-level roadmap items
 - `timeline_items` - MVP/SHORT/LONG breakdown
 - `linked_items` - Feature relationships
 - `feature_connections` - Dependency graph
 
 **Mind Mapping Tables:**
+
 - `mind_maps` - Canvas data
 - `mind_map_nodes` - Individual nodes (5 types)
 - `mind_map_edges` - Connections
 
 **Review & Feedback Tables:**
+
 - `review_links` - Public/invite/iframe links
 - `feedback` - Reviewer submissions
 
@@ -59,6 +62,7 @@ sequenceDiagram
 ### Auth Middleware
 
 **Route Protection:**
+
 ```typescript
 // middleware.ts
 export async function middleware(req: NextRequest) {
@@ -500,16 +504,19 @@ graph LR
 ### Data Loading Strategy
 
 **1. Server Components (RSC)**
+
 - Fetch data on server
 - No client-side loading states
 - Automatic code splitting
 
 **2. React Query (Client State)**
+
 - Cache server data
 - Background refetching
 - Optimistic updates
 
 **3. Streaming SSR**
+
 - Progressive page rendering
 - Suspense boundaries
 - Priority-based loading

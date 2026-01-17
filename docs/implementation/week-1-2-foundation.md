@@ -8,6 +8,7 @@
 ---
 
 ## Goal
+
 Next.js setup, authentication, teams, workspaces
 
 ---
@@ -15,9 +16,11 @@ Next.js setup, authentication, teams, workspaces
 ## Tasks
 
 ### Day 1-2: Project Setup
+
 - [ ] Initialize Next.js 15 with TypeScript (`npx create-next-app@latest`)
 - [ ] Configure `next.config.js` for optimal settings
 - [ ] Install core dependencies:
+
   ```bash
   npm install @supabase/supabase-js @supabase/auth-helpers-nextjs
   npm install zustand react-query @tanstack/react-query
@@ -28,23 +31,30 @@ Next.js setup, authentication, teams, workspaces
   npm install date-fns recharts
   npm install resend (email)
   ```
+
 - [ ] Set up shadcn/ui:
+
   ```bash
   npx shadcn-ui@latest init
   ```
+
 - [ ] Configure Tailwind CSS with custom theme
 
 ### Day 3-4: Supabase Setup
+
 - [ ] Create Supabase project (or use existing)
 - [ ] Create multi-tenant database schema (run SQL migrations)
 - [ ] Generate TypeScript types:
+
   ```bash
   npx supabase gen types typescript --project-id abc > lib/supabase/types.ts
   ```
+
 - [ ] Set up Supabase client (client-side and server-side)
 - [ ] Configure environment variables (`.env.local`)
 
 ### Day 5-7: Authentication
+
 - [ ] Configure Supabase Auth (magic links + Google OAuth)
 - [ ] Build auth pages:
   - [ ] `/app/(auth)/login/page.tsx`
@@ -54,6 +64,7 @@ Next.js setup, authentication, teams, workspaces
 - [ ] Protected route wrapper (`/app/(dashboard)/layout.tsx`)
 
 ### Day 8-10: Team Management
+
 - [ ] Team creation logic
 - [ ] Email invitations (Resend integration)
 - [ ] Accept invitation flow
@@ -61,6 +72,7 @@ Next.js setup, authentication, teams, workspaces
 - [ ] Team settings page (`/app/(dashboard)/settings/team/page.tsx`)
 
 ### Day 11-14: Workspace System
+
 - [ ] Workspace CRUD operations
 - [ ] Phase selector (dropdown in header)
 - [ ] Module toggle system (`/app/(dashboard)/settings/modules/page.tsx`)

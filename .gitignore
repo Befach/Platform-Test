@@ -25,6 +25,10 @@ desktop.ini
 *.log
 npm-debug.log*
 
+# Lint output files
+lint-output.txt
+lint-errors.txt
+
 # Build outputs (if you add build tools later)
 dist/
 build/

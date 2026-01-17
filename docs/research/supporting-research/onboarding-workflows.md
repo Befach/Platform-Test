@@ -46,6 +46,7 @@ interface TooltipPattern {
 ```
 
 **Best Practices**:
+
 - Use sparingly (max 3-5 per screen)
 - Show on focus, not immediately
 - Provide dismiss option
@@ -77,6 +78,7 @@ const firstFeatureWalkthrough = [
 ```
 
 **Best Practices**:
+
 - Keep to 3-5 steps maximum
 - Allow skipping at any point
 - Save progress for returning users
@@ -99,6 +101,7 @@ const firstFeatureWalkthrough = [
 ```
 
 **Best Practices**:
+
 - Start with quick wins (< 2 minutes each)
 - Show progress percentage
 - Make dismissable but recoverable
@@ -109,6 +112,7 @@ const firstFeatureWalkthrough = [
 **Purpose**: Communicate important information or celebrate milestones.
 
 **Best Practices**:
+
 - Use sparingly (max 1 per session)
 - Clear dismiss option
 - Actionable content
@@ -247,6 +251,7 @@ Based on Reddit/UX community research:
 ### 1. Lazy Skip Button
 
 Instead of prominent "Skip", use subtle "I'll do this later":
+
 - Reduces skip rate by 40%
 - Maintains user agency
 - Doesn't feel pushy
@@ -254,6 +259,7 @@ Instead of prominent "Skip", use subtle "I'll do this later":
 ### 2. Smart Defaults
 
 Pre-fill based on context:
+
 - Email domain → Company name
 - Industry → Template selection
 - Team size → Feature recommendations
@@ -279,6 +285,7 @@ const SMART_DEFAULTS = {
 ### 3. Sneaky Progress Bar
 
 Show progress from 20% to make completion feel achievable:
+
 - Starting at 0% feels overwhelming
 - Starting at 20% suggests progress already made
 - Increases completion by ~25%
@@ -286,6 +293,7 @@ Show progress from 20% to make completion feel achievable:
 ### 4. User-Triggered Product Tours
 
 Let users initiate tours rather than forcing:
+
 - "Show me around" button
 - "Learn how this works" links
 - Reduces annoyance, increases engagement
@@ -328,6 +336,7 @@ Let users initiate tours rather than forcing:
 From UX Bootcamp research:
 
 **5-Step Handoff Process**:
+
 1. **Gather design assets** - Finalize all deliverables
 2. **Organize systematically** - Clear naming, structure
 3. **Communicate intent** - Document the "why"
@@ -398,6 +407,7 @@ interface EmptyStateDesign {
 ### Empty State Examples
 
 **Work Items (Launch Mode)**:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │         🚀 Ready to plan your MVP?                          │
@@ -412,6 +422,7 @@ interface EmptyStateDesign {
 ```
 
 **Work Items (Development Mode)**:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │         🔧 Ready to capture user feedback?                  │
@@ -431,24 +442,28 @@ interface EmptyStateDesign {
 ## Implementation Checklist
 
 ### Phase 1: Core Onboarding
+
 - [ ] Implement mode-specific checklists
 - [ ] Create welcome flow
 - [ ] Build progress tracking
 - [ ] Add celebration moments
 
 ### Phase 2: In-App Guidance
+
 - [ ] Implement tooltip system
 - [ ] Build interactive walkthroughs
 - [ ] Create resource center
 - [ ] Add contextual banners
 
 ### Phase 3: Empty States
+
 - [ ] Design mode-aware empty states
 - [ ] Implement for all major screens
 - [ ] Add contextual tips
 - [ ] Track conversion from empty states
 
 ### Phase 4: Automation
+
 - [ ] Identify automation candidates
 - [ ] Implement status automation
 - [ ] Add notification triggers

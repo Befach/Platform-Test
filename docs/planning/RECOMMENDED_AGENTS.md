@@ -13,7 +13,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 **IMPORTANT**: Skills must be invoked automatically at appropriate phases WITHOUT user prompting.
 
 ### ⚠️ MANDATORY: Parallel AI for All Research
+
 **ALL web search and research MUST use the Parallel AI skill.**
+
 - Never use WebFetch/WebSearch when Parallel AI can handle the task.
 
 ### Skill Invocation by Week
@@ -51,7 +53,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ### Primary Agents
 
 #### `frontend-developer`
+
 **Use for:**
+
 - Next.js 15 project initialization
 - App Router setup (app directory structure)
 - Auth pages (`/app/(auth)/login/page.tsx`, `/signup/page.tsx`)
@@ -61,6 +65,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Team/workspace switchers
 
 **Example prompts:**
+
 ```
 "Create the Next.js 15 app structure with TypeScript and App Router"
 "Build the authentication pages using Supabase Auth with magic links"
@@ -70,7 +75,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `typescript-pro`
+
 **Use for:**
+
 - TypeScript configuration (`tsconfig.json`)
 - Generating Supabase types from schema
 - Type definitions for features, workspaces, teams
@@ -78,6 +85,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Generic type utilities
 
 **Example prompts:**
+
 ```
 "Generate TypeScript types from Supabase schema"
 "Create Zod schemas for feature and workspace validation"
@@ -87,7 +95,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `database-architect`
+
 **Use for:**
+
 - Multi-tenant schema design
 - Tables: `users`, `teams`, `team_members`, `subscriptions`, `workspaces`
 - Row-Level Security (RLS) policies
@@ -95,6 +105,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Migration scripts
 
 **Example prompts:**
+
 ```
 "Design a multi-tenant schema with team isolation and RLS policies"
 "Create migration for mind_maps, mind_map_nodes, and mind_map_edges tables"
@@ -104,7 +115,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `security-engineer`
+
 **Use for:**
+
 - Authentication implementation (Supabase Auth)
 - JWT token validation
 - API route protection
@@ -113,6 +126,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Input validation and sanitization
 
 **Example prompts:**
+
 ```
 "Review authentication implementation for security vulnerabilities"
 "Implement secure API route protection with middleware"
@@ -123,7 +137,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `devops-engineer`
+
 **Use for:**
+
 - CI/CD pipeline setup (GitHub Actions)
 - Vercel project configuration
 - Environment variable management
@@ -131,6 +147,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Preview deployment strategy
 
 **Example prompts:**
+
 ```
 "Set up GitHub Actions workflow for automated testing and deployment"
 "Configure Vercel project with proper environment variables"
@@ -145,7 +162,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ### Primary Agents
 
 #### `frontend-developer`
+
 **Use for:**
+
 - ReactFlow integration
 - Custom node components (5 types: idea, feature, epic, module, user-story)
 - Drag-and-drop canvas
@@ -154,6 +173,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Export functionality (PNG, SVG, JSON)
 
 **Example prompts:**
+
 ```
 "Build a ReactFlow canvas component with custom node types"
 "Create 5 custom node components for mind mapping with different icons and styles"
@@ -164,12 +184,15 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `typescript-pro`
+
 **Use for:**
+
 - ReactFlow types (Node, Edge, CustomNodeData)
 - Mind map state management types
 - Canvas position and viewport types
 
 **Example prompts:**
+
 ```
 "Create TypeScript types for ReactFlow custom nodes with 5 node types"
 "Define types for mind map canvas state and Supabase sync"
@@ -182,7 +205,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ### Primary Agents
 
 #### `frontend-developer`
+
 **Use for:**
+
 - Dashboard feature cards
 - Feature list (grid/table view)
 - Feature CRUD modals
@@ -191,6 +216,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Critical path visualization
 
 **Example prompts:**
+
 ```
 "Build a feature card component with timeline breakdown and difficulty badges"
 "Create a dependency graph using ReactFlow with 4 link types"
@@ -200,7 +226,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `typescript-pro`
+
 **Use for:**
+
 - Feature type definitions
 - Dependency graph types
 - Timeline item types
@@ -208,6 +236,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Type guards for feature validation
 
 **Example prompts:**
+
 ```
 "Create comprehensive TypeScript types for features, timeline items, and dependencies"
 "Define discriminated unions for different link types"
@@ -217,13 +246,16 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `database-optimizer`
+
 **Use for:**
+
 - Query optimization for feature loading
 - Indexing strategies for `features`, `timeline_items`, `linked_items`
 - Circular dependency detection query
 - Performance tuning for large feature sets
 
 **Example prompts:**
+
 ```
 "Optimize the query for loading features with timeline items and dependencies"
 "Create indexes for workspace_id, team_id, and created_at columns"
@@ -233,7 +265,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `api-architect`
+
 **Use for:**
+
 - API route design for feature CRUD
 - RESTful endpoint patterns
 - Request/response validation
@@ -241,6 +275,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - API documentation
 
 **Example prompts:**
+
 ```
 "Design RESTful API routes for feature management"
 "Implement consistent error handling across all API routes"
@@ -251,7 +286,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `test-automator`
+
 **Use for:**
+
 - TDD setup for feature CRUD
 - Unit tests for business logic
 - Integration tests for API routes
@@ -259,6 +296,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Jest configuration
 
 **Example prompts:**
+
 ```
 "Set up Jest and React Testing Library for component testing"
 "Write TDD tests for feature creation, update, and deletion"
@@ -273,7 +311,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ### Primary Agents
 
 #### `frontend-developer`
+
 **Use for:**
+
 - Review link generator modal (3 tabs: invite, public, iframe)
 - External review page (`/app/public/review/[token]/page.tsx`)
 - Feedback form (ratings, comments, attachments)
@@ -281,6 +321,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Iframe embed view
 
 **Example prompts:**
+
 ```
 "Create a review link generator with three sharing methods"
 "Build an external review page with no authentication required"
@@ -290,7 +331,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `backend-architect`
+
 **Use for:**
+
 - Review link token generation
 - Email invitation system (Resend API)
 - Feedback submission API route
@@ -298,6 +341,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Expiration date logic
 
 **Example prompts:**
+
 ```
 "Implement secure token generation for review links"
 "Build email invitation system using Resend API"
@@ -307,7 +351,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `security-engineer`
+
 **Use for:**
+
 - Review link token security
 - Rate limiting for public endpoints
 - CSRF protection for feedback forms
@@ -316,6 +362,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Token expiration enforcement
 
 **Example prompts:**
+
 ```
 "Audit review link token generation for security vulnerabilities"
 "Implement rate limiting for public feedback submission"
@@ -330,7 +377,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ### Primary Agents
 
 #### `frontend-developer`
+
 **Use for:**
+
 - Timeline component (react-big-calendar or vis-timeline)
 - Gantt chart rendering
 - Drag-to-reschedule functionality
@@ -339,6 +388,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Real-time cursors and presence
 
 **Example prompts:**
+
 ```
 "Integrate react-big-calendar for timeline visualization"
 "Implement drag-to-reschedule with date validation against dependencies"
@@ -349,13 +399,16 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `database-optimizer`
+
 **Use for:**
+
 - Real-time subscription setup (Supabase Realtime)
 - Performance optimization for timeline queries
 - Presence tracking (online users)
 - Activity feed queries
 
 **Example prompts:**
+
 ```
 "Set up Supabase Realtime subscriptions for workspace changes"
 "Optimize query for loading features with dates for timeline view"
@@ -369,7 +422,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ### Primary Agents
 
 #### `ai-engineer`
+
 **Use for:**
+
 - OpenRouter API integration
 - Model routing logic (Claude Haiku, Perplexity, Grok)
 - Tool calling implementation (20+ AI tools)
@@ -378,6 +433,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Approval workflow for agentic actions
 
 **Example prompts:**
+
 ```
 "Integrate OpenRouter API with model routing based on task type"
 "Implement streaming chat with Server-Sent Events"
@@ -389,7 +445,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `frontend-developer`
+
 **Use for:**
+
 - AI chat panel (left sidebar)
 - Agentic panel (right sidebar)
 - Inline AI suggestions
@@ -398,6 +456,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - AI insights widget
 
 **Example prompts:**
+
 ```
 "Build AI chat panel with streaming message display"
 "Create agentic panel with tool approval workflow"
@@ -408,7 +467,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `typescript-pro`
+
 **Use for:**
+
 - AI message types and chat state
 - Tool calling types and schemas
 - Analytics dashboard types
@@ -416,6 +477,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Custom dashboard configuration types
 
 **Example prompts:**
+
 ```
 "Create TypeScript types for AI chat messages and streaming state"
 "Define types for AI tool calling system with 20+ tools"
@@ -426,7 +488,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `api-architect`
+
 **Use for:**
+
 - OpenRouter API integration patterns
 - Streaming SSE endpoint design
 - AI tool API routes
@@ -434,6 +498,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Usage tracking API
 
 **Example prompts:**
+
 ```
 "Design API routes for OpenRouter integration with streaming"
 "Implement SSE endpoint for real-time AI chat streaming"
@@ -448,7 +513,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ### Primary Agents
 
 #### `payment-integration`
+
 **Use for:**
+
 - Razorpay integration (Orders, Subscriptions, Customer Portal)
 - Webhook handling (subscription events)
 - Feature gates (5 users on Free, Pro features)
@@ -458,6 +525,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 **Note**: Using Razorpay instead of Stripe (Stripe is invite-only in India).
 
 **Example prompts:**
+
 ```
 "Integrate Razorpay Orders for Pro plan subscription"
 "Implement Razorpay webhook handler for subscription lifecycle events"
@@ -468,7 +536,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `test-automator`
+
 **Use for:**
+
 - Playwright E2E test suite
 - Test scenarios (auth, team creation, feature CRUD, billing)
 - Jest unit tests (permissions, billing logic)
@@ -476,6 +546,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - CI/CD integration (GitHub Actions)
 
 **Example prompts:**
+
 ```
 "Create Playwright E2E tests for authentication and onboarding flow"
 "Write tests for team creation, invites, and feature CRUD operations"
@@ -486,7 +557,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `docs-architect`
+
 **Use for:**
+
 - User documentation (getting started, feature walkthroughs)
 - Developer documentation (architecture, API reference)
 - Self-hosting guide (Docker, environment variables)
@@ -494,6 +567,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - README, CONTRIBUTING, CODE_OF_CONDUCT
 
 **Example prompts:**
+
 ```
 "Create comprehensive user documentation for all 10 modules"
 "Write developer documentation including architecture and API reference"
@@ -504,13 +578,16 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `typescript-pro`
+
 **Use for:**
+
 - Payment types (Razorpay webhooks, subscriptions)
 - Test types and mock data
 - E2E test page object models
 - Type-safe environment variable validation
 
 **Example prompts:**
+
 ```
 "Create TypeScript types for Razorpay webhook events"
 "Define types for test fixtures and mock data"
@@ -521,7 +598,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `security-engineer`
+
 **Use for:**
+
 - Security audit (OWASP top 10)
 - Penetration testing recommendations
 - Dependency vulnerability scanning
@@ -530,6 +609,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Payment security validation
 
 **Example prompts:**
+
 ```
 "Perform comprehensive security audit for OWASP top 10 vulnerabilities"
 "Review Razorpay integration for security best practices"
@@ -540,7 +620,9 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 #### `devops-engineer`
+
 **Use for:**
+
 - Production deployment strategy
 - Environment variable management (Vercel)
 - Monitoring and logging setup
@@ -549,6 +631,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - Backup and disaster recovery
 
 **Example prompts:**
+
 ```
 "Create production deployment checklist and rollback strategy"
 "Configure Vercel environment variables for staging and production"
@@ -561,13 +644,16 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ## Cross-Cutting Agents (Use Throughout)
 
 ### `code-reviewer`
+
 **Use after completing features:**
+
 - Code quality checks
 - Security vulnerability scanning
 - Performance optimization suggestions
 - Best practices enforcement
 
 **Example prompts:**
+
 ```
 "Review the mind mapping implementation for security and performance issues"
 "Check the Razorpay integration for security best practices"
@@ -576,13 +662,16 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 ---
 
 ### `debugger`
+
 **Use when encountering issues:**
+
 - Error investigation
 - Stack trace analysis
 - Environment debugging
 - Performance bottlenecks
 
 **Example prompts:**
+
 ```
 "Debug the Supabase Realtime subscription not updating in real-time"
 "Investigate why dependency arrows are not rendering correctly"
@@ -610,6 +699,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 **Project-Recommended Agents**: 15 primary + cross-cutting
 
 **Primary Agents by Week**:
+
 - **Week 1-2**: `frontend-developer`, `typescript-pro`, `database-architect`, `security-auditor`, `deployment-engineer`
 - **Week 3**: `frontend-developer`, `typescript-pro`
 - **Week 4**: `frontend-developer`, `typescript-pro`, `database-optimizer`, `api-design-principles`, `test-automator`
@@ -619,6 +709,7 @@ This guide maps Claude Code agents to specific weeks in your implementation time
 - **Week 8**: `payment-integration`, `test-automator`, `docs-architect`, `security-auditor`, `deployment-engineer`
 
 **Cross-Cutting Agents** (use throughout):
+
 - `code-reviewer` - After each major feature
 - `debugger` - When encountering issues
 - `Explore` - For codebase exploration
@@ -646,9 +737,11 @@ You: "Launch test-automator agent to create Playwright E2E test suite"
 ## 🔄 Multi-Agent Orchestration Patterns
 
 ### Pattern 1: Parallel Specialists
+
 **Use when**: Feature needs multiple specializations simultaneously
 
 **Example - Mind Mapping Canvas**:
+
 ```
 Launch in SINGLE message:
 1. frontend-developer → Build ReactFlow canvas UI
@@ -657,9 +750,11 @@ Launch in SINGLE message:
 ```
 
 ### Pattern 2: Sequential Pipeline
+
 **Use when**: Output of one agent feeds into another
 
 **Example - New API Endpoint**:
+
 ```
 Step 1: api-architect → Design endpoint structure, request/response shape
 Step 2: typescript-pro → Create TypeScript types from design
@@ -669,9 +764,11 @@ Step 5: frontend-developer → Create UI to consume the API
 ```
 
 ### Pattern 3: Review Gate
+
 **Use when**: Critical feature needs quality assurance before merge
 
 **Example - Payment Integration**:
+
 ```
 1. payment-integration → Implement Razorpay Orders/Subscriptions
 2. security-auditor → Audit for vulnerabilities, webhook security
@@ -680,9 +777,11 @@ Step 5: frontend-developer → Create UI to consume the API
 ```
 
 ### Pattern 4: Exploration → Implementation
+
 **Use when**: Uncertain scope or multiple valid approaches
 
 **Example - Performance Optimization**:
+
 ```
 1. Explore agent → Identify bottlenecks (queries, renders, network)
 2. [Choose based on findings]:
@@ -693,7 +792,9 @@ Step 5: frontend-developer → Create UI to consume the API
 ```
 
 ### Context Handoff Protocol
+
 When switching agents mid-feature:
+
 ```
 ## Handoff to [next-agent]
 
@@ -714,6 +815,7 @@ When switching agents mid-feature:
 ## 📚 Complete Agent Catalog
 
 ### Core Agents (Built-in)
+
 | Agent | Use For |
 |-------|---------|
 | `Explore` | Fast codebase exploration, file searching, pattern discovery |
@@ -721,6 +823,7 @@ When switching agents mid-feature:
 | `general-purpose` | Multi-step tasks, complex research |
 
 ### Frontend & UI
+
 | Agent | Use For |
 |-------|---------|
 | `frontend-developer` | React 19, Next.js 15, components, state, accessibility |
@@ -728,6 +831,7 @@ When switching agents mid-feature:
 | `ui-visual-validator` | Screenshot analysis, visual regression testing |
 
 ### Backend & API
+
 | Agent | Use For |
 |-------|---------|
 | `backend-architect` | API design, microservices, distributed systems |
@@ -737,6 +841,7 @@ When switching agents mid-feature:
 | `api-design-principles` | REST/GraphQL API design standards |
 
 ### Database
+
 | Agent | Use For |
 |-------|---------|
 | `database-architect` | Schema design, technology selection, modeling |
@@ -746,6 +851,7 @@ When switching agents mid-feature:
 | `database-migration` | Zero-downtime migrations, data transformation |
 
 ### TypeScript & JavaScript
+
 | Agent | Use For |
 |-------|---------|
 | `typescript-pro` | Advanced types, generics, strict type safety |
@@ -754,6 +860,7 @@ When switching agents mid-feature:
 | `nodejs-backend-patterns` | Express/Fastify, middleware, API patterns |
 
 ### Testing & Quality
+
 | Agent | Use For |
 |-------|---------|
 | `test-automator` | AI-powered test automation, CI/CD integration |
@@ -762,6 +869,7 @@ When switching agents mid-feature:
 | `code-reviewer` | Code quality, security scanning, performance |
 
 ### Security
+
 | Agent | Use For |
 |-------|---------|
 | `security-auditor` | DevSecOps, vulnerability assessment, compliance |
@@ -770,6 +878,7 @@ When switching agents mid-feature:
 | `auth-implementation-patterns` | JWT, OAuth2, session management, RBAC |
 
 ### DevOps & Cloud
+
 | Agent | Use For |
 |-------|---------|
 | `deployment-engineer` | CI/CD pipelines, GitOps, deployment automation |
@@ -779,6 +888,7 @@ When switching agents mid-feature:
 | `devops-troubleshooter` | Incident response, debugging, observability |
 
 ### AI & ML
+
 | Agent | Use For |
 |-------|---------|
 | `ai-engineer` | LLM applications, RAG systems, agents |
@@ -787,12 +897,14 @@ When switching agents mid-feature:
 | `rag-implementation` | Vector databases, semantic search |
 
 ### Payments & Billing
+
 | Agent | Use For |
 |-------|---------|
 | `payment-integration` | Stripe, PayPal, checkout flows, PCI compliance |
 | `billing-automation` | Recurring payments, subscriptions, invoicing |
 
 ### Documentation
+
 | Agent | Use For |
 |-------|---------|
 | `docs-architect` | Technical documentation, architecture guides |
@@ -800,6 +912,7 @@ When switching agents mid-feature:
 | `tutorial-engineer` | Step-by-step tutorials, educational content |
 
 ### Debugging & Performance
+
 | Agent | Use For |
 |-------|---------|
 | `debugger` | Error investigation, stack traces, issues |
@@ -807,6 +920,7 @@ When switching agents mid-feature:
 | `observability-engineer` | Monitoring, logging, SLI/SLO management |
 
 ### Other Languages
+
 | Agent | Use For |
 |-------|---------|
 | `python-pro` | Python 3.12+, async, uv, ruff |

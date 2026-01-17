@@ -37,30 +37,35 @@ Progressive disclosure and role-based interfaces are critical UX patterns for co
 Research shows how leading B2B platforms approach progressive disclosure and user experience:
 
 ### Linear (Engineering-First)
+
 - **Speed obsession**: Everything < 100ms
 - **Keyboard-first**: Power users never touch mouse
 - **Triage Intelligence**: AI auto-assigns based on patterns
 - **Cycles**: Time-boxed work periods for focus
 
 ### Notion (Cross-Functional)
+
 - **Flexibility**: Same tool for docs, wikis, databases
 - **Views**: Same data, different visualizations per team
 - **Templates**: Team-specific starting points
 - **Relations**: Connect any database to any other
 
 ### Figma (Design-Centric)
+
 - **Real-time collaboration**: Multiple cursors, live editing
 - **Dev handoff**: Different views for designers vs developers
 - **Components**: Reusable, connected elements
 - **Branching**: Explore without breaking main
 
 ### Productboard (Strategy-Connected)
+
 - **Feedback-first**: Everything links to user requests
 - **Insights**: Connect features to customer quotes
 - **Portals**: Customer-facing roadmap views
 - **Scoring**: Quantified prioritization
 
 ### Asana (Portfolio-Level)
+
 - **Portfolios**: Cross-project visibility
 - **Goals**: OKR alignment
 - **Workload**: Resource management
@@ -231,6 +236,7 @@ Dashboard Home (Hub)
 3. **Deep Dive Available**: Full detail on demand
 
 Example:
+
 ```
 Work Item Card (Summary)
 ├─ Title, Status, Assignee
@@ -404,6 +410,7 @@ Avoid these common mistakes:
 ## Implementation Checklist
 
 ### Phase 1: Foundation
+
 - [ ] Implement 3-level progressive disclosure
 - [ ] Add role detection on signup/invite
 - [ ] Create role-based default views
@@ -411,6 +418,7 @@ Avoid these common mistakes:
 - [ ] Design empty states for all major views
 
 ### Phase 2: Enhancement
+
 - [ ] Build smart defaults engine
 - [ ] Add on-blur validation across forms
 - [ ] Create contextual tooltips
@@ -419,6 +427,7 @@ Avoid these common mistakes:
 - [ ] Create onboarding checklists
 
 ### Phase 3: Optimization
+
 - [ ] Track disclosure level effectiveness
 - [ ] A/B test field visibility
 - [ ] Optimize based on user behavior data

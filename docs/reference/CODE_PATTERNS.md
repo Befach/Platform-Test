@@ -2,7 +2,7 @@
 
 > **Split Version Available**: This file has been split into smaller files for better AI readability. See [code-patterns/README.md](code-patterns/README.md) for the organized version.
 
-**Last Updated**: 2025-12-28 (Verified - Next.js 16.1.1 compatible)
+**Last Updated**: 2026-01-17 (Verified - Next.js 16.1.3 compatible)
 **Purpose**: Comprehensive code examples for common patterns in the Product Lifecycle Management Platform
 
 ---
@@ -16,6 +16,8 @@
 5. [Real-time Subscription Patterns](#real-time-subscription-patterns)
 6. [Feature Gates & Billing Patterns](#feature-gates--billing-patterns)
 7. [AI Integration Patterns](#ai-integration-patterns)
+8. [Phase System Patterns](#phase-system-patterns)
+9. [Linting Configuration](#linting-configuration)
 
 ---
 
@@ -84,6 +86,7 @@ const createFeature = async (data: any) => {
 ```
 
 **Key Principles**:
+
 - ✅ Use strict TypeScript interfaces for all data structures
 - ✅ Use `Date.now().toString()` for IDs (timestamp-based)
 - ✅ Always handle errors explicitly
@@ -211,6 +214,7 @@ const FeatureCard = ({ feature }) => (
 ```
 
 **Key Principles**:
+
 - ✅ Use shadcn/ui components (not custom UI)
 - ✅ Use Tailwind CSS utility classes (not inline styles)
 - ✅ TypeScript props interfaces for all components
@@ -301,6 +305,7 @@ const loadFeatures = async () => {
 ```
 
 **Key Principles**:
+
 - ✅ **ALWAYS** filter by `team_id` for multi-tenancy
 - ✅ Use typed responses (`Promise<Feature[]>`)
 - ✅ Handle errors explicitly
@@ -393,16 +398,19 @@ EXECUTE FUNCTION update_updated_at_column();
 ```
 
 **Apply Migration**:
+
 ```bash
 npx supabase db push
 ```
 
 **Generate TypeScript Types**:
+
 ```bash
 npx supabase gen types typescript --local > lib/supabase/types.ts
 ```
 
 **Key Principles**:
+
 - ✅ Always include `team_id` for multi-tenancy
 - ✅ Use TEXT IDs (for timestamp-based IDs)
 - ✅ Add foreign key constraints with `ON DELETE CASCADE`
@@ -417,11 +425,13 @@ npx supabase gen types typescript --local > lib/supabase/types.ts
 **This is a common source of silent failures!**
 
 RLS policies use this pattern:
+
 ```sql
 team_id IN (SELECT team_id FROM team_members WHERE user_id = auth.uid())
 ```
 
 **The Problem**: If `team_id` is NULL, this check **always fails silently** because:
+
 - `NULL IN (...)` always returns NULL/false, never true
 - Supabase returns empty results `{}` with no error message
 - Operations appear to succeed but actually do nothing
@@ -442,6 +452,7 @@ COMMENT ON COLUMN my_table.team_id IS
 ```
 
 **Checklist for New Tables**:
+
 - [ ] `team_id TEXT NOT NULL` - Never allow NULL
 - [ ] `REFERENCES teams(id) ON DELETE CASCADE` - FK constraint
 - [ ] Index on team_id for performance
@@ -449,6 +460,7 @@ COMMENT ON COLUMN my_table.team_id IS
 - [ ] Test with authenticated user to verify RLS works
 
 **Debugging RLS Failures**:
+
 1. Check if `team_id` is NULL in the row being inserted/queried
 2. Verify user is authenticated (`auth.uid()` is not NULL)
 3. Verify user is in `team_members` table for the target team
@@ -517,6 +529,7 @@ useEffect(() => {
 ```
 
 **Key Principles**:
+
 - ✅ Use unique channel names (`workspace_${workspaceId}_features`)
 - ✅ Filter by `team_id` and `workspace_id` for security
 - ✅ Return cleanup function for unsubscribing
@@ -610,6 +623,7 @@ export function ReviewButton({ teamId }: { teamId: string }) {
 ```
 
 **Key Principles**:
+
 - ✅ Check feature access server-side AND client-side
 - ✅ Fail closed (deny access if check fails)
 - ✅ Show upgrade prompts for Pro features
@@ -707,6 +721,7 @@ export const createFeatureTool = {
 ```
 
 **Key Principles**:
+
 - ✅ Use streaming for real-time responses
 - ✅ Handle errors gracefully in streams
 - ✅ Close streams properly
@@ -1013,7 +1028,74 @@ export function StrategyView({ context, workItemId }: Props) {
 
 ---
 
+## Linting Configuration
+
+### Markdown Linting
+
+The project uses `markdownlint-cli2` for markdown linting with custom configuration.
+
+**Config File**: `.markdownlint.json` (root)
+
+```json
+{
+  "default": true,
+  "MD013": false,  // Line length - docs often have long lines
+  "MD022": false,  // Heading spacing - flexible in docs
+  "MD024": false,  // Duplicate headings - common in changelogs
+  "MD025": false,  // Multiple H1 headings - multi-section docs
+  "MD029": false,  // Ordered list prefixes - flexible numbering
+  "MD031": false,  // Fenced code block spacing
+  "MD032": false,  // List spacing
+  "MD033": false,  // HTML in markdown - sometimes necessary
+  "MD034": false,  // Bare URLs - common in references
+  "MD035": false,  // Horizontal rule style - flexible
+  "MD036": false,  // Emphasis as heading - used in some docs
+  "MD040": false,  // Fenced code language - not always specified
+  "MD041": false,  // First line heading - some docs have frontmatter
+  "MD051": false,  // Link fragments - cross-document references
+  "MD055": false,  // Table formatting - flexible styles
+  "MD058": false,  // Table spacing
+  "MD060": false   // Table column style - flexible alignment
+}
+```
+
+**Ignore File**: `.markdownlintignore` (root)
+
+```
+docs/planning/PROGRESS.md
+docs/reference/CHANGELOG.md
+node_modules/
+**/node_modules/
+.next/
+dist/
+build/
+```
+
+**Run Lint Check**:
+
+```bash
+cd next-app
+bun run check:links    # Checks markdown links
+npx markdownlint-cli2 "docs/**/*.md"  # Full markdown lint
+```
+
+### ESLint Configuration
+
+ESLint is configured in `next-app/eslint.config.mjs` with Next.js recommended rules.
+
+**Run ESLint**:
+
+```bash
+cd next-app
+bun run lint           # ESLint check
+bun run lint --fix     # Auto-fix issues
+```
+
+---
+
 **See Also**:
+
 - [Architecture Reference](../architecture/ARCHITECTURE.md) - Two-layer system, phase system details
 - [API Reference](API_REFERENCE.md)
 - [Main Implementation Plan](../implementation/README.md)
+- [GitHub Actions](GITHUB_ACTIONS.md) - CI lint checks

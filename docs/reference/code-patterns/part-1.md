@@ -82,6 +82,7 @@ const createFeature = async (data: any) => {
 ```
 
 **Key Principles**:
+
 - ✅ Use strict TypeScript interfaces for all data structures
 - ✅ Use `Date.now().toString()` for IDs (timestamp-based)
 - ✅ Always handle errors explicitly
@@ -209,6 +210,7 @@ const FeatureCard = ({ feature }) => (
 ```
 
 **Key Principles**:
+
 - ✅ Use shadcn/ui components (not custom UI)
 - ✅ Use Tailwind CSS utility classes (not inline styles)
 - ✅ TypeScript props interfaces for all components
@@ -299,6 +301,7 @@ const loadFeatures = async () => {
 ```
 
 **Key Principles**:
+
 - ✅ **ALWAYS** filter by `team_id` for multi-tenancy
 - ✅ Use typed responses (`Promise<Feature[]>`)
 - ✅ Handle errors explicitly
@@ -391,16 +394,19 @@ EXECUTE FUNCTION update_updated_at_column();
 ```
 
 **Apply Migration**:
+
 ```bash
 npx supabase db push
 ```
 
 **Generate TypeScript Types**:
+
 ```bash
 npx supabase gen types typescript --local > lib/supabase/types.ts
 ```
 
 **Key Principles**:
+
 - ✅ Always include `team_id` for multi-tenancy
 - ✅ Use TEXT IDs (for timestamp-based IDs)
 - ✅ Add foreign key constraints with `ON DELETE CASCADE`
@@ -415,11 +421,13 @@ npx supabase gen types typescript --local > lib/supabase/types.ts
 **This is a common source of silent failures!**
 
 RLS policies use this pattern:
+
 ```sql
 team_id IN (SELECT team_id FROM team_members WHERE user_id = auth.uid())
 ```
 
 **The Problem**: If `team_id` is NULL, this check **always fails silently** because:
+
 - `NULL IN (...)` always returns NULL/false, never true
 - Supabase returns empty results `{}` with no error message
 - Operations appear to succeed but actually do nothing
@@ -440,6 +448,7 @@ COMMENT ON COLUMN my_table.team_id IS
 ```
 
 **Checklist for New Tables**:
+
 - [ ] `team_id TEXT NOT NULL` - Never allow NULL
 - [ ] `REFERENCES teams(id) ON DELETE CASCADE` - FK constraint
 - [ ] Index on team_id for performance
@@ -447,6 +456,7 @@ COMMENT ON COLUMN my_table.team_id IS
 - [ ] Test with authenticated user to verify RLS works
 
 **Debugging RLS Failures**:
+
 1. Check if `team_id` is NULL in the row being inserted/queried
 2. Verify user is authenticated (`auth.uid()` is not NULL)
 3. Verify user is in `team_members` table for the target team

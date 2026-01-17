@@ -128,23 +128,27 @@ SESSION 6: Polish & Testing
 #### Implementation Order (Critical Path)
 
 **Recommended Sequence**:
+
 1. **Session 1** (CRITICAL) - Must be done first, blocks Sessions 2 & 3
 2. **Sessions 2, 4, 5** (PARALLEL) - Can be done simultaneously
 3. **Session 3** - After Session 1 validation is fixed
 4. **Session 6** - After all other sessions complete
 
 **Minimum Duration**:
+
 - Sequential: 44 hours (~6 days)
 - Parallel (2 developers): 28 hours (~4 days)
 
 #### Key Architecture Decisions
 
 **Two-Layer System (NOT Three)**:
+
 - Workspace shows phase DISTRIBUTION across work items (aggregation view)
 - Work items have phase field that IS the status (no separate status field)
 - Timeline items have separate status field for execution tracking
 
 **Phase Transition Requirements**:
+
 | From → To | Required Fields | Threshold |
 |-----------|----------------|-----------|
 | research → planning | purpose, 1+ timeline item OR scope | 80% |
@@ -153,12 +157,14 @@ SESSION 6: Polish & Testing
 | review → complete | Feedback addressed, status = completed | 100% |
 
 **Design Thinking as Methodology**:
+
 - NOT lifecycle stages, but HOW to work at each phase
 - Major frameworks: d.school, Double Diamond, IDEO, IBM
 - AI suggests methods based on current phase
 - Guiding questions per phase as tooltips
 
 **Strategy Customization**:
+
 - New fields: user_stories[], user_examples[], case_studies[]
 - Organization view: Full tree, high-level metrics
 - Work item view: Aligned strategies only, strength indicators
@@ -175,32 +181,38 @@ SESSION 6: Polish & Testing
 #### Success Criteria
 
 **Session 1 Complete**:
+
 - [ ] Phase calculation logic fixed with tests
 - [ ] validatePhaseTransition() function working
 - [ ] phase_transitions JSONB column added
 - [ ] Field validation enforced
 
 **Session 2 Complete**:
+
 - [ ] Readiness calculator accurate
 - [ ] Upgrade prompts show at 80%
 - [ ] Guiding questions visible
 
 **Session 3 Complete**:
+
 - [ ] Workspace analysis API working
 - [ ] Health card displays correctly
 - [ ] Manual refresh functional
 
 **Session 4 Complete**:
+
 - [ ] 4 frameworks documented
 - [ ] AI suggests methods per phase
 - [ ] Case study examples available
 
 **Session 5 Complete**:
+
 - [ ] New strategy fields populated
 - [ ] Organization view shows full tree
 - [ ] Work item view shows alignment
 
 **Session 6 Complete**:
+
 - [ ] All E2E tests passing
 - [ ] Documentation updated
 - [ ] Production-ready
@@ -222,6 +234,7 @@ SESSION 6: Polish & Testing
 **Effort**: 1 day
 
 **Components**:
+
 - Database: `departments` table
 - Fields: `id`, `team_id`, `workspace_id`, `name`, `type`, `color`, `icon`, `lead_user_id`
 - Types: `engineering`, `design`, `product`, `qa`, `marketing`, `operations`, `custom`
@@ -229,6 +242,7 @@ SESSION 6: Polish & Testing
 - API: CRUD endpoints for department management
 
 **Blocks**:
+
 - 1.2 Workflow States
 - 1.3 Triage Queue
 - 2.x Workspace Modes
@@ -236,6 +250,7 @@ SESSION 6: Polish & Testing
 - All department-specific customization
 
 **Schema**:
+
 ```sql
 CREATE TABLE departments (
   id TEXT PRIMARY KEY,
@@ -271,16 +286,19 @@ CREATE INDEX idx_work_items_department ON work_items(department_id);
 **Effort**: 1 day
 
 **Components**:
+
 - Database: `workflow_states` table (already exists, needs department_id)
 - Default workflows by department type
 - Custom workflow editor UI
 - Transition rules and validation
 
 **Blocks**:
+
 - 2.2 Mode-Specific Defaults
 - 3.x UX Enhancements
 
 **Schema Enhancement**:
+
 ```sql
 ALTER TABLE workflow_stages ADD COLUMN department_id TEXT REFERENCES departments(id) ON DELETE CASCADE;
 CREATE INDEX idx_workflow_stages_department ON workflow_stages(department_id);
@@ -304,6 +322,7 @@ CREATE INDEX idx_workflow_stages_department ON workflow_stages(department_id);
 **Effort**: 1 day
 
 **Components**:
+
 - UI: Triage board view (Kanban)
 - Workflow: Pending → Review → Prioritize → Assign
 - Auto-routing: Customer feedback → Support department, Bug → Engineering
@@ -312,6 +331,7 @@ CREATE INDEX idx_workflow_stages_department ON workflow_stages(department_id);
 **Blocks**: 4.3 Feature Voting
 
 **Implementation**:
+
 - Reuse existing `feedback` table
 - Add `triage_status` field: `pending`, `in_review`, `prioritized`, `assigned`, `converted`
 - Create triage view component
@@ -336,6 +356,7 @@ CREATE INDEX idx_workflow_stages_department ON workflow_stages(department_id);
 **Effort**: 1 day
 
 **Modes**:
+
 | Mode | Description | Target Users |
 |------|-------------|--------------|
 | `startup` | Lightweight, fast iteration | Small teams (1-10) |
@@ -344,11 +365,13 @@ CREATE INDEX idx_workflow_stages_department ON workflow_stages(department_id);
 | `custom` | Manual configuration | Power users |
 
 **Blocks**:
+
 - 2.2 Mode-Specific Defaults
 - 2.3 Mode Transition Flow
 - 2.4 Mode-Specific Dashboards
 
 **Schema**:
+
 ```sql
 ALTER TABLE workspaces ADD COLUMN mode TEXT CHECK (mode IN ('startup', 'enterprise', 'agency', 'custom')) DEFAULT 'startup';
 ALTER TABLE workspaces ADD COLUMN mode_settings JSONB DEFAULT '{}'::jsonb;
@@ -370,12 +393,14 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Defaults by Mode**:
 
 **Startup Mode**:
+
 - Phases: Research → Build → Ship (simplified)
 - Departments: Engineering + Product only
 - Workflow: Backlog → In Progress → Done
 - Modules: Mind Map, Features, Timeline
 
 **Enterprise Mode**:
+
 - Phases: All 7 phases
 - Departments: All 6 default departments
 - Workflow: Custom by department with approvals
@@ -383,6 +408,7 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 - Additional: Approval workflows, audit logs
 
 **Agency Mode**:
+
 - Phases: Discovery → Design → Development → Review → Delivery
 - Departments: Design + Engineering + Project Management
 - Workflow: With client approval steps
@@ -391,6 +417,7 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Blocks**: 3.2 Progressive Disclosure
 
 **Implementation**:
+
 - Mode templates JSON files
 - Apply template on workspace creation
 - Migration path between modes
@@ -408,11 +435,13 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Effort**: 1 day
 
 **Transitions**:
+
 - Startup → Enterprise (add departments, enable governance)
 - Startup → Agency (add client management)
 - Enterprise → Custom (unlock all customization)
 
 **Implementation**:
+
 - Pre-flight check (data migration impact)
 - Backup existing configuration
 - Apply new defaults
@@ -433,17 +462,20 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Dashboard Layouts**:
 
 **Startup Dashboard**:
+
 - Work Items by Phase (pie chart)
 - Sprint Burndown (line chart)
 - Top Blockers (list)
 
 **Enterprise Dashboard**:
+
 - Strategic Alignment (OKR progress)
 - Department Health (status grid)
 - Risk Register (table)
 - Budget vs Actual (bar chart)
 
 **Agency Dashboard**:
+
 - Client Projects (kanban board)
 - Billable Hours (timeline)
 - Client Satisfaction (NPS)
@@ -467,6 +499,7 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Effort**: 2 days
 
 **Templates**:
+
 | Template | Description | Includes |
 |----------|-------------|----------|
 | SaaS Startup | Product-market fit phase | Research canvas, MVP roadmap |
@@ -478,6 +511,7 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Blocks**: 3.3 Notion-Style Connection Menu
 
 **Implementation**:
+
 - Template gallery UI
 - Template application wizard
 - Sample data for each template
@@ -495,11 +529,13 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Effort**: 2 days
 
 **Disclosure Levels**:
+
 1. **Basic** (Default): 5 essential fields (name, type, status, owner, phase)
 2. **Intermediate** (+4 fields): Timeline, priority, department, tags
 3. **Advanced** (+10 fields): Custom fields, AI metadata, integrations
 
 **UI Pattern**:
+
 ```tsx
 // Work Item Form
 <Form>
@@ -521,6 +557,7 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 ```
 
 **Implementation**:
+
 - User preference: disclosure level (stored in user_settings)
 - Auto-promote to next level after 10 actions
 - "Show all fields" toggle for power users
@@ -538,6 +575,7 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Effort**: 3 days
 
 **Command Types**:
+
 | Command | Action | Example |
 |---------|--------|---------|
 | `/link-work-item` | Link to existing work item | `/link-work-item Authentication Bug` |
@@ -550,6 +588,7 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Blocks**: 5.2 Strategy Alignment
 
 **Implementation**:
+
 - TipTap or ProseMirror editor integration
 - Fuzzy search across all linkable entities
 - Recent items suggestion
@@ -576,12 +615,14 @@ CREATE INDEX idx_workspaces_mode ON workspaces(mode);
 **Effort**: 2 days
 
 **Blocks**:
+
 - 4.2 Feedback Widget
 - 4.3 Feature Voting
 - 4.4 Insight Linking
 - 5.3 AI Alignment Suggestions
 
 **Schema**:
+
 ```sql
 CREATE TABLE customer_insights (
   id TEXT PRIMARY KEY,
@@ -627,6 +668,7 @@ CREATE INDEX idx_customer_insights_priority ON customer_insights(priority);
 ```
 
 **API Endpoints**:
+
 - `GET /api/workspaces/[id]/insights` - List insights with filters
 - `POST /api/workspaces/[id]/insights` - Create insight
 - `PATCH /api/insights/[id]` - Update status, link to work item
@@ -647,6 +689,7 @@ CREATE INDEX idx_customer_insights_priority ON customer_insights(priority);
 **Blocks**: 4.4 Insight Linking
 
 **Features**:
+
 - Public URL: `platform.example.com/feedback/[workspace_token]`
 - Embeddable iframe: `<iframe src="...feedback-widget..." />`
 - Fields: Name (optional), Email (optional), Type, Title, Description
@@ -654,6 +697,7 @@ CREATE INDEX idx_customer_insights_priority ON customer_insights(priority);
 - Auto-create customer_insights record
 
 **Implementation**:
+
 ```tsx
 // Public feedback page (no auth required)
 app/feedback/[token]/page.tsx
@@ -663,6 +707,7 @@ app/feedback/[token]/page.tsx
 ```
 
 **API**:
+
 - `POST /api/feedback/public` - Accept anonymous feedback
 - `GET /api/feedback/widget/[token]` - Validate token, return config
 
@@ -679,6 +724,7 @@ app/feedback/[token]/page.tsx
 **Effort**: 2 days
 
 **Schema**:
+
 ```sql
 CREATE TABLE insight_votes (
   id TEXT PRIMARY KEY,
@@ -695,12 +741,14 @@ CREATE INDEX idx_customer_insights_votes ON customer_insights(vote_count DESC);
 ```
 
 **UI**:
+
 - Public voting page: `platform.example.com/vote/[workspace_token]`
 - Sort insights by votes
 - Show "12 customers want this" badge
 - Email notification on status change
 
 **API**:
+
 - `POST /api/insights/[id]/vote` - Upvote (public endpoint)
 - `GET /api/insights/trending` - Top voted insights
 
@@ -717,12 +765,14 @@ CREATE INDEX idx_customer_insights_votes ON customer_insights(vote_count DESC);
 **Effort**: 1 day
 
 **Features**:
+
 - Many-to-many: One insight can link to multiple work items
 - Show insights on Work Item Detail page (Feedback tab)
 - Show linked work items on Insights page
 - Auto-update insight status when linked work item ships
 
 **Schema Enhancement**:
+
 ```sql
 -- Already exists: linked_work_item_id in customer_insights
 -- Add many-to-many junction if needed
@@ -734,6 +784,7 @@ CREATE TABLE work_item_insights (
 ```
 
 **API**:
+
 - `POST /api/work-items/[id]/link-insight` - Link insight
 - `DELETE /api/work-items/[id]/unlink-insight` - Unlink
 - `GET /api/work-items/[id]/insights` - Get linked insights
@@ -757,6 +808,7 @@ CREATE TABLE work_item_insights (
 **Effort**: 2 days
 
 **Blocks**:
+
 - 5.2 Strategy Alignment on Work Items
 - 5.3 AI Alignment Suggestions
 - 5.4 Alignment Dashboard

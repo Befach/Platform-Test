@@ -9,9 +9,11 @@
 ## 🔐 AUTH API
 
 ### POST `/api/auth/signup`
+
 **[PUBLIC]** Create a new user account
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -21,6 +23,7 @@
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "user": {
@@ -39,9 +42,11 @@
 ---
 
 ### POST `/api/auth/login`
+
 **[PUBLIC]** Sign in existing user
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -50,6 +55,7 @@
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "user": { /* user object */ },
@@ -60,9 +66,11 @@
 ---
 
 ### POST `/api/auth/logout`
+
 Sign out current user
 
 **Response (200 OK):**
+
 ```json
 {
   "message": "Logged out successfully"
@@ -72,9 +80,11 @@ Sign out current user
 ---
 
 ### GET `/api/auth/session`
+
 Get current user session
 
 **Response (200 OK):**
+
 ```json
 {
   "user": {
@@ -93,9 +103,11 @@ Get current user session
 ## 👤 USER API
 
 ### GET `/api/user/profile`
+
 Get current user profile
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "uuid",
@@ -109,9 +121,11 @@ Get current user profile
 ---
 
 ### GET `/api/user/teams`
+
 Get all teams the current user belongs to
 
 **Response (200 OK):**
+
 ```json
 {
   "teams": [
@@ -130,9 +144,11 @@ Get all teams the current user belongs to
 ## 👥 TEAMS API
 
 ### POST `/api/teams`
+
 Create a new team
 
 **Request Body:**
+
 ```json
 {
   "name": "Acme Corp",
@@ -141,6 +157,7 @@ Create a new team
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "team": {
@@ -157,9 +174,11 @@ Create a new team
 ---
 
 ### GET `/api/teams`
+
 List all teams for current user
 
 **Response (200 OK):**
+
 ```json
 {
   "teams": [
@@ -177,9 +196,11 @@ List all teams for current user
 ---
 
 ### GET `/api/teams/:teamId`
+
 Get team details
 
 **Response (200 OK):**
+
 ```json
 {
   "team": {
@@ -206,9 +227,11 @@ Get team details
 ---
 
 ### PATCH `/api/teams/:teamId`
+
 Update team details
 
 **Request Body:**
+
 ```json
 {
   "name": "Acme Corporation"
@@ -216,6 +239,7 @@ Update team details
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "team": { /* updated team object */ }
@@ -225,6 +249,7 @@ Update team details
 ---
 
 ### DELETE `/api/teams/:teamId`
+
 Delete team (owner only)
 
 **Response (204 No Content)**
@@ -232,9 +257,11 @@ Delete team (owner only)
 ---
 
 ### POST `/api/teams/:teamId/members`
+
 Invite team member
 
 **Request Body:**
+
 ```json
 {
   "email": "newmember@example.com",
@@ -243,6 +270,7 @@ Invite team member
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "invitation": {
@@ -257,6 +285,7 @@ Invite team member
 ---
 
 ### DELETE `/api/teams/:teamId/members/:userId`
+
 Remove team member
 
 **Response (204 No Content)**
@@ -266,12 +295,15 @@ Remove team member
 ## 👥 TEAM MEMBERS API
 
 ### GET `/api/team/members`
+
 Get all members of current team
 
 **Query Parameters:**
+
 - `team_id` (required): Team ID
 
 **Response (200 OK):**
+
 ```json
 {
   "members": [
@@ -291,9 +323,11 @@ Get all members of current team
 ---
 
 ### PATCH `/api/team/members/:id`
+
 Update team member role
 
 **Request Body:**
+
 ```json
 {
   "role": "admin"
@@ -301,6 +335,7 @@ Update team member role
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "member": {
@@ -313,9 +348,11 @@ Update team member role
 ---
 
 ### GET `/api/team/invitations`
+
 Get all pending invitations
 
 **Response (200 OK):**
+
 ```json
 {
   "invitations": [
@@ -334,9 +371,11 @@ Get all pending invitations
 ---
 
 ### POST `/api/team/invitations`
+
 Send team invitation with phase assignments
 
 **Request Body:**
+
 ```json
 {
   "email": "newuser@example.com",
@@ -346,6 +385,7 @@ Send team invitation with phase assignments
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "invitation": {
@@ -359,9 +399,11 @@ Send team invitation with phase assignments
 ---
 
 ### POST `/api/team/invitations/accept`
+
 Accept a team invitation
 
 **Request Body:**
+
 ```json
 {
   "token": "invite_token_xxx"
@@ -369,6 +411,7 @@ Accept a team invitation
 ```
 
 **Response (200 OK):**
+
 ```json
 {
   "success": true,
@@ -379,9 +422,11 @@ Accept a team invitation
 ---
 
 ### GET `/api/team/phase-assignments`
+
 Get phase assignments for team members
 
 **Response (200 OK):**
+
 ```json
 {
   "assignments": [
@@ -397,9 +442,11 @@ Get phase assignments for team members
 ---
 
 ### POST `/api/team/phase-assignments`
+
 Assign user to phase
 
 **Request Body:**
+
 ```json
 {
   "user_id": "uuid",
@@ -409,6 +456,7 @@ Assign user to phase
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "assignment": {
@@ -420,4 +468,3 @@ Assign user to phase
 ```
 
 ---
-

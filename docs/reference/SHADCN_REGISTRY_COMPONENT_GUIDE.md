@@ -38,34 +38,43 @@
 #### Component Categories
 
 **Forms & Input** (17 components)
+
 - Button, Input, Textarea, Label, Checkbox, Radio Group, Switch, Select, Native Select
 - Combobox, Input OTP, Input Group, Field, Slider, Toggle, Toggle Group, Calendar, Date Picker
 
 **Data Display** (7 components)
+
 - Table, Data Table (TanStack), Card, Badge, Avatar, Skeleton, Empty
 
 **Navigation** (7 components)
+
 - Breadcrumb, Pagination, Navigation Menu, Menubar, Tabs, Sidebar, Button Group
 
 **Overlays & Dialogs** (9 components)
+
 - Dialog, Alert Dialog, Drawer, Sheet, Popover, Hover Card, Context Menu, Dropdown Menu, Tooltip
 
 **Layout** (6 components)
+
 - Separator, Scroll Area, Aspect Ratio, Resizable, Item, Collapsible
 
 **Feedback** (4 components)
+
 - Alert, Toast, Sonner, Spinner, Progress
 
 **Advanced** (5 components)
+
 - Chart (Recharts), Carousel (Embla), Command Palette, Kbd, Typography
 
 #### Best For
+
 - Core application structure
 - Accessible forms and data tables
 - Production-ready components with extensive testing
 - Base layer before adding animated registries
 
 #### Unique Strengths
+
 - Most mature and tested
 - Best accessibility (ARIA compliant)
 - Excellent TypeScript support
@@ -82,36 +91,45 @@
 #### Component Categories
 
 **Text Animations**
+
 - Animated gradient text, Typewriter effect, Text reveal, Flip text, Scroll-based text effects
 
 **Interactive Cards**
+
 - Animated cards, Hover effects, 3D transforms, Magnetic buttons
 
 **Backgrounds & Effects**
+
 - Animated backgrounds, Particles, Gradients, Mesh gradients, Dot patterns, Grid backgrounds
 
 **Hero Sections**
+
 - Animated hero components, Spotlight effects, Marquee, Bento grids
 
 **Data Visualization**
+
 - Animated lists, Number counters, Progress bars with motion
 
 **Layout Components**
+
 - Dock (macOS style), Sidebar, Navbar with animations
 
 #### Best For
+
 - SaaS landing pages
 - Product marketing sites
 - Startup websites
 - Animated portfolios
 
 #### Unique Strengths
+
 - Highest quality animations
 - Framer Motion integration
 - Production-grade performance
 - Copy-paste ready with no dependencies
 
 #### Magic UI Pro Features
+
 - 50+ blocks and templates
 - Complete landing page sections
 - Advanced animation patterns
@@ -128,59 +146,73 @@
 #### Component Categories by Type
 
 **Backgrounds (25+ components)**
+
 - Dotted Glow Background, Background Ripple Effect, Sparkles, Aurora Background
 - Background Beams, Background Boxes, Background Lines, Meteors, Shooting Stars
 - Vortex, Spotlight, Canvas Reveal Effect, SVG Mask Effect, Grid/Dot Backgrounds
 - Wavy Background, Gradient Animation, Google Gemini Effect, Glowing Effect
 
 **Card Components (15+ variants)**
+
 - 3D Card Effect, Evervault Card, Card Stack, Card Hover Effect, Wobble Card
 - Expandable Card, Card Spotlight, Focus Cards, Infinite Moving Cards, Draggable Card
 - Comet Card, Glare Card, Direction Aware Hover, Tooltip Card, Pixelated Canvas
 
 **Text Effects (12 components)**
+
 - Encrypted Text, Layout Text Flip, Colourful Text, Text Generate Effect, Typewriter Effect
 - Flip Words, Text Hover Effect, Container Text Flip, Hero Highlight, Text Reveal Card
 
 **Scroll & Parallax (5 components)**
+
 - Parallax Scroll, Sticky Scroll Reveal, Macbook Scroll, Container Scroll Animation, Hero Parallax
 
 **Navigation (7 components)**
+
 - Floating Navbar, Navbar Menu, Sidebar, Floating Dock (macOS style)
 - Tabs, Resizable Navbar, Sticky Banner
 
 **Buttons (4 components)**
+
 - Tailwind CSS Buttons, Hover Border Gradient, Moving Border, Stateful Button
 
 **Forms & Inputs (3 components)**
+
 - Signup Form, Placeholders And Vanish Input, File Upload
 
 **Layout & Grid (3 components)**
+
 - Layout Grid, Bento Grid, Container Cover
 
 **Data Visualization (4 components)**
+
 - GitHub Globe, World Map, Timeline, Codeblock
 
 **3D Components (2 components)**
+
 - 3D Pin, 3D Marquee
 
 **Specialized (10+ components)**
+
 - Animated Modal, Animated Tooltip, Link Preview, Images Slider, Carousel
 - Apple Cards Carousel, Testimonials, Compare, Following Pointer, Lens
 
 #### Best For
+
 - Premium landing pages
 - Product showcases
 - Storytelling websites
 - High-end SaaS marketing
 
 #### Unique Strengths
+
 - Most advanced 3D effects
 - Highest visual impact
 - Perfect for "wow factor"
 - Used by Google, Microsoft, Cisco employees
 
 #### Aceternity UI Pro
+
 - 70+ premium component packs
 - 8+ complete templates
 - Lifetime updates
@@ -230,12 +262,14 @@
 | **Event Calendar** | 1 | Calendar | Month view, event management |
 
 #### Best For
+
 - Form-heavy applications
 - Admin dashboards
 - Data entry systems
 - E-commerce checkout flows
 
 #### Unique Strengths
+
 - Largest component variety (600+ total)
 - Most input/form variants (59 inputs, 51 selects)
 - Complete coverage for standard UI needs
@@ -252,38 +286,48 @@
 #### Component Categories
 
 **Project Management (6 components)**
+
 - Calendar (grid view), Gantt (timeline), Kanban (board), List, Table, Roadmap (all view types)
 
 **Collaboration (2 components)**
+
 - Avatar Stack (overlapping avatars), Cursor (real-time presence)
 
 **Code (4 components)**
+
 - Code Block (syntax highlighting + copy), Contribution Graph (GitHub-style)
 - Sandbox (component preview), Snippet (tabbed code display)
 
 **Forms (5 components)**
+
 - Choicebox (card-styled radio/checkbox), Combobox (autocomplete)
 - Dropzone (file upload), Mini Calendar (date picker), Tags (multi-label)
 
 **Images (2 components)**
+
 - Image Crop (aspect ratios), Image Zoom (zoom functionality)
 
 **Finance (2 components)**
+
 - Credit Card (payment display), Ticker (finance ticker)
 
 **Social (3 components)**
+
 - Stories (carousel format), Reel (Instagram-style), Video Player (media-chrome)
 
 **Callouts (2 components)**
+
 - Announcement (badge-style), Banner (full-width)
 
 **Other (14+ components)**
+
 - Color Picker (Figma-inspired), Comparison (slider-based), Deck (Tinder cards)
 - Dialog Stack (multi-step wizards), Editor (rich text), Glimpse (URL preview)
 - Marquee (scrolling), Pill (badges), QR Code, Rating (stars)
 - Relative Time (timezone), Spinner, Status (uptime), Theme Switcher, Tree, Typography
 
 #### Pre-composed Blocks
+
 - Codebase (file explorer + viewer)
 - Collaborative Canvas (real-time)
 - Form (event creation)
@@ -292,12 +336,14 @@
 - Roadmap (all views)
 
 #### Best For
+
 - Product roadmap tools
 - Project management apps
 - Developer documentation sites
 - SaaS dashboards with Gantt/Kanban
 
 #### Unique Strengths
+
 - ONLY registry with Gantt chart
 - Real-time collaboration components
 - GitHub-style contribution graph
@@ -313,9 +359,11 @@
 **Tech Stack**: Next.js + Supabase + Tailwind CSS + shadcn/ui
 
 #### Components
+
 - Toolbar Expandable (step-based expandable toolbar)
 
 #### AI-Powered Blocks
+
 1. **Gemini Flash Image Editor** - Generate/edit images with version history
 2. **Agent - Multi-Step Tool Pattern** - Sequential AI with web search + analysis
 3. **Agent - Orchestrator Pattern** - Specialized workers for project management
@@ -324,6 +372,7 @@
 6. **Gemini Flash Image Generator** - Image generation with rate limiting
 
 #### Full-Stack Templates
+
 1. **Logo GPT** - AI logo generation with DALL-E + token currency
 2. **Directory** - Automated directory with AI enrichment + web scraping
 3. **Travel Stash** - PWA for travel planning with offline support
@@ -332,12 +381,14 @@
 6. **Manifest** - Vector embedding for RAG-based AI
 
 #### Best For
+
 - AI chat applications
 - Multi-agent AI systems
 - Full-stack SaaS products
 - AI image generation tools
 
 #### Unique Strengths
+
 - ONLY registry with AI agent patterns
 - Google Gemini + OpenAI + Claude integrations
 - Full-stack authentication templates
@@ -353,6 +404,7 @@
 **Tech Stack**: React Aria + shadcn/ui + Tailwind CSS
 
 #### Available Components
+
 - Payment Method Card (card number, expiration, CVC)
 - Create Account Form (email/password + social login)
 - Date Picker (month/day/year fields)
@@ -361,12 +413,14 @@
 - Blog/Changelog Display (content presentation with titles)
 
 #### Best For
+
 - Accessibility-first applications
 - Form-heavy authentication flows
 - Cookie consent and preference management
 - Blog and content sites
 
 #### Unique Strengths
+
 - React Aria foundation (best accessibility)
 - WAI-ARIA compliant
 - Practical, real-world patterns
@@ -381,6 +435,7 @@
 **Tech Stack**: React + TypeScript + Tailwind CSS + Framer Motion + shadcn CLI
 
 #### Known Components
+
 - Flip Card
 - Management Bar
 - Notification List
@@ -392,12 +447,14 @@
 - User Presence Avatar
 
 #### Best For
+
 - Motion-heavy interfaces
 - Interactive dashboards
 - Animated notifications
 - Playful UX
 
 #### Unique Strengths
+
 - All components animated by default
 - shadcn CLI compatible
 - Open-source and customizable
@@ -425,12 +482,14 @@
 **Special** - Popover, Sonner (toast notifications)
 
 #### Best For
+
 - Clean, professional designs
 - Motion effects without overwhelming
 - shadcn/ui extension
 - Business applications
 
 #### Unique Strengths
+
 - Motion library integration
 - Nested menu support
 - Scrollspy component
@@ -447,29 +506,36 @@
 #### Complete Component List
 
 **Interactive Controls (10 components)**
+
 - Angle Slider, Avatar Group, Checkbox Group, Color Picker, Color Swatch
 - Combobox, Compare Slider, Mask Input, Rating, Tags Input
 
 **Data & Display (8 components)**
+
 - Circular Progress, Data Grid (virtualized), Data Table, Listbox
 - Marquee, QR Code, Relative Time Card, Scroller
 
 **Content Management (8 components)**
+
 - Cropper, Editable, File Upload, Kanban, Mention, Sortable, Stack, Stepper
 
 **UI Elements (2 components)**
+
 - Kbd, Segmented Input
 
 **Utilities (8 utilities)**
+
 - Client Only, Composition, Direction Provider, Hitbox, Portal, Presence, Visually Hidden, Visually Hidden Input
 
 #### Best For
+
 - Data-heavy applications
 - Kanban boards
 - Image/video editing features
 - Advanced form controls
 
 #### Unique Strengths
+
 - Angle slider (unique component)
 - High-performance data grid
 - Cropper with zoom/rotation
@@ -485,18 +551,21 @@
 **Tech Stack**: React + TypeScript + Tailwind CSS + Headless UI + Framer Motion
 
 #### Component Categories
+
 - Animated components (motion effects)
 - Landing page blocks
 - Full templates
 - Dark mode by default on all components
 
 #### Best For
+
 - Landing pages with animations
 - Marketing sites
 - Portfolio sites
 - Startups
 
 #### Unique Strengths
+
 - 150+ components
 - Dark mode built-in
 - Active Discord community
@@ -511,21 +580,25 @@
 **Tech Stack**: React + TypeScript + Tailwind CSS + Radix UI
 
 #### Known Components
+
 - Avatar, Button, Drawer, Separator, Toggle, File Upload
 - Date Picker, Dropdown Menu, Select, Sidebar, Typewriter
 - All standard shadcn/ui components extended
 
 #### Theme Presets
+
 - Default, Retro Blue, Purple, Night Wind, Orbiter, Soft Orange
 - Light & dark modes for each theme
 
 #### Best For
+
 - Extended shadcn/ui needs
 - Multiple theme support
 - Professional design
 - Corporate applications
 
 #### Unique Strengths
+
 - 6 theme presets (most of any registry)
 - OKLCH color space
 - 400+ GitHub stars
@@ -540,16 +613,19 @@
 **Tech Stack**: TypeScript + Framer Motion + Tailwind CSS + shadcn/ui
 
 #### Known Components
+
 - Action Button (confirmation popup for destructive actions)
 - Motion Dialog (multiple animation variants: Ripple, Zoom)
 
 #### Best For
+
 - Animated modals
 - Confirmation flows
 - Destructive action safeguards
 - Modern interactions
 
 #### Unique Strengths
+
 - Framer Motion animations
 - Fully typed TypeScript
 - Easy shadcn CLI integration
@@ -649,11 +725,13 @@
 **Additions**: Aceternity UI (Canvas Reveal, Background Beams)
 
 **Rationale**:
+
 - Use shadcn/ui for controls (buttons, dialogs, tooltips)
 - Add Aceternity's Canvas Reveal for node hover effects
 - Background Beams for visual polish
 
 **Components Needed**:
+
 - `shadcn/ui`: Button, Dialog, Tooltip, Dropdown Menu, Popover
 - `Aceternity`: Canvas Reveal Effect, Background Beams (optional)
 
@@ -665,11 +743,13 @@
 **Additions**: shadcn/ui (Data Table), Kibo UI (Rich Text Editor)
 
 **Rationale**:
+
 - Origin UI has 59 input variants for custom fields
 - shadcn/ui Data Table for feature list
 - Kibo UI for rich text descriptions
 
 **Components Needed**:
+
 - `Origin UI`: Input (59 variants), Select (51 variants), Date Picker, Textarea
 - `shadcn/ui`: Data Table, Badge, Card
 - `Kibo UI`: Editor (rich text)
@@ -682,11 +762,13 @@
 **Additions**: Aceternity UI (Background Lines for graph visualization)
 
 **Rationale**:
+
 - Custom ReactFlow implementation for graph
 - shadcn/ui for controls and modals
 - Aceternity for visual enhancement
 
 **Components Needed**:
+
 - `shadcn/ui`: Button, Dialog, Dropdown Menu, Badge, Tooltip
 - `Aceternity`: Background Lines, Tracing Beam (optional)
 
@@ -698,11 +780,13 @@
 **Additions**: shadcn/ui, Kokonut UI
 
 **Rationale**:
+
 - Origin UI for extensive form variants (feedback forms)
 - shadcn/ui for core structure
 - Kokonut UI for polished review cards
 
 **Components Needed**:
+
 - `Origin UI`: Input, Textarea, Radio, Checkbox, Rating (if exists)
 - `shadcn/ui`: Card, Avatar, Badge, Toast
 - `Dice UI`: Rating component
@@ -715,11 +799,13 @@
 **Additions**: shadcn/ui
 
 **Rationale**:
+
 - ONLY registry with Gantt chart component
 - Kibo UI also has Calendar, List, Table views
 - shadcn/ui for controls
 
 **Components Needed**:
+
 - `Kibo UI`: Gantt, Calendar, List, Table, Roadmap Block
 - `shadcn/ui`: Dropdown Menu, Button, Dialog, Tabs
 
@@ -731,11 +817,13 @@
 **Additions**: Dice UI, shadcn/ui
 
 **Rationale**:
+
 - Kibo UI has Kanban + all project management views
 - Dice UI for additional Kanban variant
 - shadcn/ui for base components
 
 **Components Needed**:
+
 - `Kibo UI`: Kanban, Avatar Stack, Status, Mini Calendar
 - `Dice UI`: Kanban (alternative), Tags Input
 - `shadcn/ui`: Badge, Card, Dropdown Menu
@@ -748,11 +836,13 @@
 **Additions**: Aceternity UI (cursors)
 
 **Rationale**:
+
 - Kibo UI has Cursor + Avatar Stack + Collaborative Canvas
 - Aceternity UI for Following Pointer effect
 - shadcn/ui for base components
 
 **Components Needed**:
+
 - `Kibo UI`: Cursor, Avatar Stack, Collaborative Canvas Block
 - `Aceternity`: Following Pointer, Pointer Highlight
 - `shadcn/ui`: Tooltip, Popover
@@ -765,11 +855,13 @@
 **Additions**: Kibo UI (dashboard blocks)
 
 **Rationale**:
+
 - shadcn/ui Chart component uses Recharts (10+ chart types)
 - Kibo UI has dashboard blocks and typography
 - Origin UI for custom metric inputs
 
 **Components Needed**:
+
 - `shadcn/ui`: Chart, Card, Badge, Tabs, Select
 - `Kibo UI`: Typography, Pill
 - `Origin UI`: Input, Select (for custom metrics)
@@ -782,11 +874,13 @@
 **Additions**: Magic UI, shadcn/ui
 
 **Rationale**:
+
 - Cult UI has AI agent patterns (Multi-Step, Orchestrator, Routing)
 - Magic UI for animated chat bubbles
 - shadcn/ui for core structure
 
 **Components Needed**:
+
 - `Cult UI`: Agent patterns (3 types), Gemini integration blocks
 - `Magic UI`: Animated List (for chat messages), Typewriter
 - `shadcn/ui`: Textarea, Button, Card, Scroll Area
@@ -799,11 +893,13 @@
 **Additions**: shadcn/ui, Magic UI
 
 **Rationale**:
+
 - Cult UI has web search integration
 - Magic UI for animated search results
 - shadcn/ui for core structure
 
 **Components Needed**:
+
 - `Cult UI`: Multi-Step Tool Pattern (web search)
 - `Magic UI`: Animated List, Marquee
 - `shadcn/ui`: Input, Card, Tabs, Scroll Area, Command Palette
@@ -813,6 +909,7 @@
 ## Installation Priority
 
 ### Week 3 (Mind Mapping)
+
 ```bash
 # shadcn/ui components
 npx shadcn-ui@latest add button dialog tooltip dropdown-menu popover
@@ -823,6 +920,7 @@ npx shadcn-ui@latest add button dialog tooltip dropdown-menu popover
 ```
 
 ### Week 4 (Feature Planning + Dependencies)
+
 ```bash
 # shadcn/ui components
 npx shadcn-ui@latest add data-table badge card tabs select
@@ -838,6 +936,7 @@ npx shadcn-ui@latest add data-table badge card tabs select
 ```
 
 ### Week 5 (Review & Feedback)
+
 ```bash
 # Origin UI
 # - Input, Textarea, Radio, Checkbox
@@ -850,6 +949,7 @@ npx shadcn-ui@latest add card avatar badge toast
 ```
 
 ### Week 6 (Timeline + Execution + Collaboration)
+
 ```bash
 # Kibo UI (CRITICAL for Gantt)
 # - Gantt, Kanban, Calendar, Avatar Stack, Cursor, Roadmap Block
@@ -859,6 +959,7 @@ npx shadcn-ui@latest add dropdown-menu tabs
 ```
 
 ### Week 7 (AI + Analytics + Research)
+
 ```bash
 # Cult UI
 # - AI Agent patterns (all 3)
@@ -921,6 +1022,7 @@ START: What are you building?
 ## Context Optimization Strategy
 
 ### Problem
+
 Adding all 14 registries would consume excessive context (20k+ tokens).
 
 ### Solution: Just-in-Time Component Selection
@@ -932,12 +1034,14 @@ Adding all 14 registries would consume excessive context (20k+ tokens).
 ### Example: Feature Planning Module
 
 **BAD** (wastes context):
+
 ```
 Ask about: shadcn/ui inputs + Origin UI inputs + HextaUI inputs
 Result: 100+ input variants loaded, 5k+ tokens
 ```
 
 **GOOD** (strategic):
+
 ```
 Use: Origin UI (59 inputs) + shadcn/ui (Data Table only)
 Result: Exactly what's needed, ~2k tokens
@@ -971,20 +1075,26 @@ Result: Exactly what's needed, ~2k tokens
 ## FAQ
 
 ### Q: Can I mix components from different registries?
+
 **A**: Yes! All registries are built on shadcn/ui, Radix UI, or Tailwind CSS. They're designed to work together. Just ensure consistent theming.
 
 ### Q: Which registry should I start with?
+
 **A**: Always start with **shadcn/ui** as your base. Add specialty registries only when you need specific components (e.g., Gantt chart from Kibo UI).
 
 ### Q: Are Pro versions worth it?
+
 **A**:
+
 - **Aceternity UI Pro**: Yes, if you need 70+ premium packs + templates
 - **Magic UI Pro**: Yes, for landing page blocks and templates
 - **Kibo UI**: Free tier has all core components
 - **Cult UI**: Templates are worth it for AI apps
 
 ### Q: How do I install components from third-party registries?
+
 **A**: Most are copy-paste (not CLI):
+
 1. Visit registry website
 2. Find component
 3. Copy code
@@ -994,13 +1104,17 @@ Result: Exactly what's needed, ~2k tokens
 **Exception**: shadcn/ui uses CLI (`npx shadcn-ui@latest add [component]`)
 
 ### Q: Which registry has the best accessibility?
+
 **A**:
+
 1. **shadcn/ui** (Radix UI foundation, ARIA compliant)
 2. **JollyUI** (React Aria foundation)
 3. **Origin UI** (Base UI foundation)
 
 ### Q: Can I use multiple animation libraries?
+
 **A**: Yes, but be cautious:
+
 - Aceternity UI (Framer Motion)
 - Magic UI (Framer Motion)
 - Animate UI (Framer Motion)
@@ -1008,9 +1122,11 @@ Result: Exactly what's needed, ~2k tokens
 All use Framer Motion, so they're compatible. Don't mix with other animation libraries (e.g., GSAP, Anime.js).
 
 ### Q: Which registry is best for mobile?
+
 **A**: All registries support responsive design via Tailwind CSS. Origin UI has the most mobile-tested components (600+ variants).
 
 ### Q: Do I need to worry about bundle size?
+
 **A**: Components are copy-pasted into your project, so you only ship what you use. No external dependencies (except Framer Motion for animated registries).
 
 ---
@@ -1018,18 +1134,21 @@ All use Framer Motion, so they're compatible. Don't mix with other animation lib
 ## Maintenance & Updates
 
 This guide will be updated as:
+
 - New registries emerge
 - Existing registries add components
 - Best practices evolve
 - Project needs change
 
 **Update Triggers**:
+
 - New registry with unique components
 - Major registry version updates
 - Community feedback on missing components
 - Post-implementation lessons learned
 
 **Review Schedule**:
+
 - End of each implementation week
 - When encountering missing components
 - Before starting new modules
@@ -1039,25 +1158,27 @@ This guide will be updated as:
 ## Additional Resources
 
 ### Registry Websites
-- shadcn/ui: https://ui.shadcn.com
-- Magic UI: https://magicui.design
-- Aceternity UI: https://ui.aceternity.com
-- Origin UI: https://coss.com/origin
-- Kibo UI: https://kibo-ui.com
-- Cult UI: https://cult-ui.com
-- Dice UI: https://www.diceui.com
-- Kokonut UI: https://kokonutui.com
-- JollyUI: https://www.jollyui.dev
-- Animate UI: https://animate-ui.com
-- ReUI: https://reui.io
-- Eldora UI: https://www.eldoraui.site
-- HextaUI: https://hextaui.com
-- Shadix UI: https://shadix-ui.vercel.app
+
+- shadcn/ui: <https://ui.shadcn.com>
+- Magic UI: <https://magicui.design>
+- Aceternity UI: <https://ui.aceternity.com>
+- Origin UI: <https://coss.com/origin>
+- Kibo UI: <https://kibo-ui.com>
+- Cult UI: <https://cult-ui.com>
+- Dice UI: <https://www.diceui.com>
+- Kokonut UI: <https://kokonutui.com>
+- JollyUI: <https://www.jollyui.dev>
+- Animate UI: <https://animate-ui.com>
+- ReUI: <https://reui.io>
+- Eldora UI: <https://www.eldoraui.site>
+- HextaUI: <https://hextaui.com>
+- Shadix UI: <https://shadix-ui.vercel.app>
 
 ### Community Resources
-- Awesome shadcn/ui: https://github.com/birobirobiro/awesome-shadcn-ui
-- shadcn/ui Discord: https://discord.com/invite/shadcn
-- Registry comparisons: https://www.shadcn.io/templates
+
+- Awesome shadcn/ui: <https://github.com/birobirobiro/awesome-shadcn-ui>
+- shadcn/ui Discord: <https://discord.com/invite/shadcn>
+- Registry comparisons: <https://www.shadcn.io/templates>
 
 ---
 

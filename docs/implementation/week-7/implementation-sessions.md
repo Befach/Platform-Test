@@ -9,6 +9,7 @@
 ## Type-Aware Phase System (2025-12-22)
 
 **What Changed:**
+
 - Added missing database columns for type-specific phase tracking
 - Created migration `20251222120000_add_missing_phase_columns.sql`
 - Regenerated TypeScript types to include new columns
@@ -16,6 +17,7 @@
 - Updated all E2E test files to use correct field names
 
 **Why:**
+
 - Previous migrations were marked as applied but columns weren't created
 - Need to support type-specific phase workflows
 - Work items use `phase` as their status field
@@ -33,11 +35,13 @@
 | `review_status` | TEXT | pending, approved, needs_revision, rejected |
 
 **Type-Specific Phase Workflows:**
+
 - **Feature/Enhancement**: design -> build -> refine -> launch
 - **Concept**: ideation -> research -> validated | rejected
 - **Bug**: triage -> investigating -> fixing -> verified
 
 **Files Modified:**
+
 - `supabase/migrations/20251222120000_add_missing_phase_columns.sql`
 - `next-app/src/lib/supabase/types.ts`
 - `next-app/tests/utils/database.ts`
@@ -52,6 +56,7 @@
 ## Type-Aware Phase System - Critical Fixes (2025-12-23)
 
 **What Changed:**
+
 - Fixed 5 critical issues identified by code review
 - Enhanced migration safety with WHERE clause protection
 - Secured get_next_version function with team_id filtering
@@ -69,6 +74,7 @@
 | Schema Inconsistency | CRITICAL | Dropped work_items.status column |
 
 **Architecture Validation:**
+
 - Phase IS Status: Work items have `phase` only (no separate status)
 - Timeline Status: Timeline items retain separate `status` for execution
 - Multi-Tenancy: All database functions enforce team_id filtering
@@ -76,6 +82,7 @@
 - Type Safety: TypeScript types match actual schema
 
 **Files Modified:**
+
 - `supabase/migrations/20251222120000_add_missing_phase_columns.sql`
 - `supabase/migrations/20251223000000_drop_work_items_status_column.sql`
 - `next-app/src/lib/supabase/types.ts`
@@ -90,17 +97,20 @@
 ## Enhancement Architecture Phase 2 Cleanup (2025-12-23)
 
 **What Changed:**
+
 - Security hardening for enhance API endpoint
 - UI component cleanup: removed 'enhancement' type from 12 components
 - Form validation enhancement for is_enhancement field
 - Canvas deprecation comments for backward compatibility
 
 **Security Improvements:**
+
 - Defense-in-depth: auth -> RLS -> team membership verification
 - Comprehensive Zod validation for all request fields
 - Proper HTTP codes: 401, 403, 404, 400
 
 **Files Modified (12 UI Components):**
+
 - `src/components/insights/insight-link-dialog.tsx`
 - `src/components/ai/tool-previews.tsx`
 - `src/components/insights/insight-detail-sheet.tsx`
@@ -115,6 +125,7 @@
 - `src/components/work-board/shared/filter-context.tsx`
 
 **API Security Hardening:**
+
 - `next-app/src/app/api/work-items/[id]/enhance/route.ts`
 
 ---
@@ -122,6 +133,7 @@
 ## Knowledge & Decision Intelligence Research (2025-12-29)
 
 **What Changed:**
+
 - Deep research on AAIF projects for integration
 - Verified Metorial SDK integration (YC F25, $35/mo, 600+ integrations)
 - Confirmed goose is NOT embeddable (desktop/CLI only)
@@ -138,6 +150,7 @@
 | ai_action_history migration | MISSING | P2 (1 hour) |
 
 **Architecture Decisions:**
+
 - pgvector only (no Gemini File Search dependency)
 - L1-L4 compression pyramid for scaling decisions
 - Top-to-bottom retrieval for <20ms latency
@@ -157,12 +170,14 @@
 ## Architecture Enforcement: Phase-Only Status (2025-12-29)
 
 **What Changed:**
+
 - Restored deleted migration as `20251229180000_enforce_phase_only_status.sql`
 - Migration drops `status` column from `work_items` if exists
 - Removed orphaned constraints and indexes
 - Added documentation comment to `phase` column
 
 **Why:**
+
 - Architecture constraint: "Work items use `phase` as their status"
 - Original migration was deleted incorrectly
 - Ensures all environments enforce two-layer architecture:
@@ -170,6 +185,7 @@
   - **Timeline Items**: `status` field for execution tracking
 
 **Files Created:**
+
 - `supabase/migrations/20251229180000_enforce_phase_only_status.sql`
 
 ---
