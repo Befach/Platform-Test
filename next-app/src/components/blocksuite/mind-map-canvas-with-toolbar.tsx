@@ -5,6 +5,7 @@ import { useCallback, useRef, useState } from "react";
 import type {
   BlockSuiteLayoutType,
   BlockSuiteMindmapStyle,
+  BlockSuiteMindmapNode,
   MindMapCanvasWithToolbarProps,
   MindMapCanvasRefs,
 } from "./mindmap-types";
