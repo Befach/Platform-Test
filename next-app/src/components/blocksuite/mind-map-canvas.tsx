@@ -369,17 +369,29 @@ export function MindMapCanvas({
         });
         const doc = collection.createDoc({ id: docId });
 
+        // Ensure doc was created successfully
+        if (!doc) {
+          throw new Error(
+            "Failed to create BlockSuite document. The DocCollection.createDoc() returned null.",
+          );
+        }
+
         // Store surface block reference for mindmap creation
         let surfaceId: string = "";
 
         // Initialize with required root blocks
-        doc.load(() => {
-          const pageBlockId = doc.addBlock("affine:page", {});
-          surfaceId = doc.addBlock("affine:surface", {}, pageBlockId);
-          // Add a note block for any text content
-          const noteBlockId = doc.addBlock("affine:note", {}, pageBlockId);
-          doc.addBlock("affine:paragraph", {}, noteBlockId);
-        });
+        // Note: doc.load() may not accept a callback in all BlockSuite versions
+        // Try the callback pattern first, fall back to synchronous if needed
+        if (typeof doc.load === "function") {
+          doc.load();
+        }
+
+        // Add blocks after load
+        const pageBlockId = doc.addBlock("affine:page", {});
+        surfaceId = doc.addBlock("affine:surface", {}, pageBlockId);
+        // Add a note block for any text content
+        const noteBlockId = doc.addBlock("affine:note", {}, pageBlockId);
+        doc.addBlock("affine:paragraph", {}, noteBlockId);
 
         docRef.current = doc;
 
