@@ -19,7 +19,7 @@ export default async function NewMindMapPage({ params }: PageProps) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/auth/login')
+    redirect('/login')
   }
 
   // Get workspace to verify access
