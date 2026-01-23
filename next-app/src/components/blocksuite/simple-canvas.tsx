@@ -203,7 +203,7 @@ export function SimpleCanvas({
         const EditorClass = editorMode === 'page' ? PageEditor : EdgelessEditor
         const editor = new EditorClass()
 
-        const editorElement = editor as {
+        const editorElement = editor as unknown as {
           doc: Doc
           readonly: boolean
           updateComplete: Promise<boolean>

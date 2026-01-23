@@ -12,7 +12,6 @@ import type { Department } from '@/lib/types/department';
 import type { MindMap } from '@/lib/types/mind-map';
 import type { Team } from '@/lib/types/team';
 import type { Database } from '@/lib/supabase/types';
-import { useEffect } from 'react';
 
 /** Work Item with status field (extended from DB type for component compatibility) */
 interface WorkItem {
@@ -116,32 +115,6 @@ export function WorkspaceContent({
   userEmail,
   userName,
 }: WorkspaceContentProps) {
-  useEffect(() => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/ebdf2fd5-9696-479e-b2f1-d72537069b93', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sessionId: 'debug-session',
-        runId: 'pre-fix2',
-        hypothesisId: 'H7',
-        location: 'workspace-content.tsx:mount',
-        message: 'WorkspaceContent mounted',
-        data: {
-          view,
-          workspaceId: workspace?.id,
-          teamId: workspace?.team_id,
-          workItems: workItems?.length ?? null,
-          timelineItems: timelineItems?.length ?? null,
-          linkedItems: linkedItems?.length ?? null,
-          mindMaps: mindMaps?.length ?? null,
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {})
-    // #endregion
-  }, [view, workspace, workItems, timelineItems, linkedItems, mindMaps])
-
   // Normalize work items for child components (add phase fallback)
   const normalizedWorkItems = workItems.map(item => ({
     ...item,

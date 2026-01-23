@@ -27,7 +27,6 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useEffect } from 'react'
 
 interface AIPageClientProps {
   workspaceId: string
@@ -46,31 +45,6 @@ export function AIPageClient({
   teamName,
   userRole,
 }: AIPageClientProps) {
-  useEffect(() => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/ebdf2fd5-9696-479e-b2f1-d72537069b93', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sessionId: 'debug-session',
-        runId: 'pre-fix2',
-        hypothesisId: 'H13',
-        location: 'ai-page-client.tsx:mount',
-        message: 'AIPageClient mounted',
-        data: {
-          workspaceId,
-          teamId,
-          workspaceName,
-          workspacePhase,
-          teamName,
-          userRole,
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {})
-    // #endregion
-  }, [workspaceId, teamId, workspaceName, workspacePhase, teamName, userRole])
-
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
