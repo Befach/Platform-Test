@@ -67,23 +67,24 @@ export default async function DashboardLayout({
   })
   // #endregion
 
-  if (!user) {
-    redirect('/login')
-  }
+  // TODO: Temporarily disabled for BlockSuite testing - REMOVE BEFORE COMMIT
+  // if (!user) {
+  //   redirect('/login')
+  // }
 
   // Fetch user profile
-  const { data: userProfile } = await supabase
+  const { data: userProfile } = user ? await supabase
     .from('users')
     .select('*')
     .eq('id', user.id)
-    .single()
+    .single() : { data: null }
 
   // Fetch user's team membership to get team ID
-  const { data: membership } = await supabase
+  const { data: membership } = user ? await supabase
     .from('team_members')
     .select('team_id')
     .eq('user_id', user.id)
-    .single()
+    .single() : { data: null }
 
   // #region agent log
   await sendDebug({

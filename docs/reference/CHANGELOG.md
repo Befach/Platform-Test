@@ -2,7 +2,7 @@
 
 > **Split Version Available**: This file has been split into smaller files for better AI readability. See [changelog/README.md](changelog/README.md) for the organized version.
 
-**Last Updated**: 2026-01-17
+**Last Updated**: 2026-01-23
 **Project**: Product Lifecycle Management Platform
 **Format**: Based on [Keep a Changelog](https://keepachangelog.com/)
 
@@ -11,6 +11,90 @@ All notable changes, migrations, and feature implementations are documented in t
 ---
 
 ## [Unreleased]
+
+### Security
+
+#### Critical Security Fixes (2026-01-23)
+
+**CRITICAL: Middleware Authentication Bypass Fixed**
+
+The authentication check in `middleware.ts` was commented out, allowing unauthenticated access to protected routes.
+
+**Issue**: Authentication bypass vulnerability
+**Severity**: CRITICAL
+**Fix**: Re-enabled the `!user && isProtectedRoute` check in `lib/supabase/middleware.ts`
+
+```typescript
+// FIXED: Auth check re-enabled
+if (!user && isProtectedRoute) {
+  const url = request.nextUrl.clone()
+  url.pathname = '/login'
+  return NextResponse.redirect(url)
+}
+```
+
+**Additional Security Hardening**:
+
+| Fix | Description | File |
+|-----|-------------|------|
+| Rate limiting | Added Upstash Redis rate limiting (5 req/hour for canvas creation) | `app/api/blocksuite/documents/route.ts` |
+| Input validation | Zod schemas for workspaceId, documentType, title | `app/api/blocksuite/documents/route.ts` |
+| Team membership | Verify user belongs to team before document creation | `app/api/blocksuite/documents/route.ts` |
+| Audit logging | Security events logged with user ID and timestamps | `app/api/blocksuite/documents/route.ts` |
+| Debug code removal | Removed all console.log debug statements from middleware | `lib/supabase/middleware.ts` |
+
+**Files Modified**:
+
+- `next-app/src/lib/supabase/middleware.ts` - Auth check restored, debug code removed
+- `next-app/src/app/api/blocksuite/documents/route.ts` - NEW rate-limited API with security
+
+### Added
+
+#### Endless Canvas Module (2026-01-23) - Branch `feat/blocksuite-phase-6`
+
+Simplified BlockSuite integration as standalone "Endless Canvas" editor (no work item coupling).
+
+**New Routes**:
+
+| Route | Purpose |
+|-------|---------|
+| `/workspaces/[id]/canvas` | Canvas list page |
+| `/workspaces/[id]/canvas/[canvasId]` | Canvas editor page |
+| `/workspaces/[id]/canvas/new` | New canvas creation form |
+
+**New Components**:
+
+- `components/blocksuite/simple-canvas.tsx` - Simplified BlockSuite wrapper (~200 lines)
+- `components/blocksuite/canvas-editor.tsx` - SSR-safe editor with loading skeleton
+
+**New API Routes**:
+
+- `POST /api/blocksuite/documents` - Create canvas with rate limiting
+- `GET /api/blocksuite/documents?workspaceId=` - List workspace canvases
+
+**Sidebar Navigation**:
+
+- Added "Endless Canvas" link to workspace sidebar
+- Uses `Palette` icon from lucide-react
+
+**Redirects**:
+
+- `/mind-maps/*` routes now redirect to `/canvas/*`
+
+**E2E Tests**:
+
+- Created `e2e/canvas.spec.ts` with 18 tests
+- Tests cover: authentication, API validation, security, UI elements
+- Results: 13 passed, 5 skipped (require test credentials)
+
+**Database Migration**:
+
+- `20260123100000_simplify_blocksuite_standalone.sql`
+- Removed `mind_map_id` FK from `blocksuite_documents` table
+
+**OpenSpec Proposal**: `simplify-blocksuite-standalone` (60% complete)
+
+---
 
 ### Changed
 

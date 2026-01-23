@@ -18,9 +18,9 @@ import {
   Plus,
   Check,
   ChevronsUpDown,
-  Network,
   Target,
   Bot,
+  Palette,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -153,7 +153,7 @@ export function AppSidebar({ workspaceId: defaultWorkspaceId, workspaceName: def
     { icon: LayoutDashboard, label: 'Dashboard', href: `/workspaces/${workspaceId}?view=dashboard` },
     { icon: Bot, label: 'AI Assistant', href: `/workspaces/${workspaceId}/ai` },
     { icon: Boxes, label: 'Canvas', href: `/workspaces/${workspaceId}?view=canvas` },
-    { icon: Network, label: 'Mind Maps', href: `/workspaces/${workspaceId}/mind-maps` },
+    { icon: Palette, label: 'Endless Canvas', href: `/workspaces/${workspaceId}/canvas` },
     { icon: Target, label: 'Strategy', href: `/workspaces/${workspaceId}/strategies` },
     { icon: List, label: 'Work Board', href: `/workspaces/${workspaceId}?view=work-items` },
     { icon: Calendar, label: 'Timeline', href: `/workspaces/${workspaceId}?view=timeline` },
@@ -181,7 +181,8 @@ export function AppSidebar({ workspaceId: defaultWorkspaceId, workspaceName: def
       const currentView = searchParams.get('view')
       return pathname.includes(workspaceId) && currentView === viewName
     }
-    return pathname === href
+    // For nested routes (like /canvas, /canvas/[id]), check if pathname starts with href
+    return pathname === href || pathname.startsWith(href + '/')
   }
 
   const getUserInitials = () => {

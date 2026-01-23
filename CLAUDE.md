@@ -316,6 +316,7 @@ Design Thinking guides HOW to work at each phase (NOT lifecycle stages):
 |--------|------|--------|-------------|
 | **Foundation & Multi-Tenancy** | 1-2 | ✅ 100% | Auth, teams, RLS, base schema |
 | **Mind Mapping** | 3 | ✅ 100% | XYFlow canvas, 5 node types |
+| **Endless Canvas** | 7 | ✅ 95% | BlockSuite standalone editor |
 | Feature Planning | 4 | ⚠️ 80% | CRUD, timeline, rich text |
 | Dependency Management | 4 | ⚠️ 80% | Visual graph, 4 link types |
 | **Team Management** | 5 | ✅ 100% | Invitations, roles, phases |
@@ -373,6 +374,7 @@ CI/CD:        GitHub Actions + Bun
 | **Core** | `users`, `teams`, `team_members`, `subscriptions`, `workspaces` | Auth, multi-tenancy, billing |
 | **Features** | `work_items`, `timeline_items`, `linked_items`, `product_tasks` | Roadmap items, dependencies |
 | **Mind Mapping** | `mind_maps`, `work_flows` | Canvas data, sub-canvases |
+| **Endless Canvas** | `blocksuite_documents` | BlockSuite canvas persistence |
 | **Phases** | `user_phase_assignments`, `phase_assignment_history`, `phase_access_requests` | Phase permissions |
 | **Feedback** | `feedback` | User/stakeholder feedback |
 
@@ -489,23 +491,41 @@ Use Context7 when you need current documentation:
 
 ## TIER 7: COMMON PATTERNS
 
+### Package Manager: Bun (NOT npm)
+
+<critical>
+**ALWAYS use Bun instead of npm/npx for all commands.**
+This project uses Bun as the package manager and runtime. Never use npm or npx.
+</critical>
+
+| npm Command | Bun Equivalent |
+|-------------|----------------|
+| `npm install` | `bun install` |
+| `npm run dev` | `bun run dev` |
+| `npm run build` | `bun run build` |
+| `npm run test` | `bun run test` |
+| `npm run lint` | `bun run lint` |
+| `npx playwright` | `bunx playwright` |
+| `npx supabase` | `bunx supabase` |
+| `npx shadcn-ui` | `bunx shadcn-ui` |
+
 ### Quick Commands
 
 ```bash
 # Dev server (Port 3000 ONLY - kill existing first)
 taskkill /F /IM node.exe 2>nul
-cd next-app && npm run dev
+cd next-app && bun run dev
 
 # Database
-npx supabase db push                  # Apply migrations
-npx supabase gen types typescript     # Generate types
+bunx supabase db push                  # Apply migrations
+bunx supabase gen types typescript     # Generate types
 
 # Testing
-npm run test:e2e         # Playwright E2E
-npm run test             # Jest unit
+bun run test:e2e         # Playwright E2E
+bun run test             # Jest unit
 
 # Build & Deploy
-npm run build && npm run lint
+bun run build && bun run lint
 vercel --prod
 ```
 
@@ -513,8 +533,8 @@ vercel --prod
 
 1. Create: `supabase/migrations/YYYYMMDDHHMMSS_*.sql`
 2. Include: team_id, indexes, RLS policies (SELECT/INSERT/UPDATE/DELETE)
-3. Apply: `npx supabase db push`
-4. Generate types: `npx supabase gen types typescript > lib/supabase/types.ts`
+3. Apply: `bunx supabase db push`
+4. Generate types: `bunx supabase gen types typescript > lib/supabase/types.ts`
 
 ### Real-time Subscriptions
 
@@ -547,7 +567,7 @@ if (team.plan === 'pro') {
 
 ```bash
 # Install shadcn/ui components
-npx shadcn-ui@latest add button card dialog form input select table tabs toast
+bunx shadcn-ui@latest add button card dialog form input select table tabs toast
 ```
 
 ```tsx
@@ -566,7 +586,7 @@ npx shadcn-ui@latest add button card dialog form input select table tabs toast
 
 ```bash
 # Install (Dev Only)
-cd next-app && npm install react-grab --save-dev
+cd next-app && bun add react-grab --dev
 ```
 
 ```tsx
@@ -754,6 +774,7 @@ If ANY fails → DO NOT CREATE, extend existing file.
 - ❌ Custom CSS files
 - ❌ Hardcode API keys
 - ❌ WebFetch/WebSearch directly (use parallel-ai)
+- ❌ npm or npx commands (use bun/bunx)
 
 ---
 

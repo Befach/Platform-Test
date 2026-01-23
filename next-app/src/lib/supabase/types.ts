@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+    PostgrestVersion: "14.1"
   }
   public: {
     Tables: {
@@ -184,6 +184,66 @@ export type Database = {
           },
           {
             foreignKeyName: "ai_usage_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blocksuite_documents: {
+        Row: {
+          active_editors: number
+          created_at: string | null
+          document_type: string
+          id: string
+          last_sync_at: string | null
+          storage_path: string
+          storage_size_bytes: number
+          sync_version: number
+          team_id: string
+          title: string | null
+          updated_at: string | null
+          workspace_id: string | null
+        }
+        Insert: {
+          active_editors?: number
+          created_at?: string | null
+          document_type?: string
+          id: string
+          last_sync_at?: string | null
+          storage_path: string
+          storage_size_bytes?: number
+          sync_version?: number
+          team_id: string
+          title?: string | null
+          updated_at?: string | null
+          workspace_id?: string | null
+        }
+        Update: {
+          active_editors?: number
+          created_at?: string | null
+          document_type?: string
+          id?: string
+          last_sync_at?: string | null
+          storage_path?: string
+          storage_size_bytes?: number
+          sync_version?: number
+          team_id?: string
+          title?: string | null
+          updated_at?: string | null
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocksuite_documents_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blocksuite_documents_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
@@ -765,7 +825,9 @@ export type Database = {
           heading: string | null
           id: string
           metadata: Json | null
+          mind_map_id: string | null
           page_number: number | null
+          source_type: string | null
           token_count: number | null
         }
         Insert: {
@@ -779,7 +841,9 @@ export type Database = {
           heading?: string | null
           id?: string
           metadata?: Json | null
+          mind_map_id?: string | null
           page_number?: number | null
+          source_type?: string | null
           token_count?: number | null
         }
         Update: {
@@ -793,7 +857,9 @@ export type Database = {
           heading?: string | null
           id?: string
           metadata?: Json | null
+          mind_map_id?: string | null
           page_number?: number | null
+          source_type?: string | null
           token_count?: number | null
         }
         Relationships: [
@@ -2230,11 +2296,23 @@ export type Database = {
       }
       mind_maps: {
         Row: {
+          blocksuite_size_bytes: number | null
+          blocksuite_tree: Json | null
           canvas_data: Json
           canvas_type: string | null
+          chunk_count: number | null
           created_at: string
           description: string | null
+          embedding_error: string | null
+          embedding_status: string | null
+          embedding_version: number | null
           id: string
+          last_embedded_at: string | null
+          last_embedded_hash: string | null
+          migrated_at: string | null
+          migration_lost_edges: number | null
+          migration_status: string | null
+          migration_warnings: string[] | null
           name: string
           team_id: string
           updated_at: string
@@ -2243,11 +2321,23 @@ export type Database = {
           workspace_id: string
         }
         Insert: {
+          blocksuite_size_bytes?: number | null
+          blocksuite_tree?: Json | null
           canvas_data?: Json
           canvas_type?: string | null
+          chunk_count?: number | null
           created_at?: string
           description?: string | null
+          embedding_error?: string | null
+          embedding_status?: string | null
+          embedding_version?: number | null
           id: string
+          last_embedded_at?: string | null
+          last_embedded_hash?: string | null
+          migrated_at?: string | null
+          migration_lost_edges?: number | null
+          migration_status?: string | null
+          migration_warnings?: string[] | null
           name?: string
           team_id: string
           updated_at?: string
@@ -2256,11 +2346,23 @@ export type Database = {
           workspace_id: string
         }
         Update: {
+          blocksuite_size_bytes?: number | null
+          blocksuite_tree?: Json | null
           canvas_data?: Json
           canvas_type?: string | null
+          chunk_count?: number | null
           created_at?: string
           description?: string | null
+          embedding_error?: string | null
+          embedding_status?: string | null
+          embedding_version?: number | null
           id?: string
+          last_embedded_at?: string | null
+          last_embedded_hash?: string | null
+          migrated_at?: string | null
+          migration_lost_edges?: number | null
+          migration_status?: string | null
+          migration_warnings?: string[] | null
           name?: string
           team_id?: string
           updated_at?: string
@@ -4440,25 +4542,48 @@ export type Database = {
         }
         Returns: undefined
       }
-      search_documents: {
-        Args: {
-          p_collection_id?: string
-          p_limit?: number
-          p_query_embedding: string
-          p_team_id: string
-          p_threshold?: number
-          p_workspace_id?: string
-        }
-        Returns: {
-          chunk_id: string
-          content: string
-          document_id: string
-          document_name: string
-          heading: string
-          page_number: number
-          similarity: number
-        }[]
-      }
+      search_documents:
+        | {
+            Args: {
+              p_collection_id?: string
+              p_limit?: number
+              p_query_embedding: string
+              p_team_id: string
+              p_threshold?: number
+              p_workspace_id?: string
+            }
+            Returns: {
+              chunk_id: string
+              content: string
+              document_id: string
+              document_name: string
+              heading: string
+              page_number: number
+              similarity: number
+            }[]
+          }
+        | {
+            Args: {
+              p_collection_id?: string
+              p_limit?: number
+              p_query_embedding: string
+              p_source_type?: string
+              p_team_id: string
+              p_threshold?: number
+              p_workspace_id?: string
+            }
+            Returns: {
+              chunk_id: string
+              content: string
+              document_id: string
+              document_name: string
+              heading: string
+              mind_map_id: string
+              page_number: number
+              similarity: number
+              source_type: string
+            }[]
+          }
       search_resources: {
         Args: {
           p_include_deleted?: boolean

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(\"/c/Users/harsha_befach/.bun/bin/bun.exe\" install)",
       "Bash(\"/c/Users/harsha_befach/.bun/bin/bun.exe\" run dev)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(\"$HOME/.bun/install/global/node_modules/supabase/bin/supabase.exe\" --version)"
     ]
   }
 }

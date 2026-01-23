@@ -2,7 +2,16 @@
 
 import { useState } from 'react'
 import { notFound } from 'next/navigation'
-import { BlockSuiteEditor, BlockSuiteCanvasEditor, BlockSuitePageEditor } from '@/components/blocksuite'
+import {
+  BlockSuiteEditor,
+  BlockSuiteCanvasEditor,
+  BlockSuitePageEditor,
+  MindMapCanvasWithToolbar,
+  DEFAULT_SAMPLE_TREE,
+  BlockSuiteMindmapStyle,
+  BlockSuiteLayoutType,
+  type BlockSuiteMindmapNode
+} from '@/components/blocksuite'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -87,12 +96,42 @@ export default function BlockSuiteTestPage() {
         </Card>
       </div>
 
-      <Tabs defaultValue="generic" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="mindmap" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="mindmap">Mind Map (Full)</TabsTrigger>
           <TabsTrigger value="generic">Generic Editor</TabsTrigger>
           <TabsTrigger value="canvas">Canvas Editor</TabsTrigger>
           <TabsTrigger value="page">Page Editor</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="mindmap" className="mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Mind Map with Full Toolbar</CardTitle>
+              <CardDescription>
+                Complete mind mapping experience with toolbar controls: add/delete nodes, change styles & layouts, zoom, undo/redo
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-lg overflow-hidden h-[600px]">
+                <MindMapCanvasWithToolbar
+                  documentId="test-mindmap"
+                  initialTree={DEFAULT_SAMPLE_TREE}
+                  style={BlockSuiteMindmapStyle.FOUR}
+                  layout={BlockSuiteLayoutType.BALANCE}
+                  onTreeChange={(tree: BlockSuiteMindmapNode) => {
+                    console.log('Mind map tree changed:', tree)
+                  }}
+                  onNodeSelect={(nodeId: string, text: string) => {
+                    console.log('Node selected:', nodeId, text)
+                  }}
+                  showToolbar={true}
+                  toolbarPosition="top"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="generic" className="mt-4">
           <Card>
@@ -177,11 +216,12 @@ export default function BlockSuiteTestPage() {
         </CardHeader>
         <CardContent className="prose prose-sm dark:prose-invert">
           <ul>
-            <li>BlockSuite packages v0.18.7 with patch-package fixes</li>
+            <li>BlockSuite packages v0.19.5 integrated</li>
             <li>SSR-safe via dynamic imports with ssr: false</li>
             <li>Uses Schema + DocCollection API from @blocksuite/store</li>
             <li>Web Components mounted to React refs</li>
             <li>Change events via historyUpdated slot</li>
+            <li><strong>Mind Map with Toolbar:</strong> Full interactive experience with add/delete nodes, style changes (Classic/Bubble/Box/Wireframe), layout options (Right/Left/Balanced), zoom controls, and undo/redo</li>
           </ul>
         </CardContent>
       </Card>

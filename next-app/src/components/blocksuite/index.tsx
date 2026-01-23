@@ -75,6 +75,34 @@ export const BlockSuiteCanvasEditor = dynamic<Omit<BlockSuiteEditorProps, 'mode'
 )
 
 /**
+ * SSR-Safe SimpleCanvas - Standalone BlockSuite editor with persistence
+ * Use this for new canvas/whiteboard/document editing needs.
+ *
+ * @example
+ * ```tsx
+ * import { SimpleCanvas } from '@/components/blocksuite'
+ *
+ * function MyCanvas() {
+ *   return (
+ *     <SimpleCanvas
+ *       documentId="1234567890"
+ *       teamId="team-123"
+ *       documentType="mindmap"
+ *     />
+ *   )
+ * }
+ * ```
+ */
+export const SimpleCanvas = dynamic(
+  () => import('./simple-canvas').then((mod) => mod.SimpleCanvas),
+  {
+    ssr: false,
+    loading: () => <LoadingSkeleton mode="edgeless" />,
+  }
+)
+
+/**
+ * @deprecated Use SimpleCanvas instead. This component will be removed in a future version.
  * SSR-Safe MindMap Canvas
  * Specialized for mind mapping with BlockSuite native support
  *
@@ -141,6 +169,7 @@ export const MindMapCanvasWithToolbar = dynamic(
 
 // Re-export types
 export type { BlockSuiteEditorProps } from './blocksuite-editor'
+export type { SimpleCanvasProps } from './simple-canvas'
 export type {
   MindMapCanvasProps,
   MindMapCanvasWithToolbarProps,

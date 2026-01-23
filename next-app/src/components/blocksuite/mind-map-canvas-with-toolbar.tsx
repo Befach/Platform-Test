@@ -166,14 +166,40 @@ export function MindMapCanvasWithToolbar({
       try {
         // Use BlockSuite's addTree method to add a child node
         if (mindmap.addTree) {
-          mindmap.addTree(parentNodeId, {
+          const newNodeId = mindmap.addTree(parentNodeId, {
             text: "New Node",
             children: [],
           });
           debug(
             "[MindMapCanvasWithToolbar] Added child to node:",
             parentNodeId,
+            "New node ID:",
+            newNodeId,
           );
+
+          // POTENTIAL FIX: Force visibility on newly added BlockSuite elements
+          // Try to find and fix opacity on the new node element in the DOM
+          setTimeout(() => {
+            try {
+              if (editorRef.current) {
+                const editorEl = (editorRef.current as { host?: { renderRoot?: Element } })?.host?.renderRoot;
+                if (editorEl) {
+                  // Find all mindmap elements and ensure they have opacity 1
+                  const mindmapElements = editorEl.querySelectorAll('[data-block-id]');
+                  mindmapElements.forEach((el) => {
+                    const htmlEl = el as HTMLElement;
+                    const currentOpacity = globalThis.getComputedStyle(htmlEl).opacity;
+                    if (currentOpacity !== '1') {
+                      console.log('[MindMapCanvasWithToolbar] Fixing opacity on element:', el, 'from', currentOpacity, 'to 1');
+                      htmlEl.style.opacity = '1';
+                    }
+                  });
+                }
+              }
+            } catch (domError) {
+              console.warn('[MindMapCanvasWithToolbar] Could not fix element opacity:', domError);
+            }
+          }, 100);
         } else {
           // Fallback: Try direct tree manipulation
           console.warn(
@@ -236,14 +262,38 @@ export function MindMapCanvasWithToolbar({
 
           const parent = findParent(mindmap.tree, nodeId);
           if (parent) {
-            mindmap.addTree(parent.id, {
+            const newNodeId = mindmap.addTree(parent.id, {
               text: "New Node",
               children: [],
             });
             debug(
               "[MindMapCanvasWithToolbar] Added sibling to node:",
               nodeId,
+              "New node ID:",
+              newNodeId,
             );
+
+            // POTENTIAL FIX: Force visibility on newly added BlockSuite elements
+            setTimeout(() => {
+              try {
+                if (editorRef.current) {
+                  const editorEl = (editorRef.current as { host?: { renderRoot?: Element } })?.host?.renderRoot;
+                  if (editorEl) {
+                    const mindmapElements = editorEl.querySelectorAll('[data-block-id]');
+                    mindmapElements.forEach((el) => {
+                      const htmlEl = el as HTMLElement;
+                      const currentOpacity = globalThis.getComputedStyle(htmlEl).opacity;
+                      if (currentOpacity !== '1') {
+                        console.log('[MindMapCanvasWithToolbar] Fixing opacity on sibling element:', el, 'from', currentOpacity, 'to 1');
+                        htmlEl.style.opacity = '1';
+                      }
+                    });
+                  }
+                }
+              } catch (domError) {
+                console.warn('[MindMapCanvasWithToolbar] Could not fix sibling element opacity:', domError);
+              }
+            }, 100);
           } else {
             console.warn(
               "[MindMapCanvasWithToolbar] Could not find parent for sibling",
