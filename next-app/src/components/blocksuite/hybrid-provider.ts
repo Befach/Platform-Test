@@ -320,6 +320,12 @@ export class HybridProvider {
         // Skip our own broadcasts
         if (payload.origin === 'local') return
 
+        // SECURITY: Validate base64 format before decoding
+        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(payload.update)) {
+          console.warn('[HybridProvider] Invalid base64 format in broadcast')
+          return
+        }
+
         try {
           // Decode base64 to Uint8Array
           const binaryString = atob(payload.update)
