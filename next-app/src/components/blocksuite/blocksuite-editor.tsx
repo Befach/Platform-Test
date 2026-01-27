@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback, useState, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { safeValidateEditorProps } from './schema'
+import { cleanupBlockSuiteEditor, clearContainer } from './editor-utils'
 
 // Types for BlockSuite modules (dynamically imported)
 type Doc = import('@blocksuite/store').Doc
@@ -41,16 +42,6 @@ export interface BlockSuiteEditorProps {
   documentId?: string
   /** Whether the editor is read-only */
   readOnly?: boolean
-}
-
-/**
- * Safely clears all child nodes from a container element
- * This avoids innerHTML which can be an XSS vector
- */
-function clearContainer(container: HTMLElement): void {
-  while (container.firstChild) {
-    container.removeChild(container.firstChild)
-  }
 }
 
 /**
@@ -100,20 +91,7 @@ export function BlockSuiteEditor({
 
   // Cleanup function - must be before useEffect that uses it
   const cleanup = useCallback(() => {
-    if (editorRef.current && containerRef.current) {
-      try {
-        // Remove editor from DOM
-        const editor = editorRef.current as { remove?: () => void }
-        if (typeof editor.remove === 'function') {
-          editor.remove()
-        } else if (containerRef.current.firstChild) {
-          containerRef.current.removeChild(containerRef.current.firstChild)
-        }
-      } catch (e) {
-        console.warn('BlockSuite cleanup warning:', e)
-      }
-      editorRef.current = null
-    }
+    cleanupBlockSuiteEditor(editorRef, containerRef, '[BlockSuiteEditor]')
     docRef.current = null
   }, [])
 

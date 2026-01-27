@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { HybridProvider } from './hybrid-provider'
 import { LoadingSkeleton } from './loading-skeleton'
+import { cleanupBlockSuiteEditor, cleanupEditorInterval } from './editor-utils'
 
 // Types for BlockSuite modules (dynamically imported)
 type Doc = import('@blocksuite/store').Doc
@@ -72,25 +73,13 @@ export function SimpleCanvas({
   // Determine editor mode based on document type
   const editorMode = documentType === 'document' ? 'page' : 'edgeless'
 
-  // Cleanup function
+  // Cleanup function using shared utility to avoid code duplication
   const cleanup = useCallback(() => {
     if (providerRef.current) {
       providerRef.current.destroy()
       providerRef.current = null
     }
-    if (editorRef.current && containerRef.current) {
-      try {
-        const editor = editorRef.current as { remove?: () => void }
-        if (typeof editor.remove === 'function') {
-          editor.remove()
-        } else if (containerRef.current.firstChild) {
-          containerRef.current.removeChild(containerRef.current.firstChild)
-        }
-      } catch (e) {
-        console.warn('[SimpleCanvas] Cleanup warning:', e)
-      }
-      editorRef.current = null
-    }
+    cleanupBlockSuiteEditor(editorRef, containerRef, '[SimpleCanvas]')
     docRef.current = null
   }, [])
 
@@ -288,10 +277,7 @@ export function SimpleCanvas({
     return () => {
       mounted = false
       if (initTimeout) clearTimeout(initTimeout)
-      const editor = editorRef.current as { _checkInterval?: ReturnType<typeof setInterval> } | null
-      if (editor?._checkInterval) {
-        clearInterval(editor._checkInterval)
-      }
+      cleanupEditorInterval(editorRef)
       cleanup()
     }
   }, [documentId, teamId, editorMode, readOnly, supabase, cleanup, onReady, onSaveStatusChange])
