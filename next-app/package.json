@@ -20,8 +20,7 @@
     "test:e2e:watch": "playwright test --watch",
     "test:report": "playwright show-report",
     "test:trace": "playwright show-trace",
-    "prepare": "husky",
-    "postinstall": "patch-package"
+    "prepare": "husky"
   },
   "dependencies": {
     "@ai-sdk/react": "^3.0.41",

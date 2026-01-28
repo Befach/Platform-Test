@@ -1,7 +1,5 @@
 {
   "framework": "nextjs",
-  "installCommand": "bun install",
-  "buildCommand": "cd next-app && bun run build",
   "headers": [
     {
       "source": "/(.*)",
