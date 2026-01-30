@@ -105,7 +105,7 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.58.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^25",
     "@types/nodemailer": "^7.0.5",
@@ -115,7 +115,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "dotenv": "^17.2.3",
     "eslint": "^9",
-    "eslint-config-next": "16.1.1",
+    "eslint-config-next": "16.1.6",
     "husky": "^9.1.7",
     "patch-package": "^8.0.1",
     "react-grab": "^0.0.98",
