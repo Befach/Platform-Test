@@ -17,12 +17,14 @@ Product Lifecycle Management - Next.js 16 + TypeScript + Supabase + Vercel
 
 ## Detailed Rules
 
-- [Core Principles](.claude/rules/01-core-principles.md) - Bun, IDs, team isolation, TypeScript, UI
-- [Architecture](.claude/rules/02-architecture.md) - Phase/Status, workspace modes, strategy hierarchy
-- [Git Workflow](.claude/rules/03-workflow.md) - Branching, commits, PRs
-- [AI & Agents](.claude/rules/04-ai-routing.md) - Model routing, multi-agent patterns
-- [Database](.claude/rules/05-database.md) - Supabase, migrations, RLS, real-time
-- [Commands](.claude/rules/06-commands.md) - MCP servers, skills, slash commands
+See [CLAUDE.md](CLAUDE.md) for comprehensive project guidelines covering:
+- Core principles (Bun, IDs, team isolation, TypeScript, UI)
+- Architecture (Phase/Status, workspace modes, strategy hierarchy)
+- Git workflow (Branching, commits, PRs)
+- AI & agents (Model routing, multi-agent patterns)
+- Database (Supabase, migrations, RLS, real-time)
+
+For commands and skills: [.claude/rules/06-commands.md](.claude/rules/06-commands.md)
 
 ## Key Links
 
