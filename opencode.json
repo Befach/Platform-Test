@@ -2,6 +2,60 @@
   "$schema": "https://opencode.ai/config.json",
   "instructions": [
     "CLAUDE.md",
-    ".claude/rules/*.md"
-  ]
+    ".claude/rules/*.md",
+    "openspec/AGENTS.md"
+  ],
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "${SUPABASE_ACCESS_TOKEN}",
+        "SUPABASE_PROJECT_REF": "${SUPABASE_PROJECT_REF}"
+      }
+    },
+    "shadcn-ui": {
+      "command": "npx",
+      "args": ["-y", "@jpisnice/shadcn-ui-mcp-server"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@context7/mcp-server"]
+    }
+  },
+  "skills": {
+    "project": [
+      ".claude/skills/parallel-ai",
+      ".claude/skills/sonarcloud",
+      ".claude/skills/nextjs-supabase"
+    ]
+  },
+  "agents": {
+    "explore": {
+      "description": "Contextual grep for codebases. Fire liberally for cross-module pattern discovery.",
+      "runInBackground": true
+    },
+    "librarian": {
+      "description": "External reference grep - docs, OSS, web. Fire proactively for unfamiliar libraries.",
+      "runInBackground": true
+    },
+    "oracle": {
+      "description": "High-IQ read-only consultant for debugging and architecture. Expensive - use wisely.",
+      "runInBackground": false
+    }
+  },
+  "workflows": {
+    "defaultBranch": "main",
+    "branchPrefixes": ["feat/", "fix/", "docs/", "refactor/", "test/", "chore/"],
+    "commitTypes": ["feat", "fix", "docs", "refactor", "test", "chore"],
+    "prAutoMerge": false
+  },
+  "codebase": {
+    "packageManager": "bun",
+    "idFormat": "timestamp",
+    "typescript": {
+      "strict": true,
+      "noAny": true
+    }
+  }
 }

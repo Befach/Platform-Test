@@ -55,6 +55,20 @@ export interface BlockSuiteMindmapNodeWithMeta extends BlockSuiteMindmapNode {
 }
 
 /**
+ * Internal refs exposed by MindMapCanvas for external operations
+ */
+export interface MindMapCanvasRefs {
+  /** Reference to the BlockSuite editor element */
+  editor: unknown
+  /** Reference to the BlockSuite Doc */
+  doc: import("@blocksuite/store").Doc | null
+  /** ID of the mindmap element in the surface */
+  mindmapId: string | null
+  /** ID of the surface block */
+  surfaceId: string | null
+}
+
+/**
  * MindMapCanvas component props
  */
 export interface MindMapCanvasProps {
@@ -70,10 +84,40 @@ export interface MindMapCanvasProps {
   onTreeChange?: (tree: BlockSuiteMindmapNode) => void
   /** Callback when a node is selected */
   onNodeSelect?: (nodeId: string, text: string) => void
+  /** Callback to expose internal refs for operations (used by MindMapCanvasWithToolbar) */
+  onRefsReady?: (refs: MindMapCanvasRefs) => void
   /** Whether the canvas is read-only */
   readOnly?: boolean
   /** Additional CSS classes */
   className?: string
+}
+
+/**
+ * Extended MindMapCanvas props with toolbar support
+ */
+export interface MindMapCanvasWithToolbarProps extends MindMapCanvasProps {
+  /** Show the toolbar (default: true) */
+  showToolbar?: boolean
+  /** Toolbar position */
+  toolbarPosition?: 'top' | 'bottom'
+  /** Toolbar CSS classes */
+  toolbarClassName?: string
+}
+
+/**
+ * MindMap operation handlers exposed for external use
+ */
+export interface MindMapOperations {
+  /** Add a child node to the specified parent */
+  addChild: (parentNodeId: string) => void
+  /** Add a sibling node next to the specified node */
+  addSibling: (nodeId: string) => void
+  /** Delete the specified node and its children */
+  deleteNode: (nodeId: string) => void
+  /** Undo the last operation */
+  undo: () => void
+  /** Redo the last undone operation */
+  redo: () => void
 }
 
 /**

@@ -22,7 +22,7 @@ export function WorkspaceLayout({
   // Global keyboard shortcuts for navigation
   useHotkeys('g h', () => router.push('/dashboard'), { preventDefault: true })
   useHotkeys('g f', () => router.push(`/workspaces/${workspaceId}/features`), { preventDefault: true })
-  useHotkeys('g m', () => router.push(`/workspaces/${workspaceId}/mind-map`), { preventDefault: true })
+  useHotkeys('g m', () => router.push(`/workspaces/${workspaceId}/canvas`), { preventDefault: true })
   useHotkeys('g d', () => router.push(`/workspaces/${workspaceId}/dependencies`), { preventDefault: true })
   useHotkeys('g t', () => router.push(`/workspaces/${workspaceId}/timeline`), { preventDefault: true })
   useHotkeys('g r', () => router.push(`/workspaces/${workspaceId}/reviews`), { preventDefault: true })

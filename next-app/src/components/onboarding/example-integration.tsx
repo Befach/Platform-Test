@@ -67,13 +67,13 @@ const checklistItems: ChecklistItem[] = [
     },
   },
   {
-    id: 'create_mind_map',
-    title: 'Try the mind mapping tool',
-    description: 'Brainstorm ideas with our AI-powered mind mapping canvas',
+    id: 'create_canvas',
+    title: 'Try the canvas tool',
+    description: 'Brainstorm ideas with our BlockSuite canvas',
     completed: false,
     action: {
-      label: 'Open Mind Map',
-      href: '/mind-map',
+      label: 'Open Canvas',
+      href: '/canvas',
     },
   },
   {

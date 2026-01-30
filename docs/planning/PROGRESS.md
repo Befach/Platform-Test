@@ -2,7 +2,7 @@
 
 > **Split Version Available**: This file has been split into smaller files for better AI readability. See [progress/README.md](progress/README.md) for the organized version.
 
-**Last Updated**: 2026-01-17
+**Last Updated**: 2026-01-23
 **Project**: Product Lifecycle Management Platform
 **Overall Progress**: ~96% Complete (Week 7 / 8-week timeline)
 **Status**: On Track - Dependency Upgrade & CI Migration Complete (PR #61)
@@ -54,6 +54,8 @@ Week 8:   [░░░░░░░░░░░░░░░░░░░░]   0% �
 
 **Status**: ✅ **100% Complete**
 **Completed**: 2025-01-20
+
+> **Note**: The original ReactFlow-based mind mapping is being deprecated in favor of the BlockSuite "Endless Canvas". See Week 7 BlockSuite Simplification section below.
 
 ### Completed
 
@@ -608,6 +610,81 @@ Complete redesign of tool UI with glassmorphism, gradients, and micro-interactio
   - Pinned @ai-sdk/react to v2 (v3/AI SDK 6 is BETA)
   - Upgraded react-grid-layout v2 with legacy API compatibility
   - Removed @types/react-grid-layout (v2 includes types)
+
+---
+
+## BlockSuite Simplification: Endless Canvas (2026-01-23)
+
+**Status**: ✅ **95% Complete** | **Branch**: `feat/blocksuite-phase-6`
+
+### Overview
+
+Simplified BlockSuite from complex work-item integration to standalone "Endless Canvas" editor. This reduces ~5,000 lines to ~1,600 lines and improves maintainability.
+
+### Completed
+
+#### New Components ✅
+
+- [x] `components/blocksuite/simple-canvas.tsx` - Simplified canvas wrapper (~200 lines)
+- [x] `components/blocksuite/canvas-editor.tsx` - SSR-safe editor with toolbar
+- [x] `/workspaces/[id]/canvas/page.tsx` - Canvas list page
+- [x] `/workspaces/[id]/canvas/[canvasId]/page.tsx` - Canvas editor page
+- [x] `/workspaces/[id]/canvas/new/page.tsx` - New canvas creation form
+
+#### Database Migration ✅
+
+- [x] `20260123100000_simplify_blocksuite_standalone.sql` - Removed mind_map_id FK
+- [x] Regenerated TypeScript types
+
+#### Security Hardening ✅ (CRITICAL)
+
+- [x] **Fixed middleware auth bypass** - Re-enabled authentication check that was commented out
+- [x] **Rate limiting** - Added Upstash Redis rate limiting to canvas creation API
+- [x] **Input validation** - Zod schemas for all API inputs
+- [x] **Team membership verification** - Enforced on document creation
+- [x] **Audit logging** - Security events logged with timestamps
+- [x] Removed all debug code from production middleware
+
+#### UI Integration ✅
+
+- [x] Added "Endless Canvas" link to workspace sidebar
+- [x] `/mind-maps/*` routes redirect to `/canvas/*`
+- [x] Updated `isActive` function to handle nested routes
+
+#### E2E Tests ✅
+
+- [x] Created `e2e/canvas.spec.ts` with 18 tests:
+  - Authentication protection (3 tests)
+  - Mind maps redirect behavior (2 tests)
+  - API rate limiting and validation (4 tests)
+  - Canvas list and creation (4 tests)
+  - Security tests (5 tests)
+- [x] All 13 tests passing (5 skipped - require test user credentials)
+- [x] Smoke tests: 10/10 passing
+
+### Files Modified
+
+| File | Change |
+|------|--------|
+| `middleware.ts` | Re-enabled auth, removed debug code |
+| `app/api/blocksuite/documents/route.ts` | NEW - Rate-limited creation API |
+| `app/(dashboard)/workspaces/[id]/canvas/new/page.tsx` | Uses rate-limited API |
+| `components/layout/app-sidebar.tsx` | Added Endless Canvas nav item |
+| `lib/supabase/middleware.ts` | Fixed auth check, added mind-maps redirect |
+| `e2e/canvas.spec.ts` | NEW - 18 E2E tests |
+
+### Remaining (Phase 4 - Deferred)
+
+- [ ] Delete deprecated mind-map-canvas.tsx (843 lines)
+- [ ] Delete deprecated mind-map-canvas-with-toolbar.tsx (491 lines)
+- [ ] Delete migration-utils.ts (419 lines)
+- [ ] Simplify blocksuite-editor.tsx (356 → ~200 lines)
+
+### OpenSpec Proposal
+
+- **ID**: `simplify-blocksuite-standalone`
+- **Status**: In Progress (60% overall)
+- **Location**: `openspec/changes/simplify-blocksuite-standalone/`
 
 ---
 

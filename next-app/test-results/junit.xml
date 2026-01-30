@@ -1,96 +1,24 @@
-<testsuites id="" name="" tests="23" failures="0" skipped="23" errors="0" time="0.49484799999999995">
-<testsuite name="14-product-tasks.spec.ts" timestamp="2026-01-02T12:04:17.273Z" hostname="chromium" tests="23" failures="0" skipped="23" time="0" errors="0">
-<testcase name="Product Tasks - CRUD Operations › should display product tasks page with create button" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testsuites id="" name="" tests="10" failures="0" skipped="0" errors="0" time="14.502153">
+<testsuite name="smoke.spec.ts" timestamp="2026-01-23T08:02:12.205Z" hostname="chromium" tests="10" failures="0" skipped="0" time="13.582" errors="0">
+<testcase name="Smoke Tests - Application Health Check › homepage loads and displays branding" classname="smoke.spec.ts" time="0.737">
 </testcase>
-<testcase name="Product Tasks - CRUD Operations › should open create task dialog when clicking add button" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › homepage displays navigation elements" classname="smoke.spec.ts" time="0.736">
 </testcase>
-<testcase name="Product Tasks - CRUD Operations › should create new standalone task with valid data" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › homepage displays feature cards" classname="smoke.spec.ts" time="1.814">
 </testcase>
-<testcase name="Product Tasks - CRUD Operations › should edit task title and description" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › login page loads correctly" classname="smoke.spec.ts" time="3.931">
 </testcase>
-<testcase name="Product Tasks - CRUD Operations › should delete task with confirmation" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › signup page loads correctly" classname="smoke.spec.ts" time="1.593">
 </testcase>
-<testcase name="Product Tasks - Status Workflow › should progress task from todo to in_progress" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › unauthenticated user is redirected from dashboard" classname="smoke.spec.ts" time="0.464">
 </testcase>
-<testcase name="Product Tasks - Status Workflow › should progress task from in_progress to done" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › unauthenticated user is redirected from workspaces" classname="smoke.spec.ts" time="0.58">
 </testcase>
-<testcase name="Product Tasks - Status Workflow › should display tasks grouped by status in board view" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › static assets load without critical errors" classname="smoke.spec.ts" time="1.473">
 </testcase>
-<testcase name="Product Tasks - Status Workflow › should handle blocked status appropriately" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › navigation from homepage to login works" classname="smoke.spec.ts" time="1.659">
 </testcase>
-<testcase name="Product Tasks - Assignment › should display assigned user avatar on task card" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Assignment › should show only team members in assignment dropdown" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Assignment › should allow unassigning task" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Statistics › should display task completion percentage" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Statistics › should show status breakdown counts" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Statistics › should update stats when task status changes" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Statistics › should filter tasks and update display accordingly" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Convert to Work Item › should open convert to work item dialog" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Convert to Work Item › should convert standalone task to work item" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Convert to Work Item › should show option to keep task linked after conversion" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Convert to Work Item › should not allow converting linked tasks" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Type and Priority › should display task type badges" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Type and Priority › should display priority indicators" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Product Tasks - Type and Priority › should filter tasks by type" classname="14-product-tasks.spec.ts" time="0">
-<skipped>
-</skipped>
+<testcase name="Smoke Tests - Application Health Check › navigation from homepage to signup works" classname="smoke.spec.ts" time="0.595">
 </testcase>
 </testsuite>
 </testsuites>

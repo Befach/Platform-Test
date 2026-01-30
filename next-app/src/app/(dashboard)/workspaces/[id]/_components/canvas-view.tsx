@@ -3,28 +3,14 @@
 /**
  * Canvas View Component
  *
- * Unified visual canvas that replaces Mind Map and Dependencies views
- * Single source of truth for all visual work item relationships
+ * Placeholder component that redirects users to the new BlockSuite canvas system.
+ * The old ReactFlow-based canvas has been deprecated in favor of BlockSuite.
  */
 
-import dynamic from 'next/dynamic'
-import { Loader2 } from 'lucide-react'
-
-// Import canvas wrapper as client-side only to avoid ReactFlow hydration warnings
-const CanvasViewWrapper = dynamic(
-  () => import('@/components/canvas/canvas-view-wrapper').then((mod) => ({ default: mod.CanvasViewWrapper })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-[calc(100vh-12rem)] w-full rounded-lg border bg-white shadow-sm flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-muted-foreground">
-          <Loader2 className="w-8 h-8 animate-spin" />
-          <p className="text-sm">Loading canvas...</p>
-        </div>
-      </div>
-    ),
-  }
-)
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ExternalLink, Map } from 'lucide-react'
 
 interface WorkspaceData {
   id: string
@@ -51,15 +37,28 @@ interface CanvasViewProps {
   linkedItems: LinkedItemData[]
 }
 
-export function CanvasView({ workspace, workItems, linkedItems }: CanvasViewProps) {
+export function CanvasView({ workspace, workItems: _workItems, linkedItems: _linkedItems }: CanvasViewProps) {
   return (
-    <div className="h-[calc(100vh-12rem)] w-full rounded-lg border bg-white shadow-sm">
-      <CanvasViewWrapper
-        workspaceId={workspace.id}
-        teamId={workspace.team_id}
-        initialWorkItems={workItems}
-        initialLinkedItems={linkedItems}
-      />
+    <div className="h-[calc(100vh-12rem)] w-full rounded-lg border bg-white shadow-sm flex items-center justify-center">
+      <Card className="max-w-md">
+        <CardHeader className="text-center">
+          <div className="mx-auto w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+            <Map className="w-6 h-6 text-blue-600" />
+          </div>
+          <CardTitle>Canvas Has Moved</CardTitle>
+          <CardDescription>
+            The canvas feature has been upgraded to use BlockSuite for better performance and collaboration.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-center">
+          <Link href={`/workspaces/${workspace.id}/canvas`}>
+            <Button className="gap-2">
+              <ExternalLink className="w-4 h-4" />
+              Go to Canvas
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
     </div>
   )
 }

@@ -27,7 +27,7 @@ export function DashboardHeader({ userEmail, userName }: DashboardHeaderProps) {
         if (view) {
             switch (view) {
                 case 'dashboard': return 'Dashboard'
-                case 'mind-map': return 'Mind Map'
+                case 'canvas': return 'Canvas'
                 case 'work-items': return 'Features'
                 case 'timeline': return 'Timeline'
                 case 'dependencies': return 'Dependencies'

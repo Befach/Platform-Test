@@ -26,7 +26,7 @@ interface AppSidebarProps {
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home, shortcut: 'G H' },
-  { name: 'Mind Map', href: '/mind-map', icon: Lightbulb, shortcut: 'G M' },
+  { name: 'Canvas', href: '/canvas', icon: Lightbulb, shortcut: 'G M' },
   { name: 'Features', href: '/features', icon: Sparkles, shortcut: 'G F' },
   { name: 'Dependencies', href: '/dependencies', icon: GitBranch, shortcut: 'G D' },
   { name: 'Timeline', href: '/timeline', icon: Calendar, shortcut: 'G T' },

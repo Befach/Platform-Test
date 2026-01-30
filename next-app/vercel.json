@@ -1,5 +1,7 @@
 {
   "framework": "nextjs",
+  "installCommand": "bun install",
+  "buildCommand": "bun run build",
   "functions": {
     "app/api/ai/**/*.ts": {
       "maxDuration": 300,

@@ -111,9 +111,9 @@ export function WorkspaceSidebar({
       icon: Target,
       items: [
         {
-          id: 'mind-map',
-          name: 'Mind Map',
-          view: 'mind-map',
+          id: 'canvas',
+          name: 'Canvas',
+          view: 'canvas',
           icon: Map,
           enabled: enabledModules.includes('mind_map'),
         },

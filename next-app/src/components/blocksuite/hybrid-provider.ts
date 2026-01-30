@@ -54,6 +54,7 @@ export class HybridProvider {
   private isDirty: boolean = false
   private destroyed: boolean = false
   private isLoaded: boolean = false
+  private isSaving: boolean = false // Mutex lock to prevent concurrent saves
   private onConnectionChange?: (connected: boolean) => void
   private onSyncError?: (error: Error) => void
 
@@ -133,10 +134,18 @@ export class HybridProvider {
 
   /**
    * Save Yjs state to Supabase Storage
+   * Uses mutex lock to prevent concurrent save operations
    */
   async save(): Promise<void> {
     if (this.destroyed || !this.isDirty) return
 
+    // Mutex lock: Skip if already saving to prevent concurrent writes
+    if (this.isSaving) {
+      console.log('[HybridProvider] Save already in progress, skipping')
+      return
+    }
+
+    this.isSaving = true
     try {
       const state = Y.encodeStateAsUpdate(this.doc)
 
@@ -166,6 +175,8 @@ export class HybridProvider {
     } catch (error) {
       console.error('[HybridProvider] Save error:', error)
       this.onSyncError?.(error instanceof Error ? error : new Error(String(error)))
+    } finally {
+      this.isSaving = false
     }
   }
 
@@ -308,6 +319,12 @@ export class HybridProvider {
 
         // Skip our own broadcasts
         if (payload.origin === 'local') return
+
+        // SECURITY: Validate base64 format before decoding
+        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(payload.update)) {
+          console.warn('[HybridProvider] Invalid base64 format in broadcast')
+          return
+        }
 
         try {
           // Decode base64 to Uint8Array

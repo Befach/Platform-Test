@@ -34,3 +34,4 @@ dist/
 build/
 .vercel
 nul
+.env*.local

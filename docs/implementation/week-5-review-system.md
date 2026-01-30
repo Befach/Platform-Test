@@ -377,7 +377,7 @@
 
 **Links**:
 
-- Canvas: [../../next-app/src/components/canvas/](../../next-app/src/components/canvas/)
+- Canvas: [../../next-app/src/components/blocksuite/](../../next-app/src/components/blocksuite/) *(Refactored from ReactFlow to BlockSuite)*
 
 ---
 

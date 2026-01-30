@@ -30,8 +30,6 @@ export const BlockSuiteEditor = dynamic<BlockSuiteEditorProps>(
   () => import('./blocksuite-editor').then((mod) => mod.BlockSuiteEditor),
   {
     ssr: false,
-    // Default to edgeless mode for loading skeleton since we can't access props here
-    // Use specific BlockSuitePageEditor or BlockSuiteCanvasEditor for mode-matched loading
     loading: () => <LoadingSkeleton mode="edgeless" />,
   }
 )
@@ -42,7 +40,6 @@ export const BlockSuiteEditor = dynamic<BlockSuiteEditorProps>(
  */
 export const BlockSuitePageEditor = dynamic<Omit<BlockSuiteEditorProps, 'mode'>>(
   () => import('./blocksuite-editor').then((mod) => {
-    // Return a component that forces page mode
     const PageEditor = (props: Omit<BlockSuiteEditorProps, 'mode'>) => (
       <mod.BlockSuiteEditor {...props} mode="page" />
     )
@@ -61,7 +58,6 @@ export const BlockSuitePageEditor = dynamic<Omit<BlockSuiteEditorProps, 'mode'>>
  */
 export const BlockSuiteCanvasEditor = dynamic<Omit<BlockSuiteEditorProps, 'mode'>>(
   () => import('./blocksuite-editor').then((mod) => {
-    // Return a component that forces edgeless mode
     const CanvasEditor = (props: Omit<BlockSuiteEditorProps, 'mode'>) => (
       <mod.BlockSuiteEditor {...props} mode="edgeless" />
     )
@@ -75,38 +71,38 @@ export const BlockSuiteCanvasEditor = dynamic<Omit<BlockSuiteEditorProps, 'mode'
 )
 
 /**
- * SSR-Safe MindMap Canvas
- * Specialized for mind mapping with BlockSuite native support
+ * SSR-Safe SimpleCanvas - Standalone BlockSuite editor with persistence
+ * Use this for all canvas/whiteboard/document editing needs.
  *
  * @example
  * ```tsx
- * import { MindMapCanvas } from '@/components/blocksuite'
+ * import { SimpleCanvas } from '@/components/blocksuite'
  *
- * function MyMindMap() {
+ * function MyCanvas() {
  *   return (
- *     <MindMapCanvas
- *       initialTree={{
- *         text: 'Central Idea',
- *         children: [{ text: 'Branch 1' }]
- *       }}
- *       style={4}  // MindmapStyle.FOUR
- *       layout={2} // LayoutType.BALANCE
+ *     <SimpleCanvas
+ *       documentId="1234567890"
+ *       teamId="team-123"
+ *       documentType="mindmap"
  *     />
  *   )
  * }
  * ```
  */
-export const MindMapCanvas = dynamic(
-  () => import('./mind-map-canvas').then((mod) => mod.MindMapCanvas),
+export const SimpleCanvas = dynamic(
+  () => import('./simple-canvas').then((mod) => mod.SimpleCanvas),
   {
     ssr: false,
     loading: () => <LoadingSkeleton mode="edgeless" />,
   }
 )
 
-// Re-export types
+// ============================================================
+// Core Types
+// ============================================================
+
 export type { BlockSuiteEditorProps } from './blocksuite-editor'
-export type { MindMapCanvasProps } from './mindmap-types'
+export type { SimpleCanvasProps } from './simple-canvas'
 export { LoadingSkeleton } from './loading-skeleton'
 
 // Re-export validation schemas
@@ -120,15 +116,11 @@ export {
   BlockSuiteDocumentSchema,
   validateEditorProps,
   safeValidateEditorProps,
-  // MindMapCanvas validation schemas
   BlockSuiteMindmapStyleSchema,
   BlockSuiteLayoutTypeSchema,
   BlockSuiteMindmapNodeSchema,
-  MindMapCanvasPropsSchema,
-  validateMindMapCanvasProps,
-  safeValidateMindMapCanvasProps,
 } from './schema'
-export type { ValidatedBlockSuiteEditorProps, ValidatedMindMapCanvasProps } from './schema'
+export type { ValidatedBlockSuiteEditorProps } from './schema'
 
 // Re-export BlockSuite types for convenience
 export type {
@@ -145,7 +137,7 @@ export type {
   CanvasViewport,
 } from './types'
 
-// Re-export mindmap-specific types and utilities
+// Re-export mindmap-specific types (kept for compatibility)
 export {
   BlockSuiteMindmapStyle,
   BlockSuiteLayoutType,
@@ -154,77 +146,12 @@ export {
 export type {
   BlockSuiteMindmapNode,
   BlockSuiteMindmapNodeWithMeta,
-  ConversionResult,
-  MindmapElementRef,
-  SurfaceBlockModelRef,
 } from './mindmap-types'
 
-// Re-export conversion utilities
-export {
-  reactFlowToBlockSuiteTree,
-  blockSuiteTreeToReactFlow,
-  semanticNodeToMindmapNode,
-  textToMindmapTree,
-  getTreeDepth,
-  countTreeNodes,
-} from './mindmap-utils'
-
 // ============================================================
-// Migration Utilities (Phase 3: Data Migration)
+// Persistence Utilities
 // ============================================================
 
-// Re-export migration types
-export type {
-  MigrationStatus,
-  LostEdge,
-  MigrationOptions,
-  MigrationResult,
-  BatchMigrationResult,
-  MindMapMigrationData,
-} from './mindmap-types'
-
-// Re-export migration utilities
-export {
-  DEFAULT_MIGRATION_OPTIONS,
-  TOAST_THRESHOLD_BYTES,
-  estimateJSONBSize,
-  formatBytes,
-  checkSizeThreshold,
-  extractLostEdges,
-  validateMindMapForMigration,
-  migrateToBlockSuite,
-  getBlockSuiteTree,
-  summarizeMigration,
-  createBatchResult,
-} from './migration-utils'
-
-// Re-export migration schemas
-export {
-  MigrationStatusSchema,
-  LostEdgeReasonSchema,
-  LostEdgeSchema,
-  MigrationOptionsSchema,
-  MigrateSingleRequestSchema,
-  MigrateWorkspaceRequestSchema,
-  MigrationResultSchema,
-  validateMigrationOptions,
-  safeValidateMigrationOptions,
-  validateMigrateSingleRequest,
-  safeValidateMigrateSingleRequest,
-  validateMigrateWorkspaceRequest,
-  safeValidateMigrateWorkspaceRequest,
-} from './schema'
-export type {
-  ValidatedMigrationOptions,
-  ValidatedMigrateSingleRequest,
-  ValidatedMigrateWorkspaceRequest,
-} from './schema'
-
-// ============================================================
-// Persistence Utilities (Phase 4: Supabase Persistence)
-// ============================================================
-
-// Re-export persistence types
 export type {
   BlockSuiteDocumentType,
   BlockSuiteDocumentMetadata,
@@ -242,7 +169,6 @@ export type {
   ApiErrorResponse,
 } from './persistence-types'
 
-// Re-export persistence constants and security utilities
 export {
   BLOCKSUITE_STORAGE_BUCKET,
   getStoragePath,
@@ -253,7 +179,6 @@ export {
   MAX_DOCUMENT_SIZE,
 } from './persistence-types'
 
-// Re-export storage client functions
 export {
   saveYjsState,
   loadYjsState,
@@ -263,13 +188,10 @@ export {
   listTeamDocuments,
 } from './storage-client'
 
-// Re-export hybrid provider
 export { HybridProvider } from './hybrid-provider'
 
-// Re-export sync hooks
 export { useBlockSuiteSync, useBlockSuiteDocument } from './use-blocksuite-sync'
 
-// Re-export persistence schemas
 export {
   BlockSuiteDocumentTypeSchema,
   BlockSuiteDocumentCreateSchema,
@@ -281,40 +203,21 @@ export {
   safeValidateDocumentUpdate,
   validateStateSave,
   safeValidateStateSave,
-  // Realtime payload validation (Phase 4 Security)
   YjsUpdatePayloadSchema,
   validateYjsUpdatePayload,
   safeValidateYjsUpdatePayload,
-  // RAG Layer schemas (Phase 5)
-  EmbeddingStatusSchema,
-  ExtractedNodeTypeSchema,
-  ExtractionOptionsSchema,
-  ChunkOptionsSchema,
-  EmbedMindMapRequestSchema,
-  MindMapChunkMetadataSchema,
-  validateExtractionOptions,
-  safeValidateExtractionOptions,
-  validateChunkOptions,
-  safeValidateChunkOptions,
-  validateEmbedMindMapRequest,
-  safeValidateEmbedMindMapRequest,
 } from './schema'
 export type {
   ValidatedDocumentCreate,
   ValidatedDocumentUpdate,
   ValidatedStateSave,
   ValidatedYjsUpdatePayload,
-  ValidatedExtractionOptions,
-  ValidatedChunkOptions,
-  ValidatedEmbedMindMapRequest,
-  ValidatedMindMapChunkMetadata,
 } from './schema'
 
 // ============================================================
-// RAG Layer Utilities (Phase 5: Embedding Integration)
+// RAG Layer Utilities (for AI Assistant search)
 // ============================================================
 
-// Re-export RAG types
 export type {
   MindMapEmbeddingStatusType,
   MindMapEmbeddingStatus,
@@ -334,7 +237,6 @@ export type {
   TreeHashResult,
 } from './rag-types'
 
-// Re-export text extraction utilities
 export {
   extractTextFromBlockSuiteTree,
   walkBlockSuiteTree,
@@ -345,7 +247,6 @@ export {
   estimateExtractionTokens,
 } from './text-extractor'
 
-// Re-export chunking utilities
 export {
   chunkMindmapForEmbedding,
   batchChunkMindmaps,
@@ -354,3 +255,24 @@ export {
   DEFAULT_CHUNK_OPTIONS,
 } from './mindmap-chunker'
 export type { ChunkContext } from './mindmap-chunker'
+
+export {
+  EmbeddingStatusSchema,
+  ExtractedNodeTypeSchema,
+  ExtractionOptionsSchema,
+  ChunkOptionsSchema,
+  EmbedMindMapRequestSchema,
+  MindMapChunkMetadataSchema,
+  validateExtractionOptions,
+  safeValidateExtractionOptions,
+  validateChunkOptions,
+  safeValidateChunkOptions,
+  validateEmbedMindMapRequest,
+  safeValidateEmbedMindMapRequest,
+} from './schema'
+export type {
+  ValidatedExtractionOptions,
+  ValidatedChunkOptions,
+  ValidatedEmbedMindMapRequest,
+  ValidatedMindMapChunkMetadata,
+} from './schema'

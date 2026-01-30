@@ -1,0 +1,12 @@
+diff --git a/dist/lit.mjs b/dist/lit.mjs
+index fd396fd8341fd2601805ae9c06cea25a5fda6a5f..67ccb542daa9612e6d22252755aa356c8ffd4448 100644
+--- a/dist/lit.mjs
++++ b/dist/lit.mjs
+@@ -7670,6 +7670,7 @@ export {
+   ChatWithAi as ChatWithAiIcon,
+   CheckBoxCheckLinear as CheckBoxCheckLinearIcon,
+   CheckBoxCheckSolid as CheckBoxCheckSolidIcon,
++  CheckBoxCheckSolid as CheckBoxCkeckSolidIcon,
+   CheckBoxIntermediate as CheckBoxIntermediateIcon,
+   CheckBoxUn as CheckBoxUnIcon,
+   ChemicalPanel as ChemicalPanelIcon,

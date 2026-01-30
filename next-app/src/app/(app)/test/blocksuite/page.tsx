@@ -2,7 +2,12 @@
 
 import { useState } from 'react'
 import { notFound } from 'next/navigation'
-import { BlockSuiteEditor, BlockSuiteCanvasEditor, BlockSuitePageEditor } from '@/components/blocksuite'
+import {
+  BlockSuiteEditor,
+  BlockSuiteCanvasEditor,
+  BlockSuitePageEditor,
+  SimpleCanvas,
+} from '@/components/blocksuite'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -17,7 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
  * - SSR-safe dynamic imports work correctly
  * - Editor mounts and initializes properly
  * - Both page and edgeless modes function
- * - Change callbacks fire correctly
+ * - SimpleCanvas with persistence works
  *
  * Access at: /test/blocksuite (development only)
  */
@@ -31,10 +36,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
  */
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
 
+// Test document/team IDs for development
+const TEST_DOCUMENT_ID = 'test-dev-document-001'
+const TEST_TEAM_ID = 'test-dev-team-001'
+
 export default function BlockSuiteTestPage() {
   const [editorReady, setEditorReady] = useState(false)
   const [changeCount, setChangeCount] = useState(0)
   const [currentMode, setCurrentMode] = useState<'page' | 'edgeless'>('edgeless')
+  const [canvasReady, setCanvasReady] = useState(false)
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   // Block access in production - show 404
   // This check happens before any renders
@@ -56,7 +67,7 @@ export default function BlockSuiteTestPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Editor Status</CardTitle>
@@ -85,14 +96,58 @@ export default function BlockSuiteTestPage() {
             <div className="text-2xl font-bold capitalize">{currentMode}</div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">SimpleCanvas</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className={`text-2xl font-bold ${canvasReady ? 'text-green-600' : 'text-yellow-600'}`}>
+              {canvasReady ? (hasUnsavedChanges ? 'Unsaved' : 'Saved') : 'Loading...'}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      <Tabs defaultValue="generic" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="simple-canvas" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="simple-canvas">SimpleCanvas (New)</TabsTrigger>
           <TabsTrigger value="generic">Generic Editor</TabsTrigger>
           <TabsTrigger value="canvas">Canvas Editor</TabsTrigger>
           <TabsTrigger value="page">Page Editor</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="simple-canvas" className="mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>SimpleCanvas with Persistence</CardTitle>
+              <CardDescription>
+                New standalone canvas component with HybridProvider persistence.
+                Uses test document/team IDs for development.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-lg overflow-hidden h-[600px]">
+                <SimpleCanvas
+                  documentId={TEST_DOCUMENT_ID}
+                  teamId={TEST_TEAM_ID}
+                  documentType="canvas"
+                  onReady={() => {
+                    setCanvasReady(true)
+                    console.log('SimpleCanvas ready!')
+                  }}
+                  onSaveStatusChange={(unsaved) => {
+                    setHasUnsavedChanges(unsaved)
+                    console.log('Save status:', unsaved ? 'Unsaved changes' : 'All saved')
+                  }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Document ID: {TEST_DOCUMENT_ID} | Team ID: {TEST_TEAM_ID}
+              </p>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="generic" className="mt-4">
           <Card>
@@ -139,7 +194,7 @@ export default function BlockSuiteTestPage() {
             <CardHeader>
               <CardTitle>Canvas Editor (Edgeless Mode)</CardTitle>
               <CardDescription>
-                Pre-configured for whiteboard/canvas editing with mind maps
+                Pre-configured for whiteboard/canvas editing
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -177,11 +232,13 @@ export default function BlockSuiteTestPage() {
         </CardHeader>
         <CardContent className="prose prose-sm dark:prose-invert">
           <ul>
-            <li>BlockSuite packages v0.18.7 with patch-package fixes</li>
+            <li>BlockSuite packages v0.18.7 integrated</li>
             <li>SSR-safe via dynamic imports with ssr: false</li>
             <li>Uses Schema + DocCollection API from @blocksuite/store</li>
             <li>Web Components mounted to React refs</li>
             <li>Change events via historyUpdated slot</li>
+            <li><strong>SimpleCanvas:</strong> New standalone component with HybridProvider for Yjs + Supabase persistence</li>
+            <li><strong>Deprecated:</strong> MindMapCanvas and MindMapCanvasWithToolbar have been removed. Use SimpleCanvas instead.</li>
           </ul>
         </CardContent>
       </Card>

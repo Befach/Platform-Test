@@ -1,16 +1,18 @@
 {
   "config": {
-    "configFile": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\playwright.config.ts",
-    "rootDir": "C:/Users/harsh/Downloads/Platform Test/next-app/e2e",
+    "configFile": "C:\\Users\\harsha_befach\\Downloads\\Roadmap\\next-app\\playwright.config.ts",
+    "rootDir": "C:/Users/harsha_befach/Downloads/Roadmap/next-app/e2e",
     "forbidOnly": false,
     "fullyParallel": true,
-    "globalSetup": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\tests\\global-setup.ts",
-    "globalTeardown": "C:\\Users\\harsh\\Downloads\\Platform Test\\next-app\\tests\\global-teardown.ts",
+    "globalSetup": "C:\\Users\\harsha_befach\\Downloads\\Roadmap\\next-app\\tests\\global-setup.ts",
+    "globalTeardown": "C:\\Users\\harsha_befach\\Downloads\\Roadmap\\next-app\\tests\\global-teardown.ts",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 2
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -43,13 +45,15 @@
     "quiet": false,
     "projects": [
       {
-        "outputDir": "C:/Users/harsh/Downloads/Platform Test/next-app/test-results",
+        "outputDir": "C:/Users/harsha_befach/Downloads/Roadmap/next-app/test-results",
         "repeatEach": 1,
         "retries": 1,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 2
+        },
         "id": "chromium",
         "name": "chromium",
-        "testDir": "C:/Users/harsh/Downloads/Platform Test/next-app/e2e",
+        "testDir": "C:/Users/harsha_befach/Downloads/Roadmap/next-app/e2e",
         "testIgnore": [],
         "testMatch": [
           "*.spec.ts"
@@ -72,20 +76,20 @@
   },
   "suites": [
     {
-      "title": "14-product-tasks.spec.ts",
-      "file": "14-product-tasks.spec.ts",
+      "title": "smoke.spec.ts",
+      "file": "smoke.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Product Tasks - CRUD Operations",
-          "file": "14-product-tasks.spec.ts",
-          "line": 31,
+          "title": "Smoke Tests - Application Health Check",
+          "file": "smoke.spec.ts",
+          "line": 14,
           "column": 6,
           "specs": [
             {
-              "title": "should display product tasks page with create button",
+              "title": "homepage loads and displays branding",
               "ok": true,
               "tags": [],
               "tests": [
@@ -95,17 +99,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 737,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:12.835Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-69f387d55eaf8a14d813",
-              "file": "14-product-tasks.spec.ts",
-              "line": 81,
+              "id": "4219922fea2e2bd3c691-bc0dfde8b8e856fa53e2",
+              "file": "smoke.spec.ts",
+              "line": 15,
               "column": 7
             },
             {
-              "title": "should open create task dialog when clicking add button",
+              "title": "homepage displays navigation elements",
               "ok": true,
               "tags": [],
               "tests": [
@@ -115,17 +133,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 736,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:12.848Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-e73c2649257c3d76694b",
-              "file": "14-product-tasks.spec.ts",
-              "line": 117,
+              "id": "4219922fea2e2bd3c691-66e51f7a6fd4f92e7959",
+              "file": "smoke.spec.ts",
+              "line": 28,
               "column": 7
             },
             {
-              "title": "should create new standalone task with valid data",
+              "title": "homepage displays feature cards",
               "ok": true,
               "tags": [],
               "tests": [
@@ -135,17 +167,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1814,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:13.653Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-260b6bb6e079e8a0b022",
-              "file": "14-product-tasks.spec.ts",
-              "line": 147,
+              "id": "4219922fea2e2bd3c691-11d1b38981b29c04dc52",
+              "file": "smoke.spec.ts",
+              "line": 42,
               "column": 7
             },
             {
-              "title": "should edit task title and description",
+              "title": "login page loads correctly",
               "ok": true,
               "tags": [],
               "tests": [
@@ -155,17 +201,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3931,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:13.671Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-575d0ec0e00e666e8d43",
-              "file": "14-product-tasks.spec.ts",
-              "line": 196,
+              "id": "4219922fea2e2bd3c691-8642c95fe14c404cdb2f",
+              "file": "smoke.spec.ts",
+              "line": 51,
               "column": 7
             },
             {
-              "title": "should delete task with confirmation",
+              "title": "signup page loads correctly",
               "ok": true,
               "tags": [],
               "tests": [
@@ -175,45 +235,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1593,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:15.480Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-ab832b218a2991a4f268",
-              "file": "14-product-tasks.spec.ts",
-              "line": 256,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Product Tasks - Status Workflow",
-          "file": "14-product-tasks.spec.ts",
-          "line": 306,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should progress task from todo to in_progress",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-0f7b815be21ca3b48889",
-              "file": "14-product-tasks.spec.ts",
-              "line": 343,
+              "id": "4219922fea2e2bd3c691-f36b7bce14a0336f847c",
+              "file": "smoke.spec.ts",
+              "line": 67,
               "column": 7
             },
             {
-              "title": "should progress task from in_progress to done",
+              "title": "unauthenticated user is redirected from dashboard",
               "ok": true,
               "tags": [],
               "tests": [
@@ -223,17 +269,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 464,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:17.083Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-5adb98d323b7760cf2b7",
-              "file": "14-product-tasks.spec.ts",
-              "line": 395,
+              "id": "4219922fea2e2bd3c691-b7cf8d15f349250cdbd7",
+              "file": "smoke.spec.ts",
+              "line": 77,
               "column": 7
             },
             {
-              "title": "should display tasks grouped by status in board view",
+              "title": "unauthenticated user is redirected from workspaces",
               "ok": true,
               "tags": [],
               "tests": [
@@ -243,17 +303,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 580,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:17.556Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-7434265985cf42e27772",
-              "file": "14-product-tasks.spec.ts",
-              "line": 438,
+              "id": "4219922fea2e2bd3c691-15e399efea5baa17f802",
+              "file": "smoke.spec.ts",
+              "line": 84,
               "column": 7
             },
             {
-              "title": "should handle blocked status appropriately",
+              "title": "static assets load without critical errors",
               "ok": true,
               "tags": [],
               "tests": [
@@ -263,45 +337,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1473,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:17.612Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-9410a738c3b3e3ac63bf",
-              "file": "14-product-tasks.spec.ts",
-              "line": 491,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Product Tasks - Assignment",
-          "file": "14-product-tasks.spec.ts",
-          "line": 517,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display assigned user avatar on task card",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-84a5813d2f963b6e8ece",
-              "file": "14-product-tasks.spec.ts",
-              "line": 554,
+              "id": "4219922fea2e2bd3c691-50169966e383212b6520",
+              "file": "smoke.spec.ts",
+              "line": 91,
               "column": 7
             },
             {
-              "title": "should show only team members in assignment dropdown",
+              "title": "navigation from homepage to login works",
               "ok": true,
               "tags": [],
               "tests": [
@@ -311,17 +371,31 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1659,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:18.144Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-53d79c2396ba28b7795d",
-              "file": "14-product-tasks.spec.ts",
-              "line": 581,
+              "id": "4219922fea2e2bd3c691-26a6ed870fe34a35a957",
+              "file": "smoke.spec.ts",
+              "line": 110,
               "column": 7
             },
             {
-              "title": "should allow unassigning task",
+              "title": "navigation from homepage to signup works",
               "ok": true,
               "tags": [],
               "tests": [
@@ -331,257 +405,27 @@
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 595,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-23T08:02:19.096Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "7eb505c46cef500f0279-f69b71c1dc754a051b74",
-              "file": "14-product-tasks.spec.ts",
-              "line": 625,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Product Tasks - Statistics",
-          "file": "14-product-tasks.spec.ts",
-          "line": 650,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display task completion percentage",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-cacb2fee27ac4730c180",
-              "file": "14-product-tasks.spec.ts",
-              "line": 723,
-              "column": 7
-            },
-            {
-              "title": "should show status breakdown counts",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-108f697af009cbdfe21f",
-              "file": "14-product-tasks.spec.ts",
-              "line": 749,
-              "column": 7
-            },
-            {
-              "title": "should update stats when task status changes",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-9b40905d3afc1c11285d",
-              "file": "14-product-tasks.spec.ts",
-              "line": 773,
-              "column": 7
-            },
-            {
-              "title": "should filter tasks and update display accordingly",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-1726be322ca500d1cb05",
-              "file": "14-product-tasks.spec.ts",
-              "line": 796,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Product Tasks - Convert to Work Item",
-          "file": "14-product-tasks.spec.ts",
-          "line": 829,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should open convert to work item dialog",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-fe72a6edeff77925e8df",
-              "file": "14-product-tasks.spec.ts",
-              "line": 866,
-              "column": 7
-            },
-            {
-              "title": "should convert standalone task to work item",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-548511e39f6cc5b0fd2e",
-              "file": "14-product-tasks.spec.ts",
-              "line": 911,
-              "column": 7
-            },
-            {
-              "title": "should show option to keep task linked after conversion",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-437ddcd706bb7577bbcc",
-              "file": "14-product-tasks.spec.ts",
-              "line": 976,
-              "column": 7
-            },
-            {
-              "title": "should not allow converting linked tasks",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-6b76d455073f568351b8",
-              "file": "14-product-tasks.spec.ts",
-              "line": 1033,
-              "column": 7
-            }
-          ]
-        },
-        {
-          "title": "Product Tasks - Type and Priority",
-          "file": "14-product-tasks.spec.ts",
-          "line": 1074,
-          "column": 6,
-          "specs": [
-            {
-              "title": "should display task type badges",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-8446d7d9392b05296d9a",
-              "file": "14-product-tasks.spec.ts",
-              "line": 1136,
-              "column": 7
-            },
-            {
-              "title": "should display priority indicators",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-a8f1487ee7df20a36706",
-              "file": "14-product-tasks.spec.ts",
-              "line": 1159,
-              "column": 7
-            },
-            {
-              "title": "should filter tasks by type",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "7eb505c46cef500f0279-7a336def49bc9d465e81",
-              "file": "14-product-tasks.spec.ts",
-              "line": 1178,
+              "id": "4219922fea2e2bd3c691-f378c859312c0786efd6",
+              "file": "smoke.spec.ts",
+              "line": 124,
               "column": 7
             }
           ]
@@ -591,10 +435,10 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-01-02T12:04:16.779Z",
-    "duration": 494.84799999999996,
-    "expected": 0,
-    "skipped": 23,
+    "startTime": "2026-01-23T08:02:07.762Z",
+    "duration": 14502.153,
+    "expected": 10,
+    "skipped": 0,
     "unexpected": 0,
     "flaky": 0
   }

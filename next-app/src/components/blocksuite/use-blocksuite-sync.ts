@@ -158,7 +158,6 @@ export function useBlockSuiteSync(
  */
 export function useBlockSuiteDocument(options: {
   workspaceId?: string
-  mindMapId?: string
   teamId: string
   documentType?: 'mindmap' | 'document' | 'canvas'
   title?: string
@@ -174,7 +173,6 @@ export function useBlockSuiteDocument(options: {
 
   const {
     workspaceId,
-    mindMapId,
     teamId,
     documentType = 'mindmap',
     title,
@@ -190,31 +188,6 @@ export function useBlockSuiteDocument(options: {
       setCreateError(null)
 
       try {
-        // Check if document already exists for this mind map
-        // Note: Use maybeSingle() to return null on zero rows (not an error)
-        if (mindMapId) {
-          const { data: existing, error: existingError } = await supabase
-            .from('blocksuite_documents')
-            .select('id')
-            .eq('mind_map_id', mindMapId)
-            .eq('team_id', teamId)
-            .maybeSingle()
-
-          // Handle real database errors (not just "no rows found")
-          if (existingError) {
-            console.error('[useBlockSuiteDocument] Error checking existing document:', existingError)
-            setCreateError(existingError)
-            setIsCreating(false)
-            return
-          }
-
-          if (existing) {
-            setDocumentId(existing.id)
-            setIsCreating(false)
-            return
-          }
-        }
-
         // Create new document
         // SECURITY: Use getStoragePath() to sanitize inputs and prevent path traversal
         const id = Date.now().toString()
@@ -224,7 +197,6 @@ export function useBlockSuiteDocument(options: {
           id,
           team_id: teamId,
           workspace_id: workspaceId ?? null,
-          mind_map_id: mindMapId ?? null,
           storage_path: storagePath,
           storage_size_bytes: 0,
           document_type: documentType,
@@ -245,7 +217,7 @@ export function useBlockSuiteDocument(options: {
     }
 
     initDocument()
-  }, [supabase, workspaceId, mindMapId, teamId, documentType, title, enabled])
+  }, [supabase, workspaceId, teamId, documentType, title, enabled])
 
   return {
     documentId,

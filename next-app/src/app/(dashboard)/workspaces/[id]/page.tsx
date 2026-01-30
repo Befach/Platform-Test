@@ -2,42 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import { WorkspaceContent } from './_components/workspace-content'
 import { calculatePhaseDistribution } from '@/lib/constants/workspace-phases'
-import fs from 'fs/promises'
-
-const DEBUG_ENDPOINT = 'http://127.0.0.1:7242/ingest/ebdf2fd5-9696-479e-b2f1-d72537069b93'
-const DEBUG_LOG_PATH = 'c:\\Users\\harsh\\Downloads\\Platform Test\\.cursor\\debug.log'
-
-async function sendDebug(payload: {
-  sessionId?: string
-  runId?: string
-  hypothesisId?: string
-  location: string
-  message: string
-  data?: Record<string, unknown>
-  timestamp?: number
-}) {
-  const body = {
-    sessionId: 'debug-session',
-    runId: 'pre-fix2',
-    timestamp: Date.now(),
-    ...payload,
-  }
-
-  try {
-    await fetch(DEBUG_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-  } catch (_err) {
-    // Fallback to file append if the ingest endpoint is unreachable
-    try {
-      await fs.appendFile(DEBUG_LOG_PATH, `${JSON.stringify(body)}\n`)
-    } catch {
-      // swallow secondary errors to avoid affecting user flow
-    }
-  }
-}
 
 export default async function WorkspacePage({
   params,
@@ -46,14 +10,6 @@ export default async function WorkspacePage({
   params: Promise<{ id: string }>
   searchParams: Promise<{ view?: string }>
 }) {
-  // #region agent log
-  await sendDebug({
-    hypothesisId: 'H6',
-    location: 'workspaces/[id]/page.tsx:entry',
-    message: 'WorkspacePage invoked',
-  })
-  // #endregion
-
   const { id } = await params
   const { view = 'dashboard' } = await searchParams
   const supabase = await createClient()
@@ -62,17 +18,6 @@ export default async function WorkspacePage({
   const {
     data: { user },
   } = await supabase.auth.getUser()
-
-  // Debug logging removed for React Compiler compatibility
-
-  // #region agent log
-  await sendDebug({
-    hypothesisId: 'H2',
-    location: 'workspaces/[id]/page.tsx:getUser',
-    message: 'Fetched auth user (fallback logger)',
-    data: { hasUser: !!user },
-  })
-  // #endregion
 
   if (!user) {
     redirect('/login')
@@ -85,17 +30,6 @@ export default async function WorkspacePage({
     .eq('id', id)
     .single()
 
-  // Debug logging removed for React Compiler compatibility
-
-  // #region agent log
-  await sendDebug({
-    hypothesisId: 'H1',
-    location: 'workspaces/[id]/page.tsx:getWorkspace',
-    message: 'Workspace fetch result (fallback logger)',
-    data: { hasWorkspace: !!workspace, teamId: workspace?.team_id, error: !!error },
-  })
-  // #endregion
-
   if (error || !workspace) {
     notFound()
   }
@@ -107,17 +41,6 @@ export default async function WorkspacePage({
     .eq('team_id', workspace.team_id)
     .eq('user_id', user.id)
     .single()
-
-  // Debug logging removed for React Compiler compatibility
-
-  // #region agent log
-  await sendDebug({
-    hypothesisId: 'H3',
-    location: 'workspaces/[id]/page.tsx:getMembership',
-    message: 'Team membership fetch result (fallback logger)',
-    data: { hasMember: !!teamMember, role: teamMember?.role },
-  })
-  // #endregion
 
   if (!teamMember) {
     redirect('/dashboard')
@@ -211,8 +134,6 @@ export default async function WorkspacePage({
       .single(),
   ])
 
-  // Debug logging removed for React Compiler compatibility
-
   // Calculate phase distribution and stats
   const phaseDistribution = calculatePhaseDistribution(workItems || [])
 
@@ -274,7 +195,6 @@ export default async function WorkspacePage({
       workItems={mappedWorkItems}
       timelineItems={mappedTimelineItems}
       linkedItems={mappedLinkedItems}
-      mindMaps={mindMaps || []}
       tags={tags || []}
       departments={departments || []}
       teamSize={teamSize || 0}

@@ -21,7 +21,6 @@ export interface BlockSuiteDocumentMetadata {
   id: string // Date.now().toString()
   team_id: string
   workspace_id: string | null
-  mind_map_id: string | null
 
   // Storage reference (NOT the actual Yjs state)
   storage_path: string // Format: {team_id}/{doc_id}.yjs
@@ -44,7 +43,6 @@ export interface BlockSuiteDocumentMetadata {
 /** Input for creating a new document */
 export interface CreateDocumentInput {
   workspace_id?: string
-  mind_map_id?: string
   document_type?: BlockSuiteDocumentType
   title?: string
   initial_state?: Uint8Array // Optional initial Yjs state
